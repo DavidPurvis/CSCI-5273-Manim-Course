@@ -1,0 +1,436 @@
+dish: '16.1'
+title: The whole story, then mixed problems
+deck: lec10-routing.pdf
+target_min: 8.5
+concepts: []
+pad: 2.2
+beats:
+- id: 16.1.question
+  stage: question
+  narration: 16.1.question
+  pdf:
+  - lec10-routing.pdf
+  - 3
+  concepts: []
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Synthesis: the whole story'
+  - spine:
+      current: Move
+      zone: top
+  - q:
+      text: How does a packet arrive when no device knows the whole path?
+      zone: bottom
+  adjust: {}
+- id: 16.1.story1
+  stage: animation
+  narration: 16.1.story1
+  pdf:
+  - lec09-discovery.pdf
+  - 9
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: s
+      zone: full
+      cols:
+      - Missing fact
+      - Mechanism
+      - State kept
+      rows:
+      - - Attachment
+        - Wi-Fi association
+        - AP relationship
+      - - Address and gateway
+        - DHCP
+        - lease
+      - - Next hop's MAC
+        - ARP
+        - IP to MAC cache
+      - - Server's address
+        - DNS
+        - cached record with TTL
+      - - Which port for a MAC
+        - Switch learning
+        - MAC to port table
+      - - Which output for a prefix
+        - Longest prefix match
+        - forwarding table
+      - - Path inside an AS
+        - Dijkstra or Bellman-Ford
+        - link map or distances
+      - - Exit from the AS
+        - BGP with policy
+        - routes and preferences
+      show: 0
+  - table.reveal:
+      name: s
+      when: Wi-Fi association
+  - table.reveal:
+      name: s
+      when: a broadcast to DHCP
+  - table.reveal:
+      name: s
+      when: so ARP finds
+  - table.reveal:
+      name: s
+      when: The resolver walks
+  adjust: {}
+  pre_roll: 0.2
+- id: 16.1.story2
+  stage: animation
+  narration: 16.1.story2
+  pdf:
+  - lec06-lan.pdf
+  - 30
+  concepts: []
+  clarifications: []
+  moves:
+  - table.reveal:
+      name: s
+      when: The frame crosses
+  - table.reveal:
+      name: s
+      when: Longest prefix match
+  - table.reveal:
+      name: s
+      when: link state or
+  - table.reveal:
+      name: s
+      when: and BGP between
+  adjust: {}
+- id: 16.1.story3
+  stage: animation
+  narration: 16.1.story3
+  pdf:
+  - lec11-convergence.pdf
+  - 10
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: rest
+      zone: top
+      show: 0
+      items:
+      - 'Failure: detect, tell, compute, install'
+      - 'Group: IGMP locally, PIM between routers'
+      - 'One of many: routing selects an instance'
+      - 'Moving: same inner packet, new outer destination'
+  - reveal:
+      name: rest
+      when: When something breaks
+  - reveal:
+      name: rest
+      when: If the destination
+  - reveal:
+      name: rest
+      when: If it's one
+  - reveal:
+      name: rest
+      when: And when the receiver
+  - rule:
+      text: 'Problem, scope, knowledge, state, action, output, failure: ask these of any mechanism.'
+  adjust: {}
+  pre_roll: 1.5
+- id: 16.1.pitfall
+  stage: rule
+  narration: 16.1.pitfall
+  pdf:
+  - lec10-routing.pdf
+  - 15
+  concepts: []
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Discovery, routing, and forwarding are one big step
+      right: Each mechanism supplies one missing fact
+  adjust: {}
+- id: 16.1.p1
+  stage: rule
+  narration: 16.1.p1
+  pdf:
+  - lec08-network2.pdf
+  - 5
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - text:
+      name: q1
+      zone: top
+      lines:
+      - Host 10.10.1.97/23, gateway 10.10.0.1
+      - Sends to 10.10.0.200, then to 10.10.2.5
+      - ARP for what?
+  adjust: {}
+- id: 16.1.a1
+  stage: explanation
+  narration: 16.1.a1
+  pdf:
+  - lec08-network2.pdf
+  - 5
+  concepts: []
+  clarifications: []
+  moves:
+  - table.show:
+      name: a1
+      zone: bottom
+      cols:
+      - Destination
+      - Local?
+      - ARP for
+      rows:
+      - - 10.10.0.200
+        - 'yes'
+        - 10.10.0.200
+      - - 10.10.2.5
+        - 'no'
+        - 10.10.0.1
+  adjust: {}
+  hold: 5
+- id: 16.1.p2
+  stage: rule
+  narration: 16.1.p2
+  pdf:
+  - lec11-convergence.pdf
+  - 16
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: q2
+      zone: top
+      cols:
+      - Via
+      - Link
+      - Says
+      - Total
+      rows:
+      - - A
+        - 2
+        - 7
+        - '?'
+      - - B
+        - 5
+        - 1
+        - '?'
+  adjust: {}
+- id: 16.1.a2
+  stage: explanation
+  narration: 16.1.a2
+  pdf:
+  - lec11-convergence.pdf
+  - 16
+  concepts: []
+  clarifications: []
+  moves:
+  - table.set:
+      name: q2
+      r: 0
+      c: 3
+      v: 9
+  - table.set:
+      name: q2
+      r: 1
+      c: 3
+      v: 6
+      state: done
+  - rule:
+      text: A stale advertisement causes counting. Poison reverse breaks this two-router feedback.
+  adjust: {}
+  hold: 5
+- id: 16.1.p3
+  stage: rule
+  narration: 16.1.p3
+  pdf:
+  - lec12-bgp.pdf
+  - 14
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: q3
+      zone: top
+      cols:
+      - From
+      - Local pref
+      - Length
+      rows:
+      - - Provider
+        - 80
+        - 2
+      - - Customer
+        - 100
+        - 5
+  adjust: {}
+- id: 16.1.a3
+  stage: explanation
+  narration: 16.1.a3
+  pdf:
+  - lec12-bgp.pdf
+  - 14
+  concepts: []
+  clarifications: []
+  moves:
+  - table.mark:
+      name: q3
+      r: 1
+      state: done
+  - rule:
+      text: Preference before length. Provider routes go only to customers.
+  adjust: {}
+  hold: 5
+- id: 16.1.p5
+  stage: rule
+  narration: 16.1.p5
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - text:
+      name: q5
+      zone: top
+      lines:
+      - Total 2000, header 20, MTU 1500
+      - Fragment payloads and offsets?
+      - 'Destination 201.10.6.200: which output?'
+  adjust: {}
+- id: 16.1.a5
+  stage: explanation
+  narration: 16.1.a5
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts: []
+  clarifications: []
+  moves:
+  - table.show:
+      name: a5
+      zone: bottom
+      cols:
+      - Fragment
+      - Payload
+      - Offset
+      - MF
+      rows:
+      - - 1
+        - 1480
+        - 0
+        - 1
+      - - 2
+        - 500
+        - 185
+        - 0
+  adjust: {}
+  hold: 5
+- id: 16.1.p6
+  stage: rule
+  narration: 16.1.p6
+  pdf:
+  - lec13-multicast.pdf
+  - 32
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - text:
+      name: q6
+      zone: top
+      lines:
+      - Route to S uses port 2
+      - Packet arrives on port 4, then on port 2
+      - The LAN's only member leaves
+  adjust: {}
+- id: 16.1.a6
+  stage: explanation
+  narration: 16.1.a6
+  pdf:
+  - lec13-multicast.pdf
+  - 32
+  concepts: []
+  clarifications: []
+  moves:
+  - table.show:
+      name: a6
+      zone: bottom
+      cols:
+      - Event
+      - Action
+      rows:
+      - - Arrives on port 4
+        - RPF fails; drop
+      - - Arrives on port 2
+        - RPF passes; forward
+      - - Leave
+        - group query; prune if silent
+  adjust: {}
+  hold: 5
+- id: 16.1.p4
+  stage: changed_example
+  narration: 16.1.p4
+  pdf:
+  - lec15-mobile.pdf
+  - 7
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - stack.show:
+      name: q4
+      zone: top
+      width: 7.5
+      layers:
+      - t: 'Outer IP: S-GW → base station A'
+        k: tunnel
+      - t: UDP and GTP-U
+        k: transport
+      - t: 'Inner IP: correspondent → phone'
+        k: ip
+  adjust: {}
+- id: 16.1.predict
+  stage: prediction
+  narration: 16.1.predict
+  pdf:
+  - lec15-mobile.pdf
+  - 7
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: which fields change after the handover?
+  adjust: {}
+  hold: 6
+- id: 16.1.a4
+  stage: explanation
+  narration: 16.1.a4
+  pdf:
+  - lec15-mobile.pdf
+  - 7
+  concepts: []
+  clarifications: []
+  moves:
+  - tunnel.reencapsulate:
+      stack: q4
+      outer: 'Outer IP: S-GW → base station B'
+  - stack.mark:
+      name: q4
+      layer: 0
+      state: now
+  - stack.mark:
+      name: q4
+      layer: 2
+      state: done
+  - rule:
+      text: Ask what's missing, who knows it, what state is kept, and what happens when it goes stale.
+  - keep: {}
+  adjust: {}

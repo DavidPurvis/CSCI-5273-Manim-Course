@@ -1,0 +1,1449 @@
+dish: '10.1'
+title: Dijkstra
+deck: lec10-routing.pdf
+target_min: 9.5
+concepts:
+- Shortest-Path Routing
+- Link-State Routing
+- Dijkstra Algorithm
+- OSPF
+- IS-IS
+pad: 2.2
+beats:
+- id: 10.1.question
+  stage: question
+  narration: 10.1.question
+  pdf:
+  - lec10-routing.pdf
+  - 19
+  concepts:
+  - Shortest-Path Routing
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 10: Dijkstra'
+  - spine:
+      current: Route
+      zone: top
+  - q:
+      text: How do routers work out paths through a network none of them fully sees?
+      zone: bottom
+  adjust: {}
+- id: 10.1.laptop
+  stage: animation
+  narration: 10.1.laptop
+  pdf:
+  - lec10-routing.pdf
+  - 19
+  concepts:
+  - Shortest-Path Routing
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: lp
+      zone: top
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        A:
+          k: router
+          at:
+          - 3.4
+          - 0
+          l: R1
+        B:
+          k: router
+          at:
+          - 6.8
+          - 0
+          l: R2
+        W:
+          k: server
+          at:
+          - 10.2
+          - 0
+          l: Web server
+      links:
+      - - L
+        - A
+      - - A
+        - B
+      - - B
+        - W
+  - packet.spawn:
+      name: p
+      net: lp
+      at: A
+      layers:
+      - ip
+      when: sitting at router
+  - net.badge:
+      name: lp
+      node: A
+      text: which port?
+      side: up
+      state: now
+      when: R1 looked up
+  - packet.hop:
+      name: p
+      to: B
+      when: and sent it
+  - packet.fade:
+      name: p
+  - rule:
+      text: Who built that table?
+      when: This chapter
+  adjust: {}
+- id: 10.1.routing-forwarding
+  stage: animation
+  narration: 10.1.routing-forwarding
+  pdf:
+  - lec10-routing.pdf
+  - 12
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: rf
+      zone: top
+      cols:
+      - ''
+      - Forwarding
+      - Routing
+      rows:
+      - - Plane
+        - data
+        - control
+      - - Timescale
+        - per packet
+        - per network event
+      - - Output
+        - one output port
+        - the table itself
+      show: 0
+  - bullets:
+      name: two
+      zone: bottom
+      show: 0
+      items:
+      - Which exit can reach the prefix? (BGP)
+      - How do I reach that exit? (this lecture)
+  - table.reveal:
+      name: rf
+  - rule:
+      text: 'Forwarding: one packet, right now'
+      when: Forwarding is what
+  - table.reveal:
+      name: rf
+      when: read the address
+  - rule:
+      text: 'Routing: how the table got there'
+      when: Routing is how
+  - table.reveal:
+      name: rf
+      when: a network-wide process
+  - rule:
+      text: A far prefix needs two pieces of knowledge
+      when: And a route to a far
+  - reveal:
+      name: two
+      when: Which router, or exit
+  - reveal:
+      name: two
+      when: And how do I
+  - rule:
+      text: This lecture solves the second piece
+      when: This lecture solves
+  - rule:
+      text: Static routes don't adapt to failures, equipment or load
+      when: Static routes
+  adjust: {}
+- id: 10.1.model
+  stage: animation
+  narration: 10.1.model
+  pdf:
+  - lec10-routing.pdf
+  - 19
+  concepts: &id001
+  - Shortest-Path Routing
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show: &id003
+      name: g
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.2
+          l: B
+        C:
+          k: node
+          at:
+          - 3
+          - -0.2
+          l: C
+        D:
+          k: node
+          at:
+          - 6
+          - 1
+          l: D
+      links:
+      - - A
+        - B
+        - c: 2
+      - - A
+        - C
+        - c: 5
+      - - B
+        - C
+        - c: 1
+      - - B
+        - D
+        - c: 4
+      - - C
+        - D
+        - c: 2
+  - rule:
+      text: Routers are nodes; links are edges with a cost
+      when: Draw the network
+  - rule:
+      text: If every edge costs one, this just counts hops
+      when: If every edge
+  - text:
+      name: goal
+      zone: right_top
+      lines:
+      - Path cost = sum of its edge costs
+      - 'Goal: the cheapest path to each destination'
+      when:
+        phrase: Our goal
+        frame_offset: 162
+  adjust: {}
+- id: 10.1.model-2
+  stage: animation
+  narration: 10.1.model-2
+  pdf:
+  - lec10-routing.pdf
+  - 19
+  concepts: *id001
+  clarifications: []
+  moves:
+  - fade:
+      names: _rule
+  - net.path:
+      name: g
+      path:
+      - A
+      - C
+      style: failed
+      when: going from A to C
+  - net.path:
+      name: g
+      path:
+      - A
+      - B
+      - C
+      style: now
+      when: Going through B
+  - fade:
+      names: goal
+  - rule:
+      text: Path cost = the sum of link costs. More hops can be cheaper.
+      when: So the path
+  - rule:
+      text: This fits inside one organization
+      when: This makes sense
+  adjust: {}
+- id: 10.1.linkstate
+  stage: animation
+  narration: 10.1.linkstate
+  pdf:
+  - lec10-routing.pdf
+  - 22
+  concepts:
+  - Link-State Routing
+  - OSPF
+  - IS-IS
+  clarifications: []
+  moves:
+  - fade:
+      names: _rule
+  - net.path:
+      name: g
+      path:
+      - A
+      - C
+      style: solid
+  - net.path:
+      name: g
+      path:
+      - A
+      - B
+      - C
+      style: solid
+  - fade:
+      names: _rule
+  - text:
+      name: ls
+      zone: right
+      lines:
+      - 'Step 1: flood your own links'
+      - 'Step 2: compute from your map'
+      - OSPF and IS-IS work this way
+      when: Step one
+  - packet.spawn:
+      name: lsa
+      net: g
+      at: D
+      layers:
+      - label
+      when: Those messages flood
+  - packet.flood:
+      name: lsa
+      to:
+      - B
+      - C
+      - A
+  - packet.fade:
+      name: lsa
+  - rule:
+      text: Every router ends up with the same map
+      when: so eventually every
+  - rule:
+      text: 'Step two: compute shortest paths on that map'
+      when: Step two
+  - rule:
+      text: OSPF and IS-IS are link-state protocols
+      when: OSPF and IS-IS
+  adjust: {}
+- id: 10.1.ospf
+  stage: state
+  narration: 10.1.ospf
+  pdf:
+  - lec10-routing.pdf
+  - 22
+  concepts:
+  - OSPF
+  - IS-IS
+  clarifications: []
+  moves:
+  - card:
+      kind: note
+      text: The map is what a router currently believes, not a live view.
+      zone: right_bottom
+  - rule:
+      text: The map is what the router currently believes
+      when: It's what the router
+  - net.state:
+      name: g
+      links:
+      - - B
+        - D
+        - failed
+      when: If a link has
+  - rule:
+      text: 'A link just failed: some routers don''t know yet'
+      when:
+        phrase: If a link has
+        frame_offset: 23
+  - net.badge:
+      name: g
+      node: A
+      text: old map
+      side: left
+      state: error
+      when: some routers
+  - net.state:
+      name: g
+      links:
+      - - B
+        - D
+        - solid
+      when: For now
+  - net.unbadge:
+      name: g
+      node: A
+  - rule:
+      text: 'Next: Dijkstra''s computation'
+      when: look at the computation
+  adjust: {}
+- id: 10.1.idea
+  stage: rule
+  narration: 10.1.idea
+  pdf:
+  - lec10-routing.pdf
+  - 22
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: g
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.2
+          l: B
+        C:
+          k: node
+          at:
+          - 3
+          - -0.2
+          l: C
+        D:
+          k: node
+          at:
+          - 6
+          - 1
+          l: D
+      links:
+      - - A
+        - B
+        - c: 2
+      - - A
+        - C
+        - c: 5
+      - - B
+        - C
+        - c: 1
+      - - B
+        - D
+        - c: 4
+      - - C
+        - D
+        - c: 2
+  - net.state:
+      name: g
+      nodes:
+        A: done
+      when: grows a region
+  - net.state:
+      name: g
+      nodes:
+        B: candidate
+        C: candidate
+        D: candidate
+      when: It keeps a tentative
+  - text:
+      name: key
+      zone: right_top
+      lines:
+      - 'Green: settled, distance is final'
+      - 'Dashed: tentative, may still improve'
+  - graph.promote:
+      name: g
+      node: B
+      via: A
+      when: Pick the unsettled
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - C
+      when: for each neighbor
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - D
+  - rule:
+      text: Settle the smallest tentative distance. Then relax its edges. Weights must not be negative.
+      when: Why is it safe
+  adjust: {}
+  pre_roll: 0.9
+- id: 10.1.init
+  stage: state
+  narration: 10.1.init
+  pdf:
+  - lec10-routing.pdf
+  - 27
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: g
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.2
+          l: B
+        C:
+          k: node
+          at:
+          - 3
+          - -0.2
+          l: C
+        D:
+          k: node
+          at:
+          - 6
+          - 1
+          l: D
+      links:
+      - - A
+        - B
+        - c: 2
+      - - A
+        - C
+        - c: 5
+      - - B
+        - C
+        - c: 1
+      - - B
+        - D
+        - c: 4
+      - - C
+        - D
+        - c: 2
+  - table.show:
+      name: t
+      zone: right_top
+      data: $routing.small_table
+      show: 0
+  - graph.promote:
+      name: g
+      node: A
+      when: Start by settling
+  - net.badge:
+      name: g
+      node: A
+      text: '0'
+      side: left
+      state: done
+  - text:
+      name: dv
+      zone: right_bottom
+      lines:
+      - D(v) is the best known cost from A so far
+      when:
+        phrase: Start by settling
+        frame_offset: 40
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - B
+      when: Its neighbors get tentative
+  - rule:
+      text: 'Direct costs: B = 2, C = 5, D = ∞'
+      when:
+        phrase: Its neighbors get
+        frame_offset: 29
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - C
+      when: direct costs
+  - graph.relax:
+      name: g
+      via: A
+      node: B
+      text: '2'
+      side: up
+      when: B is 2
+  - graph.relax:
+      name: g
+      via: A
+      node: C
+      text: '5'
+      side: down
+      when:
+        phrase: and C is 5
+        frame_offset: 4
+  - net.badge:
+      name: g
+      node: D
+      text: ∞
+      side: right
+      when: D is not
+  - table.reveal:
+      name: t
+  adjust: {}
+  pre_roll: 1.1
+- id: 10.1.settle-b
+  stage: state
+  narration: 10.1.settle-b
+  pdf:
+  - lec10-routing.pdf
+  - 28
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - net.state:
+      name: g
+      nodes:
+        B: candidate
+        C: candidate
+        D: candidate
+      when: The frontier holds
+  - rule:
+      text: 'Frontier: B 2, C 5, D ∞'
+      when:
+        phrase: The frontier holds
+        frame_offset: 23
+  - rule:
+      text: 'Smallest is B: settle it, predecessor A'
+      when: The smallest is B
+  - graph.promote:
+      name: g
+      node: B
+      via: A
+      when: so settle it
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - B
+      when: record that its predecessor
+  - graph.relax:
+      name: g
+      via: B
+      node: C
+      text: $routing.small.1.relaxed.0.new
+      side: down
+      when: Through B, C
+  - rule:
+      text: 'Through B, C: 2 + 1 = 3, which beats 5'
+      when:
+        phrase: Through B, C
+        frame_offset: 32
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - C
+      when: which is 3
+  - graph.relax:
+      name: g
+      via: B
+      node: D
+      text: $routing.small.1.relaxed.1.new
+      side: right
+      when: Through B, D
+  - rule:
+      text: 'Through B, D: 2 + 4 = 6, which beats ∞'
+      when:
+        phrase: Through B, D
+        frame_offset: 32
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - D
+      when:
+        phrase: costs 2 plus 4
+        frame_offset: 29
+  - table.reveal:
+      name: t
+      when: that beats infinity
+  adjust: {}
+- id: 10.1.settle-c
+  stage: state
+  narration: 10.1.settle-c
+  pdf:
+  - lec10-routing.pdf
+  - 30
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - rule:
+      text: 'Frontier: C 3, D 6. Settle C.'
+      when: The frontier is C
+  - graph.promote:
+      name: g
+      node: C
+      via: B
+      when: Settle C
+  - graph.relax:
+      name: g
+      via: C
+      node: D
+      text: $routing.small.2.relaxed.0.new
+      side: right
+      when: Relax its edge
+  - rule:
+      text: 'Through C, D: 3 + 2 = 5, which beats 6'
+      when:
+        phrase: Relax its edge
+        frame_offset: 32
+  - net.pulse:
+      name: g
+      path:
+      - C
+      - D
+      when:
+        phrase: 3 plus 2 is 5
+        frame_offset: 18
+  - table.reveal:
+      name: t
+      when: That beats 6
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - C
+      when: its predecessor changes from B to C
+  - rule:
+      text: A tentative value can improve until it's settled
+      when: See how a tentative
+  - net.state:
+      name: g
+      nodes:
+        C: done
+      when: until the moment it's settled
+  adjust: {}
+- id: 10.1.settle-d
+  stage: state
+  narration: 10.1.settle-d
+  pdf:
+  - lec10-routing.pdf
+  - 36
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - graph.promote:
+      name: g
+      node: D
+      via: C
+      when: Finally settle
+  - rule:
+      text: Settle D at 5, through C
+      when:
+        phrase: Finally settle
+        frame_offset: 26
+  - table.reveal:
+      name: t
+      when: Every node
+  - rule:
+      text: 'Green edges: the shortest path tree from A'
+      when: The green edges
+  - table.mark:
+      name: t
+      r: 3
+      state: done
+      when: Final distances
+  - rule:
+      text: 'Final: B 2, C 3, D 5'
+      when:
+        phrase: Final distances
+        frame_offset: 17
+  - fade:
+      names: dv
+  - tex:
+      name: rel
+      zone: right_bottom
+      tex: D(v) \leftarrow \min\big(D(v),\ D(w)+c(w,v)\big)
+      size: 40
+      when: and D is 5
+  adjust: {}
+- id: 10.1.firsthop
+  stage: rule
+  narration: 10.1.firsthop
+  pdf:
+  - lec10-routing.pdf
+  - 36
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - fade:
+      names: _rule
+  - table.show:
+      name: fh
+      zone: right_bottom
+      cols:
+      - Dest
+      - Predecessor
+      - First hop
+      rows:
+      - - B
+        - $routing.small_pred.B
+        - $routing.small_first_hop.B
+      - - C
+        - $routing.small_pred.C
+        - $routing.small_first_hop.C
+      - - D
+        - $routing.small_pred.D
+        - $routing.small_first_hop.D
+      when:
+        phrase: The part
+        frame_offset: 17
+  - net.pulse:
+      name: g
+      path:
+      - C
+      - D
+      when: gave us predecessors
+  - rule:
+      text: A forwarding table needs something else
+      when: but a forwarding table
+  - net.state:
+      name: g
+      nodes:
+        C: now
+      when: D's predecessor is C
+  - rule:
+      text: D's predecessor is C, but A can't hand a packet to C
+      when:
+        phrase: D's predecessor is C
+        frame_offset: 23
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - C
+      state: error
+      when: But router A cannot hand
+  - net.walk:
+      name: g
+      path:
+      - A
+      - B
+      - C
+      - D
+      when: The path to D
+  - rule:
+      text: 'Path A, B, C, D: to reach D, send to B'
+      when:
+        phrase: The path to D
+        frame_offset: 32
+  - net.state:
+      name: g
+      nodes:
+        C: done
+        B: now
+      when: send to B
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - B
+      when: every entry at A says B
+  - rule:
+      text: A forwarding table stores the first hop, not the predecessor.
+      when: Distance, predecessor
+  adjust: {}
+- id: 10.1.slide
+  stage: rule
+  narration: 10.1.slide
+  pdf:
+  - lec10-routing.pdf
+  - 26
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: e
+      zone: left
+      nodes:
+        u:
+          k: node
+          at:
+          - 0
+          - 2
+          l: u
+        v:
+          k: node
+          at:
+          - 2
+          - 4
+          l: v
+        y:
+          k: node
+          at:
+          - 5
+          - 4
+          l: y
+        z:
+          k: node
+          at:
+          - 8
+          - 2.6
+          l: z
+        x:
+          k: node
+          at:
+          - 3.2
+          - 2.6
+          l: x
+        w:
+          k: node
+          at:
+          - 2
+          - 1
+          l: w
+        s:
+          k: node
+          at:
+          - 4
+          - 0
+          l: s
+        t:
+          k: node
+          at:
+          - 6.5
+          - 1
+          l: t
+      links:
+      - - u
+        - v
+        - c: 4
+      - - u
+        - w
+        - c: 3
+      - - v
+        - y
+        - c: 1
+      - - v
+        - x
+        - c: 4
+      - - x
+        - w
+        - c: 1
+      - - x
+        - z
+        - c: 1
+      - - x
+        - t
+        - c: 5
+      - - y
+        - z
+        - c: 1
+      - - w
+        - s
+        - c: 1
+      - - s
+        - t
+        - c: 2
+  - net.state:
+      name: e
+      nodes:
+        t: now
+        v: now
+  - table.show:
+      name: opts
+      zone: right_top
+      cols:
+      - Route from t
+      - Cost
+      rows:
+      - - x z y v
+        - $routing.slide26_alt_direct
+      - - s w x v
+        - $routing.slide26_alt_via_x
+      - - s w x z y v
+        - $routing.slide26_cost
+      show: 0
+  - net.walk:
+      name: e
+      path:
+      - t
+      - x
+      - z
+      - y
+      - v
+      when: But then x
+  - table.reveal:
+      name: opts
+  - rule:
+      text: 'Through x, then z, y, v: 5 + 3 = 8'
+      when:
+        phrase: But then x
+        frame_offset: 50
+  - net.walk:
+      name: e
+      path:
+      - t
+      - s
+      - w
+      - x
+      - v
+      when: The direct route
+  - table.reveal:
+      name: opts
+  - rule:
+      text: 'Direct x to v at 4: also 8'
+      when:
+        phrase: The direct route
+        frame_offset: 50
+  - net.walk:
+      name: e
+      path:
+      - t
+      - s
+      - w
+      - x
+      - z
+      - y
+      - v
+      state: done
+      when: The best path
+  - table.reveal:
+      name: opts
+  - rule:
+      text: 't, s, w, x, z, y, v: total 7'
+      when:
+        phrase: The best path
+        frame_offset: 50
+  - table.mark:
+      name: opts
+      r: 2
+      state: done
+      when: So the distance
+  - rule:
+      text: Distance 7; the entry at t points to s
+      when:
+        phrase: So the distance
+        frame_offset: 17
+  - rule:
+      text: More hops, lower cost.
+      when: More hops
+  adjust: {}
+- id: 10.1.bigger
+  stage: state
+  narration: 10.1.bigger
+  pdf:
+  - lec10-routing.pdf
+  - 36
+  concepts: &id002
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: big
+      zone: upper
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: A
+        B:
+          k: node
+          at:
+          - 2.5
+          - 2.4
+          l: B
+        C:
+          k: node
+          at:
+          - 2.5
+          - -0.4
+          l: C
+        D:
+          k: node
+          at:
+          - 4.2
+          - 1
+          l: D
+        G:
+          k: node
+          at:
+          - 6.4
+          - -0.4
+          l: G
+        E:
+          k: node
+          at:
+          - 7
+          - 1.2
+          l: E
+        F:
+          k: node
+          at:
+          - 7.8
+          - 2.8
+          l: F
+        H:
+          k: node
+          at:
+          - 10
+          - 1
+          l: H
+      links:
+      - - A
+        - B
+        - c: 2
+      - - A
+        - C
+        - c: 4
+      - - A
+        - D
+        - c: 5
+      - - B
+        - D
+        - c: 2
+      - - B
+        - E
+        - c: 7
+      - - B
+        - F
+        - c: 12
+      - - C
+        - D
+        - c: 1
+      - - C
+        - G
+        - c: 4
+      - - D
+        - E
+        - c: 4
+      - - D
+        - G
+        - c: 3
+      - - E
+        - G
+        - c: 1
+      - - E
+        - H
+        - c: 5
+      - - F
+        - H
+        - c: 3
+      - - G
+        - H
+        - c: 7
+  - table.show:
+      name: bigt
+      zone: lower
+      data: $routing.slide27_table
+      size: 28
+      show: 0
+  - graph.promote:
+      name: big
+      node: A
+  - graph.promote:
+      name: big
+      node: B
+      via: A
+      when: at 2, which improves
+  - rule:
+      text: 'Settle B at 2: D improves to 4, E 9, F 14'
+      when:
+        phrase: at 2, which improves
+        frame_offset: 26
+  - net.pulse:
+      name: big
+      path:
+      - B
+      - D
+      when:
+        phrase: which improves D
+        frame_offset: 35
+  - net.pulse:
+      name: big
+      path:
+      - B
+      - E
+      when: gives E 9
+  - net.state:
+      name: big
+      nodes:
+        C: candidate
+        D: candidate
+      when: C and D then
+  - rule:
+      text: A tie can alter a predecessor, not a shortest distance
+      when: Either may go
+  adjust: {}
+- id: 10.1.bigger-2
+  stage: state
+  narration: 10.1.bigger-2
+  pdf:
+  - lec10-routing.pdf
+  - 36
+  concepts: *id002
+  clarifications: []
+  moves:
+  - graph.promote:
+      name: big
+      node: D
+      via: B
+      when: Settling D improves
+  - net.pulse:
+      name: big
+      path:
+      - D
+      - E
+  - rule:
+      text: 'Settle D: E improves to 8, G gets 7'
+      when:
+        phrase: Settling D improves
+        frame_offset: 53
+  - net.pulse:
+      name: big
+      path:
+      - D
+      - G
+      when:
+        phrase: and gives G
+        frame_offset: 21
+  - graph.promote:
+      name: big
+      node: C
+      via: A
+  - graph.promote:
+      name: big
+      node: G
+      via: D
+      when:
+        phrase: Settling G offers
+        frame_offset: 6
+  - net.pulse:
+      name: big
+      path:
+      - G
+      - E
+  - rule:
+      text: 'Settle G: another route to E at 8, a tie'
+      when:
+        phrase: Settling G offers
+        frame_offset: 59
+  - graph.promote:
+      name: big
+      node: E
+      via: D
+      when: Settling E improves
+  - net.pulse:
+      name: big
+      path:
+      - E
+      - H
+  - graph.promote:
+      name: big
+      node: H
+      via: E
+  - net.pulse:
+      name: big
+      path:
+      - H
+      - F
+      when: And F stays
+  - graph.promote:
+      name: big
+      node: F
+      via: B
+  - rule:
+      text: F stays at 14; through H would cost 16
+      when:
+        phrase: And F stays
+        frame_offset: 53
+  - table.reveal:
+      name: bigt
+      when: Check any of these
+  - rule:
+      text: Keep settled set, distances and tie policy explicit
+      when: Keep your settled
+  adjust: {}
+- id: 10.1.pitfall
+  stage: rule
+  narration: 10.1.pitfall
+  pdf:
+  - lec10-routing.pdf
+  - 36
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Settled nodes can still improve
+      right: A settled distance is final. Only tentative ones can improve.
+  adjust: {}
+- id: 10.1.changed
+  stage: changed_example
+  narration: 10.1.changed
+  pdf:
+  - lec10-routing.pdf
+  - 36
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show: *id003
+  - net.cost:
+      name: g
+      a: B
+      b: C
+      cost: 6
+  - table.show:
+      name: chg
+      zone: right_top
+      cols:
+      - Dest
+      - Distance
+      - First hop
+      rows:
+      - - B
+        - '?'
+        - '?'
+      - - C
+        - '?'
+        - '?'
+      - - D
+        - '?'
+        - '?'
+  adjust: {}
+- id: 10.1.predict
+  stage: prediction
+  narration: 10.1.predict
+  pdf:
+  - lec10-routing.pdf
+  - 36
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - pause:
+      text: the new distances, and A's first hop toward C?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 10.1.answer
+  stage: explanation
+  narration: 10.1.answer
+  pdf:
+  - lec10-routing.pdf
+  - 36
+  concepts:
+  - Dijkstra Algorithm
+  - Link-State Routing
+  clarifications: []
+  moves:
+  - table.set:
+      name: chg
+      r: 0
+      c: 1
+      v: $routing.changed_dist.B
+      when: Settle B at 2
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - C
+      state: error
+      when: Through B, C
+  - rule:
+      text: 'Through B, C would cost 8: it doesn''t beat 5'
+      when:
+        phrase: Through B, C
+        frame_offset: 29
+  - table.set:
+      name: chg
+      r: 2
+      c: 1
+      v: $routing.changed_dist.D
+      when: D becomes 6
+  - table.set:
+      name: chg
+      r: 1
+      c: 1
+      v: $routing.changed_dist.C
+      state: now
+      when: Then settle C
+  - rule:
+      text: 'Settle C at 5. Through C, D would cost 7: no change'
+      when:
+        phrase: Then settle C
+        frame_offset: 20
+  - net.pulse:
+      name: g
+      path:
+      - C
+      - D
+      state: error
+      when: Through C, D would cost 7
+  - rule:
+      text: 'Distances: 2, 5, 6'
+      when: So the distances
+  - table.set:
+      name: chg
+      r: 0
+      c: 2
+      v: $routing.changed_first_hop.B
+      when: A's first hop to B
+  - rule:
+      text: 'First hops: B, C, B'
+      when:
+        phrase: A's first hop
+        frame_offset: 20
+  - table.set:
+      name: chg
+      r: 1
+      c: 2
+      v: $routing.changed_first_hop.C
+      state: now
+      when: to C is C
+  - table.set:
+      name: chg
+      r: 2
+      c: 2
+      v: $routing.changed_first_hop.D
+      when: and to D
+  - net.walk:
+      name: g
+      path:
+      - A
+      - C
+      when: One number changed
+  - rule:
+      text: One number changed A's route to C
+      when:
+        phrase: One number changed
+        frame_offset: 32
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - C
+      state: error
+      when: the new cost had to reach it
+  - rule:
+      text: 'Next: what if routers share distances instead of a map?'
+      when: Flooding carries
+  adjust: {}

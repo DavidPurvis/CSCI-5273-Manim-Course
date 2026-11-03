@@ -1,0 +1,575 @@
+dish: '12.3'
+title: Inside an AS
+deck: lec12-bgp.pdf
+target_min: 6
+concepts:
+- eBGP
+- iBGP
+- BGP Next-Hop Resolution
+- Hot-Potato Routing
+- Default Routes
+pad: 2.2
+beats:
+- id: 12.3.question
+  stage: question
+  narration: 12.3.question
+  pdf:
+  - lec12-bgp.pdf
+  - 21
+  concepts:
+  - eBGP
+  - iBGP
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 12: inside an AS'
+  - q:
+      text: An AS is not one node. How do its routers pick an exit?
+  adjust: {}
+- id: 12.3.ibgp
+  stage: animation
+  narration: 12.3.ibgp
+  pdf:
+  - lec12-bgp.pdf
+  - 22
+  concepts:
+  - eBGP
+  - iBGP
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: i
+      zone: full
+      nodes:
+        X:
+          k: cloud
+          at:
+          - 0
+          - 1
+          l: AS 300
+        R1:
+          k: router
+          at:
+          - 3.5
+          - 1
+          l: R1
+        R2:
+          k: router
+          at:
+          - 7
+          - 2.2
+          l: R2
+          lp: right
+        R3:
+          k: router
+          at:
+          - 7
+          - -0.2
+          l: R3
+          lp: right
+      links:
+      - - X
+        - R1
+        - c: eBGP
+      - - R1
+        - R2
+        - c: iBGP
+          s: control
+      - - R1
+        - R3
+        - c: iBGP
+          s: control
+      - - R2
+        - R3
+  - packet.spawn:
+      name: u
+      net: i
+      at: X
+      layers:
+      - label
+      when: Border router R1
+  - packet.hop:
+      name: u
+      to: R1
+  - packet.flood:
+      name: u
+      to:
+      - R2
+      - R3
+      when: It passes this
+  adjust: {}
+- id: 12.3.igp
+  stage: state
+  narration: 12.3.igp
+  pdf:
+  - lec12-bgp.pdf
+  - 23
+  concepts:
+  - iBGP
+  clarifications: []
+  moves:
+  - net.state:
+      name: i
+      nodes:
+        R2: now
+      when: It says that
+  - net.state:
+      name: i
+      nodes:
+        R1: done
+  - net.walk:
+      name: i
+      path:
+      - R2
+      - R3
+      - R1
+      when: how to get across
+  - rule:
+      text: BGP names the exit. The internal protocol finds the way to that exit.
+      when: BGP and the IGP
+  adjust: {}
+- id: 12.3.nexthop
+  stage: state
+  narration: 12.3.nexthop
+  pdf:
+  - lec12-bgp.pdf
+  - 29
+  concepts:
+  - BGP Next-Hop Resolution
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: bg
+      zone: top
+      cols:
+      - Table
+      - Key
+      - Gives
+      rows:
+      - - BGP
+        - 203.0.113.0/24
+        - next hop 192.0.2.9
+      - - Internal
+        - 192.0.2.9
+        - 198.51.100.2, port 3
+      - - Forwarding
+        - 203.0.113.0/24
+        - 198.51.100.2, port 3
+      show: 0
+  - table.reveal:
+      name: bg
+      when: BGP says
+  - table.reveal:
+      name: bg
+      when: So the router
+  - table.reveal:
+      name: bg
+      when: It combines
+  - table.mark:
+      name: bg
+      r: 2
+      state: done
+  - rule:
+      text: Resolve the BGP next hop through internal routing before forwarding.
+      when: A BGP next hop
+  adjust: {}
+- id: 12.3.order
+  stage: rule
+  narration: 12.3.order
+  pdf:
+  - lec12-bgp.pdf
+  - 24
+  concepts:
+  - Local Preference
+  - Hot-Potato Routing
+  clarifications: []
+  moves:
+  - clear: {}
+  - stack.show:
+      name: order
+      zone: left
+      width: 6
+      layers:
+      - t: 1. Highest local preference
+        k: ip
+      - t: 2. Shortest AS path
+        k: eth
+      - t: 3. Lowest internal exit cost
+        k: transport
+      - t: 4. Tie break
+        k: data
+  - stack.mark:
+      name: order
+      layer: 0
+      when: Highest local
+  - stack.mark:
+      name: order
+      layer: 0
+      state: null
+      when: Then shortest
+  - stack.mark:
+      name: order
+      layer: 1
+  - stack.mark:
+      name: order
+      layer: 1
+      state: null
+      when: Then lowest
+  - stack.mark:
+      name: order
+      layer: 2
+  - stack.mark:
+      name: order
+      layer: 2
+      state: null
+      when: Then a tie
+  - stack.mark:
+      name: order
+      layer: 3
+  - stack.mark:
+      name: order
+      layer: 3
+      state: null
+      when: Compare in order
+  - text:
+      name: nosum
+      zone: right
+      lines:
+      - Compare in order
+      - Stop when one route remains
+      - Never added into a score
+      when: These are not
+  adjust: {}
+- id: 12.3.decide
+  stage: state
+  narration: 12.3.decide
+  pdf:
+  - lec12-bgp.pdf
+  - 26
+  concepts:
+  - Local Preference
+  clarifications: []
+  moves:
+  - fade:
+      names: nosum
+  - sieve.show:
+      name: cand
+      zone: right
+      rungs:
+      - Local pref
+      - AS length
+      - Exit cost
+      routes:
+      - name: A
+        vals:
+        - 140
+        - 4
+        - 50
+      - name: B
+        vals:
+        - 100
+        - 2
+        - 5
+      - name: C
+        vals:
+        - 100
+        - 2
+        - 1
+      when: Try three
+  - stack.mark:
+      name: order
+      layer: 0
+      when: With all three
+  - sieve.step:
+      name: cand
+      rung: 0
+      keep:
+      - A
+  - sieve.win:
+      name: cand
+      route: A
+      unused:
+      - 1
+      - 2
+      when: despite being
+  - sieve.show:
+      name: cand
+      zone: right
+      rungs:
+      - Local pref
+      - AS length
+      - Exit cost
+      routes:
+      - name: B
+        vals:
+        - 100
+        - 2
+        - 5
+      - name: C
+        vals:
+        - 100
+        - 2
+        - 1
+      when: Withdraw A
+  - stack.mark:
+      name: order
+      layer: 0
+      state: null
+  - stack.mark:
+      name: order
+      layer: 2
+      when: so internal cost
+  - sieve.step:
+      name: cand
+      rung: 2
+      keep:
+      - C
+  - sieve.win:
+      name: cand
+      route: C
+      when: C wins
+  - sieve.show:
+      name: cand
+      zone: right
+      rungs:
+      - Local pref
+      - AS length
+      - Exit cost
+      routes:
+      - name: B
+        vals:
+        - 100
+        - 1
+        - 5
+      - name: C
+        vals:
+        - 100
+        - 2
+        - 1
+      when: Now shorten
+  - stack.mark:
+      name: order
+      layer: 2
+      state: null
+  - stack.mark:
+      name: order
+      layer: 1
+      when: B beats C
+  - sieve.step:
+      name: cand
+      rung: 1
+      keep:
+      - B
+  - sieve.win:
+      name: cand
+      route: B
+      unused:
+      - 2
+      when: and its higher
+  adjust: {}
+  pre_roll: 0.6
+- id: 12.3.hot
+  stage: state
+  narration: 12.3.hot
+  pdf:
+  - lec12-bgp.pdf
+  - 25
+  concepts:
+  - Hot-Potato Routing
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: h
+      zone: top
+      nodes:
+        W:
+          k: box
+          at:
+          - 0
+          - 0
+          l: West exit
+        R:
+          k: router
+          at:
+          - 3.6
+          - 1.4
+          l: R
+        S:
+          k: router
+          at:
+          - 7.4
+          - -1.4
+          l: S
+        E:
+          k: box
+          at:
+          - 11
+          - 0
+          l: East exit
+      links:
+      - - R
+        - W
+        - c: 4
+      - - R
+        - E
+        - c: 9
+          s: dim
+      - - S
+        - W
+        - c: 12
+          s: dim
+      - - S
+        - E
+        - c: 3
+  - net.pulse:
+      name: h
+      path:
+      - R
+      - W
+      when: A router with
+  - net.path:
+      name: h
+      path:
+      - R
+      - W
+      style: tree
+      when: picks west
+  - net.pulse:
+      name: h
+      path:
+      - S
+      - E
+      when: A router on the other
+  - net.path:
+      name: h
+      path:
+      - S
+      - E
+      style: tree
+      when: picks east
+  - rule:
+      text: 'Hot potato: when earlier attributes tie, use the nearest exit. Paths may be asymmetric.'
+      when: Internet paths
+  adjust: {}
+- id: 12.3.default
+  stage: state
+  narration: 12.3.default
+  pdf:
+  - lec12-bgp.pdf
+  - 30
+  concepts:
+  - Default Routes
+  clarifications: []
+  moves:
+  - table.show:
+      name: d
+      zone: bottom
+      cols:
+      - Prefix
+      - Next hop
+      rows:
+      - - 192.0.2.0/24
+        - local
+      - - 0.0.0.0/0
+        - provider
+      show: 1
+      when: A customer with
+  - table.reveal:
+      name: d
+      when: It can use
+  - table.mark:
+      name: d
+      r: 1
+      state: now
+  - table.mark:
+      name: d
+      r: 0
+      state: done
+      when: Any longer prefix
+  adjust: {}
+- id: 12.3.pitfall
+  stage: rule
+  narration: 12.3.pitfall
+  pdf:
+  - lec12-bgp.pdf
+  - 30
+  concepts:
+  - Default Routes
+  clarifications: []
+  moves:
+  - trap:
+      wrong: The BGP next hop is always the next router
+      right: 'It may be several hops away: resolve it first'
+  adjust: {}
+- id: 12.3.changed
+  stage: changed_example
+  narration: 12.3.changed
+  pdf:
+  - lec12-bgp.pdf
+  - 25
+  concepts:
+  - Hot-Potato Routing
+  clarifications: []
+  moves:
+  - net.cost:
+      name: h
+      a: R
+      b: W
+      cost: 11
+      when: Internal maintenance
+  - net.state:
+      name: h
+      nodes:
+        R: now
+  adjust: {}
+- id: 12.3.predict
+  stage: prediction
+  narration: 12.3.predict
+  pdf:
+  - lec12-bgp.pdf
+  - 25
+  concepts:
+  - Hot-Potato Routing
+  clarifications: []
+  moves:
+  - pause:
+      text: does R's exit change? who outside notices?
+  adjust: {}
+  hold: 6
+- id: 12.3.answer
+  stage: explanation
+  narration: 12.3.answer
+  pdf:
+  - lec12-bgp.pdf
+  - 25
+  concepts:
+  - Hot-Potato Routing
+  - BGP Next-Hop Resolution
+  clarifications: []
+  moves:
+  - net.state:
+      name: h
+      links:
+      - - R
+        - W
+        - dim
+      - - R
+        - E
+        - tree
+      nodes:
+        R: done
+      when: R now prefers
+  - net.pulse:
+      name: h
+      path:
+      - R
+      - E
+      when: Its traffic moves
+  - rule:
+      text: An internal cost change can move traffic to a different neighbor.
+      when: An internal change
+  - keep: {}
+  adjust: {}

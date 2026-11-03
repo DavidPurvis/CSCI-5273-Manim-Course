@@ -1,0 +1,381 @@
+dish: '14.3'
+title: Joining and moving
+deck: lec14-wireless.pdf
+target_min: 5
+concepts:
+- Wireless Channels
+- Wi-Fi Association
+- Passive Scanning
+- Active Scanning
+- Wi-Fi Frame Addressing
+- Same-Subnet Roaming
+pad: 2.2
+beats:
+- id: 14.3.question
+  stage: question
+  narration: 14.3.question
+  pdf:
+  - lec14-wireless.pdf
+  - 18
+  concepts:
+  - Wi-Fi Association
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 14: joining and moving'
+  - q:
+      text: You click a Wi-Fi network. Are you on the Internet yet?
+  adjust: {}
+- id: 14.3.channels
+  stage: animation
+  narration: 14.3.channels
+  pdf:
+  - lec14-wireless.pdf
+  - 17
+  concepts:
+  - Wireless Channels
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: v
+      zone: top
+      cols:
+      - Term
+      - Means
+      rows:
+      - - BSS
+        - an AP and its stations
+      - - Channel
+        - a frequency resource
+      - - SSID
+        - the network's name
+      - - BSSID
+        - one particular BSS
+  adjust: {}
+- id: 14.3.scan
+  stage: animation
+  narration: 14.3.scan
+  pdf:
+  - lec14-wireless.pdf
+  - 20
+  concepts:
+  - Passive Scanning
+  - Active Scanning
+  clarifications: []
+  moves:
+  - clear: {}
+  - seq.show:
+      name: pa
+      zone: left
+      lanes:
+      - AP
+      - Laptop
+      steps: 4
+  - seq.show:
+      name: ac
+      zone: right
+      lanes:
+      - AP
+      - Laptop
+      steps: 4
+  - seq.msg:
+      name: pa
+      a: AP
+      b: Laptop
+      text: beacon
+      kind: radio
+      when: In passive
+  - seq.msg:
+      name: ac
+      a: Laptop
+      b: AP
+      text: probe request
+      kind: eth
+      when: In active
+  - seq.msg:
+      name: ac
+      a: AP
+      b: Laptop
+      text: probe response
+      kind: radio
+  - seq.msg:
+      name: pa
+      a: Laptop
+      b: AP
+      text: association request
+      kind: eth
+      when: you end up
+  - seq.msg:
+      name: pa
+      a: AP
+      b: Laptop
+      text: association reply
+      kind: radio
+  - seq.msg:
+      name: ac
+      a: Laptop
+      b: AP
+      text: association request
+      kind: eth
+      when: you choose
+  - seq.msg:
+      name: ac
+      a: AP
+      b: Laptop
+      text: association reply
+      kind: radio
+  adjust: {}
+- id: 14.3.assoc
+  stage: rule
+  narration: 14.3.assoc
+  pdf:
+  - lec14-wireless.pdf
+  - 20
+  concepts:
+  - Wi-Fi Association
+  clarifications: []
+  moves:
+  - rule:
+      text: Association is link-layer attachment. DHCP, ARP, and DNS still come afterward.
+  adjust: {}
+- id: 14.3.addressing
+  stage: state
+  narration: 14.3.addressing
+  pdf:
+  - lec14-wireless.pdf
+  - 31
+  concepts:
+  - Wi-Fi Frame Addressing
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: f
+      zone: top
+      nodes:
+        H:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: H1
+        A:
+          k: ap
+          at:
+          - 4
+          - 0
+          l: AP
+        R:
+          k: router
+          at:
+          - 8
+          - 0
+          l: R
+      links:
+      - - H
+        - A
+        - s: radio
+      - - A
+        - R
+  - table.show:
+      name: ad
+      zone: bottom
+      cols:
+      - Hop
+      - Receiver
+      - Transmitter
+      - Also carries
+      rows:
+      - - Radio
+        - AP
+        - H1
+        - 'Address 3: R'
+      - - Ethernet
+        - R
+        - H1
+        - (no AP address)
+      show: 0
+  - packet.spawn:
+      name: p
+      net: f
+      at: H
+      layers:
+      - radio
+      - ip
+      when: Say host H1
+  - table.reveal:
+      name: ad
+      when: Address one
+  - packet.hop:
+      name: p
+      to: A
+  - packet.swap_link_header:
+      name: p
+      when: The AP then
+  - packet.hop:
+      name: p
+      to: R
+  - table.reveal:
+      name: ad
+  adjust: {}
+- id: 14.3.four
+  stage: state
+  narration: 14.3.four
+  pdf:
+  - lec14-wireless.pdf
+  - 32
+  concepts:
+  - Wi-Fi Frame Addressing
+  clarifications:
+  - wifi-4addr
+  moves:
+  - card:
+      kind: clarification
+      text: Four-address frames are a bridging case, not an ad hoc rule.
+      zone: right_bottom
+  adjust: {}
+- id: 14.3.roam
+  stage: state
+  narration: 14.3.roam
+  pdf:
+  - lec14-wireless.pdf
+  - 35
+  concepts:
+  - Same-Subnet Roaming
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: r
+      zone: left
+      nodes:
+        S:
+          k: switch
+          at:
+          - 3
+          - 2
+          l: Switch
+          lp: up
+        A1:
+          k: ap
+          at:
+          - 0
+          - 0.8
+          l: AP 1
+          lp: left
+        A2:
+          k: ap
+          at:
+          - 6
+          - 0.8
+          l: AP 2
+          lp: right
+        L:
+          k: laptop
+          at:
+          - 0
+          - -0.8
+          l: Laptop
+      links:
+      - - S
+        - A1
+      - - S
+        - A2
+      - - A1
+        - L
+        - s: radio
+  - table.show:
+      name: sw
+      zone: right_top
+      cols:
+      - MAC
+      - Port
+      rows:
+      - - Laptop
+        - 1
+  - net.unlink:
+      name: r
+      a: A1
+      b: L
+      when:
+        phrase: The laptop walks
+        frame_offset: 8
+  - net.move:
+      name: r
+      node: L
+      to:
+      - 6
+      - -0.8
+  - net.relink:
+      name: r
+      a: A2
+      b: L
+      style: radio
+      when: It associates
+  - table.set:
+      name: sw
+      r: 0
+      c: 1
+      v: 2
+      state: now
+      when: the switch's table
+  adjust: {}
+  pre_roll: 1.4000000000000001
+- id: 14.3.pitfall
+  stage: rule
+  narration: 14.3.pitfall
+  pdf:
+  - lec14-wireless.pdf
+  - 35
+  concepts:
+  - Same-Subnet Roaming
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Associating with an AP gives you an IP address
+      right: Association attaches the radio link. DHCP comes after.
+  adjust: {}
+- id: 14.3.changed
+  stage: changed_example
+  narration: 14.3.changed
+  pdf:
+  - lec14-wireless.pdf
+  - 35
+  concepts:
+  - Same-Subnet Roaming
+  clarifications: []
+  moves:
+  - card:
+      kind: note
+      text: Same SSID, but a different router and subnet.
+      zone: right_bottom
+  adjust: {}
+- id: 14.3.predict
+  stage: prediction
+  narration: 14.3.predict
+  pdf:
+  - lec14-wireless.pdf
+  - 35
+  concepts:
+  - Same-Subnet Roaming
+  clarifications: []
+  moves:
+  - pause:
+      text: does the old address still work? what does the SSID guarantee?
+  adjust: {}
+  hold: 6
+- id: 14.3.answer
+  stage: explanation
+  narration: 14.3.answer
+  pdf:
+  - lec14-wireless.pdf
+  - 35
+  concepts:
+  - Same-Subnet Roaming
+  clarifications: []
+  moves:
+  - rule:
+      text: Matching SSIDs are just matching names. Subnet continuity is what counts.
+  - keep: {}
+  adjust: {}

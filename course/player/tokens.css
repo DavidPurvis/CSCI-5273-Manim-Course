@@ -1,0 +1,88 @@
+/* Design tokens for the study player, in three tiers.
+   1. Palette: raw colours. The first nine mirror course/stage/theme.py. course/tests/test_player_design.py fails if they drift.
+   2. Roles: what a colour means in the interface. Components use roles, never palette names.
+   3. Scales: type, space, radius, control size, motion, elevation.
+   Change values here, not in style.css or player.js. */
+
+:root {
+  /* 1. Palette */
+  --blue: #4A9EFF;        /* theme.LAYER["ip"]: links and focus */
+  --orange: #FF8A3D;      /* theme.STATE["now"]: primary action, current selection */
+  --green: #4CD07D;       /* theme.STATE["done"]: success */
+  --red: #FF5A5A;         /* theme.STATE["error"]: danger */
+  --grey: #6B7588;        /* theme.STATE["idle"]: control borders */
+  --ink: #F2F4F8;         /* theme.INK: primary text */
+  --ink-muted: #A9B3C4;   /* theme.MUTED: secondary text */
+  --page: #11141B;        /* theme.BG */
+  --card: #1B2029;        /* theme.PANEL */
+
+  /* UI-only neutrals. The videos never draw these. */
+  --raised: #232936;      /* hover and secondary surfaces */
+  --divider: #2B3240;     /* rules */
+  --track: #3A4456;       /* progress track; decorative, the number beside it carries the value */
+  --black: #000000;       /* video backdrop */
+  --paper: #FFFFFF;       /* slide images */
+  --scrim: rgba(17, 20, 27, .93);   /* pause prompt over video */
+
+  /* 2. Roles */
+  --color-page: var(--page);
+  --color-surface: var(--card);
+  --color-surface-raised: var(--raised);
+  --color-divider: var(--divider);
+  --color-track: var(--track);
+  --color-border: var(--grey);
+  --color-text: var(--ink);
+  --color-text-muted: var(--ink-muted);
+  --color-text-on-action: var(--page);
+  --color-link: var(--blue);
+  --color-focus: var(--blue);
+  --color-action: var(--orange);
+  --color-success: var(--green);
+  --color-danger: var(--red);
+  --color-video: var(--black);
+  --color-slide: var(--paper);
+  --color-scrim: var(--scrim);
+
+  /* 3. Scales */
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --text-xs: 13px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 19px;
+  --text-xl: 22px;
+  --text-2xl: 26px;
+  --leading-tight: 1.25;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-pill: 999px;
+
+  --shadow-dialog: 0 16px 48px rgba(0, 0, 0, .55);
+
+  --control-height: 40px;       /* becomes --target-min on touch screens */
+  --target-min: 44px;
+  --measure-narrow: 760px;
+  --measure-wide: 1320px;
+  --topbar-height: 56px;        /* 100px on phones; sticky offsets read it */
+
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --ease-standard: cubic-bezier(.2, 0, 0, 1);
+
+  color-scheme: dark;
+}

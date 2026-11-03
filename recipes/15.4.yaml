@@ -1,0 +1,481 @@
+dish: '15.4'
+title: Handover
+deck: lec15-mobile.pdf
+target_min: 4.5
+concepts:
+- Cellular Handover
+- Wireless Effects on Transport
+pad: 2.2
+beats:
+- id: 15.4.question
+  stage: question
+  narration: 15.4.question
+  pdf:
+  - lec15-mobile.pdf
+  - 38
+  concepts:
+  - Cellular Handover
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 15: handover'
+  - q:
+      text: How do you move a live session between towers?
+  adjust: {}
+- id: 15.4.before
+  stage: animation
+  narration: 15.4.before
+  pdf:
+  - lec15-mobile.pdf
+  - 39
+  concepts:
+  - Cellular Handover
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show: &id001
+      name: h
+      zone: top
+      nodes:
+        S:
+          k: box
+          at:
+          - 4
+          - 2
+          l: S-GW
+        M:
+          k: box
+          at:
+          - 9
+          - 2
+          l: MME
+        A:
+          k: tower
+          at:
+          - 1.5
+          - 0.8
+          l: A
+          lp: left
+        B:
+          k: tower
+          at:
+          - 6.5
+          - 0.8
+          l: B
+          lp: right
+        U:
+          k: phone
+          at:
+          - 2.5
+          - -0.5
+          l: UE
+          lp: left
+      links:
+      - - S
+        - A
+        - s: tunnel
+      - - A
+        - U
+        - s: radio
+      - - M
+        - S
+        - s: control
+      - - A
+        - B
+        - s: dim
+      - - S
+        - B
+        - s: dim
+  - packet.spawn:
+      name: p
+      net: h
+      at: S
+      layers:
+      - tunnel
+      - ip
+      when: Packets come
+  - packet.hop:
+      name: p
+      to:
+      - A
+      - U
+  - packet.fade:
+      name: p
+  - bullets:
+      name: st
+      zone: bottom
+      show: 0
+      items: $mobile.steps
+      size: 26
+      gap: 0.01
+  - net.state:
+      name: h
+      nodes:
+        B: candidate
+      when: Base station B
+  - msg.send:
+      name: h
+      a: U
+      b: A
+      text: radio report
+      when: Base station A notices
+      t: 1.1
+  adjust: {}
+- id: 15.4.prepare
+  stage: state
+  narration: 15.4.prepare
+  pdf:
+  - lec15-mobile.pdf
+  - 40
+  concepts:
+  - Cellular Handover
+  clarifications: []
+  moves:
+  - reveal:
+      name: st
+      when: Step one
+  - msg.send:
+      name: h
+      a: A
+      b: B
+      text: get ready
+      t: 1.1
+  - reveal:
+      name: st
+      when: Step two
+  - msg.send:
+      name: h
+      a: B
+      b: A
+      text: ready
+      t: 1.1
+  - net.state:
+      name: h
+      nodes:
+        B: done
+  - packet.spawn:
+      name: p2
+      net: h
+      at: S
+      layers:
+      - tunnel
+      - ip
+      when: Nothing has moved
+  - packet.hop:
+      name: p2
+      to:
+      - A
+      - U
+  - packet.fade:
+      name: p2
+  adjust: {}
+- id: 15.4.switch
+  stage: state
+  narration: 15.4.switch
+  pdf:
+  - lec15-mobile.pdf
+  - 40
+  concepts:
+  - Cellular Handover
+  clarifications: []
+  moves:
+  - reveal:
+      name: st
+      when: Step three
+  - msg.send:
+      name: h
+      a: A
+      b: U
+      text: switch
+      t: 0.9
+  - net.unlink:
+      name: h
+      a: A
+      b: U
+      when: the phone begins
+  - net.move:
+      name: h
+      node: U
+      to:
+      - 6
+      - -0.5
+  - net.relink:
+      name: h
+      a: B
+      b: U
+      style: radio
+  - net.state:
+      name: h
+      nodes:
+        S: now
+      when: But the S-GW
+  - reveal:
+      name: st
+      when: Step four
+  - net.state:
+      name: h
+      links:
+      - - A
+        - B
+        - now
+  - packet.spawn:
+      name: q
+      net: h
+      at: S
+      layers:
+      - tunnel
+      - ip
+      when: So during
+  - packet.hop:
+      name: q
+      to:
+      - A
+      - B
+      - U
+      t: 1.6
+  - packet.fade:
+      name: q
+  adjust: {}
+- id: 15.4.pathswitch
+  stage: state
+  narration: 15.4.pathswitch
+  pdf:
+  - lec15-mobile.pdf
+  - 40
+  concepts:
+  - Cellular Handover
+  clarifications: []
+  moves:
+  - reveal:
+      name: st
+      when: Step five
+  - msg.send:
+      name: h
+      a: M
+      b: S
+      text: switch to B
+      kind: control
+      when: The MME tells
+      t: 1.2
+  - net.state:
+      name: h
+      nodes:
+        M: now
+      links:
+      - - M
+        - S
+        - now
+      when: See that this
+  - reveal:
+      name: st
+      when: Step six
+  - net.state:
+      name: h
+      nodes:
+        M: null
+        B: null
+        S: null
+      links:
+      - - S
+        - A
+        - dim
+      - - A
+        - B
+        - dim
+      - - S
+        - B
+        - tunnel
+      - - M
+        - S
+        - control
+  - packet.spawn:
+      name: r
+      net: h
+      at: S
+      layers:
+      - tunnel
+      - ip
+      when: The outer destination
+  - packet.hop:
+      name: r
+      to:
+      - B
+      - U
+  - packet.fade:
+      name: r
+  adjust: {}
+- id: 15.4.rule
+  stage: rule
+  narration: 15.4.rule
+  pdf:
+  - lec15-mobile.pdf
+  - 40
+  concepts:
+  - Cellular Handover
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: p3
+      zone: top
+      cols:
+      - Phase
+      - Path
+      rows:
+      - - $mobile.handover.0.phase
+        - S-GW, A, UE
+      - - $mobile.handover.1.phase
+        - S-GW, A, B, UE
+      - - $mobile.handover.2.phase
+        - S-GW, B, UE
+      show: 0
+  - table.reveal:
+      name: p3
+      when: 'Before:'
+  - table.reveal:
+      name: p3
+      when: 'During:'
+  - table.reveal:
+      name: p3
+      when: 'After:'
+  - table.mark:
+      name: p3
+      r: 1
+      state: now
+      when: The middle stage
+  - rule:
+      text: Prepare, move the radio, forward temporarily, switch the core path, release.
+  adjust: {}
+- id: 15.4.transport
+  stage: state
+  narration: 15.4.transport
+  pdf:
+  - lec15-mobile.pdf
+  - 41
+  concepts:
+  - Wireless Effects on Transport
+  clarifications: []
+  moves:
+  - bullets:
+      name: ef
+      zone: bottom
+      show: 0
+      items:
+      - 'Temporary longer path: more delay'
+      - Possible reordering
+      - 'Radio retries: changing round-trip time'
+  - reveal:
+      name: ef
+      when: The longer forwarding
+  - reveal:
+      name: ef
+      when: Packets can arrive
+  - reveal:
+      name: ef
+      when: Radio errors
+  - rule:
+      text: TCP may read these effects as congestion, even when no queue is full.
+      when: But TCP might
+  adjust: {}
+- id: 15.4.pitfall
+  stage: rule
+  narration: 15.4.pitfall
+  pdf:
+  - lec15-mobile.pdf
+  - 41
+  concepts:
+  - Wireless Effects on Transport
+  clarifications: []
+  moves:
+  - trap:
+      wrong: The MME carries packets during handover
+      right: The MME sends control messages. The data goes through the towers.
+  adjust: {}
+- id: 15.4.changed
+  stage: changed_example
+  narration: 15.4.changed
+  pdf:
+  - lec15-mobile.pdf
+  - 40
+  concepts:
+  - Cellular Handover
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show: *id001
+  - net.state:
+      name: h
+      links:
+      - - S
+        - A
+        - dim
+      - - S
+        - B
+        - tunnel
+  adjust: {}
+- id: 15.4.predict
+  stage: prediction
+  narration: 15.4.predict
+  pdf:
+  - lec15-mobile.pdf
+  - 40
+  concepts:
+  - Cellular Handover
+  clarifications: []
+  moves:
+  - pause:
+      text: what happens to packets during that gap?
+  adjust: {}
+  hold: 6
+- id: 15.4.answer
+  stage: explanation
+  narration: 15.4.answer
+  pdf:
+  - lec15-mobile.pdf
+  - 40
+  concepts:
+  - Cellular Handover
+  - Wireless Effects on Transport
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: x
+      net: h
+      at: S
+      layers:
+      - tunnel
+      - ip
+      when: Packets reach B
+  - packet.hop:
+      name: x
+      to: B
+  - net.state:
+      name: h
+      nodes:
+        B: error
+      when: so B has nobody
+  - packet.drop:
+      name: x
+      when: or they'd be lost
+  - net.state:
+      name: h
+      nodes:
+        B: null
+      links:
+      - - S
+        - B
+        - dim
+      - - S
+        - A
+        - tunnel
+      when: The real ordering
+  - rule:
+      text: 'Order matters: move the radio, forward through A, then switch the core.'
+      when: Order matters
+  - clear:
+      when: So let's put
+  - spine:
+      current: Move
+      zone: top
+  - keep: {}
+  adjust: {}

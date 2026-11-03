@@ -1,0 +1,369 @@
+dish: '7.3'
+title: The IPv4 header
+deck: lec07-network1.pdf
+target_min: 4.5
+concepts:
+- IPv4 Header
+- IPv4 Header Checksum
+- IP TTL and Traceroute
+pad: 2.2
+beats:
+- id: 7.3.question
+  stage: question
+  narration: 7.3.question
+  pdf:
+  - lec07-network1.pdf
+  - 33
+  concepts:
+  - IPv4 Header
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 7: the IPv4 header'
+  - q:
+      text: What does a router actually need to read?
+  adjust: {}
+- id: 7.3.fields
+  stage: animation
+  narration: 7.3.fields
+  pdf:
+  - lec07-network1.pdf
+  - 33
+  concepts:
+  - IPv4 Header
+  clarifications: []
+  moves:
+  - clear: {}
+  - fields.show:
+      name: h
+      zone: top
+      unit: 0.38
+      rows:
+      - - - Version
+          - 4
+        - - IHL
+          - 4
+        - - Type of service
+          - 8
+        - - Total length
+          - 16
+      - - - Identification
+          - 16
+        - - Flags
+          - 3
+        - - Fragment offset
+          - 13
+      - - - TTL
+          - 8
+        - - Protocol
+          - 8
+        - - Header checksum
+          - 16
+      - - - Source address
+          - 32
+      - - - Destination address
+          - 32
+  - fields.mark:
+      name: h
+      label: IHL
+      when: IHL, the header
+  - tex:
+      name: ihl
+      zone: bottom
+      tex: \text{IHL}=6:\ 6\times 4=24\text{ header bytes},\quad 1024-24=1000\text{ payload bytes}
+      size: 36
+      when: A packet with
+  adjust: {}
+- id: 7.3.length
+  stage: state
+  narration: 7.3.length
+  pdf:
+  - lec07-network1.pdf
+  - 35
+  concepts:
+  - IPv4 Header
+  clarifications:
+  - ipv4-max
+  moves:
+  - fields.mark:
+      name: h
+      label: IHL
+      state: null
+  - fields.mark:
+      name: h
+      label: Total length
+  - card:
+      kind: correction
+      text: Slide says 63,535. A 16-bit field holds up to 65,535 bytes.
+      zone: bottom
+      when: The slide prints
+  adjust: {}
+- id: 7.3.protocol
+  stage: state
+  narration: 7.3.protocol
+  pdf:
+  - lec07-network1.pdf
+  - 39
+  concepts:
+  - IPv4 Header
+  clarifications: []
+  moves:
+  - fields.mark:
+      name: h
+      label: Total length
+      state: null
+  - fields.mark:
+      name: h
+      label: Protocol
+  - stack.show:
+      name: chain
+      zone: bottom
+      width: 8
+      layers:
+      - t: 'Ethernet type: this payload is IPv4'
+        k: eth
+      - t: 'IPv4 protocol: this payload is UDP'
+        k: ip
+      - t: 'UDP port: this program'
+        k: transport
+  adjust: {}
+- id: 7.3.ttl
+  stage: animation
+  narration: 7.3.ttl
+  pdf:
+  - lec07-network1.pdf
+  - 38
+  concepts:
+  - IP TTL and Traceroute
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: tr
+      zone: top
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        R1:
+          k: router
+          at:
+          - 3.5
+          - 0
+          l: R1
+        R2:
+          k: router
+          at:
+          - 7
+          - 0
+          l: R2
+        W:
+          k: server
+          at:
+          - 10.5
+          - 0
+          l: Server
+      links:
+      - - L
+        - R1
+      - - R1
+        - R2
+      - - R2
+        - W
+  - packet.spawn:
+      name: p1
+      net: tr
+      at: L
+      layers:
+      - ip
+      when: Traceroute sends
+  - packet.hop:
+      name: p1
+      to: R1
+  - packet.drop:
+      name: p1
+  - table.show:
+      name: tt
+      zone: bottom
+      cols:
+      - Probe TTL
+      - Reply from
+      rows:
+      - - 1
+        - R1
+      - - 2
+        - R2
+      - - 3
+        - Server
+      show: 1
+  - packet.spawn:
+      name: p2
+      net: tr
+      at: L
+      layers:
+      - ip
+      when: Then TTL 2
+  - packet.hop:
+      name: p2
+      to:
+      - R1
+      - R2
+  - packet.drop:
+      name: p2
+  - table.reveal:
+      name: tt
+  adjust: {}
+- id: 7.3.checksum
+  stage: state
+  narration: 7.3.checksum
+  pdf:
+  - lec07-network1.pdf
+  - 41
+  concepts:
+  - IPv4 Header Checksum
+  clarifications: []
+  moves:
+  - table.show:
+      name: ck
+      zone: bottom
+      cols:
+      - TTL
+      - Header checksum
+      rows:
+      - - $ipv4.checksum_ttl64.ttl
+        - $ipv4.checksum_ttl64.checksum
+      - - $ipv4.checksum_ttl63.ttl
+        - $ipv4.checksum_ttl63.checksum
+    when: With TTL 64
+  adjust: {}
+- id: 7.3.rule
+  stage: rule
+  narration: 7.3.rule
+  pdf:
+  - lec07-network1.pdf
+  - 42
+  concepts:
+  - IPv4 Header
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: units
+      zone: full
+      cols:
+      - Field
+      - Unit
+      rows:
+      - - IHL
+        - 32-bit words
+      - - Total length
+        - bytes
+      - - Fragment offset
+        - 8-byte units
+      - - TTL
+        - router hops
+  - rule:
+      text: Every field has a unit. Read the unit first.
+  adjust: {}
+- id: 7.3.pitfall
+  stage: rule
+  narration: 7.3.pitfall
+  pdf:
+  - lec07-network1.pdf
+  - 42
+  concepts:
+  - IPv4 Header
+  clarifications: []
+  moves:
+  - trap:
+      wrong: The IP checksum protects the whole packet
+      right: It covers the header only, and it can't correct errors
+  adjust: {}
+- id: 7.3.changed
+  stage: changed_example
+  narration: 7.3.changed
+  pdf:
+  - lec07-network1.pdf
+  - 38
+  concepts:
+  - IP TTL and Traceroute
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: lp
+      zone: top
+      nodes:
+        R1:
+          k: router
+          at:
+          - 0
+          - 0
+          l: R1
+        R2:
+          k: router
+          at:
+          - 6
+          - 0
+          l: R2
+      links:
+      - - R1
+        - R2
+        - s: failed
+  - packet.spawn:
+      name: c
+      net: lp
+      at: R1
+      layers:
+      - ip
+  - packet.hop:
+      name: c
+      to:
+      - R2
+      - R1
+      - R2
+  adjust: {}
+- id: 7.3.predict
+  stage: prediction
+  narration: 7.3.predict
+  pdf:
+  - lec07-network1.pdf
+  - 38
+  concepts:
+  - IP TTL and Traceroute
+  clarifications: []
+  moves:
+  - pause:
+      text: does TTL rescue it? what does each TTL count?
+  adjust: {}
+  hold: 6
+- id: 7.3.answer
+  stage: explanation
+  narration: 7.3.answer
+  pdf:
+  - lec07-network1.pdf
+  - 38
+  concepts:
+  - IP TTL and Traceroute
+  clarifications: []
+  moves:
+  - packet.drop:
+      name: c
+  - table.show:
+      name: ttls
+      zone: bottom
+      cols:
+      - Name
+      - Counts
+      rows:
+      - - IP TTL
+        - router hops
+      - - DNS TTL
+        - seconds of cache
+      - - Switch timer
+        - seconds of aging
+  - keep: {}
+  adjust: {}

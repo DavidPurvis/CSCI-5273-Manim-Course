@@ -1,0 +1,356 @@
+dish: '9.2'
+title: Finding a name
+deck: lec09-discovery.pdf
+target_min: 5.5
+concepts:
+- DNS Hierarchy and Zones
+- Recursive DNS Queries
+- Iterative DNS Queries
+- DNS Caching
+- Negative DNS Caching
+pad: 2.2
+beats:
+- id: 9.2.question
+  stage: question
+  narration: 9.2.question
+  pdf:
+  - lec09-discovery.pdf
+  - 26
+  concepts:
+  - DNS Hierarchy and Zones
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 9: finding a name'
+  - q:
+      text: Could one file, or one server, hold every name?
+  adjust: {}
+- id: 9.2.rejected
+  stage: animation
+  narration: 9.2.rejected
+  pdf:
+  - lec09-discovery.pdf
+  - 27
+  concepts:
+  - DNS Hierarchy and Zones
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: false
+      zone: top
+      cols:
+      - Design
+      - Why it fails
+      rows:
+      - - Global hosts file
+        - huge and always stale
+      - - One central server
+        - fragile and overloaded
+  adjust: {}
+- id: 9.2.hierarchy
+  stage: state
+  narration: 9.2.hierarchy
+  pdf:
+  - lec09-discovery.pdf
+  - 30
+  concepts:
+  - DNS Hierarchy and Zones
+  clarifications:
+  - dns-roots
+  moves:
+  - net.show:
+      name: tree
+      zone: bottom
+      nodes:
+        r:
+          k: box
+          at:
+          - 4
+          - 2
+          l: Root
+        t:
+          k: box
+          at:
+          - 1.5
+          - 1
+          l: .test
+        c:
+          k: box
+          at:
+          - 6.5
+          - 1
+          l: .com
+        e:
+          k: box
+          at:
+          - 1.5
+          - 0
+          l: example.test
+      links:
+      - - r
+        - t
+      - - r
+        - c
+      - - t
+        - e
+  - card:
+      kind: clarification
+      text: 13 root identities, A to M, with many physical instances.
+      zone: top
+      when: By the way
+  adjust: {}
+- id: 9.2.lookup
+  stage: state
+  narration: 9.2.lookup
+  pdf:
+  - lec09-discovery.pdf
+  - 36
+  concepts:
+  - Recursive DNS Queries
+  - Iterative DNS Queries
+  clarifications: []
+  moves:
+  - clear: {}
+  - seq.show:
+      name: dn
+      zone: full
+      lanes:
+      - Laptop
+      - Resolver
+      - Root
+      - .test
+      - example.test
+      steps: 8
+  - seq.msg:
+      name: dn
+      a: Laptop
+      b: Resolver
+      text: find this name
+      kind: transport
+      when: The laptop asks
+  - seq.msg:
+      name: dn
+      a: Resolver
+      b: Root
+      text: query
+      kind: ip
+      when: The resolver then
+  - seq.msg:
+      name: dn
+      a: Root
+      b: Resolver
+      text: try .test
+      kind: data
+  - seq.msg:
+      name: dn
+      a: Resolver
+      b: .test
+      text: query
+      kind: ip
+      when: The resolver asks those
+  - seq.msg:
+      name: dn
+      a: .test
+      b: Resolver
+      text: try example.test
+      kind: data
+  - seq.msg:
+      name: dn
+      a: Resolver
+      b: example.test
+      text: query
+      kind: ip
+      when: It asks that
+  - seq.msg:
+      name: dn
+      a: example.test
+      b: Resolver
+      text: 203.0.113.80
+      kind: data
+      state: done
+  - seq.msg:
+      name: dn
+      a: Resolver
+      b: Laptop
+      text: 203.0.113.80
+      kind: transport
+      state: done
+      when: The result returns
+  adjust: {}
+- id: 9.2.rule-rec
+  stage: rule
+  narration: 9.2.rule-rec
+  pdf:
+  - lec09-discovery.pdf
+  - 36
+  concepts:
+  - Recursive DNS Queries
+  - Iterative DNS Queries
+  clarifications: []
+  moves:
+  - rule:
+      text: 'Client to resolver: recursive. Resolver down the tree: iterative.'
+  adjust: {}
+- id: 9.2.cache
+  stage: state
+  narration: 9.2.cache
+  pdf:
+  - lec09-discovery.pdf
+  - 37
+  concepts:
+  - DNS Caching
+  clarifications: []
+  moves:
+  - clear: {}
+  - tl.show:
+      name: cl
+      zone: top
+      tracks:
+      - Authoritative
+      - Cache
+      span:
+      - 0
+      - 5
+      ticks:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - tl.block:
+      name: cl
+      track: Cache
+      start: 0
+      end: 5
+      text: old address, TTL 300 s
+      kind: ip
+      when: Store a record
+  - tl.block:
+      name: cl
+      track: Authoritative
+      start: 0
+      end: 1
+      text: old
+      kind: data
+      when: If the real
+  - tl.block:
+      name: cl
+      track: Authoritative
+      start: 1
+      end: 5
+      text: new address
+      state: done
+  - rule:
+      text: 'Long TTL: less load, staler answers. Short TTL: fresher answers, more load.'
+  adjust: {}
+- id: 9.2.negative
+  stage: state
+  narration: 9.2.negative
+  pdf:
+  - lec09-discovery.pdf
+  - 38
+  concepts:
+  - Negative DNS Caching
+  clarifications: []
+  moves:
+  - table.show:
+      name: neg
+      zone: bottom
+      cols:
+      - Cached result
+      - Effect
+      rows:
+      - - name does not exist
+        - typos fail fast
+      - - but then the name is added
+        - hidden until expiry
+  adjust: {}
+- id: 9.2.negative-more
+  stage: state
+  narration: 9.2.negative-more
+  pdf:
+  - lec09-discovery.pdf
+  - 38
+  concepts:
+  - Negative DNS Caching
+  clarifications: []
+  moves:
+  - table.mark:
+      name: neg
+      r: 0
+      state: done
+      when: Once the resolver
+  - rule:
+      text: No such name is an answer. A timeout is only silence.
+      when: A timeout is
+  adjust: {}
+- id: 9.2.pitfall
+  stage: rule
+  narration: 9.2.pitfall
+  pdf:
+  - lec09-discovery.pdf
+  - 38
+  concepts:
+  - Negative DNS Caching
+  clarifications: []
+  moves:
+  - trap:
+      wrong: DNS TTL counts hops, like IP TTL
+      right: DNS TTL is a cache lifetime in seconds
+  adjust: {}
+- id: 9.2.changed
+  stage: changed_example
+  narration: 9.2.changed
+  pdf:
+  - lec09-discovery.pdf
+  - 38
+  concepts:
+  - DNS Caching
+  clarifications: []
+  moves:
+  - clear: {}
+  - q:
+      text: A second laptop asks 240 seconds later. The TTL is 300.
+      zone: top
+  adjust: {}
+- id: 9.2.predict
+  stage: prediction
+  narration: 9.2.predict
+  pdf:
+  - lec09-discovery.pdf
+  - 38
+  concepts:
+  - DNS Caching
+  clarifications: []
+  moves:
+  - pause:
+      text: how many hierarchy queries at 240 s? at 300 s?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 9.2.answer
+  stage: explanation
+  narration: 9.2.answer
+  pdf:
+  - lec09-discovery.pdf
+  - 38
+  concepts:
+  - DNS Caching
+  - Iterative DNS Queries
+  clarifications: []
+  moves:
+  - table.show:
+      name: a
+      zone: bottom
+      cols:
+      - Time
+      - Hierarchy queries
+      rows:
+      - - 240 s
+        - '0'
+      - - 300 s
+        - up to 3, fewer with cached referrals
+  - keep: {}
+  adjust: {}

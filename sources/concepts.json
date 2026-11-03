@@ -1,0 +1,1513 @@
+{
+ "Channel Partitioning": {
+  "lecture": "L06",
+  "pages": [
+   7
+  ],
+  "definition": "**Channel Partitioning** divides a shared medium into assigned portions of time, frequency, or code."
+ },
+ "Taking Turns": {
+  "lecture": "L06",
+  "pages": [
+   7
+  ],
+  "definition": "**Taking Turns** coordinates shared-medium access by granting users permission in an order."
+ },
+ "Random Access": {
+  "lecture": "L06",
+  "pages": [
+   7
+  ],
+  "definition": "**Random Access** lets users contend for a shared medium when they have data to send."
+ },
+ "Ethernet Frames": {
+  "lecture": "L06",
+  "pages": [
+   11
+  ],
+  "definition": "**Ethernet Frames** carry local-link data with source and destination MAC addresses, a type field, and an error check."
+ },
+ "MAC Addresses": {
+  "lecture": "L06",
+  "pages": [
+   28
+  ],
+  "definition": "**MAC Addresses** identify link-layer interfaces for local frame delivery."
+ },
+ "CSMA-CD": {
+  "lecture": "L06",
+  "pages": [
+   12
+  ],
+  "definition": "**CSMA-CD** senses a shared Ethernet medium and detects collisions while transmitting."
+ },
+ "Binary Exponential Backoff": {
+  "lecture": "L06",
+  "pages": [
+   12
+  ],
+  "definition": "**Binary Exponential Backoff** increases the range of randomized retry delays after repeated collisions."
+ },
+ "Collision Detection Window": {
+  "lecture": "L06",
+  "pages": [
+   13,
+   14
+  ],
+  "definition": "**Collision Detection Window** requires shared-Ethernet transmission time to cover the worst-case round-trip propagation delay."
+ },
+ "Repeaters and Hubs": {
+  "lecture": "L06",
+  "pages": [
+   15,
+   16,
+   18
+  ],
+  "definition": "**Repeaters and Hubs** operate at the physical layer and join segments into a shared transmission medium."
+ },
+ "Ethernet Switching": {
+  "lecture": "L06",
+  "pages": [
+   20,
+   21,
+   49
+  ],
+  "definition": "**Ethernet Switching** forwards frames between ports using destination MAC addresses."
+ },
+ "Full-Duplex Links": {
+  "lecture": "L06",
+  "pages": [
+   22,
+   23
+  ],
+  "definition": "**Full-Duplex Links** allow simultaneous transmission in both directions on a point-to-point link."
+ },
+ "Store-and-Forward Switching": {
+  "lecture": "L06",
+  "pages": [
+   26
+  ],
+  "definition": "**Store-and-Forward Switching** receives a complete frame before forwarding it."
+ },
+ "Cut-Through Switching": {
+  "lecture": "L06",
+  "pages": [
+   26
+  ],
+  "definition": "**Cut-Through Switching** starts forwarding after enough header information arrives, before receiving the full frame."
+ },
+ "Self-Learning Switch Tables": {
+  "lecture": "L06",
+  "pages": [
+   30,
+   31,
+   32,
+   34
+  ],
+  "definition": "**Self-Learning Switch Tables** learn source MAC locations from arriving frames and use them to forward destinations."
+ },
+ "Spanning Tree Protocol": {
+  "lecture": "L06",
+  "pages": [
+   35,
+   36,
+   37,
+   38,
+   39,
+   40,
+   41
+  ],
+  "definition": "**Spanning Tree Protocol** selects a loop-free active topology for bridged Ethernet."
+ },
+ "VLANs": {
+  "lecture": "L06",
+  "pages": [
+   42,
+   43,
+   44,
+   45,
+   46
+  ],
+  "definition": "**VLANs** divide shared switching infrastructure into separate logical layer-2 broadcast domains."
+ },
+ "Port-Based VLANs": {
+  "lecture": "L06",
+  "pages": [
+   45,
+   46
+  ],
+  "definition": "**Port-Based VLANs** assign VLAN membership according to the switch port receiving a frame."
+ },
+ "MAC-Based VLANs": {
+  "lecture": "L06",
+  "pages": [
+   44
+  ],
+  "definition": "**MAC-Based VLANs** assign VLAN membership using the endpoint MAC address."
+ },
+ "802.1Q Trunking": {
+  "lecture": "L06",
+  "pages": [
+   47,
+   48
+  ],
+  "definition": "**802.1Q Trunking** carries VLAN identity in tagged Ethernet frames across links shared by multiple VLANs."
+ },
+ "Packet Switching": {
+  "lecture": "L07",
+  "pages": [
+   4,
+   5
+  ],
+  "definition": "**Packet Switching** shares network links by forwarding independently addressed packets as capacity becomes available."
+ },
+ "Circuit Switching": {
+  "lecture": "L07",
+  "pages": [
+   8
+  ],
+  "definition": "**Circuit Switching** reserves a communication path or resource allocation before data transfer."
+ },
+ "Statistical Multiplexing": {
+  "lecture": "L07",
+  "pages": [
+   5
+  ],
+  "definition": "**Statistical Multiplexing** shares capacity according to actual packet arrivals rather than fixed per-user slices."
+ },
+ "Best-Effort Service": {
+  "lecture": "L07",
+  "pages": [
+   6,
+   7,
+   14,
+   15
+  ],
+  "definition": "**Best-Effort Service** attempts packet delivery without guaranteeing delivery, order, delay, or bandwidth."
+ },
+ "Network Planes": {
+  "lecture": "L07",
+  "pages": [
+   9,
+   10,
+   11,
+   12,
+   13
+  ],
+  "definition": "**Network Planes** separate packet forwarding, route computation, and administrative configuration."
+ },
+ "Software-Defined Networking": {
+  "lecture": "L07",
+  "pages": [
+   13
+  ],
+  "definition": "**Software-Defined Networking** places control logic in a controller that programs forwarding devices."
+ },
+ "IPv4 Addresses": {
+  "lecture": "L07",
+  "pages": [
+   17
+  ],
+  "definition": "**IPv4 Addresses** are 32-bit interface addresses used for network-layer delivery."
+ },
+ "CIDR and Aggregation": {
+  "lecture": "L07",
+  "pages": [
+   21,
+   24,
+   25,
+   28,
+   29,
+   30,
+   31
+  ],
+  "definition": "**CIDR and Aggregation** use arbitrary prefix lengths and combine aligned address blocks to reduce routing state."
+ },
+ "Subnet Masks": {
+  "lecture": "L07",
+  "pages": [
+   22,
+   23
+  ],
+  "definition": "**Subnet Masks** mark which IPv4 address bits belong to the network prefix."
+ },
+ "Network and Broadcast Addresses": {
+  "lecture": "L07",
+  "pages": [
+   23
+  ],
+  "definition": "**Network and Broadcast Addresses** identify the all-zero and all-one host-bit endpoints of an ordinary IPv4 subnet."
+ },
+ "Classful Addressing": {
+  "lecture": "L07",
+  "pages": [
+   27
+  ],
+  "definition": "**Classful Addressing** is the historical fixed-size IPv4 allocation scheme with class A, B, and C unicast networks."
+ },
+ "IPv4 Header": {
+  "lecture": "L07",
+  "pages": [
+   33,
+   34,
+   35,
+   40,
+   42
+  ],
+  "definition": "**IPv4 Header** contains the addresses and control fields needed to carry an IPv4 datagram."
+ },
+ "IPv4 Fragmentation": {
+  "lecture": "L07",
+  "pages": [
+   35,
+   36,
+   37
+  ],
+  "definition": "**IPv4 Fragmentation** splits an oversized IPv4 datagram into smaller datagrams that fit a link MTU."
+ },
+ "IP TTL and Traceroute": {
+  "lecture": "L07",
+  "pages": [
+   38,
+   39
+  ],
+  "definition": "**IP TTL and Traceroute** limit packet forwarding lifetime and reveal successive hops through TTL-expiry responses."
+ },
+ "IPv4 Header Checksum": {
+  "lecture": "L07",
+  "pages": [
+   41
+  ],
+  "definition": "**IPv4 Header Checksum** detects many errors in the IPv4 header using a one’s-complement checksum."
+ },
+ "QoS Service Models": {
+  "lecture": "L07",
+  "pages": [
+   14
+  ],
+  "definition": "**QoS Service Models** describe which bandwidth, loss, order, and timing properties a network service promises."
+ },
+ "ATM Constant Bit Rate": {
+  "lecture": "L07",
+  "pages": [
+   14
+  ],
+  "definition": "**ATM Constant Bit Rate** is the reserved constant-rate service example in the lecture’s network-service comparison."
+ },
+ "ATM Available Bit Rate": {
+  "lecture": "L07",
+  "pages": [
+   14
+  ],
+  "definition": "**ATM Available Bit Rate** is the lecture’s ATM example with a guaranteed minimum rate rather than a fixed constant allocation."
+ },
+ "Integrated Services": {
+  "lecture": "L07",
+  "pages": [
+   14
+  ],
+  "definition": "**Integrated Services** is the lecture’s Internet architecture example for explicit per-flow service guarantees."
+ },
+ "Differentiated Services": {
+  "lecture": "L07",
+  "pages": [
+   14
+  ],
+  "definition": "**Differentiated Services** is the lecture’s architecture example for treating classes of packets differently."
+ },
+ "VLSM Subnetting": {
+  "lecture": "L08",
+  "pages": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "definition": "**VLSM Subnetting** allocates differently sized aligned subnets within a larger address block."
+ },
+ "Longest Prefix Matching": {
+  "lecture": "L08",
+  "pages": [
+   13,
+   14,
+   15,
+   16,
+   28,
+   29
+  ],
+  "definition": "**Longest Prefix Matching** chooses the matching route with the most specific destination prefix."
+ },
+ "Router Architecture": {
+  "lecture": "L08",
+  "pages": [
+   9,
+   10,
+   11,
+   18,
+   34
+  ],
+  "definition": "**Router Architecture** separates input processing, a switching fabric, output processing, and routing control."
+ },
+ "Memory Switching": {
+  "lecture": "L08",
+  "pages": [
+   20
+  ],
+  "definition": "**Memory Switching** moves packets between router ports by copying through shared memory."
+ },
+ "Bus Switching": {
+  "lecture": "L08",
+  "pages": [
+   21
+  ],
+  "definition": "**Bus Switching** transfers packets across a shared internal bus from input to output memory."
+ },
+ "Crossbar and Clos Switching": {
+  "lecture": "L08",
+  "pages": [
+   22,
+   23
+  ],
+  "definition": "**Crossbar and Clos Switching** use interconnected switching elements to support parallel internal packet transfers."
+ },
+ "Input Queuing and HOL Blocking": {
+  "lecture": "L08",
+  "pages": [
+   24
+  ],
+  "definition": "**Input Queuing and HOL Blocking** hold packets before the fabric, where a blocked first packet can delay packets behind it."
+ },
+ "Output Queuing and Scheduling": {
+  "lecture": "L08",
+  "pages": [
+   25,
+   26
+  ],
+  "definition": "**Output Queuing and Scheduling** buffer packets awaiting an output link and choose the next packet to transmit."
+ },
+ "Patricia Tries": {
+  "lecture": "L08",
+  "pages": [
+   31,
+   32
+  ],
+  "definition": "**Patricia Tries** organize address prefixes in a compressed bitwise search tree for forwarding lookup."
+ },
+ "TCAM": {
+  "lecture": "L08",
+  "pages": [
+   17,
+   32
+  ],
+  "definition": "**TCAM** matches keys in parallel against stored bit patterns containing zero, one, and don’t-care values."
+ },
+ "Generalized Forwarding": {
+  "lecture": "L08",
+  "pages": [
+   11
+  ],
+  "definition": "**Generalized Forwarding** matches selected packet-header fields and applies a configured action."
+ },
+ "Content-Addressable Memory": {
+  "lecture": "L08",
+  "pages": [
+   32
+  ],
+  "definition": "**Content-Addressable Memory** retrieves entries by matching stored content rather than supplying an ordinary memory location."
+ },
+ "Names Addresses and Indirection": {
+  "lecture": "L09",
+  "pages": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "definition": "**Names Addresses and Indirection** separate human-readable identity, topological location, and local interface delivery."
+ },
+ "Soft State": {
+  "lecture": "L09",
+  "pages": [
+   12,
+   20
+  ],
+  "definition": "**Soft State** expires unless refreshed, allowing stale information to disappear without explicit cleanup."
+ },
+ "DHCP": {
+  "lecture": "L09",
+  "pages": [
+   14,
+   16,
+   17,
+   21,
+   22,
+   23
+  ],
+  "definition": "**DHCP** automatically supplies an interface with an IP configuration and a lease."
+ },
+ "DHCP Leases and Reservations": {
+  "lecture": "L09",
+  "pages": [
+   18,
+   20
+  ],
+  "definition": "**DHCP Leases and Reservations** control how long an allocation lasts and whether an endpoint receives a configured fixed assignment."
+ },
+ "ARP": {
+  "lecture": "L09",
+  "pages": [
+   24,
+   25,
+   54,
+   58
+  ],
+  "definition": "**ARP** resolves an on-link IPv4 next-hop address to a link-layer address."
+ },
+ "DNS Hierarchy and Zones": {
+  "lecture": "L09",
+  "pages": [
+   26,
+   27,
+   28,
+   29,
+   30,
+   31,
+   32,
+   33,
+   34
+  ],
+  "definition": "**DNS Hierarchy and Zones** distribute name records through delegated authority rather than one flat global file."
+ },
+ "Recursive DNS Queries": {
+  "lecture": "L09",
+  "pages": [
+   35,
+   36
+  ],
+  "definition": "**Recursive DNS Queries** ask a DNS server to obtain an answer on the requester’s behalf."
+ },
+ "Iterative DNS Queries": {
+  "lecture": "L09",
+  "pages": [
+   35,
+   36,
+   47,
+   48
+  ],
+  "definition": "**Iterative DNS Queries** ask for an answer or a referral, leaving the requester to contact the next server."
+ },
+ "DNS Caching": {
+  "lecture": "L09",
+  "pages": [
+   37,
+   39,
+   40
+  ],
+  "definition": "**DNS Caching** reuses DNS results until their allowed cache lifetime expires."
+ },
+ "Negative DNS Caching": {
+  "lecture": "L09",
+  "pages": [
+   38
+  ],
+  "definition": "**Negative DNS Caching** temporarily remembers DNS nonexistence or missing-record results."
+ },
+ "DNS Resource Records": {
+  "lecture": "L09",
+  "pages": [
+   41,
+   42,
+   44,
+   45,
+   46
+  ],
+  "definition": "**DNS Resource Records** store typed name-to-value information with a cache lifetime."
+ },
+ "DNS A Records": {
+  "lecture": "L09",
+  "pages": [
+   41
+  ],
+  "definition": "**DNS A Records** map a DNS name to an IPv4 address."
+ },
+ "DNS NS Records": {
+  "lecture": "L09",
+  "pages": [
+   41
+  ],
+  "definition": "**DNS NS Records** identify the DNS servers authoritative for a domain or delegated zone."
+ },
+ "DNS CNAME Records": {
+  "lecture": "L09",
+  "pages": [
+   41
+  ],
+  "definition": "**DNS CNAME Records** map an alias name to another canonical DNS name."
+ },
+ "DNS MX Records": {
+  "lecture": "L09",
+  "pages": [
+   41,
+   46
+  ],
+  "definition": "**DNS MX Records** identify mail exchanger hostnames and their delivery preferences for a domain."
+ },
+ "DNS Reliability": {
+  "lecture": "L09",
+  "pages": [
+   43
+  ],
+  "definition": "**DNS Reliability** combines replicated servers, retries, timeouts, and response matching to survive failures."
+ },
+ "Shortest-Path Routing": {
+  "lecture": "L10",
+  "pages": [
+   19,
+   20
+  ],
+  "definition": "**Shortest-Path Routing** chooses paths minimizing a common sum of link costs."
+ },
+ "Link-State Routing": {
+  "lecture": "L10",
+  "pages": [
+   21,
+   22,
+   45,
+   48
+  ],
+  "definition": "**Link-State Routing** floods link information so each router can compute routes from a network graph."
+ },
+ "Dijkstra Algorithm": {
+  "lecture": "L10",
+  "pages": [
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31,
+   32,
+   33,
+   34,
+   35,
+   36
+  ],
+  "definition": "**Dijkstra Algorithm** computes shortest paths by repeatedly finalizing the smallest tentative distance."
+ },
+ "Distance-Vector Routing": {
+  "lecture": "L10",
+  "pages": [
+   37,
+   38,
+   39,
+   40,
+   41,
+   42,
+   43,
+   44,
+   45,
+   49
+  ],
+  "definition": "**Distance-Vector Routing** learns destination distances from neighbors rather than distributing the whole topology."
+ },
+ "Bellman-Ford Updates": {
+  "lecture": "L10",
+  "pages": [
+   38,
+   39,
+   40,
+   41
+  ],
+  "definition": "**Bellman-Ford Updates** compute a node’s distance as the minimum link-plus-neighbor advertised distance."
+ },
+ "Path-Vector Routing": {
+  "lecture": "L10",
+  "pages": [
+   50,
+   51,
+   52
+  ],
+  "definition": "**Path-Vector Routing** advertises a destination path so nodes can reject loops and apply path policies."
+ },
+ "OSPF": {
+  "lecture": "L10",
+  "pages": [
+   22
+  ],
+  "definition": "**OSPF** is a link-state interior routing protocol used to compute paths within an autonomous system."
+ },
+ "IS-IS": {
+  "lecture": "L10",
+  "pages": [
+   22
+  ],
+  "definition": "**IS-IS** is a link-state interior routing protocol named alongside OSPF in the lectures."
+ },
+ "RIP": {
+  "lecture": "L10",
+  "pages": [
+   38,
+   45
+  ],
+  "definition": "**RIP** is a distance-vector interior routing protocol with hop-count metrics and bounded infinity."
+ },
+ "EIGRP": {
+  "lecture": "L10",
+  "pages": [
+   38
+  ],
+  "definition": "**EIGRP** is an advanced distance-vector routing protocol named as a distance-vector example in the deck."
+ },
+ "MPLS Label Switching": {
+  "lecture": "L10",
+  "pages": [
+   53,
+   54,
+   55,
+   56
+  ],
+  "definition": "**MPLS Label Switching** forwards encapsulated packets using labels that identify a forwarding path or class."
+ },
+ "RSVP Signaling": {
+  "lecture": "L10",
+  "pages": [
+   53
+  ],
+  "definition": "**RSVP Signaling** establishes path-related state through messages exchanged before the associated data forwarding."
+ },
+ "Failure Detection": {
+  "lecture": "L11",
+  "pages": [
+   4,
+   5,
+   11
+  ],
+  "definition": "**Failure Detection** infers link or neighbor failure from local signals or missing liveness messages."
+ },
+ "Routing Convergence": {
+  "lecture": "L11",
+  "pages": [
+   7,
+   8,
+   9,
+   10,
+   11
+  ],
+  "definition": "**Routing Convergence** is the transition toward consistent routing and forwarding after a change."
+ },
+ "Forwarding Blackholes": {
+  "lecture": "L11",
+  "pages": [
+   8
+  ],
+  "definition": "**Forwarding Blackholes** discard or strand traffic along a route that cannot complete delivery."
+ },
+ "Transient Forwarding Loops": {
+  "lecture": "L11",
+  "pages": [
+   9
+  ],
+  "definition": "**Transient Forwarding Loops** arise when routers temporarily use incompatible forwarding decisions during updates."
+ },
+ "Count to Infinity": {
+  "lecture": "L11",
+  "pages": [
+   16,
+   17,
+   19
+  ],
+  "definition": "**Count to Infinity** is slow distance-vector failure propagation caused by neighbors repeatedly trusting stale distances."
+ },
+ "Poison Reverse": {
+  "lecture": "L11",
+  "pages": [
+   18
+  ],
+  "definition": "**Poison Reverse** advertises a route as unreachable to the neighbor currently used to reach that destination."
+ },
+ "BGP Session Liveness": {
+  "lecture": "L11",
+  "pages": [
+   24
+  ],
+  "definition": "**BGP Session Liveness** uses keepalives and a hold timer to detect a silent BGP peer."
+ },
+ "BGP Path Exploration": {
+  "lecture": "L11",
+  "pages": [
+   25,
+   26,
+   27,
+   28
+  ],
+  "definition": "**BGP Path Exploration** tries successive alternate paths while withdrawals and changed routes propagate."
+ },
+ "Stable Paths Problem": {
+  "lecture": "L11",
+  "pages": [
+   30,
+   31,
+   32,
+   33,
+   34
+  ],
+  "definition": "**Stable Paths Problem** models routing as permitted paths and local rankings that must be mutually consistent."
+ },
+ "Policy Oscillation": {
+  "lecture": "L11",
+  "pages": [
+   33,
+   34,
+   35,
+   36
+  ],
+  "definition": "**Policy Oscillation** is repeated route change caused by incompatible preferences rather than a new physical failure each time."
+ },
+ "Autonomous Systems": {
+  "lecture": "L12",
+  "pages": [
+   3,
+   21,
+   33,
+   36,
+   37
+  ],
+  "definition": "**Autonomous Systems** are networks under a common routing administration represented by AS numbers."
+ },
+ "BGP": {
+  "lecture": "L12",
+  "pages": [
+   3,
+   4,
+   5,
+   7,
+   13,
+   32
+  ],
+  "definition": "**BGP** exchanges prefix reachability and policy attributes between routing peers."
+ },
+ "AS Path": {
+  "lecture": "L12",
+  "pages": [
+   7,
+   8,
+   9,
+   10
+  ],
+  "definition": "**AS Path** lists the AS sequence associated with a BGP route advertisement."
+ },
+ "BGP Next-Hop Resolution": {
+  "lecture": "L12",
+  "pages": [
+   27,
+   28,
+   29
+  ],
+  "definition": "**BGP Next-Hop Resolution** combines an external-prefix route with an internal route to its BGP next-hop address."
+ },
+ "BGP Import Policy": {
+  "lecture": "L12",
+  "pages": [
+   12,
+   13,
+   14,
+   15
+  ],
+  "definition": "**BGP Import Policy** filters or changes received routes before local route selection."
+ },
+ "BGP Export Policy": {
+  "lecture": "L12",
+  "pages": [
+   12,
+   13,
+   16,
+   17,
+   18,
+   41
+  ],
+  "definition": "**BGP Export Policy** controls which selected routes are advertised to each neighbor and with which attributes."
+ },
+ "Local Preference": {
+  "lecture": "L12",
+  "pages": [
+   14,
+   23,
+   26
+  ],
+  "definition": "**Local Preference** ranks BGP routes within an AS, with higher values preferred."
+ },
+ "AS Path Prepending": {
+  "lecture": "L12",
+  "pages": [
+   18
+  ],
+  "definition": "**AS Path Prepending** adds repeated copies of an AS number to make an advertised path look longer."
+ },
+ "eBGP": {
+  "lecture": "L12",
+  "pages": [
+   22
+  ],
+  "definition": "**eBGP** exchanges BGP routes between peers in different autonomous systems."
+ },
+ "iBGP": {
+  "lecture": "L12",
+  "pages": [
+   22,
+   23
+  ],
+  "definition": "**iBGP** distributes BGP reachability and policy information among routers within one AS."
+ },
+ "Hot-Potato Routing": {
+  "lecture": "L12",
+  "pages": [
+   25,
+   26
+  ],
+  "definition": "**Hot-Potato Routing** chooses the nearest eligible exit to hand traffic to another network quickly."
+ },
+ "Customer-Provider Relationships": {
+  "lecture": "L12",
+  "pages": [
+   34,
+   38,
+   41
+  ],
+  "definition": "**Customer-Provider Relationships** exchange payment for transit and impose directional route-export expectations."
+ },
+ "Peering": {
+  "lecture": "L12",
+  "pages": [
+   35,
+   41
+  ],
+  "definition": "**Peering** exchanges traffic between two networks and their customers without offering unrestricted transit."
+ },
+ "Gao-Rexford Conditions": {
+  "lecture": "L12",
+  "pages": [
+   39,
+   40,
+   41,
+   42,
+   43,
+   44
+  ],
+  "definition": "**Gao-Rexford Conditions** are commercial-policy constraints sufficient for stable interdomain routing under the model’s assumptions."
+ },
+ "Valley-Free Paths": {
+  "lecture": "L12",
+  "pages": [
+   43,
+   45,
+   46,
+   47
+  ],
+  "definition": "**Valley-Free Paths** follow zero or more customer-to-provider edges, at most one peer edge, then provider-to-customer edges."
+ },
+ "Default Routes": {
+  "lecture": "L12",
+  "pages": [
+   30,
+   31
+  ],
+  "definition": "**Default Routes** provide a fallback next hop for destinations lacking a more specific matching route."
+ },
+ "IP Anycast": {
+  "lecture": "L13",
+  "pages": [
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14
+  ],
+  "definition": "**IP Anycast** routes a shared service address toward one of several announcing instances."
+ },
+ "IP Multicast": {
+  "lecture": "L13",
+  "pages": [
+   16,
+   17,
+   18,
+   21,
+   22,
+   26,
+   34
+  ],
+  "definition": "**IP Multicast** delivers a packet to interested members of a group using replication within the network."
+ },
+ "Multicast Group Addresses": {
+  "lecture": "L13",
+  "pages": [
+   19,
+   20,
+   21
+  ],
+  "definition": "**Multicast Group Addresses** identify IPv4 destination groups in 224.0.0.0/4 rather than individual source interfaces."
+ },
+ "Iterated Unicast": {
+  "lecture": "L13",
+  "pages": [
+   22
+  ],
+  "definition": "**Iterated Unicast** sends a separate unicast copy of the same data to every intended receiver."
+ },
+ "Overlay Multicast": {
+  "lecture": "L13",
+  "pages": [
+   22
+  ],
+  "definition": "**Overlay Multicast** builds application-level distribution paths on top of ordinary unicast delivery."
+ },
+ "Shared Multicast Trees": {
+  "lecture": "L13",
+  "pages": [
+   36,
+   38,
+   39,
+   45,
+   46
+  ],
+  "definition": "**Shared Multicast Trees** use one group distribution structure shared by multiple sources."
+ },
+ "Source-Based Multicast Trees": {
+  "lecture": "L13",
+  "pages": [
+   36,
+   40,
+   42,
+   49
+  ],
+  "definition": "**Source-Based Multicast Trees** root distribution paths at a particular sender."
+ },
+ "Minimum Spanning Trees": {
+  "lecture": "L13",
+  "pages": [
+   36,
+   37
+  ],
+  "definition": "**Minimum Spanning Trees** connect all vertices of a weighted graph with minimum total edge cost and no cycles."
+ },
+ "Prim Algorithm": {
+  "lecture": "L13",
+  "pages": [
+   37
+  ],
+  "definition": "**Prim Algorithm** grows a minimum spanning tree by repeatedly adding the cheapest edge crossing its current cut."
+ },
+ "Kruskal Algorithm": {
+  "lecture": "L13",
+  "pages": [
+   37
+  ],
+  "definition": "**Kruskal Algorithm** builds a minimum spanning tree by adding cheapest edges that do not create a cycle."
+ },
+ "IGMPv1": {
+  "lecture": "L13",
+  "pages": [
+   27,
+   28,
+   29,
+   30,
+   31
+  ],
+  "definition": "**IGMPv1** reports IPv4 multicast group interest between hosts and their local multicast router."
+ },
+ "IGMPv2": {
+  "lecture": "L13",
+  "pages": [
+   32,
+   33
+  ],
+  "definition": "**IGMPv2** adds explicit leave behavior, group-specific queries, and querier election to local multicast membership."
+ },
+ "IGMPv3": {
+  "lecture": "L13",
+  "pages": [
+   32
+  ],
+  "definition": "**IGMPv3** expresses multicast membership with source inclusion or exclusion filters."
+ },
+ "IGMP Snooping": {
+  "lecture": "L13",
+  "pages": [
+   33
+  ],
+  "definition": "**IGMP Snooping** lets a layer-2 switch observe membership messages to limit multicast forwarding to interested ports."
+ },
+ "Core-Based Trees": {
+  "lecture": "L13",
+  "pages": [
+   38,
+   39
+  ],
+  "definition": "**Core-Based Trees** join multicast receivers to a distribution tree organized around designated core routers."
+ },
+ "Reverse Path Forwarding": {
+  "lecture": "L13",
+  "pages": [
+   40
+  ],
+  "definition": "**Reverse Path Forwarding** accepts multicast data on the interface expected to lead back toward its source."
+ },
+ "Truncated Reverse Path Broadcasting": {
+  "lecture": "L13",
+  "pages": [
+   41
+  ],
+  "definition": "**Truncated Reverse Path Broadcasting** stops reverse-path broadcast at leaf networks without interested group members."
+ },
+ "Reverse Path Multicasting": {
+  "lecture": "L13",
+  "pages": [
+   42,
+   43
+  ],
+  "definition": "**Reverse Path Multicasting** prunes reverse-path distribution branches that have no downstream group interest."
+ },
+ "PIM Dense Mode": {
+  "lecture": "L13",
+  "pages": [
+   44
+  ],
+  "definition": "**PIM Dense Mode** assumes broad multicast interest and forwards unless branches have been pruned."
+ },
+ "PIM Sparse Mode": {
+  "lecture": "L13",
+  "pages": [
+   45,
+   46,
+   47,
+   48,
+   49,
+   50
+  ],
+  "definition": "**PIM Sparse Mode** builds multicast distribution through explicit joins, initially using a rendezvous-point shared tree."
+ },
+ "PIM Rendezvous Point": {
+  "lecture": "L13",
+  "pages": [
+   45,
+   46,
+   50
+  ],
+  "definition": "**PIM Rendezvous Point** is the group meeting point that anchors PIM-SM’s initial shared tree."
+ },
+ "PIM Register": {
+  "lecture": "L13",
+  "pages": [
+   47,
+   48
+  ],
+  "definition": "**PIM Register** encapsulates a source’s initial multicast data for unicast delivery from its DR to the RP."
+ },
+ "PIM SPT Switchover": {
+  "lecture": "L13",
+  "pages": [
+   49
+  ],
+  "definition": "**PIM SPT Switchover** moves receiver delivery from the RP shared tree toward a source-rooted shortest-path tree."
+ },
+ "Wireless Network Types": {
+  "lecture": "L14",
+  "pages": [
+   2,
+   4,
+   5,
+   6,
+   8,
+   9,
+   10
+  ],
+  "definition": "**Wireless Network Types** classify infrastructure use and hop count separately from whether hosts move."
+ },
+ "Path Loss": {
+  "lecture": "L14",
+  "pages": [
+   11
+  ],
+  "definition": "**Path Loss** reduces received signal strength as radio propagation and obstacles attenuate a transmission."
+ },
+ "Radio Interference": {
+  "lecture": "L14",
+  "pages": [
+   11
+  ],
+  "definition": "**Radio Interference** adds competing electromagnetic energy that can impair reception."
+ },
+ "Multipath Propagation": {
+  "lecture": "L14",
+  "pages": [
+   11
+  ],
+  "definition": "**Multipath Propagation** delivers delayed reflected copies of a radio signal to a receiver."
+ },
+ "Signal-to-Noise Ratio and BER": {
+  "lecture": "L14",
+  "pages": [
+   12,
+   36
+  ],
+  "definition": "**Signal-to-Noise Ratio and BER** relate received signal quality to the probability of bit errors for a chosen physical-layer scheme."
+ },
+ "Rate Adaptation": {
+  "lecture": "L14",
+  "pages": [
+   36
+  ],
+  "definition": "**Rate Adaptation** changes the physical transmission rate or modulation as channel conditions vary."
+ },
+ "CDMA": {
+  "lecture": "L14",
+  "pages": [
+   14,
+   15,
+   16
+  ],
+  "definition": "**CDMA** separates simultaneous transmissions using distinct spreading codes."
+ },
+ "Wireless Channels": {
+  "lecture": "L14",
+  "pages": [
+   17,
+   19
+  ],
+  "definition": "**Wireless Channels** divide radio spectrum into selectable frequency resources for communication."
+ },
+ "Wi-Fi Association": {
+  "lecture": "L14",
+  "pages": [
+   18,
+   19,
+   20
+  ],
+  "definition": "**Wi-Fi Association** attaches a station to an access point for participation in its wireless service set."
+ },
+ "Passive Scanning": {
+  "lecture": "L14",
+  "pages": [
+   20
+  ],
+  "definition": "**Passive Scanning** discovers access points by listening for their beacon transmissions."
+ },
+ "Active Scanning": {
+  "lecture": "L14",
+  "pages": [
+   20
+  ],
+  "definition": "**Active Scanning** discovers access points by sending probe requests and collecting probe responses."
+ },
+ "CSMA-CA": {
+  "lecture": "L14",
+  "pages": [
+   21,
+   22,
+   28,
+   29,
+   30
+  ],
+  "definition": "**CSMA-CA** uses sensing, randomized waiting, and acknowledgments to reduce wireless collisions."
+ },
+ "Hidden Terminals": {
+  "lecture": "L14",
+  "pages": [
+   13,
+   23,
+   26
+  ],
+  "definition": "**Hidden Terminals** cannot hear each other but can interfere at a common receiver."
+ },
+ "Exposed Terminals": {
+  "lecture": "L14",
+  "pages": [
+   27
+  ],
+  "definition": "**Exposed Terminals** defer because of sensed activity even when their own transmission could be noninterfering."
+ },
+ "RTS and CTS": {
+  "lecture": "L14",
+  "pages": [
+   24,
+   26,
+   27,
+   29,
+   30
+  ],
+  "definition": "**RTS and CTS** reserve a wireless exchange through a short request and receiver response before data."
+ },
+ "Network Allocation Vector": {
+  "lecture": "L14",
+  "pages": [
+   25
+  ],
+  "definition": "**Network Allocation Vector** tracks a wireless reservation duration for virtual carrier sensing."
+ },
+ "Wi-Fi Frame Addressing": {
+  "lecture": "L14",
+  "pages": [
+   31,
+   32,
+   33,
+   34
+  ],
+  "definition": "**Wi-Fi Frame Addressing** distinguishes immediate radio receiver/transmitter from original frame source/destination."
+ },
+ "Same-Subnet Roaming": {
+  "lecture": "L14",
+  "pages": [
+   35
+  ],
+  "definition": "**Same-Subnet Roaming** changes a station’s access point while retaining its IP subnet and potentially its IP address."
+ },
+ "Wireless Power Management": {
+  "lecture": "L14",
+  "pages": [
+   37,
+   39
+  ],
+  "definition": "**Wireless Power Management** saves energy by coordinating sleep intervals with buffered delivery and periodic wakeups."
+ },
+ "Bluetooth Piconets": {
+  "lecture": "L14",
+  "pages": [
+   38,
+   39
+  ],
+  "definition": "**Bluetooth Piconets** coordinate nearby devices through a controller and shared time/frequency hopping resources."
+ },
+ "Wireless Error Recovery": {
+  "lecture": "L14",
+  "pages": [
+   40
+  ],
+  "definition": "**Wireless Error Recovery** uses local coding, detection, retries, or rate changes to handle an error-prone radio hop."
+ },
+ "2G Circuit-Switched Core": {
+  "lecture": "L15",
+  "pages": [
+   2,
+   3
+  ],
+  "definition": "**2G Circuit-Switched Core** organizes the lecture’s legacy voice network around base stations, controllers, and mobile switching centers."
+ },
+ "3G Parallel Voice and Data": {
+  "lecture": "L15",
+  "pages": [
+   4,
+   5
+  ],
+  "definition": "**3G Parallel Voice and Data** adds a packet-data core alongside the existing circuit-oriented voice core in the lecture model."
+ },
+ "LTE All-IP Core": {
+  "lecture": "L15",
+  "pages": [
+   5,
+   6,
+   9,
+   15
+  ],
+  "definition": "**LTE All-IP Core** carries cellular service traffic through an IP packet core with separate mobility control functions."
+ },
+ "UE and Subscriber Identity": {
+  "lecture": "L15",
+  "pages": [
+   10
+  ],
+  "definition": "**UE and Subscriber Identity** distinguish the mobile device and subscription identity from its current network-layer location."
+ },
+ "LTE eNodeB": {
+  "lecture": "L15",
+  "pages": [
+   11
+  ],
+  "definition": "**LTE eNodeB** is the LTE radio base station that manages cells and connects user traffic to the packet core."
+ },
+ "LTE Home Subscriber Server": {
+  "lecture": "L15",
+  "pages": [
+   12
+  ],
+  "definition": "**LTE Home Subscriber Server** stores home-subscriber information used in authentication and mobility management."
+ },
+ "LTE Mobility Management Entity": {
+  "lecture": "L15",
+  "pages": [
+   14
+  ],
+  "definition": "**LTE Mobility Management Entity** coordinates subscriber authentication, mobility state, paging, and tunnel setup in the control plane."
+ },
+ "LTE Serving Gateway": {
+  "lecture": "L15",
+  "pages": [
+   13,
+   18
+  ],
+  "definition": "**LTE Serving Gateway** forwards user traffic between radio-access tunnel endpoints and the packet gateway."
+ },
+ "LTE Packet Gateway": {
+  "lecture": "L15",
+  "pages": [
+   13
+  ],
+  "definition": "**LTE Packet Gateway** connects the cellular packet core to external packet networks such as the Internet."
+ },
+ "LTE PDCP": {
+  "lecture": "L15",
+  "pages": [
+   16
+  ],
+  "definition": "**LTE PDCP** provides packet-data convergence functions such as header compression and encryption at the radio edge."
+ },
+ "LTE RLC": {
+  "lecture": "L15",
+  "pages": [
+   16
+  ],
+  "definition": "**LTE RLC** handles radio-link fragmentation/reassembly and reliable transfer functions in the lecture stack."
+ },
+ "LTE Radio Scheduling": {
+  "lecture": "L15",
+  "pages": [
+   16,
+   17
+  ],
+  "definition": "**LTE Radio Scheduling** allocates radio time-frequency opportunities to active user equipment."
+ },
+ "OFDM": {
+  "lecture": "L15",
+  "pages": [
+   17
+  ],
+  "definition": "**OFDM** multiplexes data over orthogonal frequency subcarriers."
+ },
+ "GTP Tunnels": {
+  "lecture": "L15",
+  "pages": [
+   7,
+   18
+  ],
+  "definition": "**GTP Tunnels** encapsulate user packets across cellular core segments while access locations change."
+ },
+ "LTE Attachment and System Information": {
+  "lecture": "L15",
+  "pages": [
+   19,
+   21,
+   38
+  ],
+  "definition": "**LTE Attachment and System Information** discovers a base station and establishes the control and data state needed for cellular service."
+ },
+ "LTE Sleep and Paging": {
+  "lecture": "L15",
+  "pages": [
+   20
+  ],
+  "definition": "**LTE Sleep and Paging** reduce radio energy use while maintaining enough location knowledge to reach a mobile when needed."
+ },
+ "5G New Radio": {
+  "lecture": "L15",
+  "pages": [
+   23
+  ],
+  "definition": "**5G New Radio** extends the cellular radio system using new spectrum and antenna techniques aimed at greater capacity and lower delay."
+ },
+ "MIMO": {
+  "lecture": "L15",
+  "pages": [
+   23
+  ],
+  "definition": "**MIMO** uses multiple antennas to provide spatial transmission or reception capabilities."
+ },
+ "Mobile Identity and Location": {
+  "lecture": "L15",
+  "pages": [
+   25,
+   26,
+   27,
+   30
+  ],
+  "definition": "**Mobile Identity and Location** separate a persistent endpoint or subscriber identity from its current point of attachment."
+ },
+ "Home and Visited Networks": {
+  "lecture": "L15",
+  "pages": [
+   22,
+   28,
+   29,
+   30,
+   31
+  ],
+  "definition": "**Home and Visited Networks** distinguish the subscriber’s registered provider from the network currently providing access."
+ },
+ "Mobile IP Registration": {
+  "lecture": "L15",
+  "pages": [
+   31,
+   33,
+   34
+  ],
+  "definition": "**Mobile IP Registration** binds a mobile’s home address to its current care-of locator for redirected delivery."
+ },
+ "IP Tunneling": {
+  "lecture": "L15",
+  "pages": [
+   7,
+   18,
+   34
+  ],
+  "definition": "**IP Tunneling** carries an original packet inside an outer packet addressed to a tunnel endpoint."
+ },
+ "Indirect Mobile Routing": {
+  "lecture": "L15",
+  "pages": [
+   32,
+   33,
+   34,
+   35
+  ],
+  "definition": "**Indirect Mobile Routing** delivers traffic through a home-side anchor that forwards it to the mobile’s current location."
+ },
+ "Triangle Routing": {
+  "lecture": "L15",
+  "pages": [
+   35
+  ],
+  "definition": "**Triangle Routing** is the detour through a mobile’s home anchor when a more direct correspondent-to-mobile path exists."
+ },
+ "Direct Mobile Routing": {
+  "lecture": "L15",
+  "pages": [
+   36,
+   37
+  ],
+  "definition": "**Direct Mobile Routing** uses the mobile’s current locator to deliver without the home-anchor data-path detour."
+ },
+ "Cellular Handover": {
+  "lecture": "L15",
+  "pages": [
+   38,
+   39,
+   40
+  ],
+  "definition": "**Cellular Handover** moves an active mobile to another base station while updating radio and tunnel state."
+ },
+ "Wireless Effects on Transport": {
+  "lecture": "L15",
+  "pages": [
+   41
+  ],
+  "definition": "**Wireless Effects on Transport** change loss and delay behavior even though the underlying IP service remains best effort."
+ }
+}

@@ -1,0 +1,7 @@
+# The narration voice. Changing this re-synthesizes and re-times everything; the cache keeps each voice's clips apart.
+engine: say       # say or kokoro
+voice: Samantha
+rate: 140         # say: words per minute. kokoro uses speed instead.
+speed: 1.0        # kokoro: 1.0 is the natural pace; Heart at 1.0 matches Samantha's measured pace
+sentence_pause: 600
+clause_pause: 160

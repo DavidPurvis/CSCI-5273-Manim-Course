@@ -1,0 +1,47 @@
+{
+ "anycast_failover": "B",
+ "anycast_normal": "A",
+ "group_range": "224.0.0.0/4",
+ "kruskal": [
+  "AB",
+  "BC"
+ ],
+ "mst_total": 2,
+ "multicast_10": 10,
+ "prim": [
+  "AB",
+  "BC"
+ ],
+ "rpf_fail": false,
+ "rpf_pass": true,
+ "spt_path": [
+  "A",
+  "C"
+ ],
+ "spt_to_c": 1.5,
+ "suppress": {
+  "at": 2,
+  "reporter": "H1",
+  "suppressed": [
+   "H2"
+  ]
+ },
+ "suppress3": {
+  "at": 2,
+  "reporter": "H1",
+  "suppressed": [
+   "H2",
+   "H3"
+  ]
+ },
+ "switchover": {
+  "saving": 11,
+  "shared": 15,
+  "source": 4
+ },
+ "timers": {
+  "rfc2236": 260,
+  "slide_formula": 270
+ },
+ "unicast_10": 30
+}

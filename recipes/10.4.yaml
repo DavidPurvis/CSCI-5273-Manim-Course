@@ -1,0 +1,365 @@
+dish: '10.4'
+title: MPLS labels
+deck: lec10-routing.pdf
+target_min: 4.5
+concepts:
+- MPLS Label Switching
+- RSVP Signaling
+pad: 2.2
+beats:
+- id: 10.4.question
+  stage: question
+  narration: 10.4.question
+  pdf:
+  - lec10-routing.pdf
+  - 53
+  concepts:
+  - MPLS Label Switching
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 10: MPLS labels'
+  - q:
+      text: Could we set up a path in advance, and just follow it?
+  adjust: {}
+- id: 10.4.label
+  stage: animation
+  narration: 10.4.label
+  pdf:
+  - lec10-routing.pdf
+  - 54
+  concepts:
+  - MPLS Label Switching
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: m
+      zone: top
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        R1:
+          k: router
+          at:
+          - 3
+          - 0
+          l: R1
+        R2:
+          k: router
+          at:
+          - 6
+          - 0
+          l: R2
+        R3:
+          k: router
+          at:
+          - 9
+          - 0
+          l: R3
+        W:
+          k: server
+          at:
+          - 12
+          - 0
+          l: Server
+      links:
+      - - L
+        - R1
+      - - R1
+        - R2
+        - s: active
+      - - R2
+        - R3
+        - s: active
+      - - R3
+        - W
+  - stack.show:
+      name: st
+      zone: left_bottom
+      width: 5.6
+      reserve: 1
+      layers:
+      - t: 'IP: laptop → server'
+        k: ip
+  - packet.spawn:
+      name: p
+      net: m
+      at: L
+      layers:
+      - ip
+  - packet.hop:
+      name: p
+      to: R1
+  - packet.wrap:
+      name: p
+      kind: label
+      when: an ingress router
+  - stack.push:
+      name: st
+      text: MPLS label 17
+      kind: label
+  - rule:
+      text: Ingress classifies the packet and pushes a label
+      when:
+        phrase: an ingress router
+        frame_offset: 44
+  - rule:
+      text: Routers inside read only the label
+      when: Routers inside
+  - rule:
+      text: The last router pops the label
+      when: The last router
+  adjust: {}
+  pre_roll: 0.2
+- id: 10.4.swap
+  stage: state
+  narration: 10.4.swap
+  pdf:
+  - lec10-routing.pdf
+  - 56
+  concepts:
+  - MPLS Label Switching
+  clarifications: []
+  moves:
+  - fade:
+      names: _rule
+  - table.show:
+      name: sw
+      zone: right_bottom
+      cols:
+      - Router
+      - In
+      - Out
+      rows:
+      - - R2
+        - 17
+        - 42
+      - - R3
+        - 42
+        - pop
+      show: 0
+  - packet.hop:
+      name: p
+      to: R2
+      when: Label 17 reaches
+  - table.reveal:
+      name: sw
+  - stack.set:
+      name: st
+      layer: 0
+      text: MPLS label 42
+      kind: label
+  - packet.hop:
+      name: p
+      to: R3
+      when: Then R3 sees
+  - table.reveal:
+      name: sw
+  - packet.peel:
+      name: p
+  - stack.pop:
+      name: st
+  - packet.hop:
+      name: p
+      to: W
+  adjust: {}
+- id: 10.4.signal
+  stage: state
+  narration: 10.4.signal
+  pdf:
+  - lec10-routing.pdf
+  - 53
+  concepts:
+  - RSVP Signaling
+  clarifications:
+  - rsvp-te
+  moves:
+  - clear:
+      keep:
+      - m
+  - packet.spawn:
+      name: sg
+      net: m
+      at: R1
+      layers:
+      - transport
+      when: Before any data
+  - packet.hop:
+      name: sg
+      to:
+      - R2
+      - R3
+  - rule:
+      text: Signaling sets up state along the chosen path
+      when:
+        phrase: Before any data
+        frame_offset: 50
+  - card:
+      kind: clarification
+      text: For MPLS traffic engineering the specific extension is RSVP-TE.
+      zone: bottom
+      when: The lecture names
+  - rule:
+      text: An explicit path can steer traffic onto spare capacity
+      when: Because the path
+  adjust: {}
+- id: 10.4.te
+  stage: state
+  narration: 10.4.te
+  pdf:
+  - lec10-routing.pdf
+  - 55
+  concepts:
+  - MPLS Label Switching
+  clarifications: []
+  moves:
+  - clear:
+      keep:
+      - m
+  - rule:
+      text: 'Plain IP: same prefix, same route'
+      when: With ordinary IP
+  - fade:
+      names: _rule
+      when: With labels
+  - card:
+      kind: note
+      text: 'Same destination, different prepared paths: that''s traffic engineering.'
+      zone: bottom
+      when:
+        phrase: With labels
+        frame_offset: 17
+  - rule:
+      text: Original motive included faster lookup
+      when: The original motive
+  - rule:
+      text: 'Today: traffic engineering is the bigger reason'
+      when: Today
+  adjust: {}
+- id: 10.4.rule
+  stage: rule
+  narration: 10.4.rule
+  pdf:
+  - lec10-routing.pdf
+  - 54
+  concepts:
+  - MPLS Label Switching
+  clarifications: []
+  moves:
+  - rule:
+      text: 'A label path is prepared forwarding state: not a reservation, and not reliable delivery.'
+  - rule:
+      text: It doesn't reserve bandwidth or make delivery reliable
+      when: It doesn't by itself
+  - rule:
+      text: The control plane decides what state to install
+      when: Something must
+  adjust: {}
+- id: 10.4.laptop
+  stage: rule
+  narration: 10.4.laptop
+  pdf:
+  - lec10-routing.pdf
+  - 54
+  concepts:
+  - MPLS Label Switching
+  clarifications: []
+  moves:
+  - rule:
+      text: 'Maps, distances, paths, and labels: the packet never knew.'
+      when: Back to our
+  - rule:
+      text: Entries come from a map, distances or paths
+      when: built from a shared
+  - rule:
+      text: With MPLS, maybe a label for part of the way
+      when: Where MPLS
+  - rule:
+      text: The packet itself never knew
+      when: The packet itself
+  adjust: {}
+- id: 10.4.pitfall
+  stage: rule
+  narration: 10.4.pitfall
+  pdf:
+  - lec10-routing.pdf
+  - 54
+  concepts:
+  - MPLS Label Switching
+  clarifications: []
+  moves:
+  - trap:
+      wrong: An MPLS label reserves bandwidth
+      right: A label only says how to forward. Reservation is separate.
+  adjust: {}
+- id: 10.4.changed
+  stage: changed_example
+  narration: 10.4.changed
+  pdf:
+  - lec10-routing.pdf
+  - 56
+  concepts:
+  - MPLS Label Switching
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: r2
+      zone: top
+      cols:
+      - At R2
+      - In
+      - Out
+      rows:
+      - - From R1
+        - 17
+        - 42
+      - - From R5
+        - 17
+        - 8
+      - - New packet
+        - 99
+        - '?'
+  adjust: {}
+- id: 10.4.predict
+  stage: prediction
+  narration: 10.4.predict
+  pdf:
+  - lec10-routing.pdf
+  - 56
+  concepts:
+  - MPLS Label Switching
+  clarifications: []
+  moves:
+  - pause:
+      text: is reusing a label a conflict? what happens to 99?
+  adjust: {}
+  hold: 6
+- id: 10.4.answer
+  stage: explanation
+  narration: 10.4.answer
+  pdf:
+  - lec10-routing.pdf
+  - 56
+  concepts:
+  - MPLS Label Switching
+  clarifications: []
+  moves:
+  - rule:
+      text: 'Labels are local. No state means no valid action. Next: what happens when a link fails?'
+  - rule:
+      text: No matching state, no valid forwarding action
+      when: A label with no
+  - rule:
+      text: State has to exist before it can be used
+      when: State has to
+  - rule:
+      text: 'Next: what happens in the seconds after a link fails?'
+      when: We've treated
+  - keep: {}
+  adjust: {}

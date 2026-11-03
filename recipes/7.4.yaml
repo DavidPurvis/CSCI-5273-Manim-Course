@@ -1,0 +1,313 @@
+dish: '7.4'
+title: Fragmentation
+deck: lec07-network1.pdf
+target_min: 4.5
+concepts:
+- IPv4 Fragmentation
+pad: 2.2
+beats:
+- id: 7.4.question
+  stage: question
+  narration: 7.4.question
+  pdf:
+  - lec07-network1.pdf
+  - 35
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 7: fragmentation'
+  - q:
+      text: A 4000-byte datagram meets a 1500-byte link. Now what?
+  - keep: {}
+  adjust: {}
+- id: 7.4.idea
+  stage: animation
+  narration: 7.4.idea
+  pdf:
+  - lec07-network1.pdf
+  - 36
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: f
+      zone: top
+      nodes:
+        A:
+          k: host
+          at:
+          - 0
+          - 0
+          l: Source
+        R:
+          k: router
+          at:
+          - 4
+          - 0
+          l: Router
+        B:
+          k: host
+          at:
+          - 8
+          - 0
+          l: Destination
+      links:
+      - - A
+        - R
+        - c: MTU 4000
+      - - R
+        - B
+        - c: MTU 1500
+  - packet.spawn:
+      name: big
+      net: f
+      at: A
+      layers:
+      - ip
+  - packet.hop:
+      name: big
+      to: R
+  - packet.flood:
+      name: big
+      to:
+      - B
+      when: Each fragment
+  adjust: {}
+- id: 7.4.payload
+  stage: state
+  narration: 7.4.payload
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - bar.show:
+      name: b
+      zone: full
+      total: 4000
+      header: 20
+      rows: 3
+  - bar.cut:
+      name: b
+      at: 1480
+      when: Each fragment on
+  - bar.ruler:
+      name: b
+      when: And nonfinal
+  - bar.zoom:
+      name: b
+      at: 1480
+      when: 1,480 divides
+  adjust: {}
+- id: 7.4.table
+  stage: state
+  narration: 7.4.table
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - bar.slice:
+      name: b
+      i: 0
+      frag: $ipv4.frag_4000.0
+      when: The first fragment
+  - bar.slice:
+      name: b
+      i: 1
+      frag: $ipv4.frag_4000.1
+      when: The second carries
+  - bar.slice:
+      name: b
+      i: 2
+      frag: $ipv4.frag_4000.2
+      when: The third carries
+  adjust: {}
+- id: 7.4.check
+  stage: state
+  narration: 7.4.check
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - bar.join:
+      name: b
+      when: The payloads sum
+  - bar.note:
+      name: b
+      tex: 1480+1480+1020=3980
+      side: left
+  - bar.note:
+      name: b
+      tex: 1500+1500+1040=4040
+      side: right
+      when: But the total
+  - bar.mark:
+      name: b
+      what: chips
+      when: three headers
+  - bar.mark:
+      name: b
+      what: whole
+      state: error
+      when: the whole datagram
+  adjust: {}
+- id: 7.4.rule
+  stage: rule
+  narration: 7.4.rule
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - bar.mark:
+      name: b
+      what: whole
+      state: done
+  - bar.span:
+      name: b
+      to: 1480
+      text: offset 185 × 8 = 1480
+      when: Offset is the data
+  - bar.mark:
+      name: b
+      what: chips
+      state: error
+      when: does not count headers
+  - rule:
+      text: Offset = position in the original data ÷ 8. Only the last fragment has MF = 0.
+      when: Fragmentation exists
+  adjust: {}
+- id: 7.4.pitfall
+  stage: rule
+  narration: 7.4.pitfall
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - trap:
+      wrong: A router always fragments a packet that's too big
+      right: If Don't Fragment is set, the router can't fragment it
+  adjust: {}
+- id: 7.4.changed
+  stage: changed_example
+  narration: 7.4.changed
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - clear: {}
+  - bar.show:
+      name: c
+      zone: full
+      total: 3200
+      header: 20
+      rows: 4
+  - bar.ruler:
+      name: c
+  - bar.zoom:
+      name: c
+      at: 980
+      state: error
+      when: and 980 is not
+  adjust: {}
+- id: 7.4.predict
+  stage: prediction
+  narration: 7.4.predict
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - pause:
+      text: the largest payload, the fragment count, and the offsets?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 7.4.answer
+  stage: explanation
+  narration: 7.4.answer
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - bar.snap:
+      name: c
+      at: 976
+      when: Round 980
+  - bar.slice:
+      name: c
+      i: 0
+      frag: $ipv4.frag_3200.0
+      info: false
+      t: 0.8
+      when: The data is
+  - bar.slice:
+      name: c
+      i: 1
+      frag: $ipv4.frag_3200.1
+      info: false
+      t: 0.8
+  - bar.slice:
+      name: c
+      i: 2
+      frag: $ipv4.frag_3200.2
+      info: false
+      t: 0.8
+  - bar.slice:
+      name: c
+      i: 3
+      frag: $ipv4.frag_3200.3
+      info: false
+      t: 0.8
+      when: and a final 252
+  - bar.info:
+      name: c
+      i: 0
+      frag: $ipv4.frag_3200.0
+      when: The offsets go
+  - bar.info:
+      name: c
+      i: 1
+      frag: $ipv4.frag_3200.1
+  - bar.info:
+      name: c
+      i: 2
+      frag: $ipv4.frag_3200.2
+  - bar.info:
+      name: c
+      i: 3
+      frag: $ipv4.frag_3200.3
+      when: '366'
+  - rule:
+      text: '4 unused bytes per fragment: the price of 8-byte alignment.'
+      when: Those four unused
+  - clear:
+      when: Next question
+  - q:
+      text: How do you carve up an address space, and pick among overlapping routes?
+  adjust: {}

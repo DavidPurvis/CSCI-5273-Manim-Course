@@ -1,0 +1,2008 @@
+dish: '11.1'
+title: When a link fails
+deck: lec11-convergence.pdf
+target_min: 6
+concepts:
+- Failure Detection
+- Routing Convergence
+- Forwarding Blackholes
+- Transient Forwarding Loops
+beats:
+- id: question
+  stage: question
+  pdf: 4
+  c:
+  - Failure Detection
+  say: A backhoe cuts a fiber between two routers. A moment before, every table was
+    correct. A few seconds later, every table will be correct again. So what happens
+    to our laptop's packets during those few seconds? The answer shows that correct
+    before and correct after does not mean safe in between.
+  moves:
+  - heading:
+      text: 'Lecture 11: when a link fails'
+  - spine:
+      current: Failure
+      zone: top
+  - q:
+      text: Correct before, correct after. What about in between?
+      zone: bottom
+- id: laptop
+  stage: animation
+  pdf: 4
+  c:
+  - Failure Detection
+  say: Picture our laptop's video call, running happily through R1 and R2. The packets
+    keep coming every few milliseconds, whether the tables are ready or not. So a
+    failure isn't an abstract event. It happens underneath traffic that's already
+    moving.
+  moves:
+  - clear: {}
+  - net.show:
+      name: lp
+      zone: top
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        A:
+          k: router
+          at:
+          - 3.4
+          - 0
+          l: R1
+        B:
+          k: router
+          at:
+          - 6.8
+          - 0
+          l: R2
+        W:
+          k: server
+          at:
+          - 10.2
+          - 0
+          l: Web server
+      links:
+      - - L
+        - A
+      - - A
+        - B
+      - - B
+        - W
+  - packet.spawn:
+      name: p
+      net: lp
+      at: L
+      layers:
+      - ip
+      when: Picture our
+  - packet.hop:
+      name: p
+      to:
+      - A
+      - B
+      - W
+      t: 2.2
+  - packet.fade:
+      name: p
+  - packet.spawn:
+      name: q
+      net: lp
+      at: L
+      layers:
+      - ip
+      when: The packets keep
+  - packet.hop:
+      name: q
+      to:
+      - A
+      - B
+      - W
+      t: 2.2
+  - packet.fade:
+      name: q
+  - net.state:
+      name: lp
+      links:
+      - - A
+        - B
+        - failed
+      when: So a failure
+  pre_roll: 2.0
+- id: causes
+  stage: animation
+  pdf: 4
+  c:
+  - Failure Detection
+  say: 'First, what kinds of change are we talking about? Some are planned: maintenance
+    that shuts down a link, or traffic engineering that changes a weight. Others aren''t:
+    a fiber cut, a power failure, or crashing software. Keep this separate from a
+    different problem we''ll reach later. A new route to the same location is a routing
+    change. A host moving to a new location is mobility. Here, the destination stays
+    put, and the network underneath it changes.'
+  moves:
+  - clear: {}
+  - table.show:
+      name: ch
+      zone: top
+      cols:
+      - Planned
+      - Unplanned
+      rows:
+      - - maintenance
+        - fiber cut
+      - - traffic engineering
+        - power failure
+      - - ''
+        - failed software
+- id: detect
+  stage: animation
+  pdf: 5
+  c:
+  - Failure Detection
+  say: First, how does anyone even find out? Sometimes the hardware reports a dead
+    link. Often routers exchange periodic hello messages, and declare a neighbor dead
+    after a few are missed. That leaves a real tension. A short timer finds failures
+    quickly, but it costs more traffic and processing, and it can raise false alarms,
+    since a delayed hello looks exactly like a dead neighbor. A long timer is calm,
+    and slow.
+  moves:
+  - clear: {}
+  - tl.show:
+      name: h
+      zone: top
+      tracks:
+      - Hellos
+      span:
+      - 0
+      - 10
+      ticks:
+      - 0
+      - 2
+      - 4
+      - 6
+      - 8
+      - 10
+  - tl.block:
+      name: h
+      track: Hellos
+      start: 0
+      end: 0.3
+      kind: ip
+  - tl.block:
+      name: h
+      track: Hellos
+      start: 2
+      end: 2.3
+      kind: ip
+  - tl.block:
+      name: h
+      track: Hellos
+      start: 4
+      end: 4.3
+      kind: ip
+  - tl.block:
+      name: h
+      track: Hellos
+      start: 6
+      end: 10
+      text: 'missing: declared dead'
+      state: error
+      when: declare a neighbor
+  - table.show:
+      name: tm
+      zone: bottom
+      cols:
+      - Timer
+      - Gain
+      - Cost
+      rows:
+      - - Short
+        - fast detection
+        - traffic and false alarms
+      - - Long
+        - calm and cheap
+        - slow detection
+    when: That leaves
+- id: stages
+  stage: state
+  pdf: 7
+  c:
+  - Routing Convergence
+  say: Detection is just the start, and it's local. Everybody else must then be told.
+    Routing convergence is the whole transition, and it has four stages. Detect the
+    change. Spread the news. Compute new routes. Install them in forwarding tables.
+    If those take 30, 10, 5, and 15 milliseconds in sequence, the total is 60 milliseconds.
+    Real stages can overlap, and each router's clock runs differently. But name the
+    stages, before you blame the algorithm.
+  moves:
+  - clear: {}
+  - tl.show:
+      name: st
+      zone: top
+      tracks:
+      - Convergence
+      span:
+      - 0
+      - 60
+      ticks:
+      - 0
+      - 30
+      - 40
+      - 45
+      - 60
+  - tl.block:
+      name: st
+      track: Convergence
+      start: 0
+      end: 30
+      text: detect 30
+      kind: ip
+      when: Detect the change
+  - tl.block:
+      name: st
+      track: Convergence
+      start: 30
+      end: 40
+      text: tell
+      kind: eth
+      when: Spread the news
+  - tl.block:
+      name: st
+      track: Convergence
+      start: 40
+      end: 45
+      kind: transport
+      when: Compute new
+  - tl.block:
+      name: st
+      track: Convergence
+      start: 45
+      end: 60
+      text: install
+      kind: label
+      when: Install them
+  - tex:
+      name: tot
+      zone: bottom
+      tex: 30+10+5+15=60\text{ ms}
+      size: 46
+- id: blackhole
+  stage: animation
+  pdf: 8
+  c:
+  - Forwarding Blackholes
+  say: Watch the packets. A forwards traffic for D to B, and B forwards to D. The
+    link from B to D fails. B knows, but A hasn't heard. A keeps sending to B, on
+    its old and perfectly reasonable route. B has nothing usable, and those packets
+    vanish. That's a forwarding blackhole. Note that A has not computed anything wrong.
+    It's just working from old information.
+  moves:
+  - clear: {}
+  - net.show: &id001
+      name: n
+      zone: left
+      nodes:
+        A:
+          k: router
+          at:
+          - 0
+          - 2
+          l: A
+          lp: left
+        B:
+          k: router
+          at:
+          - 4
+          - 2
+          l: B
+          lp: right
+        C:
+          k: router
+          at:
+          - 0
+          - 0
+          l: C
+          lp: left
+        D:
+          k: server
+          at:
+          - 4
+          - 0
+          l: D
+          lp: right
+      links:
+      - - A
+        - B
+        - s: active
+      - - B
+        - D
+        - s: active
+      - - A
+        - C
+      - - C
+        - D
+  - net.state:
+      name: n
+      links:
+      - - B
+        - D
+        - failed
+      when: The link from B
+  - packet.spawn:
+      name: a1
+      net: n
+      at: A
+      layers:
+      - ip
+      when: A keeps sending
+  - packet.hop:
+      name: a1
+      to: B
+  - packet.drop:
+      name: a1
+      when: those packets vanish
+  - text:
+      name: b
+      zone: right
+      lines:
+      - A's route is old, not miscalculated
+      - 'Blackhole: no working continuation'
+      when: That's a forwarding
+- id: loop
+  stage: state
+  pdf: 9
+  c:
+  - Transient Forwarding Loops
+  say: B computes a new route for D. It goes back through A, then C, then D. And B
+    installs that first, while A still points to B. So look at what happens now. A
+    sends the packet to B. B sends it back to A. They bounce it between them. The
+    old configuration had no loop. The new configuration has no loop. The mix of the
+    two does. This is a transient forwarding loop. It isn't specific to any one protocol,
+    and it can happen with link state, whenever routers install their changes at different
+    times.
+  moves:
+  - net.badge:
+      name: n
+      node: B
+      text: 'new: via A'
+      side: down
+      state: now
+      when: And B installs
+  - net.badge:
+      name: n
+      node: A
+      text: 'old: via B'
+      side: down
+      state: error
+  - packet.spawn:
+      name: a2
+      net: n
+      at: A
+      layers:
+      - ip
+      when: A sends the packet
+  - packet.hop:
+      name: a2
+      to:
+      - B
+      - A
+      - B
+      - A
+      t: 2.4
+  - text:
+      name: b
+      zone: right
+      lines:
+      - 'Old state: no loop'
+      - 'New state: no loop'
+      - 'Mixed state: loop'
+      color: now
+      when: The old configuration
+- id: consequences
+  stage: state
+  pdf: 10
+  c:
+  - Routing Convergence
+  - Transient Forwarding Loops
+  say: What does IP's TTL do here? It eventually kills the looping packet, but it
+    doesn't save it, and until then, the loop eats up link capacity. Other packets
+    may arrive out of order when old and new paths have different delays. So an application
+    can suffer, even if a perfectly good alternate path exists the whole time.
+  moves:
+  - packet.drop:
+      name: a2
+  - rule:
+      text: TTL ends a looping packet. It does not recover it, and the loop consumes
+        capacity first.
+- id: improve
+  stage: rule
+  pdf: 11
+  c:
+  - Routing Convergence
+  - Failure Detection
+  say: 'To improve convergence, work stage by stage. Detect faster. Send control messages
+    promptly. Compute incrementally. Install changes efficiently. And keep the principle
+    in mind: a faster processor cannot make up for waiting minutes to declare a neighbor
+    dead. Find the slowest stage first.'
+  moves:
+  - clear: {}
+  - bullets:
+      name: im
+      zone: top
+      show: 4
+      items:
+      - Detect faster
+      - Propagate control messages promptly
+      - Compute incrementally
+      - Install forwarding changes efficiently
+  - rule:
+      text: Improve the slowest stage first.
+- id: pitfall
+  stage: rule
+  pdf: 11
+  c:
+  - Routing Convergence
+  - Failure Detection
+  say: 'A tempting thought: both the old tables and the new tables are correct, so
+    no harm done. But correct before and after protects nobody in between. Packets
+    can vanish or loop during the transition.'
+  moves:
+  - trap:
+      wrong: Correct tables before and after mean no packet loss
+      right: During the transition, packets can still vanish or loop
+- id: changed
+  stage: changed_example
+  pdf: 9
+  c:
+  - Transient Forwarding Loops
+  say: Change the install order. Same failure, same routers, but this time A installs
+    its new route first, and goes through C directly. Then B installs its route, by
+    way of A.
+  moves:
+  - clear: {}
+  - net.show: *id001
+  - net.state:
+      name: n
+      links:
+      - - B
+        - D
+        - failed
+      - - A
+        - B
+        - solid
+      - - A
+        - C
+        - now
+      - - C
+        - D
+        - now
+  - net.badge:
+      name: n
+      node: A
+      text: 'new: via C'
+      side: up
+      state: done
+- id: predict
+  stage: prediction
+  pdf: 9
+  hold: 6
+  c:
+  - Transient Forwarding Loops
+  say: With that order, is there a loop? Is there still a blackhole, at any moment?
+  moves:
+  - pause:
+      text: does this install order create a loop or a blackhole?
+- id: answer
+  stage: explanation
+  pdf: 9
+  c:
+  - Transient Forwarding Loops
+  - Forwarding Blackholes
+  say: 'No loop forms, because A no longer sends to B. Traffic from A goes straight
+    to C and D. Packets that reach B in the gap before it installs can still be lost,
+    so B''s own blackhole lasts until it updates. Ordering changes which disruption
+    you get. These problems come from timing, and they pass quickly. But one protocol
+    family can make things far worse: nobody gets told the truth for a very long time.'
+  moves:
+  - packet.spawn:
+      name: ok
+      net: n
+      at: A
+      layers:
+      - ip
+  - packet.hop:
+      name: ok
+      to:
+      - C
+      - D
+  - text:
+      name: an
+      zone: right
+      lines:
+      - 'No loop: A avoids B'
+      - B may still drop until it installs
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 11.1.predict
+  answer_beat: 11.1.answer
+  answer_events:
+  - 11.1.answer:move:0
+  - 11.1.answer:move:1
+  - 11.1.answer:move:2
+  answer_objects:
+  - object: ok
+    after: 11.1.answer:move:0
+    effect: packet.spawn
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: ok
+    after: 11.1.answer:move:1
+    effect: packet.hop
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: an
+    after: 11.1.answer:move:2
+    effect: text
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '11.2'
+title: Counting to infinity
+deck: lec11-convergence.pdf
+target_min: 7
+concepts:
+- Count to Infinity
+- Poison Reverse
+beats:
+- id: question
+  stage: question
+  pdf: 12
+  c:
+  - Count to Infinity
+  say: Distance vector routers believe the numbers their neighbors tell them. When
+    a link gets cheaper, that's wonderful. When a link fails, it's a disaster, and
+    the reason is not obvious. Why should good news travel fast, while bad news crawls?
+  moves:
+  - heading:
+      text: 'Lecture 11: counting to infinity'
+  - q:
+      text: Why does good news travel fast, and bad news crawl?
+  - keep: {}
+- id: goodnews
+  stage: animation
+  pdf: 14
+  c:
+  - Count to Infinity
+  say: Start with good news. A link cost drops. The router attached to it sees a better
+    distance, tells its neighbor, who sees a better distance too, and tells the next.
+    The improvement spreads in a couple of exchanges, and everyone stops. A real,
+    better path exists, so every update is true.
+  moves:
+  - clear: {}
+  - net.show:
+      name: g
+      zone: top
+      nodes:
+        X:
+          k: node
+          at:
+          - 0
+          - 0
+          l: X
+        Y:
+          k: node
+          at:
+          - 5
+          - 0
+          l: Y
+        Z:
+          k: node
+          at:
+          - 10
+          - 0
+          l: Z
+      links:
+      - - X
+        - Y
+        - c: 1
+      - - Y
+        - Z
+        - c: 1
+  - net.state:
+      name: g
+      nodes:
+        Y: now
+      when: The router attached
+  - net.badge:
+      name: g
+      node: Y
+      text: 1 to X
+      side: up
+  - msg.send:
+      name: g
+      a: Y
+      b: Z
+      text: 1 to X
+      when: tells its neighbor
+  - net.badge:
+      name: g
+      node: Z
+      text: 2 to X, via Y
+      side: up
+      when: who sees
+  - net.state:
+      name: g
+      nodes:
+        Y: done
+        Z: done
+      when: A real, better
+- id: setup
+  stage: state
+  pdf: 16
+  c:
+  - Count to Infinity
+  say: The bad news, on this tiny chain. Y reaches X directly, at distance 1. Z reaches
+    X through Y, at distance 2. And there is no other route to X in this network at
+    all. Now cut the link between X and Y. X is gone. Y knows immediately. What should
+    it do? It looks at what its neighbors have advertised, and it sees Z saying, I
+    can reach X at distance 2.
+  moves:
+  - net.state:
+      name: g
+      nodes:
+        Y: null
+        Z: null
+  - net.walk:
+      name: g
+      path:
+      - Y
+      - X
+      when: Y reaches X
+  - net.walk:
+      name: g
+      path:
+      - Z
+      - Y
+      - X
+      when: Z reaches X
+  - net.unwalk:
+      name: g
+      when: Now cut
+  - net.state:
+      name: g
+      links:
+      - - X
+        - Y
+        - failed
+  - table.show:
+      name: t
+      zone: bottom
+      data: $convergence.cti_table
+      show: 1
+      row_h: 0.44
+  - net.state:
+      name: g
+      nodes:
+        Y: now
+      when: Y knows
+  - msg.send:
+      name: g
+      a: Z
+      b: Y
+      text: 2 to X
+      when: it sees Z
+  - net.badge:
+      name: g
+      node: Y
+      text: X? Z says 2
+      side: up
+      state: now
+- id: trap
+  stage: state
+  pdf: 17
+  c:
+  - Count to Infinity
+  say: 'The trap. Y has no way of knowing that Z''s path runs through Y itself. A
+    bare number hides that. So Y believes it. Z''s 2 plus a link of 1 makes 3, and
+    Y now routes to X through Z. Y tells Z the news: I''m at 3. Z depends on Y, so
+    Z updates: 3 plus 1 is 4. Z tells Y. Y updates: 5. Then Z: 6.'
+  moves:
+  - net.state:
+      name: g
+      nodes:
+        Y: null
+  - table.reveal:
+      name: t
+      when: So Y believes
+  - net.badge:
+      name: g
+      node: Y
+      text: 3, via Z
+      side: up
+      state: error
+  - net.walk:
+      name: g
+      path:
+      - Y
+      - Z
+      state: error
+      when: Y now routes
+  - msg.send:
+      name: g
+      a: Y
+      b: Z
+      text: I'm at 3
+      when: Y tells Z
+      t: 1.1
+  - table.reveal:
+      name: t
+  - net.badge:
+      name: g
+      node: Z
+      text: 4, via Y
+      side: up
+      state: error
+  - msg.send:
+      name: g
+      a: Z
+      b: Y
+      text: '4'
+      when: Z tells Y
+      t: 0.7
+  - table.reveal:
+      name: t
+  - net.badge:
+      name: g
+      node: Y
+      text: 5, via Z
+      side: up
+      state: error
+  - msg.send:
+      name: g
+      a: Y
+      b: Z
+      text: '5'
+      when: Then Z
+      t: 0.6
+  - table.reveal:
+      name: t
+  - net.badge:
+      name: g
+      node: Z
+      text: 6, via Y
+      side: up
+      state: error
+- id: meaning
+  stage: rule
+  pdf: 17
+  c:
+  - Count to Infinity
+  say: Stop and see what those numbers mean. There is no path to X at all. Yet each
+    router is confident. They point at each other, and their traffic bounces between
+    them, while the numbers creep up, until they reach whatever the protocol treats
+    as infinity. No new links appeared. The routers are slowly unlearning something
+    false. This is called count to infinity. It's information feedback, not any physical
+    growth in the network. And a cost increase can trigger the same counting, even
+    if a real but expensive alternate exists. They just count up until the alternate
+    wins.
+  moves:
+  - net.badge:
+      name: g
+      node: X
+      text: no path at all
+      side: down
+      state: error
+      when: There is no path
+  - packet.spawn:
+      name: lp
+      net: g
+      at: Y
+      layers:
+      - ip
+      when: They point
+  - packet.hop:
+      name: lp
+      to:
+      - Z
+      - Y
+      - Z
+      - Y
+      - Z
+      - Y
+      t: 5
+      when: their traffic
+  - net.badge:
+      name: g
+      node: Y
+      text: 7, 9, 11 ...
+      side: up
+      state: error
+      when:
+        phrase: until they reach
+        frame_offset: 34
+  - net.badge:
+      name: g
+      node: Z
+      text: 8, 10, 12 ...
+      side: up
+      state: error
+  - packet.fade:
+      name: lp
+      when: No new links
+  - fx.burst:
+      net: g
+      between:
+      - Y
+      - Z
+      when: The routers are slowly
+  - rule:
+      text: 'Count to infinity: a scalar distance hides a circular dependency.'
+      when: This is called
+  - net.pulse:
+      name: g
+      path:
+      - Y
+      - Z
+      - Y
+      state: error
+      when: They just count
+- id: rip
+  stage: state
+  pdf: 19
+  c:
+  - Count to Infinity
+  say: One crude fix is to make infinity small. RIP treats 16 as unreachable, leaving
+    1 through 15 as usable metrics. Now the counting stops at 16, soon rather than
+    never. But any network wider than 15 hops can't be represented. And the underlying
+    problem has not gone anywhere. We only bounded it.
+  moves:
+  - clear:
+      keep:
+      - g
+  - table.show:
+      name: rip
+      zone: bottom
+      cols:
+      - RIP metric
+      - Meaning
+      rows:
+      - - 1 to 15
+        - usable path
+      - - 16
+        - unreachable
+      show: 0
+  - table.reveal:
+      name: rip
+      when: RIP treats
+  - table.reveal:
+      name: rip
+  - net.badge:
+      name: g
+      node: Y
+      text: stops at 16
+      side: up
+      state: done
+      when: Now the counting
+  - table.mark:
+      name: rip
+      r: 0
+      state: error
+      when: But any network
+- id: poison
+  stage: state
+  pdf: 18
+  c:
+  - Poison Reverse
+  say: 'A better fix targets the actual lie. Go back to before the failure. Z''s route
+    to X goes through Y. So why would Z ever tell Y that it has a route to X? That
+    information is useless to Y, and we''ve just seen that it''s dangerous. Poison
+    reverse says: if you route through a neighbor, tell that neighbor your distance
+    is infinity. Z keeps its true route, and tells Y infinity. It can still tell its
+    other neighbors the truth. So the advertisement is specific to each neighbor.
+    It is not a command to delete anything.'
+  moves:
+  - net.state:
+      name: g
+      links:
+      - - X
+        - Y
+        - solid
+      when: Go back
+  - net.badge:
+      name: g
+      node: Y
+      text: 1 to X
+      side: up
+  - net.unbadge:
+      name: g
+      node: X
+  - net.walk:
+      name: g
+      path:
+      - Z
+      - Y
+      when: Z's route to X
+  - net.badge:
+      name: g
+      node: Z
+      text: "tells Y: \u221E"
+      side: up
+      state: now
+      when: Poison reverse says
+  - msg.send:
+      name: g
+      a: Z
+      b: Y
+      text: "\u221E"
+      kind: error
+      when: tell that neighbor
+      t: 1.1
+  - rule:
+      text: If you route through a neighbor, tell that neighbor your distance is infinite.
+      when: Z keeps its true
+- id: poisoned
+  stage: state
+  pdf: 18
+  c:
+  - Poison Reverse
+  say: Replay the failure. X and Y lose their link. Y checks its neighbors. Z says
+    infinity. So Y knows it has nowhere to go, and it tells Z so. Z's only route was
+    through Y, so Z drops to infinity as well. Done, in one quick exchange, with no
+    counting.
+  moves:
+  - clear:
+      keep:
+      - g
+  - net.unwalk:
+      name: g
+  - net.state:
+      name: g
+      links:
+      - - X
+        - Y
+        - failed
+      when: X and Y lose
+  - table.show:
+      name: pt
+      zone: bottom
+      data: $convergence.poison_table
+      show: 1
+  - table.reveal:
+      name: pt
+      when: Z says infinity
+  - net.badge:
+      name: g
+      node: Y
+      text: "\u221E"
+      side: up
+      state: done
+      when: So Y knows
+  - msg.send:
+      name: g
+      a: Y
+      b: Z
+      text: "\u221E"
+      kind: error
+      when: it tells Z
+      t: 1.0
+  - table.reveal:
+      name: pt
+      when: Z's only route
+  - net.badge:
+      name: g
+      node: Z
+      text: "\u221E"
+      side: up
+      state: done
+- id: slide-good
+  stage: state
+  pdf: 15
+  c:
+  - Count to Infinity
+  say: See the counting itself with the slide's real numbers, on a slightly bigger
+    network. X to Y costs 4, Y to Z costs 1, and X to Z costs 50. Y reaches X directly
+    at 4, and Z goes through Y, at 5. Now suppose X to Y gets better, dropping to
+    1. Y's distance falls to 1, and it tells Z. Z computes 2. Z tells Y, and Y stays
+    at 1. Done, in two exchanges.
+  moves:
+  - clear: {}
+  - net.show:
+      name: tri
+      zone: left
+      nodes:
+        Y:
+          k: node
+          at:
+          - 0
+          - 0
+          l: Y
+        X:
+          k: node
+          at:
+          - 3
+          - 2.4
+          l: X
+        Z:
+          k: node
+          at:
+          - 6
+          - 0
+          l: Z
+      links:
+      - - Y
+        - X
+        - c: 4
+      - - Y
+        - Z
+        - c: 1
+      - - X
+        - Z
+        - c: 50
+  - table.show:
+      name: gn
+      zone: right_top
+      cols:
+      - Step
+      - Y to X
+      - Z to X
+      rows:
+      - - Before
+        - 4
+        - 5
+      - - Y notices
+        - 1
+        - 5
+      - - Z hears
+        - 1
+        - 2
+      show: 1
+  - net.cost:
+      name: tri
+      a: Y
+      b: X
+      cost: 1
+      when: Now suppose
+  - table.reveal:
+      name: gn
+      when: Y's distance falls
+  - msg.send:
+      name: tri
+      a: Y
+      b: Z
+      text: '1'
+      when: and it tells Z
+      t: 1.0
+  - table.reveal:
+      name: gn
+      when: Z computes
+  - msg.send:
+      name: tri
+      a: Z
+      b: Y
+      text: '2'
+      when: Z tells Y
+      t: 1.0
+- id: slide-bad
+  stage: state
+  pdf: 17
+  c: &id001
+  - Count to Infinity
+  say: Make it worse, raising X to Y from 4 to 60. Y compares a direct cost of 60
+    with Z's old claim of 5, through a link of 1, for a total of 6. It picks 6, through
+    Z, not knowing that Z's 5 ran through Y. Z hears 6, and computes 7. Y hears 7,
+    and computes 8.
+  moves:
+  - net.cost:
+      name: tri
+      a: Y
+      b: X
+      cost: 60
+      when: raising X to Y
+  - table.show:
+      name: bn
+      zone: right_bottom
+      cols:
+      - Step
+      - Y to X
+      - Z to X
+      rows:
+      - - Before
+        - $convergence.bad_news_start.0.Y
+        - $convergence.bad_news_start.0.Z
+      - - Y updates
+        - $convergence.bad_news_start.1.Y
+        - $convergence.bad_news_start.1.Z
+      - - Z updates
+        - $convergence.bad_news_start.2.Y
+        - $convergence.bad_news_start.2.Z
+      - - Finally
+        - $convergence.bad_news_final.final_y
+        - $convergence.bad_news_final.final_z
+      show: 1
+      size: 28
+  - table.reveal:
+      name: bn
+      when: It picks 6
+  - msg.send:
+      name: tri
+      a: Y
+      b: Z
+      text: '6'
+      when: Z hears 6
+      t: 0.8
+  - table.reveal:
+      name: bn
+  - msg.send:
+      name: tri
+      a: Z
+      b: Y
+      text: '7'
+      when: Y hears 7
+      t: 0.8
+- id: slide-bad-2
+  stage: state
+  pdf: 17
+  c: *id001
+  say: They climb 2 at a time, while packets for X bounce between them. It only ends
+    when going through Y costs more than Z's real direct link of 50. Then Z settles
+    at 50, and Y at 51. That took more than twenty exchanges, for one changed number.
+    Without the 50 link, it would never stop on its own.
+  moves:
+  - packet.spawn:
+      name: lp
+      net: tri
+      at: Y
+      layers:
+      - ip
+      when: They climb
+  - packet.hop:
+      name: lp
+      to:
+      - Z
+      - Y
+      - Z
+      - Y
+      t: 3
+  - packet.fade:
+      name: lp
+  - net.walk:
+      name: tri
+      path:
+      - Z
+      - X
+      state: done
+      when: It only ends
+  - table.reveal:
+      name: bn
+      when: Then Z settles
+  - table.mark:
+      name: bn
+      r: 3
+      state: done
+      when: That took
+- id: pitfall
+  stage: rule
+  pdf: 17
+  c:
+  - Count to Infinity
+  say: Making infinity small feels like a fix. It isn't. It only bounds the counting,
+    and it limits how wide the network can be. The underlying dependency is still
+    there.
+  moves:
+  - trap:
+      wrong: A smaller infinity fixes count to infinity
+      right: It only bounds the counting, and limits the network's width
+- id: changed
+  stage: changed_example
+  pdf: 18
+  c:
+  - Poison Reverse
+  - Count to Infinity
+  say: Is the problem solved? Add a third router to the loop. Now Y, Z, and W form
+    a triangle, and they all reach X through Y. Z and W are each other's neighbors.
+  moves:
+  - clear: {}
+  - net.show:
+      name: t3
+      zone: top
+      nodes:
+        X:
+          k: node
+          at:
+          - 0
+          - 0
+          l: X
+        Y:
+          k: node
+          at:
+          - 3
+          - 0
+          l: Y
+        Z:
+          k: node
+          at:
+          - 6
+          - 1
+          l: Z
+        W:
+          k: node
+          at:
+          - 6
+          - -1
+          l: W
+      links:
+      - - X
+        - Y
+        - s: failed
+      - - Y
+        - Z
+      - - Y
+        - W
+      - - Z
+        - W
+- id: predict
+  stage: prediction
+  pdf: 18
+  hold: 6
+  c:
+  - Poison Reverse
+  say: Z poisons its route toward Y. But what does Z tell W? Could W now give Y bad
+    advice?
+  moves:
+  - pause:
+      text: what does Z tell W? can a longer cycle still count up?
+- id: answer
+  stage: explanation
+  pdf: 18
+  c:
+  - Poison Reverse
+  - Count to Infinity
+  say: 'Z tells W the truth: distance 2. It doesn''t route through W, so it has no
+    reason to poison. W then thinks it has a path to X through Z, and it can tell
+    Y. So a loop of three can still count up. Poison reverse handles the simple two-node
+    case, not every cycle. What''s the real issue? The number hides the path. So what
+    if routers just sent the path? That''s the fix BGP uses, and we''ll see that even
+    this doesn''t make the trouble go away.'
+  moves:
+  - msg.send:
+      name: t3
+      a: Z
+      b: W
+      text: '2'
+      when: Z tells W
+  - msg.send:
+      name: t3
+      a: W
+      b: Y
+      text: '3'
+      when: and it can tell Y
+  - packet.spawn:
+      name: lp
+      net: t3
+      at: Y
+      layers:
+      - ip
+      when: So a loop
+  - packet.hop:
+      name: lp
+      to:
+      - Z
+      - W
+      - Y
+      - Z
+      - W
+      - Y
+      t: 3.5
+  - packet.fade:
+      name: lp
+  - rule:
+      text: 'Poison reverse handles two nodes, not larger cycles. Next: send the whole
+        path.'
+      when: not every cycle
+  - clear:
+      when: So what if
+  - q:
+      text: What if routers just sent the path?
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 11.2.predict
+  answer_beat: 11.2.answer
+  answer_events:
+  - 11.2.answer:move:0
+  - 11.2.answer:move:1
+  - 11.2.answer:move:2
+  - 11.2.answer:move:3
+  - 11.2.answer:move:4
+  - 11.2.answer:move:5
+  - 11.2.answer:move:6
+  answer_objects:
+  - object: t3
+    after: 11.2.answer:move:0
+    effect: msg.send
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: t3
+    after: 11.2.answer:move:1
+    effect: msg.send
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: lp
+    after: 11.2.answer:move:2
+    effect: packet.spawn
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: lp
+    after: 11.2.answer:move:3
+    effect: packet.hop
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 11.2.answer:move:5
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '11.3'
+title: BGP that won't settle
+deck: lec11-convergence.pdf
+target_min: 7.5
+concepts:
+- BGP Session Liveness
+- BGP Path Exploration
+- Stable Paths Problem
+- Policy Oscillation
+beats:
+- id: question
+  stage: question
+  pdf: 25
+  c:
+  - BGP Path Exploration
+  say: Path vector carries the whole path, so a router can spot a loop at once, and
+    count to infinity disappears. Does that mean convergence is solved? There are
+    two remaining problems. It can be slow in a new way. And even worse, with some
+    policies, it may never settle at all.
+  moves:
+  - heading:
+      text: 'Lecture 11: BGP that won''t settle'
+  - q:
+      text: Paths prevent counting. Does that solve convergence?
+- id: liveness
+  stage: animation
+  pdf: 24
+  c:
+  - BGP Session Liveness
+  say: First, how do BGP neighbors notice that one of them has died? BGP runs over
+    a TCP connection, and TCP alone won't tell you that an idle peer has vanished.
+    So neighbors send keepalive messages. In the slide's example, a keepalive goes
+    every 60 seconds, and the hold timer is 180 seconds. If nothing arrives for that
+    long, the session is declared dead. Every route learned over it is then invalid.
+    So just detecting one failure may take three minutes.
+  moves:
+  - clear: {}
+  - tl.show:
+      name: k
+      zone: top
+      tracks:
+      - Keepalives
+      span:
+      - 0
+      - 300
+      ticks:
+      - 0
+      - 60
+      - 120
+      - 180
+      - 240
+      - 300
+  - tl.block:
+      name: k
+      track: Keepalives
+      start: 0
+      end: 6
+      kind: ip
+  - tl.block:
+      name: k
+      track: Keepalives
+      start: 60
+      end: 66
+      kind: ip
+  - tl.block:
+      name: k
+      track: Keepalives
+      start: 66
+      end: 246
+      text: 'silent: 180 s hold timer'
+      state: error
+      when: If nothing arrives
+  - rule:
+      text: 'Example timers: keepalive 60 s, hold 180 s. Then every route from that
+        peer is invalid.'
+- id: explore
+  stage: state
+  pdf: 27
+  c:
+  - BGP Path Exploration
+  say: 'Suppose destination 0 disappears entirely. Follow AS 2 as the news spreads.
+    It''s been using the direct path, 2, 0. That gets withdrawn. But it remembers
+    an alternative through AS 1: 2, 1, 0. It looks fine, it''s loop-free, and it''s
+    false, since AS 1 simply hasn''t heard yet. Then that''s withdrawn too. So it
+    tries 2, 3, 0, which is also stale. Next 2, 1, 3, 0, longer still. Only after
+    all of those does it finally have no route. This is path exploration. Each candidate
+    seems reasonable locally, and each fails in turn. Every step also causes more
+    update messages.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: x
+      zone: left
+      nodes:
+        n0:
+          k: cloud
+          at:
+          - 3
+          - 0
+          l: '0'
+        n1:
+          k: cloud
+          at:
+          - 0
+          - 2
+          l: '1'
+        n2:
+          k: cloud
+          at:
+          - 3
+          - 4
+          l: '2'
+        n3:
+          k: cloud
+          at:
+          - 6
+          - 2
+          l: '3'
+      links:
+      - - n0
+        - n1
+      - - n0
+        - n2
+      - - n0
+        - n3
+      - - n1
+        - n2
+      - - n2
+        - n3
+      - - n1
+        - n3
+  - table.show:
+      name: seq
+      zone: right
+      cols:
+      - AS 2's choice
+      rows:
+      - - $convergence.exploration.0
+      - - $convergence.exploration.1
+      - - $convergence.exploration.2
+      - - $convergence.exploration.3
+      - - no route
+      show: 1
+  - net.state:
+      name: x
+      nodes:
+        n0: error
+      links:
+      - - n0
+        - n1
+        - failed
+      - - n0
+        - n2
+        - failed
+      - - n0
+        - n3
+        - failed
+      when: It's been using
+  - table.reveal:
+      name: seq
+      when: But it remembers
+  - table.reveal:
+      name: seq
+      when: So it tries
+  - table.reveal:
+      name: seq
+      when: Next 2, 1, 3
+  - table.reveal:
+      name: seq
+      when: Only after all
+- id: exploration-cost
+  stage: state
+  pdf: 28
+  c:
+  - BGP Path Exploration
+  say: Why doesn't that settle faster? Each router must first hear about the failure
+    of what it's using, then choose its next best candidate, and advertise that. Those
+    messages are limited by timers, so that routers aren't flooded with updates. So
+    each wrong candidate can take a while to be discovered. Also, not every BGP change
+    is a hardware failure. Import and export policy changes, resets of sessions, and
+    persistent instability all make routes change too.
+  moves:
+  - clear: {}
+  - bullets:
+      name: why
+      zone: top
+      show: 3
+      items:
+      - Hear about the failure of the path in use
+      - Choose and advertise the next candidate
+      - Repeat until the news has reached everyone
+  - rule:
+      text: 'Not all route changes are failures: policy changes and session resets
+        count too.'
+- id: spp
+  stage: rule
+  pdf: 30
+  c:
+  - Stable Paths Problem
+  say: The deeper problem. Each network ranks paths by its own policy. Do those independent
+    choices always fit together? To study this, there's a clean model called the stable
+    paths problem. Each node has a ranked list of permitted paths to destination 0.
+    A path is available only if the next hop is actually using exactly the rest of
+    that path. A stable assignment gives every node its best available path, all at
+    the same time.
+  moves:
+  - clear: {}
+  - net.show:
+      name: s
+      zone: left
+      nodes:
+        n0:
+          k: node
+          at:
+          - 3
+          - 1.2
+          l: '0'
+        n1:
+          k: node
+          at:
+          - 0
+          - 0
+          l: '1'
+        n2:
+          k: node
+          at:
+          - 2.6
+          - 3.2
+          l: '2'
+        n3:
+          k: node
+          at:
+          - 5.2
+          - 0
+          l: '3'
+        n4:
+          k: node
+          at:
+          - 5.4
+          - 2
+          l: '4'
+        n5:
+          k: node
+          at:
+          - 5.6
+          - 4
+          l: '5'
+      links:
+      - - n1
+        - n2
+      - - n2
+        - n5
+      - - n2
+        - n4
+      - - n2
+        - n0
+      - - n1
+        - n0
+      - - n1
+        - n3
+      - - n0
+        - n3
+      - - n4
+        - n3
+  - table.show:
+      name: ranks
+      zone: right
+      cols:
+      - Node
+      - Most preferred
+      - Then
+      rows:
+      - - 1
+        - 130
+        - 10
+      - - 2
+        - 210
+        - 20
+      - - 3
+        - 30
+        - ''
+      - - 4
+        - 420
+        - 430
+      - - 5
+        - 5210
+        - ''
+  - rule:
+      text: A path is available only if the next hop is using exactly its remainder.
+- id: solve
+  stage: state
+  pdf: 31
+  c: &id001
+  - Stable Paths Problem
+  say: Solve the instructor's instance. Node 3 has only one permitted path, 30, so
+    it uses it. Node 1 prefers 130, and since 3 uses 30, that's available, so node
+    1 uses 130. Node 2 prefers 210, which requires node 1 to use 10. But node 1 uses
+    130, so that's unavailable, and node 2 falls back to 20.
+  moves:
+  - table.mark:
+      name: ranks
+      r: 2
+      state: done
+      when: Node 3 has
+  - net.badge:
+      name: s
+      node: n3
+      text: '30'
+      side: right
+      state: done
+  - table.mark:
+      name: ranks
+      r: 0
+      state: done
+      when: Node 1 prefers
+  - net.badge:
+      name: s
+      node: n1
+      text: '130'
+      side: down
+      state: done
+  - table.mark:
+      name: ranks
+      r: 1
+      state: now
+      when: Node 2 prefers
+  - net.badge:
+      name: s
+      node: n2
+      text: '20'
+      side: left
+      state: done
+      when: node 2 falls back
+- id: solve-2
+  stage: state
+  pdf: 31
+  c: *id001
+  say: Node 4 prefers 420, and node 2 does use 20, so 420 works. Node 5 allows only
+    5210. That needs node 2 on 210, which it isn't. So node 5 has no path, even though
+    it's physically connected to node 2. The slide asks two questions. Will node 1
+    use a direct path? False. Does node 5 have a path? False.
+  moves:
+  - table.mark:
+      name: ranks
+      r: 3
+      state: done
+      when: Node 4 prefers
+  - net.badge:
+      name: s
+      node: n4
+      text: '420'
+      side: right
+      state: done
+  - table.mark:
+      name: ranks
+      r: 4
+      state: error
+      when: Node 5 allows
+  - net.badge:
+      name: s
+      node: n5
+      text: none
+      side: right
+      state: error
+      when: So node 5
+- id: multi
+  stage: state
+  pdf: 32
+  c:
+  - Stable Paths Problem
+  - Policy Oscillation
+  say: That instance has exactly one solution. Others don't. Take two nodes, each
+    preferring to reach the destination through the other. Node 1 likes 120 best,
+    and node 2 likes 210 best. There are two stable outcomes. Node 1 goes through
+    node 2, while 2 goes direct. Or the reverse. Which one you get depends on who
+    speaks first. Same policies, same links, different result.
+  moves:
+  - clear: {}
+  - net.show:
+      name: d
+      zone: left
+      nodes:
+        n0:
+          k: node
+          at:
+          - 3
+          - 0
+          l: '0'
+        n1:
+          k: node
+          at:
+          - 0
+          - 2
+          l: '1'
+        n2:
+          k: node
+          at:
+          - 6
+          - 2
+          l: '2'
+      links:
+      - - n0
+        - n1
+      - - n0
+        - n2
+      - - n1
+        - n2
+  - table.show:
+      name: dd
+      zone: right
+      cols:
+      - Solution
+      - Node 1
+      - Node 2
+      rows:
+      - - First
+        - $convergence.disagree_solutions.0.1
+        - $convergence.disagree_solutions.0.2
+      - - Second
+        - $convergence.disagree_solutions.1.1
+        - $convergence.disagree_solutions.1.2
+    when: There are two
+- id: gadget
+  stage: state
+  pdf: 34
+  c:
+  - Policy Oscillation
+  say: Three nodes in a ring. Each prefers the path through its clockwise neighbor,
+    and each will otherwise go direct. Try to settle them. If node 1 goes direct,
+    node 2 can use its favorite, through node 1, and so node 2 is not direct. Then
+    node 3 can't use 320, and goes direct. But then node 1 can use 130, its favorite,
+    and is no longer direct. That undoes node 2's choice. And round it goes. An exhaustive
+    check of every assignment finds no stable solution at all. No link failed. Policies
+    alone keep routes changing, forever. That's policy oscillation.
+  moves:
+  - clear: {}
+  - net.show:
+      name: b
+      zone: left
+      nodes:
+        n0:
+          k: node
+          at:
+          - 3
+          - 1.2
+          l: '0'
+        n1:
+          k: node
+          at:
+          - 0
+          - 0
+          l: '1'
+        n2:
+          k: node
+          at:
+          - 3
+          - 3.6
+          l: '2'
+        n3:
+          k: node
+          at:
+          - 6
+          - 0
+          l: '3'
+      links:
+      - - n0
+        - n1
+      - - n0
+        - n2
+      - - n0
+        - n3
+      - - n1
+        - n2
+      - - n2
+        - n3
+      - - n3
+        - n1
+  - table.show:
+      name: bg
+      zone: right_top
+      cols:
+      - Node
+      - Prefers
+      - Else
+      rows:
+      - - 1
+        - 130
+        - 10
+      - - 2
+        - 210
+        - 20
+      - - 3
+        - 320
+        - 30
+  - net.badge:
+      name: b
+      node: n1
+      text: '10'
+      side: down
+      when: If node 1 goes
+  - net.badge:
+      name: b
+      node: n2
+      text: '210'
+      side: up
+      when: node 2 can use
+  - net.badge:
+      name: b
+      node: n3
+      text: '30'
+      side: down
+      when: Then node 3
+  - net.badge:
+      name: b
+      node: n1
+      text: '130'
+      side: down
+      state: now
+      when: But then node 1
+  - net.badge:
+      name: b
+      node: n2
+      text: '20'
+      side: up
+      state: error
+      when: That undoes
+  - card:
+      kind: note
+      text: 'Solutions found by checking every assignment: none.'
+      zone: right_bottom
+      when: An exhaustive check
+- id: laptop
+  stage: rule
+  pdf: 34
+  c:
+  - Policy Oscillation
+  say: For our laptop, all of this shows up as a stall or a gap. Its video freezes
+    for a moment, and then recovers. The laptop did nothing wrong, and neither did
+    its server. The network was changing its mind, or couldn't settle it.
+  moves:
+  - rule:
+      text: To the laptop, this is just a stall. The network was changing its mind.
+      when: For our laptop
+- id: pitfall
+  stage: rule
+  pdf: 34
+  c:
+  - Policy Oscillation
+  say: The trap with path exploration. A path with no AS loop can still be stale.
+    No loop is a much weaker claim than, this path is still available now.
+  moves:
+  - trap:
+      wrong: No AS loop means the path still works
+      right: A loop-free path may already be gone
+- id: changed
+  stage: changed_example
+  pdf: 34
+  c:
+  - Policy Oscillation
+  say: Change one line of policy. Node 3 decides it will no longer prefer the path
+    through node 2. It now ranks going direct first, with 320 second.
+  moves:
+  - table.set:
+      name: bg
+      r: 2
+      c: 1
+      v: 30
+      state: now
+  - table.set:
+      name: bg
+      r: 2
+      c: 2
+      v: 320
+      state: now
+- id: predict
+  stage: prediction
+  pdf: 34
+  hold: 12
+  c:
+  - Stable Paths Problem
+  say: Does that single change produce a stable solution? Work it out starting from
+    node 3.
+  moves:
+  - pause:
+      text: is there now a stable solution? start from node 3.
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 36
+  c:
+  - Stable Paths Problem
+  - Policy Oscillation
+  say: Yes. Node 3 uses 30, and never moves. So node 1's favorite, 130, is always
+    available, and node 1 uses it. Node 2 then can't use 210, and so it goes direct,
+    on 20. Everyone's happy, and nothing changes. One local preference broke the cycle.
+    So the trouble isn't BGP's messages, it's the combination of rankings. Then what
+    real-world force keeps the Internet's policies from forming these cycles? The
+    answer is money. Let us see how BGP really works, and how business relationships
+    shape it.
+  moves:
+  - net.badge:
+      name: b
+      node: n3
+      text: '30'
+      side: down
+      state: done
+  - net.badge:
+      name: b
+      node: n1
+      text: '130'
+      side: down
+      state: done
+  - net.badge:
+      name: b
+      node: n2
+      text: '20'
+      side: up
+      state: done
+  - rule:
+      text: 'Stability depends on how rankings combine. Next: what shapes real rankings?'
+      when: So the trouble
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 11.3.predict
+  answer_beat: 11.3.answer
+  answer_events:
+  - 11.3.answer:move:0
+  - 11.3.answer:move:1
+  - 11.3.answer:move:2
+  - 11.3.answer:move:3
+  answer_objects:
+  - object: b
+    after: 11.3.answer:move:0
+    effect: net.badge
+    selector:
+      node: n3
+    before_answer: hidden_or_neutral
+  - object: b
+    after: 11.3.answer:move:1
+    effect: net.badge
+    selector:
+      node: n1
+    before_answer: hidden_or_neutral
+  - object: b
+    after: 11.3.answer:move:2
+    effect: net.badge
+    selector:
+      node: n2
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 11.3.answer:move:3
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.

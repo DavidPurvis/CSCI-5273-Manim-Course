@@ -1,0 +1,634 @@
+dish: '6.3'
+title: Learning and loops
+deck: lec06-lan.pdf
+target_min: 6
+concepts:
+- Self-Learning Switch Tables
+- Spanning Tree Protocol
+pad: 2.2
+beats:
+- id: 6.3.question
+  stage: question
+  narration: 6.3.question
+  pdf:
+  - lec06-lan.pdf
+  - 30
+  concepts:
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 6: learning and loops'
+  - q:
+      text: Nobody configures a switch. How does it know where hosts are?
+  adjust: {}
+- id: 6.3.setup
+  stage: animation
+  narration: 6.3.setup
+  pdf:
+  - lec06-lan.pdf
+  - 31
+  concepts:
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: sw
+      zone: left
+      nodes:
+        X:
+          k: switch
+          at:
+          - 0
+          - 0
+          l: Switch
+          lp: up
+        A:
+          k: host
+          at:
+          - -3
+          - -1
+          l: A (port 1)
+        B:
+          k: host
+          at:
+          - 0
+          - -1.6
+          l: B (port 2)
+        C:
+          k: host
+          at:
+          - 3
+          - -1
+          l: C (port 3)
+      links:
+      - - A
+        - X
+      - - B
+        - X
+      - - C
+        - X
+  - table.show:
+      name: mac
+      zone: right_top
+      cols:
+      - MAC
+      - Port
+      rows: []
+  - packet.spawn:
+      name: f
+      net: sw
+      at: A
+      layers:
+      - eth
+      when: A sends
+  adjust: {}
+- id: 6.3.learn
+  stage: state
+  narration: 6.3.learn
+  pdf:
+  - lec06-lan.pdf
+  - 33
+  concepts:
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - packet.hop:
+      name: f
+      to: X
+  - switch.learn_source:
+      table: mac
+      mac: A
+      port: '1'
+      when: So A must
+  - packet.flood:
+      name: f
+      to:
+      - B
+      - C
+      when: It floods
+  - packet.fade:
+      name: f
+  adjust: {}
+- id: 6.3.reply
+  stage: state
+  narration: 6.3.reply
+  pdf:
+  - lec06-lan.pdf
+  - 34
+  concepts:
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: g
+      net: sw
+      at: B
+      layers:
+      - eth
+  - packet.hop:
+      name: g
+      to: X
+  - switch.learn_source:
+      table: mac
+      mac: B
+      port: '2'
+      when: teaches the switch
+  - packet.hop:
+      name: g
+      to: A
+      when: so this frame
+  - packet.fade:
+      name: g
+  - packet.spawn:
+      name: h
+      net: sw
+      at: A
+      layers:
+      - eth
+      when: Finally, A sends
+  - packet.hop:
+      name: h
+      to:
+      - X
+      - B
+  - packet.fade:
+      name: h
+  - table.show:
+      name: tr
+      zone: right_bottom
+      data: $ethernet.learning_table
+      size: 28
+  adjust: {}
+- id: 6.3.aging
+  stage: rule
+  narration: 6.3.aging
+  pdf:
+  - lec06-lan.pdf
+  - 30
+  concepts:
+  - Self-Learning Switch Tables
+  clarifications:
+  - ttl-aging
+  moves:
+  - rule:
+      text: Learn from the source. Forward by the destination. Flood when unknown.
+      when: The rule
+  - net.state:
+      name: sw
+      nodes:
+        X: now
+      when: Entries also expire
+  - card:
+      kind: clarification
+      text: The slide's table TTL is a local aging timer, not a hop count in the frame.
+      zone: right_bottom
+      when: The slides call
+  adjust: {}
+- id: 6.3.loop
+  stage: animation
+  narration: 6.3.loop
+  pdf:
+  - lec06-lan.pdf
+  - 35
+  concepts:
+  - Spanning Tree Protocol
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: tri
+      zone: left
+      nodes:
+        S1:
+          k: switch
+          at:
+          - 0
+          - 1.3
+          l: S1
+          lp: up
+        S2:
+          k: switch
+          at:
+          - -2.4
+          - -1.2
+          l: S2
+        S3:
+          k: switch
+          at:
+          - 2.4
+          - -1.2
+          l: S3
+      links:
+      - - S1
+        - S2
+      - - S1
+        - S3
+      - - S2
+        - S3
+  - packet.spawn:
+      name: b
+      net: tri
+      at: S1
+      layers:
+      - eth
+      when: Now send one
+  - packet.flood:
+      name: b
+      to:
+      - S2
+      - S3
+  - packet.fade:
+      name: b
+  - packet.spawn:
+      name: b2
+      net: tri
+      at: S2
+      layers:
+      - eth
+      when: Each floods
+  - packet.flood:
+      name: b2
+      to:
+      - S3
+      - S1
+  - packet.fade:
+      name: b2
+  - packet.spawn:
+      name: b3
+      net: tri
+      at: S3
+      layers:
+      - eth
+      when: Those copies
+  - packet.flood:
+      name: b3
+      to:
+      - S2
+      - S1
+  - packet.fade:
+      name: b3
+  - text:
+      name: why
+      zone: right
+      lines:
+      - Ethernet has no hop limit.
+      - Copies circulate and multiply.
+      color: error
+      when: IP has a TTL
+  - packet.spawn:
+      name: b4
+      net: tri
+      at: S2
+      layers:
+      - eth
+      when: The copies circulate
+  - packet.hop:
+      name: b4
+      to:
+      - S3
+      - S1
+      - S2
+      - S3
+      - S1
+      t: 2.5
+  - packet.drop:
+      name: b4
+  adjust: {}
+- id: 6.3.stp
+  stage: state
+  narration: 6.3.stp
+  pdf:
+  - lec06-lan.pdf
+  - 37
+  concepts: &id001
+  - Spanning Tree Protocol
+  clarifications:
+  - stp-simplified
+  moves:
+  - text:
+      name: why
+      zone: right_top
+      lines:
+      - 'Each message: root ID, distance, sender ID'
+      when: Switches exchange
+  - net.badge:
+      name: tri
+      node: S2
+      text: I'm root
+      side: down
+      when: Each begins
+  - net.badge:
+      name: tri
+      node: S3
+      text: I'm root
+      side: down
+      t: 0.3
+  - msg.send:
+      name: tri
+      a: S1
+      b: S2
+      text: root S1
+      when: Hearing a lower
+      t: 1.0
+  - net.unbadge:
+      name: tri
+      node: S2
+  adjust: {}
+- id: 6.3.stp-2
+  stage: state
+  narration: 6.3.stp-2
+  pdf:
+  - lec06-lan.pdf
+  - 37
+  concepts: *id001
+  clarifications: []
+  moves:
+  - msg.send:
+      name: tri
+      a: S1
+      b: S3
+      text: root S1
+      when: Hearing a shorter
+      t: 1.0
+  - net.unbadge:
+      name: tri
+      node: S3
+  - net.state:
+      name: tri
+      nodes:
+        S1: done
+      when: In the triangle
+  - net.state:
+      name: tri
+      links:
+      - - S1
+        - S2
+        - tree
+      - - S1
+        - S3
+        - tree
+      - - S2
+        - S3
+        - blocked
+      when: S2 and S3 use
+  - card:
+      kind: clarification
+      text: This is a simplified account. Real STP adds tie handling and designated forwarding.
+      zone: right_bottom
+      when: The slides simplify
+  adjust: {}
+- id: 6.3.instructor
+  stage: rule
+  narration: 6.3.instructor
+  pdf:
+  - lec06-lan.pdf
+  - 41
+  concepts:
+  - Spanning Tree Protocol
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: seven
+      zone: left
+      nodes:
+        S3:
+          k: switch
+          at:
+          - -2.2
+          - 2
+          l: S3
+          lp: up
+        S5:
+          k: switch
+          at:
+          - 0.4
+          - 1.3
+          l: S5
+          lp: up
+        S7:
+          k: switch
+          at:
+          - 2.8
+          - 2
+          l: S7
+          lp: up
+        S2:
+          k: switch
+          at:
+          - -3
+          - 0
+          l: S2
+        S1:
+          k: switch
+          at:
+          - 0
+          - -0.4
+          l: S1
+        S6:
+          k: switch
+          at:
+          - -2
+          - -2
+          l: S6
+        S4:
+          k: switch
+          at:
+          - 2
+          - -2
+          l: S4
+      links:
+      - - S3
+        - S2
+      - - S2
+        - S1
+      - - S1
+        - S5
+      - - S1
+        - S7
+      - - S1
+        - S6
+      - - S1
+        - S4
+      - - S3
+        - S5
+      - - S5
+        - S7
+      - - S6
+        - S4
+  - card:
+      kind: assumption
+      text: Equal link costs; S1 to S7 are increasing bridge IDs. The figure supplies neither.
+      zone: right_top
+      when: so we must
+  - net.state:
+      name: seven
+      nodes:
+        S1: done
+      when: Then S1 is
+  - net.state:
+      name: seven
+      links:
+      - - S1
+        - S2
+        - tree
+      - - S1
+        - S4
+        - tree
+      - - S1
+        - S5
+        - tree
+      - - S1
+        - S6
+        - tree
+      - - S1
+        - S7
+        - tree
+      when: Most switches
+  - net.state:
+      name: seven
+      links:
+      - - S2
+        - S3
+        - tree
+      - - S3
+        - S5
+        - blocked
+      - - S5
+        - S7
+        - blocked
+      - - S6
+        - S4
+        - blocked
+      when: and the lower ID
+  - net.port_state:
+      name: seven
+      device: S3
+      peer: S5
+      state: discarding
+  - net.port_state:
+      name: seven
+      device: S7
+      peer: S5
+      state: discarding
+  - net.port_state:
+      name: seven
+      device: S6
+      peer: S4
+      state: discarding
+  adjust: {}
+- id: 6.3.pitfall
+  stage: rule
+  narration: 6.3.pitfall
+  pdf:
+  - lec06-lan.pdf
+  - 41
+  concepts:
+  - Spanning Tree Protocol
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Flooding turns the frame into a broadcast
+      right: Unknown unicast floods, but the destination address doesn't change
+  adjust: {}
+- id: 6.3.changed
+  stage: changed_example
+  narration: 6.3.changed
+  pdf:
+  - lec06-lan.pdf
+  - 41
+  concepts:
+  - Spanning Tree Protocol
+  clarifications: []
+  moves:
+  - table.show:
+      name: paths
+      zone: right_bottom
+      cols:
+      - Hosts
+      - Path
+      rows:
+      - - A to B
+        - S3 S2 S1 S7
+      - - A to C
+        - '?'
+      - - B to C
+        - '?'
+      when: Use this
+  - net.walk:
+      name: seven
+      path:
+      - S3
+      - S2
+      - S1
+      - S7
+      when: A to B
+  adjust: {}
+- id: 6.3.predict
+  stage: prediction
+  narration: 6.3.predict
+  pdf:
+  - lec06-lan.pdf
+  - 41
+  concepts:
+  - Spanning Tree Protocol
+  clarifications: []
+  moves:
+  - pause:
+      text: the switch path for A to C, and for B to C?
+  adjust: {}
+  hold: 6
+- id: 6.3.answer
+  stage: explanation
+  narration: 6.3.answer
+  pdf:
+  - lec06-lan.pdf
+  - 41
+  concepts:
+  - Spanning Tree Protocol
+  clarifications: []
+  moves:
+  - net.walk:
+      name: seven
+      path:
+      - S3
+      - S2
+      - S1
+      - S4
+      state: done
+      when: A to C goes
+  - table.set:
+      name: paths
+      r: 1
+      c: 1
+      v: S3 S2 S1 S4
+      state: done
+  - net.walk:
+      name: seven
+      path:
+      - S7
+      - S1
+      - S4
+      state: done
+      when: B to C goes
+  - table.set:
+      name: paths
+      r: 2
+      c: 1
+      v: S7 S1 S4
+      state: done
+  - net.walk:
+      name: seven
+      path:
+      - S3
+      - S2
+      - S1
+      - S7
+      when: Notice that A
+  - rule:
+      text: A spanning tree promises no loops. It does not promise shortest paths.
+      when: Spanning tree does
+  - keep: {}
+  adjust: {}

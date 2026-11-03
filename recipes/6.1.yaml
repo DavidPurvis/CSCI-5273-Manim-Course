@@ -1,0 +1,487 @@
+dish: '6.1'
+title: Sharing a wire
+deck: lec06-lan.pdf
+target_min: 6.5
+concepts:
+- Channel Partitioning
+- Taking Turns
+- Random Access
+- Ethernet Frames
+- MAC Addresses
+- CSMA-CD
+- Binary Exponential Backoff
+- Collision Detection Window
+pad: 2.2
+beats:
+- id: 6.1.question
+  stage: question
+  narration: 6.1.question
+  pdf:
+  - lec06-lan.pdf
+  - 7
+  concepts:
+  - Channel Partitioning
+  - Taking Turns
+  - Random Access
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 6: sharing a wire'
+  - spine:
+      current: LAN
+      zone: top
+  - q:
+      text: Many senders, one wire. Who talks, and when?
+      zone: bottom
+  adjust: {}
+- id: 6.1.partition
+  stage: animation
+  narration: 6.1.partition
+  pdf:
+  - lec06-lan.pdf
+  - 7
+  concepts:
+  - Channel Partitioning
+  clarifications: []
+  moves:
+  - clear: {}
+  - tl.show:
+      name: slots
+      zone: top
+      tracks:
+      - Partitioned
+      - Taking turns
+      - Random access
+      span:
+      - 0
+      - 12
+  - tl.block:
+      name: slots
+      track: Partitioned
+      start: 0
+      end: 1
+      text: A
+      kind: ip
+      when: Divide the wire
+  - tl.block:
+      name: slots
+      track: Partitioned
+      start: 1
+      end: 2
+      text: ''
+      kind: data
+  - tl.block:
+      name: slots
+      track: Partitioned
+      start: 2
+      end: 3
+      text: ''
+      kind: data
+  - tl.block:
+      name: slots
+      track: Partitioned
+      start: 3
+      end: 4
+      text: ''
+      kind: data
+  - tl.block:
+      name: slots
+      track: Partitioned
+      start: 4
+      end: 5
+      text: A
+      kind: ip
+      when: But watch
+  - tl.block:
+      name: slots
+      track: Partitioned
+      start: 8
+      end: 9
+      text: A
+      kind: ip
+  adjust: {}
+- id: 6.1.turns
+  stage: animation
+  narration: 6.1.turns
+  pdf:
+  - lec06-lan.pdf
+  - 7
+  concepts:
+  - Taking Turns
+  clarifications: []
+  moves:
+  - tl.block:
+      name: slots
+      track: Taking turns
+      start: 0
+      end: 3
+      text: A
+      kind: ip
+  - tl.block:
+      name: slots
+      track: Taking turns
+      start: 3.2
+      end: 3.6
+      text: ''
+      kind: data
+  - tl.block:
+      name: slots
+      track: Taking turns
+      start: 3.8
+      end: 7
+      text: A
+      kind: ip
+  adjust: {}
+- id: 6.1.random
+  stage: animation
+  narration: 6.1.random
+  pdf:
+  - lec06-lan.pdf
+  - 7
+  concepts:
+  - Random Access
+  clarifications: []
+  moves:
+  - tl.block:
+      name: slots
+      track: Random access
+      start: 0
+      end: 5
+      text: A
+      kind: ip
+  - tl.block:
+      name: slots
+      track: Random access
+      start: 5.5
+      end: 6.5
+      text: crash
+      state: error
+  - tl.block:
+      name: slots
+      track: Random access
+      start: 7
+      end: 11
+      text: B
+      kind: eth
+  - rule:
+      text: Partition reserves. Taking turns coordinates. Random access contends. Ethernet contends.
+  adjust: {}
+- id: 6.1.frame
+  stage: animation
+  narration: 6.1.frame
+  pdf:
+  - lec06-lan.pdf
+  - 11
+  concepts:
+  - Ethernet Frames
+  clarifications: []
+  moves:
+  - clear: {}
+  - fields.show:
+      name: frame
+      zone: top
+      unit: 0.21
+      rows:
+      - - - Preamble
+          - 9
+        - - Dest MAC
+          - 9
+        - - Source MAC
+          - 11
+        - - Type
+          - 6
+        - - Payload (for example IP)
+          - 20
+        - - CRC
+          - 6
+  - fields.mark:
+      name: frame
+      label: Preamble
+      when: A frame starts
+  - fields.mark:
+      name: frame
+      label: Preamble
+      state: null
+      when: Then a destination
+  - fields.mark:
+      name: frame
+      label: Dest MAC
+  - fields.mark:
+      name: frame
+      label: Source MAC
+  - fields.mark:
+      name: frame
+      label: CRC
+      when: and finally
+  adjust: {}
+- id: 6.1.mac
+  stage: animation
+  narration: 6.1.mac
+  pdf:
+  - lec06-lan.pdf
+  - 28
+  concepts:
+  - MAC Addresses
+  clarifications: []
+  moves:
+  - fields.mark:
+      name: frame
+      label: Source MAC
+      state: null
+  - fields.mark:
+      name: frame
+      label: CRC
+      state: null
+  - bullets:
+      name: macs
+      zone: bottom
+      show: 3
+      items:
+      - 48 bits, assigned to an interface
+      - 'Flat: says nothing about location'
+      - A card keeps frames for its own address or broadcast
+  adjust: {}
+- id: 6.1.mac-more
+  stage: state
+  narration: 6.1.mac-more
+  pdf:
+  - lec06-lan.pdf
+  - 28
+  concepts:
+  - MAC Addresses
+  clarifications: []
+  moves:
+  - table.show:
+      name: m2
+      zone: bottom
+      cols:
+      - Item
+      - Example
+      rows:
+      - - IP address
+        - 192.0.2.10
+      - - MAC address
+        - 02:00:00:00:00:0A
+      - - Broadcast
+        - FF:FF:FF:FF:FF:FF
+      show: 0
+  - table.reveal:
+      name: m2
+      n: 2
+      when: A host has
+  - table.reveal:
+      name: m2
+      when: And the broadcast
+  adjust: {}
+- id: 6.1.csma
+  stage: state
+  narration: 6.1.csma
+  pdf:
+  - lec06-lan.pdf
+  - 12
+  concepts:
+  - CSMA-CD
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: wire
+      zone: top
+      nodes:
+        A:
+          k: host
+          at:
+          - 0
+          - 0
+          l: A
+        M:
+          k: point
+          at:
+          - 5
+          - 0
+          l: ''
+        B:
+          k: host
+          at:
+          - 10
+          - 0
+          l: B
+      links:
+      - - A
+        - M
+      - - M
+        - B
+  - radio.pulse:
+      net: wire
+      node: A
+      radius: 5.4
+      kind: eth
+      when: A and B can
+  - radio.pulse:
+      net: wire
+      node: B
+      radius: 5.4
+      kind: ip
+  - fx.burst:
+      net: wire
+      node: M
+  adjust: {}
+- id: 6.1.backoff
+  stage: state
+  narration: 6.1.backoff
+  pdf:
+  - lec06-lan.pdf
+  - 12
+  concepts:
+  - Binary Exponential Backoff
+  clarifications: []
+  moves:
+  - text:
+      name: bo
+      zone: left_bottom
+      lines:
+      - K is random, from 0 to 2^m − 1
+      - Wait K × 512 bit times
+  - table.show:
+      name: bo3
+      zone: right_bottom
+      cols:
+      - Quantity
+      - Value
+      rows:
+      - - Collision m
+        - 3
+      - - K range
+        - 0 to 7
+      - - One slot
+        - 51.2 μs
+      - - K = 5 waits
+        - 256 μs
+      show: 0
+    when: Try one
+  - table.reveal:
+      name: bo3
+      n: 2
+  - table.reveal:
+      name: bo3
+      n: 2
+      when: On 10 megabit
+  adjust: {}
+- id: 6.1.window
+  stage: rule
+  narration: 6.1.window
+  pdf:
+  - lec06-lan.pdf
+  - 13
+  concepts:
+  - Collision Detection Window
+  clarifications: []
+  moves:
+  - clear:
+      keep:
+      - wire
+  - tl.show:
+      name: win
+      zone: bottom
+      tracks:
+      - A sends
+      - B sends
+      span:
+      - 0
+      - 2.4
+      ticks:
+      - 0
+      - 1
+      - 2
+  - tl.block:
+      name: win
+      track: A sends
+      start: 0
+      end: 2
+      text: A must still be sending
+      kind: ip
+      when: Suppose A starts
+  - tl.block:
+      name: win
+      track: B sends
+      start: 0.95
+      end: 1.15
+      state: error
+      when: B starts just
+  - rule:
+      text: Frame length ÷ rate ≥ 2 × propagation delay
+      when: which gives the rule
+  adjust: {}
+- id: 6.1.pitfall
+  stage: rule
+  narration: 6.1.pitfall
+  pdf:
+  - lec06-lan.pdf
+  - 13
+  concepts:
+  - Collision Detection Window
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Carrier sensing prevents collisions
+      right: Propagation delay still lets two senders collide
+  adjust: {}
+- id: 6.1.changed
+  stage: changed_example
+  narration: 6.1.changed
+  pdf:
+  - lec06-lan.pdf
+  - 14
+  concepts:
+  - Collision Detection Window
+  clarifications: []
+  moves:
+  - clear: {}
+  - tex:
+      name: f
+      zone: top
+      tex: L \ge 2dR = 2 \times 25.6\,\mu s \times 10\,\text{Mb/s} = 512 \text{ bits}
+      size: 40
+  - text:
+      name: tw
+      zone: bottom
+      lines:
+      - 'Now: d = 20 μs at the same 10 Mb/s'
+      when: Now change
+  adjust: {}
+- id: 6.1.predict
+  stage: prediction
+  narration: 6.1.predict
+  pdf:
+  - lec06-lan.pdf
+  - 14
+  concepts:
+  - Collision Detection Window
+  clarifications: []
+  moves:
+  - pause:
+      text: the minimum L in bits for d = 20 μs?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 6.1.answer
+  stage: explanation
+  narration: 6.1.answer
+  pdf:
+  - lec06-lan.pdf
+  - 14
+  concepts:
+  - Collision Detection Window
+  - CSMA-CD
+  clarifications: []
+  moves:
+  - text:
+      name: tw
+      zone: bottom
+      lines:
+      - L ≥ 2 × 20 μs × 10 Mb/s = 400 bits
+      - The formula's answer, not a new Ethernet minimum
+  - rule:
+      text: 'These limits belong to shared half-duplex wires. Next: stop sharing.'
+  - keep: {}
+  adjust: {}

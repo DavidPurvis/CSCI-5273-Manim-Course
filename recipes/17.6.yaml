@@ -1,0 +1,192 @@
+dish: '17.6'
+title: 'Practice question 6: queues'
+deck: lec08-network2.pdf
+target_min: 2
+concepts: []
+pad: 2.2
+beats:
+- id: 17.6.question
+  stage: question
+  narration: 17.6.question
+  pdf:
+  - lec08-network2.pdf
+  - 24
+  concepts:
+  - Input Queuing and HOL Blocking
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 6: queues'
+  - queue.show:
+      name: x
+      zone: left_top
+      items:
+      - to 2
+      - to 1
+      kind: ip
+      title: Input X
+      when: Input FIFO X
+  - bullets:
+      name: o
+      zone: right_top
+      show: 2
+      items:
+      - 'Output 1: taken by another input'
+      - 'Output 2: idle'
+  adjust: {}
+- id: 17.6.predict
+  stage: prediction
+  narration: 17.6.predict
+  pdf:
+  - lec08-network2.pdf
+  - 24
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: name the problem. does a faster fabric fix the overload?
+  adjust: {}
+  hold: 12
+- id: 17.6.hol
+  stage: state
+  narration: 17.6.hol
+  pdf:
+  - lec08-network2.pdf
+  - 24
+  concepts:
+  - Input Queuing and HOL Blocking
+  clarifications: []
+  moves:
+  - queue.mark:
+      name: x
+      i: 1
+      state: error
+      when: X's first packet
+  - queue.mark:
+      name: x
+      i: 0
+      state: candidate
+      when: The packet behind
+  - rule:
+      text: 'Head of line blocking: a blocked head holds back a packet for an idle output.'
+      when: But a first-in
+  adjust: {}
+- id: 17.6.overload
+  stage: state
+  narration: 17.6.overload
+  pdf:
+  - lec08-network2.pdf
+  - 25
+  concepts:
+  - Output Queuing and Scheduling
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: o
+      zone: bottom
+      nodes:
+        F:
+          k: box
+          at:
+          - 0
+          - 0
+          l: Fabric
+        Q:
+          k: box
+          at:
+          - 4
+          - 0
+          l: Output queue
+        L:
+          k: box
+          at:
+          - 8
+          - 0
+          l: Output link
+      links:
+      - - F
+        - Q
+      - - Q
+        - L
+        - c: 10 Mb/s
+  - packet.spawn:
+      name: pa
+      net: o
+      at: F
+      layers:
+      - ip
+      when: per second arrive
+  - packet.hop:
+      name: pa
+      to:
+      - Q
+  - packet.hop:
+      name: pa
+      to:
+      - L
+      when:
+        phrase: the output sends only 10
+        frame_offset: 6
+  - packet.fade:
+      name: pa
+  - tex:
+      name: g
+      zone: top
+      tex: 20-10=10\ \text{Mb/s of growing backlog}
+      size: 46
+      when: So the backlog
+  - packet.spawn:
+      name: pb
+      net: o
+      at: F
+      layers:
+      - ip
+      when: megabits per second, for
+  - packet.hop:
+      name: pb
+      to:
+      - Q
+  - net.pulse:
+      name: o
+      path:
+      - F
+      - Q
+      when: A faster fabric
+  - net.state:
+      name: o
+      nodes:
+        L: error
+      when: The output link's
+  - keep: {}
+  adjust: {}
+- id: 17.6.trap
+  stage: rule
+  narration: 17.6.trap
+  pdf:
+  - lec08-network2.pdf
+  - 25
+  concepts:
+  - Output Queuing and Scheduling
+  clarifications: []
+  moves:
+  - trap:
+      wrong: A faster fabric cures sustained overload
+      right: 'It can''t: the output link''s rate is the limit'
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.6.marks
+  stage: explanation
+  narration: 17.6.marks
+  pdf:
+  - lec08-network2.pdf
+  - 25
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '3 points: the HOL mechanism. 2 points: the overload reasoning.'
+      when: On marks
+  - keep: {}
+  adjust: {}

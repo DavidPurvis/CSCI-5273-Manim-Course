@@ -1,0 +1,189 @@
+dish: '17.12'
+title: 'Practice question 12: stability'
+deck: lec11-convergence.pdf
+target_min: 2
+concepts: []
+pad: 2.2
+beats:
+- id: 17.12.question
+  stage: question
+  narration: 17.12.question
+  pdf:
+  - lec11-convergence.pdf
+  - 7
+  concepts:
+  - Routing Convergence
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 12: stability'
+  - bullets:
+      name: q
+      zone: top
+      show: 3
+      items:
+      - The four convergence stages?
+      - Why isn't own-AS rejection enough?
+      - Exploration versus oscillation?
+      when: Name the four
+  adjust: {}
+- id: 17.12.predict
+  stage: prediction
+  narration: 17.12.predict
+  pdf:
+  - lec11-convergence.pdf
+  - 7
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: the stages, the limit of loop rejection, and the distinction
+  adjust: {}
+  hold: 12
+- id: 17.12.stages
+  stage: state
+  narration: 17.12.stages
+  pdf:
+  - lec11-convergence.pdf
+  - 7
+  concepts:
+  - Routing Convergence
+  clarifications: []
+  moves:
+  - clear: {}
+  - tl.show:
+      name: st
+      zone: top
+      tracks:
+      - Convergence
+      span:
+      - 0
+      - 4
+  - tl.block:
+      name: st
+      track: Convergence
+      start: 0
+      end: 1
+      text: detect
+      kind: ip
+      t: 0.4
+  - tl.block:
+      name: st
+      track: Convergence
+      start: 1
+      end: 2
+      text: disseminate
+      kind: eth
+      t: 0.4
+  - tl.block:
+      name: st
+      track: Convergence
+      start: 2
+      end: 3
+      text: compute
+      kind: transport
+      t: 0.4
+  - tl.block:
+      name: st
+      track: Convergence
+      start: 3
+      end: 4
+      text: install
+      kind: label
+      t: 0.4
+  adjust: {}
+- id: 17.12.rejection
+  stage: state
+  narration: 17.12.rejection
+  pdf:
+  - lec11-convergence.pdf
+  - 26
+  concepts:
+  - BGP Path Exploration
+  clarifications: []
+  moves:
+  - bullets:
+      name: why
+      zone: bottom
+      show: 0
+      items:
+      - Own-AS rejection stops one kind of loop
+      - Many loop-free candidates can still be tried in turn
+      - Nothing forces preferences to be compatible
+  - reveal:
+      name: why
+      when: Rejecting a path
+  - reveal:
+      name: why
+      when: But many
+  - reveal:
+      name: why
+      when: And nothing
+  adjust: {}
+  pre_roll: 0.9
+- id: 17.12.distinction
+  stage: explanation
+  narration: 17.12.distinction
+  pdf:
+  - lec11-convergence.pdf
+  - 29
+  concepts:
+  - BGP Path Exploration
+  - Policy Oscillation
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: t
+      zone: top
+      cols:
+      - ''
+      - Cause
+      - Ending
+      rows:
+      - - Exploration
+        - incomplete news
+        - settles
+      - - Oscillation
+        - incompatible policies
+        - may never settle
+      show: 0
+  - table.reveal:
+      name: t
+      when: Exploration is
+  - table.reveal:
+      name: t
+      when: Oscillation can
+  - keep: {}
+  adjust: {}
+  pre_roll: 1.6
+- id: 17.12.trap
+  stage: rule
+  narration: 17.12.trap
+  pdf:
+  - lec11-convergence.pdf
+  - 33
+  concepts:
+  - Policy Oscillation
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Rejecting loops guarantees quick, stable routing
+      right: Loop-free paths can still explore, or oscillate under conflicting policy
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.12.marks
+  stage: explanation
+  narration: 17.12.marks
+  pdf:
+  - lec11-convergence.pdf
+  - 33
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '2 points: the stages. 1 each: exploration, policy conflict, the distinction.'
+      when: On marks
+  - keep: {}
+  adjust: {}

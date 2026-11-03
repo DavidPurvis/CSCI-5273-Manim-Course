@@ -1,0 +1,772 @@
+dish: '8.3'
+title: Inside a router
+deck: lec08-network2.pdf
+target_min: 7.5
+concepts:
+- Router Architecture
+- Memory Switching
+- Bus Switching
+- Crossbar and Clos Switching
+- Input Queuing and HOL Blocking
+- Output Queuing and Scheduling
+pad: 2.2
+beats:
+- id: 8.3.question
+  stage: question
+  narration: 8.3.question
+  pdf:
+  - lec08-network2.pdf
+  - 9
+  concepts:
+  - Router Architecture
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 8: inside a router'
+  - q:
+      text: When a router is slow, which part is the bottleneck?
+  - keep: {}
+  adjust: {}
+- id: 8.3.parts
+  stage: animation
+  narration: 8.3.parts
+  pdf:
+  - lec08-network2.pdf
+  - 9
+  concepts:
+  - Router Architecture
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: rtr
+      zone: full
+      nodes:
+        I:
+          k: box
+          at:
+          - 0
+          - 0
+          l: Input port
+        F:
+          k: box
+          at:
+          - 4
+          - 0
+          l: Fabric
+        O:
+          k: box
+          at:
+          - 8
+          - 0
+          l: Output port
+        C:
+          k: box
+          at:
+          - 4
+          - 2
+          l: Routing processor
+      links:
+      - - I
+        - F
+      - - F
+        - O
+      - - C
+        - I
+        - s: control
+  - net.state:
+      name: rtr
+      nodes:
+        I: now
+      when: Input ports
+  - net.state:
+      name: rtr
+      nodes:
+        I: null
+        F: now
+      when: A switching fabric
+  - net.state:
+      name: rtr
+      nodes:
+        F: null
+        O: now
+      when: Output ports
+  - net.state:
+      name: rtr
+      nodes:
+        O: null
+        C: now
+      when: And a routing
+  - net.state:
+      name: rtr
+      nodes:
+        C: null
+  - packet.spawn:
+      name: p
+      net: rtr
+      at: I
+      layers:
+      - eth
+      - ip
+      when: Follow our packet
+  - packet.hop:
+      name: p
+      to:
+      - F
+      - O
+      t: 2
+  adjust: {}
+- id: 8.3.fabrics
+  stage: state
+  narration: 8.3.fabrics
+  pdf:
+  - lec08-network2.pdf
+  - 19
+  concepts:
+  - Router Architecture
+  clarifications: []
+  moves:
+  - clear: {}
+  - tex:
+      name: cap
+      zone: top
+      tex: N\times R = 4\times 10\,\text{Gb/s}=40\,\text{Gb/s offered}
+      size: 44
+      when: With 4 inputs
+  - rule:
+      text: If the fabric cannot carry N × R, inputs wait even when outputs are free.
+      when: A fabric that
+  adjust: {}
+- id: 8.3.memory
+  stage: animation
+  narration: 8.3.memory
+  pdf:
+  - lec08-network2.pdf
+  - 20
+  concepts:
+  - Memory Switching
+  clarifications: []
+  moves:
+  - fade:
+      names: _rule
+  - net.show:
+      name: mem
+      zone: bottom
+      nodes:
+        I:
+          k: box
+          at:
+          - 0
+          - 0
+          l: Input
+        M:
+          k: box
+          at:
+          - 4
+          - 0
+          l: Shared memory
+        O:
+          k: box
+          at:
+          - 8
+          - 0
+          l: Output
+      links:
+      - - I
+        - M
+        - c: copy in
+      - - M
+        - O
+        - c: copy out
+  - packet.spawn:
+      name: mp
+      net: mem
+      at: I
+      layers:
+      - ip
+  - packet.hop:
+      name: mp
+      to: M
+      when: The packet is copied
+  - packet.hop:
+      name: mp
+      to: O
+      when: and then copied
+  - packet.fade:
+      name: mp
+  - net.state:
+      name: mem
+      nodes:
+        M: now
+      when: so memory bandwidth
+  adjust: {}
+- id: 8.3.memory-more
+  stage: state
+  narration: 8.3.memory-more
+  pdf:
+  - lec08-network2.pdf
+  - 20
+  concepts:
+  - Memory Switching
+  clarifications: []
+  moves:
+  - tex:
+      name: mm
+      zone: top
+      tex: 20\ \text{Gb/s of copying}\div 2 = 10\ \text{Gb/s forwarded}
+      size: 42
+      when: Put a number
+  - net.pulse:
+      name: mem
+      path:
+      - I
+      - M
+      - O
+      when: each forwarded bit
+  adjust: {}
+- id: 8.3.bus
+  stage: animation
+  narration: 8.3.bus
+  pdf:
+  - lec08-network2.pdf
+  - 21
+  concepts:
+  - Bus Switching
+  clarifications: []
+  moves:
+  - net.show:
+      name: bus
+      zone: bottom
+      nodes:
+        B:
+          k: box
+          at:
+          - 4
+          - 0
+          l: One shared bus
+        A:
+          k: box
+          at:
+          - 0
+          - 1
+          l: Input 1
+        C:
+          k: box
+          at:
+          - 0
+          - -1
+          l: Input 2
+        D:
+          k: box
+          at:
+          - 8
+          - 1
+          l: Output 1
+        E:
+          k: box
+          at:
+          - 8
+          - -1
+          l: Output 2
+      links:
+      - - A
+        - B
+      - - C
+        - B
+      - - B
+        - D
+      - - B
+        - E
+  - packet.spawn:
+      name: bp
+      net: bus
+      at: A
+      layers:
+      - ip
+      when: A packet crosses
+  - packet.hop:
+      name: bp
+      to:
+      - B
+      - E
+  - packet.fade:
+      name: bp
+  - packet.spawn:
+      name: b1
+      net: bus
+      at: A
+      layers:
+      - ip
+      when: But only one
+  - packet.spawn:
+      name: b2
+      net: bus
+      at: C
+      layers:
+      - eth
+  - packet.hop:
+      name: b1
+      to:
+      - B
+      - D
+      t: 1.2
+  - net.state:
+      name: bus
+      nodes:
+        C: error
+  - packet.hop:
+      name: b2
+      to:
+      - B
+      - E
+      t: 1.0
+  - net.state:
+      name: bus
+      nodes:
+        C: null
+  adjust: {}
+- id: 8.3.bus-more
+  stage: state
+  narration: 8.3.bus-more
+  pdf:
+  - lec08-network2.pdf
+  - 21
+  concepts:
+  - Bus Switching
+  clarifications: []
+  moves:
+  - tex:
+      name: bb
+      zone: top
+      tex: 4\times 10=40\ \text{Gb/s offered},\quad 20\ \text{Gb/s bus}
+      size: 42
+      when: Four 10 gigabit
+  - net.state:
+      name: bus
+      nodes:
+        B: error
+      when: The bus is
+  adjust: {}
+- id: 8.3.crossbar
+  stage: animation
+  narration: 8.3.crossbar
+  pdf:
+  - lec08-network2.pdf
+  - 22
+  concepts:
+  - Crossbar and Clos Switching
+  clarifications: []
+  moves:
+  - net.show:
+      name: xb
+      zone: bottom
+      nodes:
+        A:
+          k: box
+          at:
+          - 0
+          - 1
+          l: Input 1
+        C:
+          k: box
+          at:
+          - 0
+          - -1
+          l: Input 2
+        D:
+          k: box
+          at:
+          - 8
+          - 1
+          l: Output 1
+        E:
+          k: box
+          at:
+          - 8
+          - -1
+          l: Output 2
+      links:
+      - - A
+        - E
+        - s: now
+      - - C
+        - D
+        - s: active
+  - packet.spawn:
+      name: x1
+      net: xb
+      at: A
+      layers:
+      - ip
+      when: The third design
+  - packet.spawn:
+      name: x2
+      net: xb
+      at: C
+      layers:
+      - eth
+  - packet.both:
+      moves:
+      - name: x1
+        to: E
+      - name: x2
+        to: D
+      when: Now input 1
+      t: 2
+  - rule:
+      text: Those cells are an internal technique, not IP fragments.
+      when: Those cells
+  adjust: {}
+  pre_roll: 1.4000000000000001
+- id: 8.3.crossbar-more
+  stage: state
+  narration: 8.3.crossbar-more
+  pdf:
+  - lec08-network2.pdf
+  - 22
+  concepts:
+  - Crossbar and Clos Switching
+  clarifications: []
+  moves:
+  - packet.fade:
+      name: x1
+  - packet.fade:
+      name: x2
+  - packet.spawn:
+      name: y1
+      net: xb
+      at: A
+      layers:
+      - ip
+      when: But send both
+  - packet.spawn:
+      name: y2
+      net: xb
+      at: C
+      layers:
+      - eth
+  - packet.both:
+      moves:
+      - name: y1
+        to: D
+      - name: y2
+        to: D
+  - net.state:
+      name: xb
+      nodes:
+        D: error
+  - rule:
+      text: Parallel paths create no extra capacity at a single output.
+      when: Parallel paths
+  adjust: {}
+- id: 8.3.hol
+  stage: state
+  narration: 8.3.hol
+  pdf:
+  - lec08-network2.pdf
+  - 24
+  concepts:
+  - Input Queuing and HOL Blocking
+  clarifications: []
+  moves:
+  - clear: {}
+  - queue.show:
+      name: qb
+      zone: left_top
+      items:
+      - to 1
+      kind: ip
+      title: Input B
+  - queue.show:
+      name: qc
+      zone: left_bottom
+      items:
+      - to 2
+      - to 1
+      kind: eth
+      title: Input C
+  - bullets:
+      name: idle
+      zone: right
+      show: 0
+      items:
+      - 'Output 1: busy with B'
+      - 'Output 2: idle, yet unused'
+  - queue.pop:
+      name: qb
+      when: B wins
+  - reveal:
+      name: idle
+      when:
+        phrase: B wins
+        frame_offset: 21
+  - queue.mark:
+      name: qc
+      i: 1
+      state: error
+      when: C's head packet
+  - queue.mark:
+      name: qc
+      i: 0
+      state: candidate
+      when: C's second packet
+  - reveal:
+      name: idle
+      when: and output 2
+  - rule:
+      text: 'Head of line blocking: a free output sits unused because of how the queue is arranged.'
+      when: This is head
+  adjust: {}
+- id: 8.3.outq
+  stage: state
+  narration: 8.3.outq
+  pdf:
+  - lec08-network2.pdf
+  - 25
+  concepts:
+  - Output Queuing and Scheduling
+  clarifications: []
+  moves:
+  - clear: {}
+  - queue.show:
+      name: oq
+      zone: left_top
+      items:
+      - P3
+      - P2
+      - P1
+      kind: ip
+      title: Output queue
+  - table.show:
+      name: ot
+      zone: right_top
+      data: $router.output_table
+      show: 0
+  - queue.pop:
+      name: oq
+      when: So they finish
+  - table.reveal:
+      name: ot
+  - queue.pop:
+      name: oq
+      t: 0.5
+  - table.reveal:
+      name: ot
+      t: 0.4
+  - queue.pop:
+      name: oq
+      t: 0.5
+  - table.reveal:
+      name: ot
+      t: 0.4
+  - bullets:
+      name: pol
+      zone: bottom
+      show: 0
+      items:
+      - 'Drop policy: what to discard'
+      - 'Scheduler: what to send next'
+      - Priority shifts who suffers, not the total rate
+  - reveal:
+      name: pol
+      when: A drop policy
+  - reveal:
+      name: pol
+      when: A scheduler
+  - reveal:
+      name: pol
+      when: Priority shifts
+  adjust: {}
+- id: 8.3.timescales
+  stage: state
+  narration: 8.3.timescales
+  pdf:
+  - lec08-network2.pdf
+  - 34
+  concepts:
+  - Router Architecture
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: pl
+      zone: top
+      cols:
+      - Plane
+      - Timescale
+      - Where
+      rows:
+      - - Data
+        - nanoseconds
+        - line cards
+      - - Control
+        - ms to seconds
+        - router software
+      - - Management
+        - minutes to hours
+        - people and scripts
+      show: 0
+  - table.reveal:
+      name: pl
+      when: The data plane
+  - table.reveal:
+      name: pl
+      when: The control plane
+  - table.reveal:
+      name: pl
+      when: The management plane
+  - rule:
+      text: Static entries don't adapt to failures, new equipment, or load.
+      when: Tables could
+  adjust: {}
+- id: 8.3.macvsip
+  stage: state
+  narration: 8.3.macvsip
+  pdf:
+  - lec08-network2.pdf
+  - 35
+  concepts:
+  - Router Architecture
+  clarifications: []
+  moves:
+  - table.show:
+      name: mi
+      zone: full
+      cols:
+      - Property
+      - Answer
+      rows:
+      - - Hierarchically allocated
+        - both
+      - - Organized by topology
+        - IP
+      - - Exact match forwarding
+        - MAC
+      - - Learns by watching data
+        - Ethernet switches
+      - - Per-host state in the network
+        - MAC
+      - - Per-connection state
+        - neither
+      show: 0
+  - table.reveal:
+      name: mi
+      when: Are both MAC
+  - table.reveal:
+      name: mi
+      when: Which is organized
+  - table.reveal:
+      name: mi
+      when: Which forwards
+  - table.reveal:
+      name: mi
+      when: Which builds
+  - table.reveal:
+      name: mi
+      when: Which keeps per-host
+  - table.reveal:
+      name: mi
+      when: And which keeps
+  adjust: {}
+- id: 8.3.rule
+  stage: rule
+  narration: 8.3.rule
+  pdf:
+  - lec08-network2.pdf
+  - 26
+  concepts:
+  - Router Architecture
+  - Output Queuing and Scheduling
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: lim
+      zone: top
+      show: 0
+      items:
+      - Lookup
+      - Memory, bus, or fabric
+      - Input queue
+      - Output
+  - reveal:
+      name: lim
+      n: 4
+      when: Is it at lookup
+  - rule:
+      text: 'Locate the contention first: lookup, fabric, input queue, or output.'
+      when: Upgrading one
+  adjust: {}
+- id: 8.3.pitfall
+  stage: rule
+  narration: 8.3.pitfall
+  pdf:
+  - lec08-network2.pdf
+  - 26
+  concepts:
+  - Router Architecture
+  - Output Queuing and Scheduling
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Memory switching forwards at the full memory bandwidth
+      right: Each packet crosses twice, so throughput is half of it
+  adjust: {}
+- id: 8.3.changed
+  stage: changed_example
+  narration: 8.3.changed
+  pdf:
+  - lec08-network2.pdf
+  - 25
+  concepts:
+  - Output Queuing and Scheduling
+  clarifications: []
+  moves:
+  - clear: {}
+  - q:
+      text: Ten senders saturate one output. Double the fabric speed?
+      zone: top
+  adjust: {}
+- id: 8.3.predict
+  stage: prediction
+  narration: 8.3.predict
+  pdf:
+  - lec08-network2.pdf
+  - 25
+  concepts:
+  - Output Queuing and Scheduling
+  clarifications: []
+  moves:
+  - pause:
+      text: does a faster fabric help? does a bigger buffer?
+  adjust: {}
+  hold: 6
+- id: 8.3.answer
+  stage: explanation
+  narration: 8.3.answer
+  pdf:
+  - lec08-network2.pdf
+  - 25
+  concepts:
+  - Output Queuing and Scheduling
+  - Router Architecture
+  clarifications: []
+  moves:
+  - bullets:
+      name: ans
+      zone: bottom
+      show: 0
+      items:
+      - 'Faster fabric: reaches the same full output sooner'
+      - 'Bigger buffer: absorbs bursts, adds delay under overload'
+  - reveal:
+      name: ans
+      when: Packets just
+  - reveal:
+      name: ans
+      when: A bigger buffer
+  - rule:
+      text: 'Next: how did the laptop learn its address at all?'
+      when: We assumed
+  - keep: {}
+  adjust: {}

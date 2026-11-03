@@ -1,0 +1,510 @@
+dish: '12.2'
+title: Import and export
+deck: lec12-bgp.pdf
+target_min: 5.5
+concepts:
+- BGP Import Policy
+- BGP Export Policy
+- Local Preference
+- AS Path Prepending
+pad: 2.2
+beats:
+- id: 12.2.question
+  stage: question
+  narration: 12.2.question
+  pdf:
+  - lec12-bgp.pdf
+  - 12
+  concepts:
+  - BGP Import Policy
+  - BGP Export Policy
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 12: import and export'
+  - q:
+      text: Must you believe, use, or repeat a route you're given?
+  adjust: {}
+- id: 12.2.pipeline
+  stage: animation
+  narration: 12.2.pipeline
+  pdf:
+  - lec12-bgp.pdf
+  - 13
+  concepts:
+  - BGP Import Policy
+  - BGP Export Policy
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: p
+      zone: top
+      nodes:
+        a:
+          k: box
+          at:
+          - 0
+          - 0
+          l: Received
+        b:
+          k: box
+          at:
+          - 3.2
+          - 0
+          l: Import
+        c:
+          k: box
+          at:
+          - 6.4
+          - 0
+          l: Select best
+        d:
+          k: box
+          at:
+          - 9.8
+          - 1
+          l: Forwarding
+        e:
+          k: box
+          at:
+          - 9.8
+          - -1
+          l: Export
+      links:
+      - - a
+        - b
+      - - b
+        - c
+      - - c
+        - d
+      - - c
+        - e
+  - packet.spawn:
+      name: r
+      net: p
+      at: a
+      layers:
+      - label
+      when: Routes arrive
+  - packet.hop:
+      name: r
+      to: b
+      when: Import policy
+  - packet.hop:
+      name: r
+      to: c
+      when: Best-route selection
+  - packet.flood:
+      name: r
+      to:
+      - d
+      - e
+      when: That route goes
+  - rule:
+      text: Import, selection, and export are three separate decisions.
+      when: Because the stages
+  adjust: {}
+- id: 12.2.import
+  stage: state
+  narration: 12.2.import
+  pdf:
+  - lec12-bgp.pdf
+  - 15
+  concepts:
+  - BGP Import Policy
+  clarifications: []
+  moves:
+  - clear:
+      keep:
+      - _rule
+  - table.show:
+      name: f
+      zone: top
+      cols:
+      - Customer announces
+      - Holds it?
+      - Import
+      rows:
+      - - Its own 203.0.113.0/24
+        - 'yes'
+        - accept
+      - - A video site's prefix
+        - 'no'
+        - reject
+      show: 0
+  - table.reveal:
+      name: f
+      when: Say your customer
+  - table.reveal:
+      name: f
+      when: suddenly announces
+  - table.mark:
+      name: f
+      r: 1
+      state: error
+      when: Believing it
+  - table.mark:
+      name: f
+      r: 0
+      state: done
+      when: So on a session
+  - rule:
+      text: An advertisement is data to evaluate, not an order.
+      when: An advertisement
+  adjust: {}
+- id: 12.2.lp
+  stage: state
+  narration: 12.2.lp
+  pdf:
+  - lec12-bgp.pdf
+  - 14
+  concepts:
+  - Local Preference
+  clarifications: []
+  moves:
+  - sieve.show:
+      name: c
+      zone: bottom
+      rungs:
+      - Local preference
+      - AS path length
+      routes:
+      - name: Customer
+        vals:
+        - 100
+        - 4
+      - name: Peer
+        vals:
+        - 90
+        - 2
+      when: For example
+  - sieve.step:
+      name: c
+      rung: 0
+      keep:
+      - Customer
+      when: A customer route with
+  - sieve.win:
+      name: c
+      route: Customer
+      unused:
+      - 1
+      when: The customer route wins
+  adjust: {}
+- id: 12.2.export
+  stage: state
+  narration: 12.2.export
+  pdf:
+  - lec12-bgp.pdf
+  - 16
+  concepts:
+  - BGP Export Policy
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: e
+      zone: top
+      nodes:
+        X:
+          k: cloud
+          at:
+          - 4
+          - 0
+          l: Our AS
+        A:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: Neighbor A
+        B:
+          k: cloud
+          at:
+          - 8
+          - 0
+          l: Neighbor B
+      links:
+      - - A
+        - X
+      - - X
+        - B
+        - s: blocked
+  - msg.send:
+      name: e
+      a: X
+      b: A
+      text: route offer
+      when: Export policy
+  - msg.send:
+      name: e
+      a: X
+      b: A
+      text: send through me
+      when: Because telling
+  - net.state:
+      name: e
+      nodes:
+        X: now
+      when: Advertising a route
+  - rule:
+      text: An advertisement is an offer to carry traffic. Using a route is not offering it.
+  - net.state:
+      name: e
+      nodes:
+        B: candidate
+      when: So a network
+  adjust: {}
+- id: 12.2.prepend
+  stage: state
+  narration: 12.2.prepend
+  pdf:
+  - lec12-bgp.pdf
+  - 18
+  concepts:
+  - AS Path Prepending
+  clarifications: []
+  moves:
+  - fade:
+      names: _rule
+  - net.state:
+      name: e
+      nodes:
+        X: null
+        B: null
+  - net.badge:
+      name: e
+      node: A
+      text: Primary
+      side: down
+      when: Suppose you have
+  - net.badge:
+      name: e
+      node: B
+      text: Backup
+      side: down
+  - table.show:
+      name: pp
+      zone: bottom
+      cols:
+      - Link
+      - Announced path
+      - Apparent length
+      rows:
+      - - Primary
+        - '300'
+        - 1
+      - - Backup
+        - 300, 300, 300
+        - 3
+      show: 0
+      when: AS path prepending
+  - table.reveal:
+      name: pp
+      when: Instead of announcing
+  - msg.send:
+      name: e
+      a: X
+      b: A
+      text: '300'
+  - table.reveal:
+      name: pp
+  - msg.send:
+      name: e
+      a: X
+      b: B
+      text: 300, 300, 300
+      when: over the backup
+  - net.state:
+      name: e
+      links:
+      - - A
+        - X
+        - active
+      when: Remote networks
+  - net.state:
+      name: e
+      nodes:
+        B: now
+      when: A remote network's
+  adjust: {}
+- id: 12.2.rule
+  stage: rule
+  narration: 12.2.rule
+  pdf:
+  - lec12-bgp.pdf
+  - 18
+  concepts:
+  - Local Preference
+  - AS Path Prepending
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: two
+      zone: top
+      show: 0
+      items:
+      - 'Local preference: your outgoing traffic'
+      - 'Prepending: your incoming traffic'
+  - reveal:
+      name: two
+      when: Local preference ranks
+  - reveal:
+      name: two
+      when: Prepending changes
+  - rule:
+      text: Local preference decides your outgoing traffic. Prepending suggests your incoming traffic.
+      when: One is a decision
+  adjust: {}
+- id: 12.2.config
+  stage: rule
+  narration: 12.2.config
+  pdf:
+  - lec12-bgp.pdf
+  - 19
+  concepts:
+  - BGP Export Policy
+  - BGP Import Policy
+  clarifications: []
+  moves:
+  - fade:
+      names: two
+  - bullets:
+      name: cfg
+      zone: top
+      show: 0
+      items:
+      - Policies are written per neighbor, by people
+      - A mistake can be visible everywhere
+  - reveal:
+      name: cfg
+      when: Administrators write
+  - reveal:
+      name: cfg
+      when: A configuration error
+  adjust: {}
+- id: 12.2.pitfall
+  stage: rule
+  narration: 12.2.pitfall
+  pdf:
+  - lec12-bgp.pdf
+  - 19
+  concepts:
+  - BGP Export Policy
+  - BGP Import Policy
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Trade one unit of preference for one AS hop
+      right: 'Compare in order: preference first, length only on a tie'
+  adjust: {}
+- id: 12.2.changed
+  stage: changed_example
+  narration: 12.2.changed
+  pdf:
+  - lec12-bgp.pdf
+  - 14
+  concepts:
+  - Local Preference
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: z
+      zone: top
+      nodes:
+        A:
+          k: cloud
+          at:
+          - 0
+          - 0.8
+          l: A
+        P:
+          k: cloud
+          at:
+          - 4
+          - 1.6
+          l: P
+        Q:
+          k: cloud
+          at:
+          - 4
+          - 0
+          l: Q
+        Z:
+          k: cloud
+          at:
+          - 8
+          - 0.8
+          l: Z
+      links:
+      - - A
+        - P
+        - s: dim
+      - - A
+        - Q
+      - - P
+        - Z
+      - - Q
+        - Z
+  - net.state:
+      name: z
+      nodes:
+        A: now
+      when: Network A prepends
+  - net.badge:
+      name: z
+      node: Z
+      text: high preference for P
+      side: down
+      state: now
+      when: But a far-off
+  adjust: {}
+- id: 12.2.predict
+  stage: prediction
+  narration: 12.2.predict
+  pdf:
+  - lec12-bgp.pdf
+  - 18
+  concepts:
+  - AS Path Prepending
+  clarifications: []
+  moves:
+  - pause:
+      text: which way does Z's traffic reach A?
+  adjust: {}
+  hold: 6
+- id: 12.2.answer
+  stage: explanation
+  narration: 12.2.answer
+  pdf:
+  - lec12-bgp.pdf
+  - 18
+  concepts:
+  - AS Path Prepending
+  - Local Preference
+  clarifications: []
+  moves:
+  - net.walk:
+      name: z
+      path:
+      - Z
+      - P
+      - A
+      when: It arrives through
+  - rule:
+      text: Z's local preference is compared before A's prepended length.
+      when: because Z compares
+  - net.state:
+      name: z
+      nodes:
+        Q: candidate
+      when: Prepending may
+  - clear:
+      when: So that's the outside
+  - q:
+      text: An AS isn't one node. How do its routers agree?
+  - keep: {}
+  adjust: {}

@@ -1,0 +1,181 @@
+dish: '18.4'
+title: The slide clarifications
+deck: lec06-lan.pdf
+target_min: 2.5
+concepts: []
+pad: 2.2
+beats:
+- id: 18.4.open
+  stage: question
+  narration: 18.4.open
+  pdf:
+  - lec06-lan.pdf
+  - 30
+  concepts: []
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Wednesday warm-up: the slide clarifications'
+  - q:
+      text: Where do the slides need a careful reading?
+  adjust: {}
+- id: 18.4.lan
+  stage: state
+  narration: 18.4.lan
+  pdf:
+  - lec06-lan.pdf
+  - 30
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: a
+      zone: full
+      show: 0
+      items:
+      - 'Switch-table TTL: a local aging timer, not a hop count'
+      - STP, shortest-path trees, and MSTs have different objectives
+  - reveal:
+      name: a
+      when: The slide's table
+  - reveal:
+      name: a
+      when: And spanning
+  adjust: {}
+- id: 18.4.ip
+  stage: state
+  narration: 18.4.ip
+  pdf:
+  - lec07-network1.pdf
+  - 35
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: a
+      zone: full
+      show: 0
+      items:
+      - 'IPv4 maximum: 65,535 bytes, not 63,535'
+      - 128.101.5.0/23 normalizes to 128.101.4.0/23; 31 hosts need /26
+      - '51.2 ns omits physical overhead: a budget illustration'
+  - reveal:
+      name: a
+      when: The maximum IPv4
+  - reveal:
+      name: a
+      when: In the subnet
+  - reveal:
+      name: a
+      when: And the 51.2
+  - keep: {}
+  adjust: {}
+  pre_roll: 0.2
+- id: 18.4.dns
+  stage: state
+  narration: 18.4.dns
+  pdf:
+  - lec09-discovery.pdf
+  - 31
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: a
+      zone: full
+      show: 0
+      items:
+      - '13 DNS roots: identities A to M, many physical instances'
+      - The TCP recap omits the handshake's final ACK
+  - reveal:
+      name: a
+      when: DNS has
+  - reveal:
+      name: a
+      when: And the slide's
+  adjust: {}
+  pre_roll: 0.7
+- id: 18.4.mc
+  stage: state
+  narration: 18.4.mc
+  pdf:
+  - lec13-multicast.pdf
+  - 14
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: a
+      zone: full
+      show: 0
+      items:
+      - 'Anycast and TCP: the issue is lost connection state'
+      - 'IGMP: queries to all hosts, reports to the group'
+      - 'Membership timer: 270 s on the slide, 260 s by RFC formula'
+      - Sparse mode begins with a shared (*,G) tree
+  - reveal:
+      name: a
+      when: Anycast's problem
+  - reveal:
+      name: a
+      when: IGMP queries
+  - reveal:
+      name: a
+      when: The slide's membership
+  - reveal:
+      name: a
+      when: And sparse
+  adjust: {}
+- id: 18.4.radio
+  stage: state
+  narration: 18.4.radio
+  pdf:
+  - lec14-wireless.pdf
+  - 32
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: a
+      zone: full
+      show: 0
+      items:
+      - 'Four-address Wi-Fi: a bridging case'
+      - 'Exposed-terminal shortcut: idealized'
+      - 'IMSI: decimal subscriber identity, not a MAC address'
+      - 'Foreign agent: one Mobile IPv4 arrangement, not LTE'
+  - reveal:
+      name: a
+      when: Four-address
+  - reveal:
+      name: a
+      when: The exposed-terminal
+  - reveal:
+      name: a
+      when: IMSI is
+  - reveal:
+      name: a
+      when: And the foreign
+  adjust: {}
+- id: 18.4.close
+  stage: explanation
+  narration: 18.4.close
+  pdf:
+  - lec14-wireless.pdf
+  - 32
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - spine:
+      current: Move
+      zone: top
+  - q:
+      text: If you can trace one packet through it with real addresses, you understand it.
+      zone: bottom
+  adjust: {}

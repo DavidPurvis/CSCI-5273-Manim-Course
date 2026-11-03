@@ -1,0 +1,2860 @@
+{
+  "schema_version": 1,
+  "predictions": [
+    {
+      "prediction_beat": "6.1.predict",
+      "answer_beat": "6.1.answer",
+      "answer_events": [
+        "6.1.answer:move:0",
+        "6.1.answer:move:1"
+      ],
+      "answer_objects": [
+        {
+          "object": "tw",
+          "after": "6.1.answer:move:0",
+          "effect": "text",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "6.1.answer:move:1",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "6.2.predict",
+      "answer_beat": "6.2.answer",
+      "answer_events": [
+        "6.2.answer:move:0",
+        "6.2.answer:move:1",
+        "6.2.answer:move:2"
+      ],
+      "answer_objects": [
+        {
+          "object": "bad",
+          "after": "6.2.answer:move:0",
+          "effect": "packet.hop",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "bad",
+          "after": "6.2.answer:move:1",
+          "effect": "packet.drop",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "6.2.answer:move:2",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "6.3.predict",
+      "answer_beat": "6.3.answer",
+      "answer_events": [
+        "6.3.answer:move:0",
+        "6.3.answer:move:1",
+        "6.3.answer:move:2",
+        "6.3.answer:move:3",
+        "6.3.answer:move:4",
+        "6.3.answer:move:5"
+      ],
+      "answer_objects": [
+        {
+          "object": "seven",
+          "after": "6.3.answer:move:0",
+          "effect": "net.walk",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "paths",
+          "after": "6.3.answer:move:1",
+          "effect": "table.set",
+          "selector": {
+            "r": 1,
+            "c": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "seven",
+          "after": "6.3.answer:move:2",
+          "effect": "net.walk",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "paths",
+          "after": "6.3.answer:move:3",
+          "effect": "table.set",
+          "selector": {
+            "r": 2,
+            "c": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "seven",
+          "after": "6.3.answer:move:4",
+          "effect": "net.walk",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "6.3.answer:move:5",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "6.4.predict",
+      "answer_beat": "6.4.answer",
+      "answer_events": [
+        "6.4.answer:move:0",
+        "6.4.answer:move:1"
+      ],
+      "answer_objects": [
+        {
+          "object": "res",
+          "after": "6.4.answer:move:0",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "Broadcasts heard",
+                "engineering"
+              ],
+              [
+                "Old IP address",
+                "fails if the subnet changed"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "6.4.answer:move:1",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "7.1.predict",
+      "answer_beat": "7.1.answer",
+      "answer_events": [
+        "7.1.answer:move:0",
+        "7.1.answer:move:1"
+      ],
+      "answer_objects": [
+        {
+          "object": "why",
+          "after": "7.1.answer:move:0",
+          "effect": "bullets",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "7.1.answer:move:1",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "7.2.predict",
+      "answer_beat": "7.2.answer",
+      "answer_events": [
+        "7.2.answer:move:0",
+        "7.2.answer:move:1",
+        "7.2.answer:move:2",
+        "7.2.answer:move:3"
+      ],
+      "answer_objects": [
+        {
+          "object": "t",
+          "after": "7.2.answer:move:0",
+          "effect": "bits.mark",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t",
+          "after": "7.2.answer:move:1",
+          "effect": "bits.mark",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "ans",
+          "after": "7.2.answer:move:2",
+          "effect": "text",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "7.2.answer:move:3",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "7.3.predict",
+      "answer_beat": "7.3.answer",
+      "answer_events": [
+        "7.3.answer:move:0",
+        "7.3.answer:move:1"
+      ],
+      "answer_objects": [
+        {
+          "object": "c",
+          "after": "7.3.answer:move:0",
+          "effect": "packet.drop",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "ttls",
+          "after": "7.3.answer:move:1",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "IP TTL",
+                "router hops"
+              ],
+              [
+                "DNS TTL",
+                "seconds of cache"
+              ],
+              [
+                "Switch timer",
+                "seconds of aging"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "7.4.predict",
+      "answer_beat": "7.4.answer",
+      "answer_events": [
+        "7.4.answer:move:0",
+        "7.4.answer:move:1",
+        "7.4.answer:move:2",
+        "7.4.answer:move:3",
+        "7.4.answer:move:4",
+        "7.4.answer:move:5",
+        "7.4.answer:move:6",
+        "7.4.answer:move:7",
+        "7.4.answer:move:8",
+        "7.4.answer:move:9",
+        "7.4.answer:move:10"
+      ],
+      "answer_objects": [
+        {
+          "object": "c",
+          "after": "7.4.answer:move:0",
+          "effect": "bar.snap",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "c",
+          "after": "7.4.answer:move:1",
+          "effect": "bar.slice",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "c",
+          "after": "7.4.answer:move:2",
+          "effect": "bar.slice",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "c",
+          "after": "7.4.answer:move:3",
+          "effect": "bar.slice",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "c",
+          "after": "7.4.answer:move:4",
+          "effect": "bar.slice",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "c",
+          "after": "7.4.answer:move:5",
+          "effect": "bar.info",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "c",
+          "after": "7.4.answer:move:6",
+          "effect": "bar.info",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "c",
+          "after": "7.4.answer:move:7",
+          "effect": "bar.info",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "c",
+          "after": "7.4.answer:move:8",
+          "effect": "bar.info",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "7.4.answer:move:9",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "8.1.predict",
+      "answer_beat": "8.1.answer",
+      "answer_events": [
+        "8.1.answer:move:0",
+        "8.1.answer:move:1",
+        "8.1.answer:move:2",
+        "8.1.answer:move:3",
+        "8.1.answer:move:4",
+        "8.1.answer:move:5",
+        "8.1.answer:move:6"
+      ],
+      "answer_objects": [
+        {
+          "object": "over",
+          "after": "8.1.answer:move:0",
+          "effect": "tl.show",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "over",
+          "after": "8.1.answer:move:1",
+          "effect": "tl.block",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "over",
+          "after": "8.1.answer:move:2",
+          "effect": "tl.block",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "over",
+          "after": "8.1.answer:move:3",
+          "effect": "tl.block",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "over",
+          "after": "8.1.answer:move:4",
+          "effect": "tl.block",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "8.1.answer:move:5",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "8.2.predict",
+      "answer_beat": "8.2.answer",
+      "answer_events": [
+        "8.2.answer:move:0",
+        "8.2.answer:move:1",
+        "8.2.answer:move:2",
+        "8.2.answer:move:3",
+        "8.2.answer:move:4",
+        "8.2.answer:move:5"
+      ],
+      "answer_objects": [
+        {
+          "object": "rt2",
+          "after": "8.2.answer:move:0",
+          "effect": "table.mark",
+          "selector": {
+            "r": 2
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "an",
+          "after": "8.2.answer:move:1",
+          "effect": "bullets",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "an",
+          "after": "8.2.answer:move:2",
+          "effect": "reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "an",
+          "after": "8.2.answer:move:3",
+          "effect": "reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "rt2",
+          "after": "8.2.answer:move:4",
+          "effect": "table.mark",
+          "selector": {
+            "r": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "8.3.predict",
+      "answer_beat": "8.3.answer",
+      "answer_events": [
+        "8.3.answer:move:0",
+        "8.3.answer:move:1",
+        "8.3.answer:move:2",
+        "8.3.answer:move:3"
+      ],
+      "answer_objects": [
+        {
+          "object": "ans",
+          "after": "8.3.answer:move:0",
+          "effect": "bullets",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "ans",
+          "after": "8.3.answer:move:1",
+          "effect": "reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "ans",
+          "after": "8.3.answer:move:2",
+          "effect": "reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "8.3.answer:move:3",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "9.1.predict",
+      "answer_beat": "9.1.answer",
+      "answer_events": [
+        "9.1.answer:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "ans",
+          "after": "9.1.answer:move:0",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "198.51.100.53 (remote)",
+                "192.0.2.1"
+              ],
+              [
+                "192.0.2.53 (local)",
+                "192.0.2.53"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "9.2.predict",
+      "answer_beat": "9.2.answer",
+      "answer_events": [
+        "9.2.answer:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "a",
+          "after": "9.2.answer:move:0",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "240 s",
+                "0"
+              ],
+              [
+                "300 s",
+                "up to 3, fewer with cached referrals"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "9.3.predict",
+      "answer_beat": "9.3.answer",
+      "answer_events": [
+        "9.3.answer:move:0",
+        "9.3.answer:move:1"
+      ],
+      "answer_objects": [
+        {
+          "object": "a3",
+          "after": "9.3.answer:move:0",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "Local resolver",
+                "ARP for the resolver itself"
+              ],
+              [
+                "Cached answer",
+                "no hierarchy queries"
+              ],
+              [
+                "Cut link",
+                "correct caches; delivery still fails"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "9.3.answer:move:1",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "10.1.predict",
+      "answer_beat": "10.1.answer",
+      "answer_events": [
+        "10.1.answer:move:0",
+        "10.1.answer:move:1",
+        "10.1.answer:move:3",
+        "10.1.answer:move:4",
+        "10.1.answer:move:6",
+        "10.1.answer:move:8",
+        "10.1.answer:move:10",
+        "10.1.answer:move:11",
+        "10.1.answer:move:12",
+        "10.1.answer:move:14",
+        "10.1.answer:move:15"
+      ],
+      "answer_objects": [
+        {
+          "object": "chg",
+          "after": "10.1.answer:move:0",
+          "effect": "table.set",
+          "selector": {
+            "r": 0,
+            "c": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "g",
+          "after": "10.1.answer:move:1",
+          "effect": "net.pulse",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "chg",
+          "after": "10.1.answer:move:3",
+          "effect": "table.set",
+          "selector": {
+            "r": 2,
+            "c": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "chg",
+          "after": "10.1.answer:move:4",
+          "effect": "table.set",
+          "selector": {
+            "r": 1,
+            "c": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "chg",
+          "after": "10.1.answer:move:8",
+          "effect": "table.set",
+          "selector": {
+            "r": 0,
+            "c": 2
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "chg",
+          "after": "10.1.answer:move:10",
+          "effect": "table.set",
+          "selector": {
+            "r": 1,
+            "c": 2
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "chg",
+          "after": "10.1.answer:move:11",
+          "effect": "table.set",
+          "selector": {
+            "r": 2,
+            "c": 2
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "g",
+          "after": "10.1.answer:move:12",
+          "effect": "net.walk",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "10.1.answer:move:15",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "10.2.predict",
+      "answer_beat": "10.2.answer",
+      "answer_events": [
+        "10.2.answer:move:0",
+        "10.2.answer:move:1",
+        "10.2.answer:move:2",
+        "10.2.answer:move:3",
+        "10.2.answer:move:4"
+      ],
+      "answer_objects": [
+        {
+          "object": "y",
+          "after": "10.2.answer:move:0",
+          "effect": "table.set",
+          "selector": {
+            "r": 0,
+            "c": 3
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "y",
+          "after": "10.2.answer:move:1",
+          "effect": "table.set",
+          "selector": {
+            "r": 1,
+            "c": 3
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "y",
+          "after": "10.2.answer:move:2",
+          "effect": "table.set",
+          "selector": {
+            "r": 0,
+            "c": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "y",
+          "after": "10.2.answer:move:3",
+          "effect": "table.set",
+          "selector": {
+            "r": 0,
+            "c": 3
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "10.2.answer:move:4",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "10.3.predict",
+      "answer_beat": "10.3.answer",
+      "answer_events": [
+        "10.3.answer:move:0",
+        "10.3.answer:move:1",
+        "10.3.answer:move:2"
+      ],
+      "answer_objects": [
+        {
+          "object": "c",
+          "after": "10.3.answer:move:0",
+          "effect": "table.set",
+          "selector": {
+            "r": 0,
+            "c": 2
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "c",
+          "after": "10.3.answer:move:1",
+          "effect": "table.set",
+          "selector": {
+            "r": 1,
+            "c": 2
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "c",
+          "after": "10.3.answer:move:2",
+          "effect": "table.set",
+          "selector": {
+            "r": 2,
+            "c": 2
+          },
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "10.4.predict",
+      "answer_beat": "10.4.answer",
+      "answer_events": [
+        "10.4.answer:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "10.4.answer:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "11.1.predict",
+      "answer_beat": "11.1.answer",
+      "answer_events": [
+        "11.1.answer:move:0",
+        "11.1.answer:move:1",
+        "11.1.answer:move:2"
+      ],
+      "answer_objects": [
+        {
+          "object": "ok",
+          "after": "11.1.answer:move:0",
+          "effect": "packet.spawn",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "ok",
+          "after": "11.1.answer:move:1",
+          "effect": "packet.hop",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "an",
+          "after": "11.1.answer:move:2",
+          "effect": "text",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "11.2.predict",
+      "answer_beat": "11.2.answer",
+      "answer_events": [
+        "11.2.answer:move:0",
+        "11.2.answer:move:1",
+        "11.2.answer:move:2",
+        "11.2.answer:move:3",
+        "11.2.answer:move:4",
+        "11.2.answer:move:5",
+        "11.2.answer:move:6"
+      ],
+      "answer_objects": [
+        {
+          "object": "t3",
+          "after": "11.2.answer:move:0",
+          "effect": "msg.send",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t3",
+          "after": "11.2.answer:move:1",
+          "effect": "msg.send",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "lp",
+          "after": "11.2.answer:move:2",
+          "effect": "packet.spawn",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "lp",
+          "after": "11.2.answer:move:3",
+          "effect": "packet.hop",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "11.2.answer:move:5",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "11.3.predict",
+      "answer_beat": "11.3.answer",
+      "answer_events": [
+        "11.3.answer:move:0",
+        "11.3.answer:move:1",
+        "11.3.answer:move:2",
+        "11.3.answer:move:3"
+      ],
+      "answer_objects": [
+        {
+          "object": "b",
+          "after": "11.3.answer:move:0",
+          "effect": "net.badge",
+          "selector": {
+            "node": "n3"
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "b",
+          "after": "11.3.answer:move:1",
+          "effect": "net.badge",
+          "selector": {
+            "node": "n1"
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "b",
+          "after": "11.3.answer:move:2",
+          "effect": "net.badge",
+          "selector": {
+            "node": "n2"
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "11.3.answer:move:3",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "12.1.predict",
+      "answer_beat": "12.1.answer",
+      "answer_events": [
+        "12.1.answer:move:0",
+        "12.1.answer:move:1"
+      ],
+      "answer_objects": [
+        {
+          "object": "q",
+          "after": "12.1.answer:move:0",
+          "effect": "text",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "12.1.answer:move:1",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "12.2.predict",
+      "answer_beat": "12.2.answer",
+      "answer_events": [
+        "12.2.answer:move:0",
+        "12.2.answer:move:1",
+        "12.2.answer:move:2",
+        "12.2.answer:move:3"
+      ],
+      "answer_objects": [
+        {
+          "object": "z",
+          "after": "12.2.answer:move:0",
+          "effect": "net.walk",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "12.2.answer:move:1",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "z",
+          "after": "12.2.answer:move:2",
+          "effect": "net.state",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "12.3.predict",
+      "answer_beat": "12.3.answer",
+      "answer_events": [
+        "12.3.answer:move:0",
+        "12.3.answer:move:1",
+        "12.3.answer:move:2"
+      ],
+      "answer_objects": [
+        {
+          "object": "h",
+          "after": "12.3.answer:move:0",
+          "effect": "net.state",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "h",
+          "after": "12.3.answer:move:1",
+          "effect": "net.pulse",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "12.3.answer:move:2",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "12.4.predict",
+      "answer_beat": "12.4.answer",
+      "answer_events": [
+        "12.4.answer:move:0",
+        "12.4.answer:move:1",
+        "12.4.answer:move:2",
+        "12.4.answer:move:3",
+        "12.4.answer:move:4",
+        "12.4.answer:move:5",
+        "12.4.answer:move:6",
+        "12.4.answer:move:7",
+        "12.4.answer:move:8"
+      ],
+      "answer_objects": [
+        {
+          "object": "an",
+          "after": "12.4.answer:move:0",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "Peer P",
+                "customer C only"
+              ],
+              [
+                "Customer C",
+                "provider U and peer P"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "a",
+          "after": "12.4.answer:move:1",
+          "effect": "msg.send",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "an",
+          "after": "12.4.answer:move:2",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "a",
+          "after": "12.4.answer:move:3",
+          "effect": "net.state",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "a",
+          "after": "12.4.answer:move:4",
+          "effect": "net.state",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "a",
+          "after": "12.4.answer:move:5",
+          "effect": "msg.send",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "a",
+          "after": "12.4.answer:move:6",
+          "effect": "msg.send",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "an",
+          "after": "12.4.answer:move:7",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "13.1.predict",
+      "answer_beat": "13.1.answer",
+      "answer_events": [
+        "13.1.answer:move:0",
+        "13.1.answer:move:1"
+      ],
+      "answer_objects": [
+        {
+          "object": "_card",
+          "after": "13.1.answer:move:0",
+          "effect": "card",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "13.1.answer:move:1",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "13.2.predict",
+      "answer_beat": "13.2.answer",
+      "answer_events": [
+        "13.2.answer:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "a",
+          "after": "13.2.answer:move:0",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "Unicast load",
+                "15 Mb/s"
+              ],
+              [
+                "Multicast load",
+                "5 Mb/s"
+              ],
+              [
+                "Reports heard",
+                "1, at 2 s"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "13.3.predict",
+      "answer_beat": "13.3.answer",
+      "answer_events": [
+        "13.3.answer:move:0",
+        "13.3.answer:move:1",
+        "13.3.answer:move:2"
+      ],
+      "answer_objects": [
+        {
+          "object": "t2",
+          "after": "13.3.answer:move:0",
+          "effect": "net.path",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t2",
+          "after": "13.3.answer:move:1",
+          "effect": "net.path",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "tx",
+          "after": "13.3.answer:move:2",
+          "effect": "text",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "13.4.predict",
+      "answer_beat": "13.4.answer",
+      "answer_events": [
+        "13.4.answer:move:0",
+        "13.4.answer:move:1",
+        "13.4.answer:move:2"
+      ],
+      "answer_objects": [
+        {
+          "object": "z",
+          "after": "13.4.answer:move:0",
+          "effect": "tex",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "13.4.answer:move:1",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "14.1.predict",
+      "answer_beat": "14.1.answer",
+      "answer_events": [
+        "14.1.answer:move:0",
+        "14.1.answer:move:1",
+        "14.1.answer:move:2"
+      ],
+      "answer_objects": [
+        {
+          "object": "db",
+          "after": "14.1.answer:move:0",
+          "effect": "table.set",
+          "selector": {
+            "r": 1,
+            "c": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "db",
+          "after": "14.1.answer:move:1",
+          "effect": "table.set",
+          "selector": {
+            "r": 2,
+            "c": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "14.1.answer:move:2",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "14.2.predict",
+      "answer_beat": "14.2.answer",
+      "answer_events": [
+        "14.2.answer:move:0",
+        "14.2.answer:move:1",
+        "14.2.answer:move:2",
+        "14.2.answer:move:3"
+      ],
+      "answer_objects": [
+        {
+          "object": "w",
+          "after": "14.2.answer:move:0",
+          "effect": "chips.sum",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "dc1",
+          "after": "14.2.answer:move:1",
+          "effect": "tex",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "dc2",
+          "after": "14.2.answer:move:2",
+          "effect": "tex",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "14.2.answer:move:3",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "14.3.predict",
+      "answer_beat": "14.3.answer",
+      "answer_events": [
+        "14.3.answer:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "14.3.answer:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "14.4.predict",
+      "answer_beat": "14.4.answer",
+      "answer_events": [
+        "14.4.answer:move:0",
+        "14.4.answer:move:1",
+        "14.4.answer:move:2",
+        "14.4.answer:move:3"
+      ],
+      "answer_objects": [
+        {
+          "object": "g2",
+          "after": "14.4.answer:move:0",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "C",
+                "CTS from B",
+                "defers; protects B"
+              ],
+              [
+                "E",
+                "RTS from A",
+                "sets NAV; exposed"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "g2",
+          "after": "14.4.answer:move:1",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "g2",
+          "after": "14.4.answer:move:2",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "14.4.answer:move:3",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "15.1.predict",
+      "answer_beat": "15.1.answer",
+      "answer_events": [
+        "15.1.answer:move:0",
+        "15.1.answer:move:1"
+      ],
+      "answer_objects": [
+        {
+          "object": "l",
+          "after": "15.1.answer:move:0",
+          "effect": "net.state",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "15.1.answer:move:1",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "15.2.predict",
+      "answer_beat": "15.2.answer",
+      "answer_events": [
+        "15.2.answer:move:0",
+        "15.2.answer:move:1"
+      ],
+      "answer_objects": [
+        {
+          "object": "k",
+          "after": "15.2.answer:move:0",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 0
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "15.2.answer:move:1",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "15.3.predict",
+      "answer_beat": "15.3.answer",
+      "answer_events": [
+        "15.3.answer:move:0",
+        "15.3.answer:move:1",
+        "15.3.answer:move:2"
+      ],
+      "answer_objects": [
+        {
+          "object": "tr",
+          "after": "15.3.answer:move:0",
+          "effect": "tex",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "m",
+          "after": "15.3.answer:move:1",
+          "effect": "net.state",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "15.3.answer:move:2",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "15.4.predict",
+      "answer_beat": "15.4.answer",
+      "answer_events": [
+        "15.4.answer:move:0",
+        "15.4.answer:move:1",
+        "15.4.answer:move:2",
+        "15.4.answer:move:3",
+        "15.4.answer:move:4",
+        "15.4.answer:move:5",
+        "15.4.answer:move:6"
+      ],
+      "answer_objects": [
+        {
+          "object": "x",
+          "after": "15.4.answer:move:0",
+          "effect": "packet.spawn",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "x",
+          "after": "15.4.answer:move:1",
+          "effect": "packet.hop",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "h",
+          "after": "15.4.answer:move:2",
+          "effect": "net.state",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "x",
+          "after": "15.4.answer:move:3",
+          "effect": "packet.drop",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "h",
+          "after": "15.4.answer:move:4",
+          "effect": "net.state",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "15.4.answer:move:5",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "16.1.predict",
+      "answer_beat": "16.1.a4",
+      "answer_events": [
+        "16.1.a4:move:0",
+        "16.1.a4:move:1",
+        "16.1.a4:move:2",
+        "16.1.a4:move:3"
+      ],
+      "answer_objects": [
+        {
+          "object": "q4",
+          "after": "16.1.a4:move:0",
+          "effect": "tunnel.reencapsulate",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "q4",
+          "after": "16.1.a4:move:1",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 0
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "q4",
+          "after": "16.1.a4:move:2",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 2
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "16.1.a4:move:3",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.1.predict",
+      "answer_beat": "17.1.marks",
+      "answer_events": [
+        "17.1.marks:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.1.marks:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.2.predict",
+      "answer_beat": "17.2.marks",
+      "answer_events": [
+        "17.2.marks:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.2.marks:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.3.predict",
+      "answer_beat": "17.3.same",
+      "answer_events": [
+        "17.3.same:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.3.same:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.4.predict",
+      "answer_beat": "17.4.unit",
+      "answer_events": [
+        "17.4.unit:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "b",
+          "after": "17.4.unit:move:0",
+          "effect": "bar.span",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.5.predict",
+      "answer_beat": "17.5.why",
+      "answer_events": [
+        "17.5.why:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.5.why:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.6.predict",
+      "answer_beat": "17.6.marks",
+      "answer_events": [
+        "17.6.marks:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.6.marks:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.7.predict",
+      "answer_beat": "17.7.marks",
+      "answer_events": [
+        "17.7.marks:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.7.marks:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.8.predict",
+      "answer_beat": "17.8.ttl",
+      "answer_events": [
+        "17.8.ttl:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.8.ttl:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.9.predict",
+      "answer_beat": "17.9.answer",
+      "answer_events": [
+        "17.9.answer:move:0",
+        "17.9.answer:move:1",
+        "17.9.answer:move:2",
+        "17.9.answer:move:3",
+        "17.9.answer:move:4"
+      ],
+      "answer_objects": [
+        {
+          "object": "t",
+          "after": "17.9.answer:move:0",
+          "effect": "table.mark",
+          "selector": {
+            "r": 3
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "g",
+          "after": "17.9.answer:move:1",
+          "effect": "net.state",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "g",
+          "after": "17.9.answer:move:2",
+          "effect": "net.walk",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "g",
+          "after": "17.9.answer:move:3",
+          "effect": "net.state",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "17.9.answer:move:4",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.10.predict",
+      "answer_beat": "17.10.trust",
+      "answer_events": [
+        "17.10.trust:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.10.trust:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.11.predict",
+      "answer_beat": "17.11.limit",
+      "answer_events": [
+        "17.11.limit:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.11.limit:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.12.predict",
+      "answer_beat": "17.12.distinction",
+      "answer_events": [
+        "17.12.distinction:move:0",
+        "17.12.distinction:move:1",
+        "17.12.distinction:move:2",
+        "17.12.distinction:move:3"
+      ],
+      "answer_objects": [
+        {
+          "object": "t",
+          "after": "17.12.distinction:move:1",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "Exploration",
+                "incomplete news",
+                "settles"
+              ],
+              [
+                "Oscillation",
+                "incompatible policies",
+                "may never settle"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t",
+          "after": "17.12.distinction:move:2",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t",
+          "after": "17.12.distinction:move:3",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.13.predict",
+      "answer_beat": "17.13.marks",
+      "answer_events": [
+        "17.13.marks:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.13.marks:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.14.predict",
+      "answer_beat": "17.14.conditions",
+      "answer_events": [
+        "17.14.conditions:move:0",
+        "17.14.conditions:move:1",
+        "17.14.conditions:move:2"
+      ],
+      "answer_objects": [
+        {
+          "object": "gr",
+          "after": "17.14.conditions:move:0",
+          "effect": "bullets",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "gr",
+          "after": "17.14.conditions:move:1",
+          "effect": "reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "gr",
+          "after": "17.14.conditions:move:2",
+          "effect": "reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.15.predict",
+      "answer_beat": "17.15.limit",
+      "answer_events": [
+        "17.15.limit:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.15.limit:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.16.predict",
+      "answer_beat": "17.16.marks",
+      "answer_events": [
+        "17.16.marks:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.16.marks:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.17.predict",
+      "answer_beat": "17.17.noack",
+      "answer_events": [
+        "17.17.noack:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.17.noack:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.18.predict",
+      "answer_beat": "17.18.assumption",
+      "answer_events": [
+        "17.18.assumption:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.18.assumption:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.19.predict",
+      "answer_beat": "17.19.marks",
+      "answer_events": [
+        "17.19.marks:move:0"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.19.marks:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "17.20.predict",
+      "answer_beat": "17.20.marks",
+      "answer_events": [
+        "17.20.marks:move:0",
+        "17.20.marks:move:1",
+        "17.20.marks:move:2"
+      ],
+      "answer_objects": [
+        {
+          "object": "_rule",
+          "after": "17.20.marks:move:0",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "why",
+          "after": "17.20.marks:move:2",
+          "effect": "bullets",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.1.p1",
+      "answer_beat": "18.1.a1",
+      "answer_events": [
+        "18.1.a1:move:0",
+        "18.1.a1:move:1",
+        "18.1.a1:move:2",
+        "18.1.a1:move:3",
+        "18.1.a1:move:4"
+      ],
+      "answer_objects": [
+        {
+          "object": "n",
+          "after": "18.1.a1:move:1",
+          "effect": "net.show",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t",
+          "after": "18.1.a1:move:2",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "Address, mask, gateway, resolver",
+                "DHCP"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t",
+          "after": "18.1.a1:move:3",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "n",
+          "after": "18.1.a1:move:4",
+          "effect": "msg.send",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.1.p2",
+      "answer_beat": "18.1.a2",
+      "answer_events": [
+        "18.1.a2:move:0",
+        "18.1.a2:move:1",
+        "18.1.a2:move:2",
+        "18.1.a2:move:3",
+        "18.1.a2:move:4",
+        "18.1.a2:move:5",
+        "18.1.a2:move:6"
+      ],
+      "answer_objects": [
+        {
+          "object": "n",
+          "after": "18.1.a2:move:0",
+          "effect": "msg.send",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "p",
+          "after": "18.1.a2:move:1",
+          "effect": "packet.spawn",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "p",
+          "after": "18.1.a2:move:2",
+          "effect": "packet.hop",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "p",
+          "after": "18.1.a2:move:3",
+          "effect": "packet.swap_link_header",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "p",
+          "after": "18.1.a2:move:4",
+          "effect": "packet.hop",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "18.1.a2:move:6",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.1.p3",
+      "answer_beat": "18.1.a3",
+      "answer_events": [
+        "18.1.a3:move:0",
+        "18.1.a3:move:1",
+        "18.1.a3:move:2",
+        "18.1.a3:move:3"
+      ],
+      "answer_objects": [
+        {
+          "object": "n",
+          "after": "18.1.a3:move:0",
+          "effect": "net.state",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t",
+          "after": "18.1.a3:move:1",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "Which port for a MAC",
+                "Switch learning"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "18.1.a3:move:3",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.1.p4",
+      "answer_beat": "18.1.a4",
+      "answer_events": [
+        "18.1.a4:move:0",
+        "18.1.a4:move:1",
+        "18.1.a4:move:2",
+        "18.1.a4:move:3",
+        "18.1.a4:move:4",
+        "18.1.a4:move:5"
+      ],
+      "answer_objects": [
+        {
+          "object": "t",
+          "after": "18.1.a4:move:0",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "Which output for a prefix",
+                "Longest prefix match"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "p",
+          "after": "18.1.a4:move:2",
+          "effect": "packet.spawn",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "p",
+          "after": "18.1.a4:move:3",
+          "effect": "packet.swap_link_header",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "p",
+          "after": "18.1.a4:move:4",
+          "effect": "packet.hop",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.1.p5",
+      "answer_beat": "18.1.a5",
+      "answer_events": [
+        "18.1.a5:move:0",
+        "18.1.a5:move:1",
+        "18.1.a5:move:2",
+        "18.1.a5:move:3"
+      ],
+      "answer_objects": [
+        {
+          "object": "t",
+          "after": "18.1.a5:move:0",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "Inside an AS",
+                "link state or distance vector"
+              ],
+              [
+                "Between ASes",
+                "BGP with policy"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t",
+          "after": "18.1.a5:move:1",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t",
+          "after": "18.1.a5:move:2",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "n",
+          "after": "18.1.a5:move:3",
+          "effect": "net.walk",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.1.p6",
+      "answer_beat": "18.1.a6",
+      "answer_events": [
+        "18.1.a6:move:0",
+        "18.1.a6:move:1",
+        "18.1.a6:move:2",
+        "18.1.a6:move:3",
+        "18.1.a6:move:4",
+        "18.1.a6:move:5"
+      ],
+      "answer_objects": [
+        {
+          "object": "n",
+          "after": "18.1.a6:move:1",
+          "effect": "net.state",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t",
+          "after": "18.1.a6:move:2",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "Blackhole",
+                "old route, no way on"
+              ],
+              [
+                "Transient loop",
+                "installs at different times"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t",
+          "after": "18.1.a6:move:3",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "t",
+          "after": "18.1.a6:move:4",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "18.1.a6:move:5",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.1.p7",
+      "answer_beat": "18.1.a7",
+      "answer_events": [
+        "18.1.a7:move:0",
+        "18.1.a7:move:1",
+        "18.1.a7:move:2",
+        "18.1.a7:move:3",
+        "18.1.a7:move:4"
+      ],
+      "answer_objects": [
+        {
+          "object": "st",
+          "after": "18.1.a7:move:1",
+          "effect": "stack.show",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "st",
+          "after": "18.1.a7:move:2",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "st",
+          "after": "18.1.a7:move:3",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 0
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "18.1.a7:move:4",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.2.p1",
+      "answer_beat": "18.2.a1",
+      "answer_events": [
+        "18.2.a1:move:0",
+        "18.2.a1:move:1",
+        "18.2.a1:move:2",
+        "18.2.a1:move:3",
+        "18.2.a1:move:4",
+        "18.2.a1:move:5"
+      ],
+      "answer_objects": [
+        {
+          "object": "d",
+          "after": "18.2.a1:move:1",
+          "effect": "bits.show",
+          "selector": {
+            "rows": [
+              {
+                "label": "Address 192.168.37.200",
+                "value": "$practice.warm.address"
+              },
+              {
+                "label": "Mask 255.255.248.0",
+                "value": "$practice.warm.mask"
+              }
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "d",
+          "after": "18.2.a1:move:2",
+          "effect": "bits.draw_mask",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "d",
+          "after": "18.2.a1:move:3",
+          "effect": "bits.scan",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "d",
+          "after": "18.2.a1:move:4",
+          "effect": "bits.scan",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "18.2.a1:move:5",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.2.p2",
+      "answer_beat": "18.2.a2",
+      "answer_events": [
+        "18.2.a2:move:0",
+        "18.2.a2:move:1",
+        "18.2.a2:move:2",
+        "18.2.a2:move:3"
+      ],
+      "answer_objects": [
+        {
+          "object": "rt",
+          "after": "18.2.a2:move:0",
+          "effect": "table.flash",
+          "selector": {
+            "rows": [
+              0,
+              1,
+              3
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "rt",
+          "after": "18.2.a2:move:1",
+          "effect": "table.mark",
+          "selector": {
+            "r": 2
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "rt",
+          "after": "18.2.a2:move:2",
+          "effect": "table.flash",
+          "selector": {
+            "rows": [
+              0,
+              3
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "rt",
+          "after": "18.2.a2:move:3",
+          "effect": "table.mark",
+          "selector": {
+            "r": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.2.p3",
+      "answer_beat": "18.2.a3",
+      "answer_events": [
+        "18.2.a3:move:0",
+        "18.2.a3:move:1",
+        "18.2.a3:move:2",
+        "18.2.a3:move:3",
+        "18.2.a3:move:4",
+        "18.2.a3:move:5",
+        "18.2.a3:move:6",
+        "18.2.a3:move:7",
+        "18.2.a3:move:8",
+        "18.2.a3:move:9",
+        "18.2.a3:move:10"
+      ],
+      "answer_objects": [
+        {
+          "object": "b",
+          "after": "18.2.a3:move:0",
+          "effect": "bar.ruler",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "b",
+          "after": "18.2.a3:move:1",
+          "effect": "bar.zoom",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "b",
+          "after": "18.2.a3:move:2",
+          "effect": "bar.snap",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "b",
+          "after": "18.2.a3:move:3",
+          "effect": "bar.slice",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "b",
+          "after": "18.2.a3:move:4",
+          "effect": "bar.slice",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "b",
+          "after": "18.2.a3:move:5",
+          "effect": "bar.slice",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "b",
+          "after": "18.2.a3:move:6",
+          "effect": "bar.slice",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "b",
+          "after": "18.2.a3:move:7",
+          "effect": "bar.info",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "b",
+          "after": "18.2.a3:move:8",
+          "effect": "bar.info",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "b",
+          "after": "18.2.a3:move:9",
+          "effect": "bar.info",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "b",
+          "after": "18.2.a3:move:10",
+          "effect": "bar.info",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.3.p1",
+      "answer_beat": "18.3.a1",
+      "answer_events": [
+        "18.3.a1:move:0",
+        "18.3.a1:move:1",
+        "18.3.a1:move:2",
+        "18.3.a1:move:3",
+        "18.3.a1:move:4",
+        "18.3.a1:move:5",
+        "18.3.a1:move:6",
+        "18.3.a1:move:7",
+        "18.3.a1:move:8"
+      ],
+      "answer_objects": [
+        {
+          "object": "o",
+          "after": "18.3.a1:move:1",
+          "effect": "stack.show",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "o",
+          "after": "18.3.a1:move:2",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 0
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "o",
+          "after": "18.3.a1:move:3",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 0
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "o",
+          "after": "18.3.a1:move:4",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "o",
+          "after": "18.3.a1:move:5",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 1
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "o",
+          "after": "18.3.a1:move:6",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 2
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "o",
+          "after": "18.3.a1:move:7",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 2
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "o",
+          "after": "18.3.a1:move:8",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 3
+          },
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.3.p2",
+      "answer_beat": "18.3.a2",
+      "answer_events": [
+        "18.3.a2:move:0",
+        "18.3.a2:move:1",
+        "18.3.a2:move:2",
+        "18.3.a2:move:3",
+        "18.3.a2:move:4"
+      ],
+      "answer_objects": [
+        {
+          "object": "o",
+          "after": "18.3.a2:move:0",
+          "effect": "stack.mark",
+          "selector": {
+            "layer": 3
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "x",
+          "after": "18.3.a2:move:1",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "Own or customer",
+                "everyone"
+              ],
+              [
+                "Peer or provider",
+                "customers only"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "x",
+          "after": "18.3.a2:move:2",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "x",
+          "after": "18.3.a2:move:3",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "18.3.a2:move:4",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.3.p3",
+      "answer_beat": "18.3.a3",
+      "answer_events": [
+        "18.3.a3:move:0",
+        "18.3.a3:move:1",
+        "18.3.a3:move:2",
+        "18.3.a3:move:3"
+      ],
+      "answer_objects": [
+        {
+          "object": "m",
+          "after": "18.3.a3:move:0",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "Dense",
+                "forward unless pruned",
+                "flood and prune"
+              ],
+              [
+                "Sparse",
+                "nothing until joined",
+                "(*,G), may switch to (S,G)"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "m",
+          "after": "18.3.a3:move:1",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "m",
+          "after": "18.3.a3:move:2",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "18.3.a3:move:3",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    },
+    {
+      "prediction_beat": "18.3.p4",
+      "answer_beat": "18.3.a4",
+      "answer_events": [
+        "18.3.a4:move:0",
+        "18.3.a4:move:1",
+        "18.3.a4:move:2",
+        "18.3.a4:move:3",
+        "18.3.a4:move:4",
+        "18.3.a4:move:5"
+      ],
+      "answer_objects": [
+        {
+          "object": "h",
+          "after": "18.3.a4:move:1",
+          "effect": "table.show",
+          "selector": {
+            "rows": [
+              [
+                "before",
+                "S-GW, A, UE"
+              ],
+              [
+                "during",
+                "S-GW, A, B, UE"
+              ],
+              [
+                "after",
+                "S-GW, B, UE"
+              ]
+            ]
+          },
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "h",
+          "after": "18.3.a4:move:2",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "h",
+          "after": "18.3.a4:move:3",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "h",
+          "after": "18.3.a4:move:4",
+          "effect": "table.reveal",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        },
+        {
+          "object": "_rule",
+          "after": "18.3.a4:move:5",
+          "effect": "rule",
+          "selector": {},
+          "before_answer": "hidden_or_neutral"
+        }
+      ],
+      "review_scope": "Inspect the listed answer objects for neutral or hidden state during the prediction hold."
+    }
+  ]
+}

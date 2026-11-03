@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CSCI 5273 Study Player</title>
+<link rel="stylesheet" href="/tokens.css">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#home">CSCI 5273</a>
+  <nav class="topbar__nav" aria-label="Sections">
+    <a href="#home" data-nav="home">Next up</a>
+    <a href="#find" data-nav="find">Find</a>
+    <a href="#drills" data-nav="drills">Drills</a>
+    <a href="#midterm" data-nav="midterm">Practice midterm</a>
+    <a href="#ready" data-nav="ready">Readiness</a>
+  </nav>
+  <div class="score" id="score" aria-live="polite"></div>
+</header>
+<main id="app"><p class="text-muted">Loading…</p></main>
+<script src="/player.js"></script>
+</body>
+</html>

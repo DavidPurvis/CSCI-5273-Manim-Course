@@ -1,0 +1,18 @@
+[
+  {
+    "chapter": "4",
+    "target_minutes": 18,
+    "actual_minutes": 20.252,
+    "deviation_percent": 12.51,
+    "decision": "retain substantive explanations",
+    "reason": "Retain the complete normalized /23 VLSM allocation, changed sizing example, two LPM lookups, trie/TCAM mechanisms, fabric comparison and head-of-line blocking sequence."
+  },
+  {
+    "chapter": "9",
+    "target_minutes": 20,
+    "actual_minutes": 22.979,
+    "deviation_percent": 14.9,
+    "decision": "retain substantive explanations",
+    "reason": "Retain anycast instance selection, multicast membership/timers, three distinct tree objectives, worked RPF checks, pruning, and shared-to-source PIM transitions with prediction pauses."
+  }
+]

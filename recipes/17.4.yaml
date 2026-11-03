@@ -1,0 +1,155 @@
+dish: '17.4'
+title: 'Practice question 4: fragmentation'
+deck: lec07-network1.pdf
+target_min: 2.5
+concepts: []
+pad: 2.2
+beats:
+- id: 17.4.question
+  stage: question
+  narration: 17.4.question
+  pdf:
+  - lec07-network1.pdf
+  - 36
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 4: fragmentation'
+  - bar.show:
+      name: b
+      zone: full
+      total: 2600
+      header: 20
+      rows: 3
+      when: A 2,600 byte
+  adjust: {}
+- id: 17.4.predict
+  stage: prediction
+  narration: 17.4.predict
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: payload, total length, offset, and MF for each fragment
+  adjust: {}
+  hold: 20
+- id: 17.4.size
+  stage: state
+  narration: 17.4.size
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - bar.ruler:
+      name: b
+      when: Each fragment has room
+  - bar.zoom:
+      name: b
+      at: 980
+      state: error
+      when: or 980 bytes
+  - bar.snap:
+      name: b
+      at: 976
+      when: so round down
+  - keep: {}
+  adjust: {}
+- id: 17.4.slices
+  stage: state
+  narration: 17.4.slices
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - bar.slice:
+      name: b
+      i: 0
+      frag: $practice.q4.0
+      info: false
+      when: The payloads
+      t: 0.8
+  - bar.slice:
+      name: b
+      i: 1
+      frag: $practice.q4.1
+      info: false
+      t: 0.8
+  - bar.slice:
+      name: b
+      i: 2
+      frag: $practice.q4.2
+      info: false
+      t: 0.8
+  - bar.info:
+      name: b
+      i: 0
+      frag: $practice.q4.0
+      when: The offsets are
+  - bar.info:
+      name: b
+      i: 1
+      frag: $practice.q4.1
+  - bar.info:
+      name: b
+      i: 2
+      frag: $practice.q4.2
+  - keep: {}
+  adjust: {}
+- id: 17.4.unit
+  stage: explanation
+  narration: 17.4.unit
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - bar.span:
+      name: b
+      to: 976
+      text: offset 122 × 8 = 976
+      when: The offset field
+  - keep: {}
+  adjust: {}
+- id: 17.4.trap
+  stage: rule
+  narration: 17.4.trap
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts:
+  - IPv4 Fragmentation
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Payloads of 980, 980, and 620
+      right: '980 isn''t a multiple of 8: payloads are 976, 976, and 628'
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.4.marks
+  stage: explanation
+  narration: 17.4.marks
+  pdf:
+  - lec07-network1.pdf
+  - 37
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '1 point each: payloads, totals, offsets, MF flags, and the offset unit.'
+      when: On marks
+  - keep: {}
+  adjust: {}

@@ -1,0 +1,195 @@
+dish: '17.13'
+title: 'Practice question 13: BGP selection'
+deck: lec12-bgp.pdf
+target_min: 2
+concepts: []
+pad: 2.2
+beats:
+- id: 17.13.question
+  stage: question
+  narration: 17.13.question
+  pdf:
+  - lec12-bgp.pdf
+  - 26
+  concepts:
+  - Local Preference
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 13: BGP selection'
+  - sieve.show:
+      name: s
+      zone: top
+      rungs:
+      - Local pref
+      - AS length
+      - Egress cost
+      routes:
+      - name: A
+        vals:
+        - 150
+        - 5
+        - 20
+      - name: B
+        vals:
+        - 100
+        - 2
+        - 1
+      when: Route A has
+  adjust: {}
+- id: 17.13.predict
+  stage: prediction
+  narration: 17.13.predict
+  pdf:
+  - lec12-bgp.pdf
+  - 26
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: both winners, and how the next hop becomes usable
+  adjust: {}
+  hold: 12
+- id: 17.13.first
+  stage: state
+  narration: 17.13.first
+  pdf:
+  - lec12-bgp.pdf
+  - 26
+  concepts:
+  - Local Preference
+  clarifications: []
+  moves:
+  - sieve.step:
+      name: s
+      rung: 0
+      keep:
+      - A
+      when: Local preference
+  - sieve.win:
+      name: s
+      route: A
+      unused:
+      - 1
+      - 2
+      when: so A wins
+  - keep: {}
+  adjust: {}
+- id: 17.13.second
+  stage: state
+  narration: 17.13.second
+  pdf:
+  - lec12-bgp.pdf
+  - 26
+  concepts:
+  - Local Preference
+  clarifications: []
+  moves:
+  - sieve.show:
+      name: s
+      zone: top
+      rungs:
+      - Local pref
+      - AS length
+      - Egress cost
+      routes:
+      - name: A
+        vals:
+        - 100
+        - 5
+        - 20
+      - name: B
+        vals:
+        - 100
+        - 2
+        - 1
+      when: Make the
+  - sieve.step:
+      name: s
+      rung: 1
+      keep:
+      - B
+      when: Now AS length
+  - sieve.win:
+      name: s
+      route: B
+      unused:
+      - 2
+      when: so B wins
+  - keep: {}
+  adjust: {}
+- id: 17.13.resolve
+  stage: state
+  narration: 17.13.resolve
+  pdf:
+  - lec12-bgp.pdf
+  - 28
+  concepts:
+  - BGP Next-Hop Resolution
+  clarifications: []
+  moves:
+  - stack.show:
+      name: st
+      zone: bottom
+      layers:
+      - t: 'BGP: next hop, maybe several routers away'
+        k: ip
+      - t: 'Internal route: an adjacent neighbor and a port'
+        k: eth
+      - t: 'Forwarding entry: prefix, neighbor, port'
+        k: label
+  - stack.mark:
+      name: st
+      layer: 0
+      when:
+        phrase: BGP's chosen
+        frame_offset: 6
+  - stack.mark:
+      name: st
+      layer: 0
+      state: null
+      when: It must resolve
+  - stack.mark:
+      name: st
+      layer: 1
+  - stack.mark:
+      name: st
+      layer: 1
+      state: null
+      when: Only then
+  - stack.mark:
+      name: st
+      layer: 2
+      state: done
+  - keep: {}
+  adjust: {}
+- id: 17.13.trap
+  stage: rule
+  narration: 17.13.trap
+  pdf:
+  - lec12-bgp.pdf
+  - 28
+  concepts:
+  - Local Preference
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Add the attributes into a score, or take the lowest cost
+      right: Compare in order, and stop when one route remains
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.13.marks
+  stage: explanation
+  narration: 17.13.marks
+  pdf:
+  - lec12-bgp.pdf
+  - 28
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '2 points: first choice and reason. 1 point: second choice. 2 points: resolution.'
+      when: On marks
+  - keep: {}
+  adjust: {}

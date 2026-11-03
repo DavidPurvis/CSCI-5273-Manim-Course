@@ -1,0 +1,655 @@
+dish: '13.2'
+title: Who wants the stream?
+deck: lec13-multicast.pdf
+target_min: 7.5
+concepts:
+- IP Multicast
+- Multicast Group Addresses
+- Iterated Unicast
+- Overlay Multicast
+- IGMPv1
+- IGMPv2
+- IGMPv3
+- IGMP Snooping
+pad: 2.2
+beats:
+- id: 13.2.question
+  stage: question
+  narration: 13.2.question
+  pdf:
+  - lec13-multicast.pdf
+  - 16
+  concepts:
+  - IP Multicast
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 13: who wants the stream?'
+  - q:
+      text: Three receivers, one first link. Must it carry three copies?
+  - keep: {}
+  adjust: {}
+- id: 13.2.unicast
+  stage: animation
+  narration: 13.2.unicast
+  pdf:
+  - lec13-multicast.pdf
+  - 22
+  concepts:
+  - Iterated Unicast
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: m
+      zone: left
+      nodes:
+        S:
+          k: server
+          at:
+          - 0
+          - 1.5
+          l: Source
+        R:
+          k: router
+          at:
+          - 3
+          - 1.5
+          l: R
+        X:
+          k: router
+          at:
+          - 6
+          - 1.5
+          l: X
+        H1:
+          k: host
+          at:
+          - 9
+          - 3
+          l: H1
+        H2:
+          k: host
+          at:
+          - 9
+          - 1.5
+          l: H2
+        H3:
+          k: host
+          at:
+          - 9
+          - 0
+          l: H3
+      links:
+      - - S
+        - R
+      - - R
+        - X
+      - - X
+        - H1
+      - - X
+        - H2
+      - - X
+        - H3
+  - packet.spawn:
+      name: c1
+      net: m
+      at: S
+      layers:
+      - ip
+  - packet.flood:
+      name: c1
+      to:
+      - X
+      - X
+      - X
+  - tex:
+      name: u
+      zone: right_top
+      tex: 3\times 10\ \text{Mb/s}=30\ \text{Mb/s}
+      size: 44
+  adjust: {}
+- id: 13.2.unicast-more
+  stage: state
+  narration: 13.2.unicast-more
+  pdf:
+  - lec13-multicast.pdf
+  - 22
+  concepts:
+  - Iterated Unicast
+  clarifications: []
+  moves:
+  - tex:
+      name: u2
+      zone: right_bottom
+      tex: 100\times 1\ \text{MB}=100\ \text{MB}
+      size: 44
+      when: A one megabyte
+  - net.pulse:
+      name: m
+      path:
+      - S
+      - R
+      - X
+      when: If every copy
+  adjust: {}
+- id: 13.2.multicast
+  stage: state
+  narration: 13.2.multicast
+  pdf:
+  - lec13-multicast.pdf
+  - 18
+  concepts:
+  - IP Multicast
+  clarifications: []
+  moves:
+  - packet.fade:
+      name: c1
+  - packet.spawn:
+      name: c2
+      net: m
+      at: S
+      layers:
+      - ip
+  - packet.hop:
+      name: c2
+      to:
+      - R
+      - X
+  - packet.flood:
+      name: c2
+      to:
+      - H1
+      - H2
+      - H3
+  - tex:
+      name: v
+      zone: right_bottom
+      tex: 1\times 10\ \text{Mb/s}=10\ \text{Mb/s}
+      size: 44
+  adjust: {}
+- id: 13.2.address
+  stage: state
+  narration: 13.2.address
+  pdf:
+  - lec13-multicast.pdf
+  - 19
+  concepts:
+  - Multicast Group Addresses
+  clarifications: []
+  moves:
+  - clear: {}
+  - stack.show:
+      name: g
+      zone: left_top
+      width: 5.6
+      layers:
+      - t: 'Source: the sender''s own address'
+        k: ip
+      - t: 'Destination: group in 224.0.0.0/4'
+        k: ip
+  - bullets:
+      name: gg
+      zone: right_top
+      show: 2
+      items:
+      - Names an audience, not a machine
+      - A sender need not be a member
+  adjust: {}
+- id: 13.2.address-more
+  stage: state
+  narration: 13.2.address-more
+  pdf:
+  - lec13-multicast.pdf
+  - 19
+  concepts:
+  - Multicast Group Addresses
+  clarifications: []
+  moves:
+  - table.show:
+      name: ex
+      zone: bottom
+      cols:
+      - Field
+      - Value
+      rows:
+      - - Source
+        - 192.0.2.10
+      - - Destination
+        - 239.1.1.1
+      show: 0
+      when: A concrete
+  - table.reveal:
+      name: ex
+      when: The packet's source
+  - table.reveal:
+      name: ex
+      when: and its destination
+  - table.mark:
+      name: ex
+      r: 0
+      state: done
+      when: The source never
+  adjust: {}
+- id: 13.2.overlay
+  stage: state
+  narration: 13.2.overlay
+  pdf:
+  - lec13-multicast.pdf
+  - 22
+  concepts:
+  - Overlay Multicast
+  clarifications: []
+  moves:
+  - table.show:
+      name: ov
+      zone: bottom
+      cols:
+      - Method
+      - Replicates at
+      - Downside
+      rows:
+      - - Iterated unicast
+        - source
+        - many copies on shared links
+      - - IP multicast
+        - routers
+        - needs router support
+      - - Overlay
+        - end hosts
+        - repeated links and host upload
+  adjust: {}
+- id: 13.2.overlay-more
+  stage: state
+  narration: 13.2.overlay-more
+  pdf:
+  - lec13-multicast.pdf
+  - 22
+  concepts:
+  - Overlay Multicast
+  clarifications: []
+  moves:
+  - net.show:
+      name: ot
+      zone: top
+      nodes:
+        S:
+          k: node
+          at:
+          - 4
+          - 2
+          l: S
+        A:
+          k: node
+          at:
+          - 2
+          - 1
+          l: a
+        B:
+          k: node
+          at:
+          - 6
+          - 1
+          l: b
+        C:
+          k: node
+          at:
+          - 1
+          - 0
+          l: c
+        D:
+          k: node
+          at:
+          - 3
+          - 0
+          l: d
+        E:
+          k: node
+          at:
+          - 5
+          - 0
+          l: e
+        F:
+          k: node
+          at:
+          - 7
+          - 0
+          l: f
+        G:
+          k: node
+          at:
+          - 8.4
+          - 0
+          l: g
+      links:
+      - - S
+        - A
+      - - S
+        - B
+      - - A
+        - C
+      - - A
+        - D
+      - - B
+        - E
+      - - B
+        - F
+      - - F
+        - G
+  - net.pulse:
+      name: ot
+      path:
+      - S
+      - A
+      - C
+      when: The source sends
+  - net.pulse:
+      name: ot
+      path:
+      - S
+      - B
+      - F
+      - G
+      when: Seven recipients
+  adjust: {}
+- id: 13.2.igmp1
+  stage: animation
+  narration: 13.2.igmp1
+  pdf:
+  - lec13-multicast.pdf
+  - 28
+  concepts:
+  - IGMPv1
+  clarifications: []
+  moves:
+  - clear: {}
+  - seq.show:
+      name: q
+      zone: left
+      lanes:
+      - Router
+      - H1
+      - H2
+      steps: 4
+  - seq.msg:
+      name: q
+      a: Router
+      b: H2
+      text: query to all hosts
+      kind: ip
+      when: The router sends
+  - table.show:
+      name: sup
+      zone: right_top
+      cols:
+      - Host
+      - Delay
+      - Action
+      rows:
+      - - H1
+        - 2 s
+        - reports
+      - - H2
+        - 6 s
+        - suppressed
+    when: Each picks
+  - seq.msg:
+      name: q
+      a: H1
+      b: Router
+      text: report at 2 s
+      kind: eth
+      when: H1's timer
+  - rule:
+      text: The router needs to know whether anyone wants the group, not who.
+      when: Because the router
+  adjust: {}
+- id: 13.2.dest
+  stage: rule
+  narration: 13.2.dest
+  pdf:
+  - lec13-multicast.pdf
+  - 27
+  concepts:
+  - IGMPv1
+  clarifications:
+  - igmp-dest
+  moves:
+  - card:
+      kind: clarification
+      text: Queries go to all hosts. A report goes to the group being reported, with TTL 1.
+      zone: right_bottom
+  adjust: {}
+- id: 13.2.igmp23
+  stage: state
+  narration: 13.2.igmp23
+  pdf:
+  - lec13-multicast.pdf
+  - 32
+  concepts:
+  - IGMPv2
+  - IGMPv3
+  clarifications: []
+  moves:
+  - clear: {}
+  - seq.show:
+      name: q2
+      zone: left
+      lanes:
+      - Router
+      - H1
+      - H2
+      steps: 3
+  - seq.msg:
+      name: q2
+      a: H1
+      b: Router
+      text: leave
+      kind: eth
+      when: When a host leaves
+  - seq.msg:
+      name: q2
+      a: Router
+      b: H2
+      text: anyone still?
+      kind: ip
+      when: So the router
+  - seq.msg:
+      name: q2
+      a: H2
+      b: Router
+      text: report
+      kind: eth
+      state: done
+      when: If H2 still
+  - table.show:
+      name: vers
+      zone: right_top
+      cols:
+      - Version
+      - Adds
+      rows:
+      - - v1
+        - query, report, suppression
+      - - v2
+        - leave, group query, election
+      - - v3
+        - source filters
+  adjust: {}
+- id: 13.2.timer
+  stage: state
+  narration: 13.2.timer
+  pdf:
+  - lec13-multicast.pdf
+  - 33
+  concepts:
+  - IGMPv2
+  clarifications:
+  - igmp-timer
+  moves:
+  - table.show:
+      name: tmr
+      zone: right_bottom
+      cols:
+      - Source
+      - Formula
+      - Seconds
+      rows:
+      - - Slide
+        - 2 × (125 + 10)
+        - $multicast.timers.slide_formula
+      - - RFC 2236
+        - 2 × 125 + 10
+        - $multicast.timers.rfc2236
+  adjust: {}
+- id: 13.2.snoop
+  stage: rule
+  narration: 13.2.snoop
+  pdf:
+  - lec13-multicast.pdf
+  - 33
+  concepts:
+  - IGMP Snooping
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: sn
+      zone: top
+      nodes:
+        X:
+          k: switch
+          at:
+          - 3
+          - 1
+          l: Switch
+          lp: up
+        A:
+          k: host
+          at:
+          - 0
+          - 0
+          l: Member
+        B:
+          k: host
+          at:
+          - 3
+          - 0
+          l: Not a member
+        C:
+          k: host
+          at:
+          - 6
+          - 0
+          l: Member
+      links:
+      - - X
+        - A
+        - s: active
+      - - X
+        - B
+        - s: dim
+      - - X
+        - C
+        - s: active
+  - rule:
+      text: IGMP covers one local network. It does not build the tree between routers.
+  adjust: {}
+- id: 13.2.snoop-more
+  stage: state
+  narration: 13.2.snoop-more
+  pdf:
+  - lec13-multicast.pdf
+  - 33
+  concepts:
+  - IGMP Snooping
+  clarifications: []
+  moves:
+  - net.pulse:
+      name: sn
+      path:
+      - X
+      - A
+      when: A snooping switch
+  - net.state:
+      name: sn
+      nodes:
+        A: done
+  - rule:
+      text: Snooping reads membership messages. It isn't unicast MAC learning.
+      when: This is separate
+  adjust: {}
+- id: 13.2.pitfall
+  stage: rule
+  narration: 13.2.pitfall
+  pdf:
+  - lec13-multicast.pdf
+  - 33
+  concepts:
+  - IGMP Snooping
+  clarifications: []
+  moves:
+  - trap:
+      wrong: IGMP connects the multicast routers
+      right: IGMP is the LAN's membership. Routing protocols build the tree.
+  adjust: {}
+- id: 13.2.changed
+  stage: changed_example
+  narration: 13.2.changed
+  pdf:
+  - lec13-multicast.pdf
+  - 30
+  concepts:
+  - IGMPv1
+  - IP Multicast
+  clarifications: []
+  moves:
+  - clear: {}
+  - text:
+      name: c
+      zone: top
+      lines:
+      - Stream 5 Mb/s, three receivers on a shared link
+      - 'Report delays: 2 s, 5 s, 8 s'
+  adjust: {}
+- id: 13.2.predict
+  stage: prediction
+  narration: 13.2.predict
+  pdf:
+  - lec13-multicast.pdf
+  - 30
+  concepts:
+  - IGMPv1
+  clarifications: []
+  moves:
+  - pause:
+      text: the link load both ways? how many reports are heard?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 13.2.answer
+  stage: explanation
+  narration: 13.2.answer
+  pdf:
+  - lec13-multicast.pdf
+  - 30
+  concepts:
+  - IGMPv1
+  - IP Multicast
+  clarifications: []
+  moves:
+  - table.show:
+      name: a
+      zone: bottom
+      cols:
+      - Question
+      - Answer
+      rows:
+      - - Unicast load
+        - 15 Mb/s
+      - - Multicast load
+        - 5 Mb/s
+      - - Reports heard
+        - 1, at 2 s
+  - keep: {}
+  adjust: {}

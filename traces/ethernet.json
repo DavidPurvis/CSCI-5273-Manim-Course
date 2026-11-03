@@ -1,0 +1,187 @@
+{
+ "backoff_m3_k5": {
+  "collision": 3,
+  "k": 5,
+  "k_max": 7,
+  "slot_us": 51.2,
+  "wait_us": 256.0
+ },
+ "fixed_share_mbps": 3.0,
+ "learning": [
+  {
+   "action": "flood",
+   "dst": "B",
+   "in_port": 1,
+   "learned": true,
+   "out_ports": [
+    2,
+    3
+   ],
+   "src": "A",
+   "table": {
+    "A": 1
+   }
+  },
+  {
+   "action": "forward",
+   "dst": "A",
+   "in_port": 2,
+   "learned": true,
+   "out_ports": [
+    1
+   ],
+   "src": "B",
+   "table": {
+    "A": 1,
+    "B": 2
+   }
+  },
+  {
+   "action": "forward",
+   "dst": "B",
+   "in_port": 1,
+   "learned": false,
+   "out_ports": [
+    2
+   ],
+   "src": "A",
+   "table": {
+    "A": 1,
+    "B": 2
+   }
+  }
+ ],
+ "learning_table": {
+  "cols": [
+   "Frame",
+   "Learn",
+   "Action"
+  ],
+  "rows": [
+   [
+    "A → B on 1",
+    "A → port 1",
+    "flood to 2,3"
+   ],
+   [
+    "B → A on 2",
+    "B → port 2",
+    "forward to 1"
+   ],
+   [
+    "A → B on 1",
+    "A → port 1",
+    "forward to 2"
+   ]
+  ]
+ },
+ "min_frame_bits": 512.0,
+ "serial_1500_100_us": 120.0,
+ "stp": {
+  "active": [
+   [
+    "S1",
+    "S2"
+   ],
+   [
+    "S1",
+    "S4"
+   ],
+   [
+    "S1",
+    "S5"
+   ],
+   [
+    "S1",
+    "S6"
+   ],
+   [
+    "S1",
+    "S7"
+   ],
+   [
+    "S2",
+    "S3"
+   ]
+  ],
+  "blocked": [
+   [
+    "S3",
+    "S5"
+   ],
+   [
+    "S4",
+    "S6"
+   ],
+   [
+    "S5",
+    "S7"
+   ]
+  ],
+  "dist": {
+   "S1": 0,
+   "S2": 1,
+   "S3": 2,
+   "S4": 1,
+   "S5": 1,
+   "S6": 1,
+   "S7": 1
+  },
+  "parent": {
+   "S2": "S1",
+   "S3": "S2",
+   "S4": "S1",
+   "S5": "S1",
+   "S6": "S1",
+   "S7": "S1"
+  },
+  "root": "S1"
+ },
+ "stp_paths": {
+  "A-B": [
+   "S3",
+   "S2",
+   "S1",
+   "S7"
+  ],
+  "A-C": [
+   "S3",
+   "S2",
+   "S1",
+   "S4"
+  ],
+  "B-C": [
+   "S7",
+   "S1",
+   "S4"
+  ]
+ },
+ "triangle": {
+  "active": [
+   [
+    "S1",
+    "S2"
+   ],
+   [
+    "S1",
+    "S3"
+   ]
+  ],
+  "blocked": [
+   [
+    "S2",
+    "S3"
+   ]
+  ],
+  "dist": {
+   "S1": 0,
+   "S2": 1,
+   "S3": 1
+  },
+  "parent": {
+   "S2": "S1",
+   "S3": "S1"
+  },
+  "root": "S1"
+ }
+}

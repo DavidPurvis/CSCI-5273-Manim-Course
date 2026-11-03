@@ -1,0 +1,38 @@
+# Foundations and synthesis dishes have no vault concepts of their own, so their checks come from the vault's connected story
+# (01 - Complete Mental Model, Examples/01, and 03 - Study Route's Sunday questions).
+- id: x.1.1.a
+  dishes: ["1.1"]
+  q: Why is the gateway's MAC address used while the server's IP address stays in the packet?
+  a: The frame only crosses one link, so it names the next device on that link. The packet crosses the whole network, so its IP header keeps the final destination.
+- id: x.1.1.b
+  dishes: ["1.1"]
+  q: What does a router change in a packet it forwards, and what does it keep?
+  a: It replaces the Ethernet frame and decrements TTL, which also changes the checksum. The source and destination IP addresses stay the same.
+- id: x.1.1.c
+  dishes: ["1.1"]
+  q: A host sends to another host on its own subnet. Whose MAC address goes on the frame?
+  a: The destination host's own MAC address. Only remote destinations go through the router's MAC address.
+- id: x.1.2.a
+  dishes: ["1.2"]
+  q: Which layer delivers across one link, and which delivers across the whole network?
+  a: The link layer delivers locally across one link. The network layer, IP, delivers globally from source host to destination host.
+- id: x.1.2.b
+  dishes: ["1.2"]
+  q: Why can ARP come before the actual DNS query?
+  a: The DNS query is itself a packet. If the resolver is remote, the host needs the gateway's MAC address before it can frame the query, so it may ARP for the gateway first.
+- id: x.1.2.c
+  dishes: ["1.2"]
+  q: Does a switch look at the IP header to forward a frame?
+  a: No. An ordinary Ethernet switch forwards using the destination MAC address and its learned table. IP forwarding is the router's job.
+- id: x.12.1.a
+  dishes: ["12.1"]
+  q: Name the missing fact that each of these supplies - DHCP, ARP, DNS, and longest prefix match.
+  a: DHCP supplies address, mask, gateway, and resolver. ARP supplies the next hop's MAC address. DNS supplies the server's IP address. Longest prefix match supplies the output for a destination.
+- id: x.12.1.b
+  dishes: ["12.1"]
+  q: A tunnel carries a phone's packet after a handover. What changes, and what stays the same?
+  a: The outer destination changes to the new base station. The inner packet, including the phone's stable address, stays the same.
+- id: x.12.1.c
+  dishes: ["12.1"]
+  q: What four questions can you ask of any new network mechanism?
+  a: What's missing, who knows it, what state is kept, and what happens when that state goes stale.

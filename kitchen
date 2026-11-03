@@ -1,0 +1,4 @@
+#!/bin/bash
+# The only command the chef runs. See CHEF.md.
+export PATH="/opt/homebrew/bin:/Library/TeX/texbin:$PATH"
+cd "$(dirname "$0")" && PYTHONWARNINGS=ignore exec .venv/bin/python -W ignore -m course.tools.kitchen "$@"

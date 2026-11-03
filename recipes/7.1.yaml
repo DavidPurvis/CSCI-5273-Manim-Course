@@ -1,0 +1,445 @@
+dish: '7.1'
+title: What the network promises
+deck: lec07-network1.pdf
+target_min: 6
+concepts:
+- Packet Switching
+- Circuit Switching
+- Statistical Multiplexing
+- Best-Effort Service
+- Network Planes
+- Software-Defined Networking
+- QoS Service Models
+- ATM Constant Bit Rate
+- ATM Available Bit Rate
+- Integrated Services
+- Differentiated Services
+pad: 2.2
+beats:
+- id: 7.1.question
+  stage: question
+  narration: 7.1.question
+  pdf:
+  - lec07-network1.pdf
+  - 4
+  concepts:
+  - Packet Switching
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 7: what the network promises'
+  - spine:
+      current: IP
+      zone: top
+  - q:
+      text: What should a network of networks actually promise?
+      zone: bottom
+  adjust: {}
+- id: 7.1.circuit
+  stage: animation
+  narration: 7.1.circuit
+  pdf:
+  - lec07-network1.pdf
+  - 8
+  concepts:
+  - Circuit Switching
+  clarifications: []
+  moves:
+  - clear: {}
+  - tl.show:
+      name: link
+      zone: top
+      tracks:
+      - Circuit
+      - Packet
+      span:
+      - 0
+      - 12
+  - tl.block:
+      name: link
+      track: Circuit
+      start: 0
+      end: 1
+      text: setup
+      kind: data
+  - tl.block:
+      name: link
+      track: Circuit
+      start: 1
+      end: 3
+      text: A
+      kind: ip
+  - tl.block:
+      name: link
+      track: Circuit
+      start: 3
+      end: 6
+      text: idle, reserved
+      state: idle
+      when: But if you pause
+  - tl.block:
+      name: link
+      track: Circuit
+      start: 6
+      end: 8
+      text: A
+      kind: ip
+  adjust: {}
+- id: 7.1.circuit-more
+  stage: state
+  narration: 7.1.circuit-more
+  pdf:
+  - lec07-network1.pdf
+  - 8
+  concepts:
+  - Circuit Switching
+  clarifications: []
+  moves:
+  - tex:
+      name: wa
+      zone: bottom
+      tex: 1\ \text{Mb/s}\times 10\ \text{s}=10\ \text{Mb reserved, 2 Mb used}
+      size: 42
+      when: A 1 megabit
+  adjust: {}
+- id: 7.1.packet
+  stage: animation
+  narration: 7.1.packet
+  pdf:
+  - lec07-network1.pdf
+  - 4
+  concepts:
+  - Packet Switching
+  clarifications: []
+  moves:
+  - tl.block:
+      name: link
+      track: Packet
+      start: 0
+      end: 1.4
+      text: A
+      kind: ip
+  - tl.block:
+      name: link
+      track: Packet
+      start: 1.4
+      end: 2.6
+      text: B
+      kind: eth
+  - tl.block:
+      name: link
+      track: Packet
+      start: 2.6
+      end: 4
+      text: A
+      kind: ip
+  - tl.block:
+      name: link
+      track: Packet
+      start: 4
+      end: 7
+      text: B
+      kind: eth
+  - tl.block:
+      name: link
+      track: Packet
+      start: 7
+      end: 8
+      text: A
+      kind: ip
+  adjust: {}
+- id: 7.1.statmux
+  stage: state
+  narration: 7.1.statmux
+  pdf:
+  - lec07-network1.pdf
+  - 5
+  concepts:
+  - Statistical Multiplexing
+  clarifications: []
+  moves:
+  - queue.show:
+      name: q1
+      zone: left_bottom
+      items:
+      - A
+      - B
+      - A
+      - B
+      kind: ip
+      title: Queue during a burst
+  - tex:
+      name: bl
+      zone: right_bottom
+      tex: (8-4)\,\text{Mb/s}\times 10\,\text{ms}=5000\text{ bytes}
+      size: 38
+      when: If 8 megabits
+  adjust: {}
+- id: 7.1.best
+  stage: state
+  narration: 7.1.best
+  pdf:
+  - lec07-network1.pdf
+  - 6
+  concepts:
+  - Best-Effort Service
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: be
+      zone: left
+      show: 0
+      items:
+      - May lose packets
+      - May reorder packets
+      - May delay packets
+  - reveal:
+      name: be
+      n: 3
+      when: It may lose
+  - text:
+      name: buys
+      zone: right
+      lines:
+      - 'Buys simplicity:'
+      - runs over nearly any link
+      - no per-flow memory inside
+      - end machines add reliability
+      when: That sounds terrible
+  adjust: {}
+- id: 7.1.services
+  stage: state
+  narration: 7.1.services
+  pdf:
+  - lec07-network1.pdf
+  - 14
+  concepts:
+  - QoS Service Models
+  - ATM Constant Bit Rate
+  - ATM Available Bit Rate
+  - Integrated Services
+  - Differentiated Services
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: svc
+      zone: full
+      cols:
+      - Service
+      - Promise
+      rows:
+      - - Internet best effort
+        - none
+      - - ATM constant bit rate
+        - fixed reserved rate
+      - - ATM available bit rate
+        - minimum rate
+      - - Integrated Services
+        - per-flow guarantees
+      - - Differentiated Services
+        - class-based treatment
+      show: 1
+  - table.reveal:
+      name: svc
+      when: ATM's constant
+  - table.reveal:
+      name: svc
+      when: ATM's available
+  - table.reveal:
+      name: svc
+      when: Integrated Services aims
+  - table.reveal:
+      name: svc
+      when: Differentiated Services treats
+  adjust: {}
+- id: 7.1.planes
+  stage: animation
+  narration: 7.1.planes
+  pdf:
+  - lec07-network1.pdf
+  - 9
+  concepts:
+  - Network Planes
+  clarifications: []
+  moves:
+  - clear: {}
+  - stack.show:
+      name: pl
+      zone: left
+      width: 6
+      layers:
+      - t: 'Management: people set intent'
+        k: data
+      - t: 'Control: decide the table'
+        k: transport
+      - t: 'Data: forward every packet'
+        k: ip
+  - stack.mark:
+      name: pl
+      layer: 2
+      when: The data plane
+  - stack.mark:
+      name: pl
+      layer: 2
+      state: null
+      when: The control plane
+  - stack.mark:
+      name: pl
+      layer: 1
+  - stack.mark:
+      name: pl
+      layer: 1
+      state: null
+      when: The management plane
+  - stack.mark:
+      name: pl
+      layer: 0
+  - bullets:
+      name: ev
+      zone: right
+      show: 4
+      items:
+      - Operator changes a weight
+      - Protocol recomputes
+      - Router installs an entry
+      - Later packets follow it
+      when: Say an operator
+  adjust: {}
+- id: 7.1.rule
+  stage: rule
+  narration: 7.1.rule
+  pdf:
+  - lec07-network1.pdf
+  - 13
+  concepts:
+  - Software-Defined Networking
+  - Network Planes
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: sdn
+      zone: top
+      nodes:
+        C:
+          k: box
+          at:
+          - 5
+          - 1
+          l: Controller
+        A:
+          k: switch
+          at:
+          - 1
+          - 0
+          l: Switch 1
+        B:
+          k: switch
+          at:
+          - 5
+          - 0
+          l: Switch 2
+        D:
+          k: switch
+          at:
+          - 9
+          - 0
+          l: Switch 3
+      links:
+      - - C
+        - A
+        - s: control
+      - - C
+        - B
+        - s: control
+      - - C
+        - D
+        - s: control
+      - - A
+        - B
+      - - B
+        - D
+  - packet.spawn:
+      name: dp
+      net: sdn
+      at: A
+      layers:
+      - ip
+      when: Does every packet
+  - packet.hop:
+      name: dp
+      to:
+      - B
+      - D
+      when: The controller installs
+  - rule:
+      text: Control decides what goes in the table. Data executes the table.
+  adjust: {}
+- id: 7.1.pitfall
+  stage: rule
+  narration: 7.1.pitfall
+  pdf:
+  - lec07-network1.pdf
+  - 13
+  concepts:
+  - Software-Defined Networking
+  - Network Planes
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Average load below capacity means no queues
+      right: Bursts still queue, even when the average fits
+  adjust: {}
+- id: 7.1.changed
+  stage: changed_example
+  narration: 7.1.changed
+  pdf:
+  - lec07-network1.pdf
+  - 15
+  concepts:
+  - Best-Effort Service
+  clarifications: []
+  moves:
+  - clear: {}
+  - q:
+      text: Valid address, good checksum, a route exists. It never arrives.
+      zone: top
+  adjust: {}
+- id: 7.1.predict
+  stage: prediction
+  narration: 7.1.predict
+  pdf:
+  - lec07-network1.pdf
+  - 15
+  concepts:
+  - Best-Effort Service
+  clarifications: []
+  moves:
+  - pause:
+      text: was the contract broken? how could this happen?
+  adjust: {}
+  hold: 6
+- id: 7.1.answer
+  stage: explanation
+  narration: 7.1.answer
+  pdf:
+  - lec07-network1.pdf
+  - 15
+  concepts:
+  - Best-Effort Service
+  clarifications: []
+  moves:
+  - bullets:
+      name: why
+      zone: bottom
+      show: 3
+      items:
+      - A full queue drops it
+      - Its TTL expires
+      - A failure or policy stops it
+  - rule:
+      text: 'No promise was broken. Next: addresses that scale.'
+  - keep: {}
+  adjust: {}

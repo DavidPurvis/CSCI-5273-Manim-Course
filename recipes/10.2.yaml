@@ -1,0 +1,793 @@
+dish: '10.2'
+title: Distance vector
+deck: lec10-routing.pdf
+target_min: 7
+concepts:
+- Distance-Vector Routing
+- Bellman-Ford Updates
+- RIP
+- EIGRP
+pad: 2.2
+beats:
+- id: 10.2.question
+  stage: question
+  narration: 10.2.question
+  pdf:
+  - lec10-routing.pdf
+  - 37
+  concepts:
+  - Distance-Vector Routing
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 10: distance vector'
+  - q:
+      text: Can a router find good paths just by asking its neighbors?
+  adjust: {}
+- id: 10.2.idea
+  stage: animation
+  narration: 10.2.idea
+  pdf:
+  - lec10-routing.pdf
+  - 37
+  concepts:
+  - Distance-Vector Routing
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: a
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 1.1
+          l: B
+        C:
+          k: node
+          at:
+          - 3
+          - -1.1
+          l: C
+        Z:
+          k: node
+          at:
+          - 6
+          - 0
+          l: Z
+      links:
+      - - A
+        - B
+        - c: 3
+      - - A
+        - C
+        - c: 2
+      - - B
+        - Z
+        - s: dim
+      - - C
+        - Z
+        - s: dim
+  - rule:
+      text: Each keeps destinations and best known distances
+      when: Each one keeps
+  - msg.send:
+      name: a
+      a: B
+      b: A
+      text: 3 to Z
+      when: only to its direct
+  - msg.send:
+      name: a
+      a: C
+      b: A
+      text: 5 to Z
+  - net.state:
+      name: a
+      nodes:
+        A: now
+      when: Then each router combines
+  - rule:
+      text: Like asking a neighbor for directions
+      when: It's like asking
+  - net.badge:
+      name: a
+      node: B
+      text: says 3 to Z
+      side: up
+      when: they're 3
+  - net.badge:
+      name: a
+      node: C
+      text: says 5 to Z
+      side: down
+  adjust: {}
+- id: 10.2.compute
+  stage: state
+  narration: 10.2.compute
+  pdf:
+  - lec10-routing.pdf
+  - 40
+  concepts:
+  - Bellman-Ford Updates
+  clarifications: []
+  moves:
+  - clear:
+      keep:
+      - a
+  - table.show:
+      name: u
+      zone: right
+      cols:
+      - Via
+      - Link
+      - Says
+      - Total
+      rows:
+      - - B
+        - 3
+        - 3
+        - $routing.bf_first.totals.B
+      - - C
+        - 2
+        - 5
+        - $routing.bf_first.totals.C
+      show: 0
+  - net.pulse:
+      name: a
+      path:
+      - B
+      - A
+      when: A's link to B
+  - table.reveal:
+      name: u
+  - rule:
+      text: 'Through B: 3 + 3 = 6'
+      when:
+        phrase: A's link to B
+        frame_offset: 47
+  - net.pulse:
+      name: a
+      path:
+      - C
+      - A
+      when: A's link to C
+  - table.reveal:
+      name: u
+  - rule:
+      text: 'Through C: 2 + 5 = 7'
+      when:
+        phrase: A's link to C
+        frame_offset: 47
+  - table.mark:
+      name: u
+      r: 0
+      state: done
+      when: The minimum is 6
+  - rule:
+      text: 'Minimum 6: next hop B'
+      when:
+        phrase: The minimum is 6
+        frame_offset: 17
+  - net.walk:
+      name: a
+      path:
+      - A
+      - B
+      state: done
+      when: So A's distance
+  - rule:
+      text: A doesn't need B's internal path to Z
+      when: A doesn't know
+  - msg.send:
+      name: a
+      a: B
+      b: A
+      text: now 10
+      kind: error
+      when: Now B advertises
+  - net.badge:
+      name: a
+      node: B
+      text: says 10 to Z
+      side: up
+  - rule:
+      text: 'B now says 10: through B costs 13'
+      when:
+        phrase: Now B advertises
+        frame_offset: 56
+  - table.set:
+      name: u
+      r: 0
+      c: 2
+      v: 10
+      when: Through B would
+  - table.set:
+      name: u
+      r: 0
+      c: 3
+      v: $routing.bf_second.totals.B
+  - table.mark:
+      name: u
+      r: 0
+      state: null
+  - table.mark:
+      name: u
+      r: 1
+      state: done
+      when: So A switches
+  - net.walk:
+      name: a
+      path:
+      - A
+      - C
+      state: done
+  - rule:
+      text: 'Through C is still 7: A switches to C'
+      when:
+        phrase: So A switches
+        frame_offset: 47
+  adjust: {}
+- id: 10.2.formula
+  stage: rule
+  narration: 10.2.formula
+  pdf:
+  - lec10-routing.pdf
+  - 38
+  concepts:
+  - Bellman-Ford Updates
+  clarifications: []
+  moves:
+  - fade:
+      names: _rule
+  - tex:
+      name: bf
+      zone: right_top
+      tex: D_x(y)=\min_{v}\{c(x,v)+D_v(y)\}
+      size: 46
+  - net.state:
+      name: a
+      nodes:
+        A: now
+        Z: now
+      when: x is me
+  - rule:
+      text: x is me, y the destination, v a neighbor
+      when:
+        phrase: x is me
+        frame_offset: 23
+  - net.state:
+      name: a
+      nodes:
+        B: candidate
+        C: candidate
+      when: v ranges over
+  - net.pulse:
+      name: a
+      path:
+      - A
+      - B
+      when: of my link cost
+  - rule:
+      text: My link cost to v, plus v's advertised distance
+      when:
+        phrase: of my link cost
+        frame_offset: 29
+  - msg.send:
+      name: a
+      a: B
+      b: A
+      text: 3 to Z
+      when:
+        phrase: plus v's advertised
+        frame_offset: 8
+  - net.state:
+      name: a
+      nodes:
+        B: done
+        C: null
+      when: And the neighbor
+  - rule:
+      text: The neighbor giving the minimum is my next hop
+      when:
+        phrase: And the neighbor
+        frame_offset: 23
+  - text:
+      name: terms
+      zone: right_bottom
+      lines:
+      - 'c(x,v): I measure this myself'
+      - 'D_v(y): I trust my neighbor'
+      when: Two terms
+  - rule:
+      text: One term I measure; the other I trust
+      when:
+        phrase: Two terms
+        frame_offset: 29
+  adjust: {}
+- id: 10.2.setup-rounds
+  stage: animation
+  narration: 10.2.setup-rounds
+  pdf:
+  - lec10-routing.pdf
+  - 42
+  concepts:
+  - Distance-Vector Routing
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: g
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.2
+          l: B
+        C:
+          k: node
+          at:
+          - 3
+          - -0.2
+          l: C
+        D:
+          k: node
+          at:
+          - 6
+          - 1
+          l: D
+      links:
+      - - A
+        - B
+        - c: 2
+      - - A
+        - C
+        - c: 5
+      - - B
+        - C
+        - c: 1
+      - - B
+        - D
+        - c: 4
+      - - C
+        - D
+        - c: 2
+  - table.show:
+      name: dv
+      zone: right_top
+      data: $routing.dv_table_A
+      show: 0
+  - rule:
+      text: Knowledge spreads in rounds
+      when: Knowledge spreads
+  - rule:
+      text: Each round uses only last round's advertisements
+      when: in each round
+  - table.reveal:
+      name: dv
+      when: In round one
+  - rule:
+      text: 'Round one: only direct neighbors'
+      when:
+        phrase: In round one
+        frame_offset: 20
+  - rule:
+      text: A has B 2, C 5, D ∞
+      when: So A has
+  adjust: {}
+- id: 10.2.round2
+  stage: state
+  narration: 10.2.round2
+  pdf:
+  - lec10-routing.pdf
+  - 43
+  concepts:
+  - Bellman-Ford Updates
+  - Distance-Vector Routing
+  clarifications: []
+  moves:
+  - msg.send:
+      name: g
+      a: B
+      b: A
+      text: C 1, D 4
+      when: A hears B's
+  - rule:
+      text: 'A hears B: C is 1 away, D is 4'
+      when:
+        phrase: A hears B's
+        frame_offset: 41
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - B
+      - C
+      when: So through B
+  - table.reveal:
+      name: dv
+  - rule:
+      text: 'Through B, C: 2 + 1 = 3'
+      when:
+        phrase: So through B
+        frame_offset: 47
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - B
+      - D
+      when: And D costs
+  - rule:
+      text: After round two, A's table reflects paths of up to two edges.
+      when: A's table now
+  adjust: {}
+- id: 10.2.round3
+  stage: state
+  narration: 10.2.round3
+  pdf:
+  - lec10-routing.pdf
+  - 44
+  concepts:
+  - Bellman-Ford Updates
+  - Distance-Vector Routing
+  clarifications: []
+  moves:
+  - msg.send:
+      name: g
+      a: C
+      b: B
+      text: D 2
+      when: During round two
+  - rule:
+      text: In round two, B learned D for 1 + 2 = 3
+      when:
+        phrase: During round two
+        frame_offset: 41
+  - net.badge:
+      name: g
+      node: B
+      text: D is 3
+      side: up
+      state: now
+      when: and learned
+  - msg.send:
+      name: g
+      a: B
+      b: A
+      text: D 3
+      when: In round three
+  - rule:
+      text: 'Round three: A computes 2 + 3 = 5 through B'
+      when:
+        phrase: In round three
+        frame_offset: 41
+  - table.reveal:
+      name: dv
+      when: A computes
+  - net.walk:
+      name: g
+      path:
+      - A
+      - B
+      - C
+      - D
+      state: done
+      when: It has discovered
+  - rule:
+      text: A found A, B, C, D without knowing C was involved
+      when:
+        phrase: It has discovered
+        frame_offset: 32
+  - table.mark:
+      name: dv
+      r: 2
+      state: done
+      when: The next round
+  - rule:
+      text: 'Nothing changes next round: converged, same as Dijkstra'
+      when:
+        phrase: The next round
+        frame_offset: 17
+  adjust: {}
+- id: 10.2.real
+  stage: rule
+  narration: 10.2.real
+  pdf:
+  - lec10-routing.pdf
+  - 38
+  concepts:
+  - RIP
+  - EIGRP
+  clarifications: []
+  moves:
+  - fade:
+      names: _rule
+  - rule:
+      text: Real updates have no global clock, and a neighbor's value may be old.
+      when: Real routers
+  - rule:
+      text: A neighbor's value could be old
+      when: A value from
+  - table.show:
+      name: fam
+      zone: right_bottom
+      cols:
+      - Protocol
+      - Family
+      rows:
+      - - RIP
+        - distance vector, hop count
+      - - EIGRP
+        - advanced distance vector
+      when: RIP and EIGRP
+  - rule:
+      text: EIGRP's rules differ in detail
+      when: Don't assume
+  adjust: {}
+- id: 10.2.real-more
+  stage: state
+  narration: 10.2.real-more
+  pdf:
+  - lec10-routing.pdf
+  - 38
+  concepts:
+  - RIP
+  - EIGRP
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: fam2
+      zone: top
+      cols:
+      - Family
+      - Protocols
+      rows:
+      - - Link state
+        - OSPF, IS-IS
+      - - Distance vector
+        - RIP, EIGRP
+      show: 0
+  - table.reveal:
+      name: fam2
+      when:
+        phrase: OSPF and IS-IS
+        frame_offset: 16
+  - rule:
+      text: 'Link state: OSPF and IS-IS'
+      when:
+        phrase: OSPF and IS-IS
+        frame_offset: 36
+  - table.reveal:
+      name: fam2
+      when: RIP and EIGRP
+  - rule:
+      text: 'Distance vector: RIP and EIGRP'
+      when:
+        phrase: RIP and EIGRP
+        frame_offset: 20
+  - tex:
+      name: rp
+      zone: bottom
+      tex: '\text{RIP: 1 to 15 usable, and }16=\infty'
+      size: 44
+      when: RIP gives
+  - rule:
+      text: 'RIP: usable 1 to 15; 16 means unreachable'
+      when:
+        phrase: RIP gives
+        frame_offset: 32
+  - rule:
+      text: Don't carry RIP's limit over to EIGRP
+      when: Only RIP
+  adjust: {}
+- id: 10.2.compare
+  stage: rule
+  narration: 10.2.compare
+  pdf:
+  - lec10-routing.pdf
+  - 46
+  concepts:
+  - Distance-Vector Routing
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: cmp
+      zone: top
+      cols:
+      - ''
+      - Link state
+      - Distance vector
+      rows:
+      - - Shares
+        - link facts
+        - computed distances
+      - - With
+        - everyone
+        - neighbors only
+      - - Computes
+        - own full tree
+        - one update at a time
+      show: 0
+  - table.reveal:
+      name: cmp
+      when: Link state trusts
+  - table.reveal:
+      name: cmp
+      when: Distance vector trusts
+  - table.reveal:
+      name: cmp
+      when: Both reach
+  - rule:
+      text: Link state shares a map. Distance vector shares neighbors' distances.
+      when: The reusable
+  adjust: {}
+- id: 10.2.robustness
+  stage: rule
+  narration: 10.2.robustness
+  pdf:
+  - lec10-routing.pdf
+  - 46
+  concepts:
+  - Distance-Vector Routing
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: rb
+      zone: top
+      cols:
+      - ''
+      - Link state
+      - Distance vector
+      rows:
+      - - Messages
+        - flooded everywhere
+        - neighbors only
+      - - A wrong result
+        - mostly local
+        - spreads to others
+      show: 0
+  - table.reveal:
+      name: rb
+      when: Link state sends
+  - table.reveal:
+      name: rb
+      when: If one router
+  - table.mark:
+      name: rb
+      r: 1
+      state: error
+      when: But a wrong number
+  - rule:
+      text: A family-level picture, not a universal benchmark.
+      when: Real costs
+  adjust: {}
+- id: 10.2.pitfall
+  stage: rule
+  narration: 10.2.pitfall
+  pdf:
+  - lec10-routing.pdf
+  - 46
+  concepts:
+  - Distance-Vector Routing
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Use this round's freshly updated values
+      right: In a synchronous exercise, use only the previous round's values
+  adjust: {}
+- id: 10.2.changed
+  stage: changed_example
+  narration: 10.2.changed
+  pdf:
+  - lec10-routing.pdf
+  - 41
+  concepts:
+  - Bellman-Ford Updates
+  clarifications: []
+  moves:
+  - table.show:
+      name: y
+      zone: bottom
+      cols:
+      - Via
+      - Link
+      - Says
+      - Total
+      rows:
+      - - P
+        - 4
+        - 7
+        - '?'
+      - - Q
+        - 9
+        - 1
+        - '?'
+  - rule:
+      text: x to P costs 4; P advertises 7
+      when: Its link to P
+  - rule:
+      text: x to Q costs 9; Q advertises 1
+      when: Its link to Q
+  adjust: {}
+- id: 10.2.predict
+  stage: prediction
+  narration: 10.2.predict
+  pdf:
+  - lec10-routing.pdf
+  - 41
+  concepts:
+  - Bellman-Ford Updates
+  clarifications: []
+  moves:
+  - pause:
+      text: which neighbor wins? and if P's link rises to 6?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 10.2.answer
+  stage: explanation
+  narration: 10.2.answer
+  pdf:
+  - lec10-routing.pdf
+  - 41
+  concepts:
+  - Bellman-Ford Updates
+  - Distance-Vector Routing
+  clarifications: []
+  moves:
+  - table.set:
+      name: y
+      r: 0
+      c: 3
+      v: 11
+      when: P gives 11
+  - table.set:
+      name: y
+      r: 1
+      c: 3
+      v: 10
+      state: done
+      when: and Q gives 10
+  - table.set:
+      name: y
+      r: 0
+      c: 1
+      v: 6
+      when: Raise P's link
+  - table.set:
+      name: y
+      r: 0
+      c: 3
+      v: 13
+      when: at 13
+  - rule:
+      text: The router trusts a number. It cannot see the path behind it.
+      when: Notice that
+  - rule:
+      text: Or whether its path runs back through this router
+      when: and no way to know
+  - rule:
+      text: 'Next: where neither approach works'
+      when: First, there's one
+  - keep: {}
+  adjust: {}

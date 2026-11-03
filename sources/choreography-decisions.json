@@ -1,0 +1,955 @@
+[
+  {
+    "beat": "4.1.sizing",
+    "change": "Order scene events to follow spoken explanation",
+    "order": [
+      0,
+      2,
+      3,
+      4,
+      1,
+      5
+    ]
+  },
+  {
+    "beat": "4.3.hol",
+    "change": "Order scene events to follow spoken explanation",
+    "order": [
+      0,
+      1,
+      2,
+      6,
+      3,
+      7,
+      4,
+      5,
+      8,
+      9
+    ]
+  },
+  {
+    "beat": "6.1.linkstate",
+    "change": "Order scene events to follow spoken explanation",
+    "order": [
+      0,
+      1,
+      2,
+      6,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "beat": "9.2.igmp1",
+    "change": "Order scene events to follow spoken explanation",
+    "order": [
+      0,
+      1,
+      2,
+      4,
+      3,
+      5
+    ]
+  },
+  {
+    "beat": "10.3.scan",
+    "change": "Order scene events to follow spoken explanation",
+    "order": [
+      0,
+      1,
+      5,
+      2,
+      6,
+      7,
+      3,
+      4,
+      8,
+      9
+    ]
+  },
+  {
+    "beat": "11.2.sleep-more",
+    "change": "Order scene events to follow spoken explanation",
+    "order": [
+      1,
+      0
+    ]
+  },
+  {
+    "beat": "1.2.encapsulation",
+    "pre_roll": 0.6,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "4.2.more",
+    "pre_roll": 1.1,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "4.3.crossbar",
+    "pre_roll": 1.4000000000000001,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "6.1.idea",
+    "pre_roll": 0.9,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "6.1.init",
+    "pre_roll": 1.1,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "6.4.label",
+    "pre_roll": 0.2,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "7.1.laptop",
+    "pre_roll": 2.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "8.1.laptop",
+    "pre_roll": 2.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "8.3.decide",
+    "pre_roll": 0.6,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "8.4.answer",
+    "pre_roll": 1.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "9.1.laptop",
+    "pre_roll": 2.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "9.4.prune",
+    "pre_roll": 2.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "10.2.rule",
+    "pre_roll": 0.7,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "10.3.roam",
+    "pre_roll": 1.4000000000000001,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "10.4.changed",
+    "pre_roll": 0.30000000000000004,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "10.4.answer",
+    "pre_roll": 1.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "11.1.pgw-more",
+    "pre_roll": 0.5,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "12.1.story1",
+    "pre_roll": 0.2,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "12.1.story3",
+    "pre_roll": 1.5,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.3.mask",
+    "pre_roll": 1.7000000000000002,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.7.query",
+    "pre_roll": 1.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.8.records",
+    "pre_roll": 1.6,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.8.queries",
+    "pre_roll": 1.4000000000000001,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.10.first",
+    "pre_roll": 1.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.11.count",
+    "pre_roll": 1.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.12.rejection",
+    "pre_roll": 0.9,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.12.distinction",
+    "pre_roll": 1.6,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.14.export",
+    "pre_roll": 1.7000000000000002,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.14.paths",
+    "pre_roll": 2.9,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.15.audience",
+    "pre_roll": 1.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.15.rates",
+    "pre_roll": 0.6,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.16.defaults",
+    "pre_roll": 1.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.18.sum",
+    "pre_roll": 1.8,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.19.roles",
+    "pre_roll": 1.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.20.tunnel",
+    "pre_roll": 1.6,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "13.20.paths",
+    "pre_roll": 1.4000000000000001,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "14.1.a4",
+    "pre_roll": 1.5,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "14.1.a5",
+    "pre_roll": 1.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "14.1.a6",
+    "pre_roll": 0.5,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "14.1.a7",
+    "pre_roll": 1.6,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "14.2.a1",
+    "pre_roll": 1.7000000000000002,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "14.2.a3",
+    "pre_roll": 1.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "14.3.a1",
+    "pre_roll": 1.6,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "14.3.a2",
+    "pre_roll": 1.5,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "14.3.a3",
+    "pre_roll": 1.0,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "14.3.a4",
+    "pre_roll": 1.6,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "14.4.ip",
+    "pre_roll": 0.2,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "14.4.dns",
+    "pre_roll": 0.7,
+    "reason": "Complete scene setup before first anchored action; preserve narration and motion speeds"
+  },
+  {
+    "beat": "4.3.hol",
+    "move": 5,
+    "when": {
+      "phrase": "B wins",
+      "frame_offset": 21
+    },
+    "reason": "Keep sequential visible state updates after the preceding motion completes"
+  },
+  {
+    "beat": "6.1.init",
+    "move": 6,
+    "when": {
+      "phrase": "and C is 5",
+      "frame_offset": 4
+    },
+    "reason": "Keep sequential visible state updates after the preceding motion completes"
+  },
+  {
+    "beat": "7.2.meaning",
+    "move": 3,
+    "when": "until they reach",
+    "reason": "Keep sequential visible state updates after the preceding motion completes"
+  },
+  {
+    "beat": "7.2.answer",
+    "move": 5,
+    "when": "not every cycle",
+    "reason": "Keep sequential visible state updates after the preceding motion completes"
+  },
+  {
+    "beat": "9.4.prune",
+    "move": 7,
+    "when": "so entire uninterested",
+    "reason": "Keep sequential visible state updates after the preceding motion completes"
+  },
+  {
+    "beat": "13.4.size",
+    "move": 0,
+    "when": "Each fragment has room",
+    "reason": "Keep sequential visible state updates after the preceding motion completes"
+  },
+  {
+    "beat": "13.5.rest",
+    "move": 3,
+    "when": "matches only the slash 8",
+    "reason": "Keep sequential visible state updates after the preceding motion completes"
+  },
+  {
+    "beat": "13.15.rates",
+    "move": 8,
+    "when": {
+      "phrase": "one copy",
+      "frame_offset": 4
+    },
+    "reason": "Keep sequential visible state updates after the preceding motion completes"
+  },
+  {
+    "beat": "7.2.meaning",
+    "move": 3,
+    "frame_offset": 34,
+    "reason": "Finish the five second loop demonstration before updating metrics"
+  },
+  {
+    "beat": "2.4.vlan-trace-1",
+    "reason": "Visual inspection found a port label on a host glyph. Use explicit port boxes carrying VLAN membership and trunk labels."
+  },
+  {
+    "beat": "12.1.a2",
+    "reason": "Keep the two-router scope of poison reverse explicit in the synthesis banner."
+  },
+  {
+    "dish": "2.4",
+    "reason": "Causal trace review: frame must reach the switch before its source is learned. Bind ingress, learning and forwarding to measured phrases; show known unicasts with a hop rather than a flood.",
+    "verification": "test_vlan_scene_follows_verified_model_after_arrival"
+  },
+  {
+    "dish": "10.4",
+    "reason": "Geometry inspection found RTS/CTS pulses did not reach the stated receivers after automatic diagram stretching. Use explicit spacing giving 2.4-unit neighbor distance and 2.6-unit range; send CTS and ACK to A while C overhears CTS.",
+    "verification": "test_radio_geometry_matches_declared_reception"
+  },
+  {
+    "beat": "9.1.announce",
+    "change": "Replace vertically compressed top network with left network and right compact forwarding table. Seat R2 and instance A labels above, R3 and B below; retain destination /32, costs and selected receiver. Via labels R2/R3 identify the same next-hop routers narrated in this example.",
+    "reason": "Encoded-frame inspection found overlapping router and instance labels; top-zone height cannot contain both rows and labels. A trial overlapping-zone layout was rejected by dry-run state checks and is not an accepted render."
+  },
+  {
+    "beat": "1.1.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "1.2.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "1.2.question",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "10.1.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "10.2.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "10.3.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "10.4.question",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "11.1.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "11.2.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "11.2.question",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "11.3.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "11.3.question",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "11.4.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "12.1.a4",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.1.first",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.1.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.1.second",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.1.third",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.1.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.10.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.10.second",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.10.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.10.trust",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.11.limit",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.11.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.11.poison",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.11.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.12.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.12.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.13.first",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.13.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.13.resolve",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.13.second",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.13.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.14.conditions",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.14.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.15.limit",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.15.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.16.roles",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.17.cts",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.17.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.17.noack",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.17.sensing",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.17.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.18.assumption",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.18.decode",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.18.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.18.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.19.path",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.2.duplex",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.2.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.2.stp",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.2.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.20.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.20.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.3.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.3.network",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.3.same",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.3.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.4.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.4.slices",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.4.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.4.unit",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.5.first",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.5.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.5.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.5.why",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.6.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.6.overload",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.6.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.7.arp",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.7.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.7.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.8.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.8.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.9.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.9.marks",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.9.run",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "13.9.trap",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "2.1.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "2.2.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "2.3.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "2.4.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "2.4.question",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "3.1.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "3.2.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "3.2.question",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "3.3.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "3.4.question",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "4.2.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "4.3.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "4.3.question",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "5.1.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "5.2.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "5.3.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "6.2.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "6.4.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "7.1.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "7.2.question",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "7.3.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "8.1.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "8.2.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "8.3.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "8.4.question",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "9.1.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "9.2.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "9.2.question",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "9.3.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "9.3.question",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  },
+  {
+    "beat": "9.4.answer",
+    "change": "Pulse the corner tag through narrated idle longer than 8 seconds",
+    "move": "keep"
+  }
+]

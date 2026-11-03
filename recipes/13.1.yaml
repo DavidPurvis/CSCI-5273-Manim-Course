@@ -1,0 +1,362 @@
+dish: '13.1'
+title: One address, many servers
+deck: lec13-multicast.pdf
+target_min: 4.5
+concepts:
+- IP Anycast
+pad: 2.2
+beats:
+- id: 13.1.question
+  stage: question
+  narration: 13.1.question
+  pdf:
+  - lec13-multicast.pdf
+  - 5
+  concepts:
+  - IP Anycast
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 13: one address, many servers'
+  - spine:
+      current: Groups
+      zone: top
+  - q:
+      text: Could one address lead to several servers?
+      zone: bottom
+  adjust: {}
+- id: 13.1.laptop
+  stage: animation
+  narration: 13.1.laptop
+  pdf:
+  - lec13-multicast.pdf
+  - 5
+  concepts:
+  - IP Anycast
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: lp
+      zone: top
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        A:
+          k: router
+          at:
+          - 3.4
+          - 0
+          l: R1
+        B:
+          k: router
+          at:
+          - 6.8
+          - 0
+          l: R2
+        W:
+          k: server
+          at:
+          - 10.2
+          - 0
+          l: Web server
+      links:
+      - - L
+        - A
+      - - A
+        - B
+      - - B
+        - W
+  - packet.spawn:
+      name: p
+      net: lp
+      at: L
+      layers:
+      - ip
+      when: So far, our
+  - packet.hop:
+      name: p
+      to:
+      - A
+      - B
+      - W
+      t: 2.2
+  - packet.fade:
+      name: p
+  - rule:
+      text: The destination is about to stop meaning one machine.
+      when: The destination
+  adjust: {}
+  pre_roll: 2.0
+- id: 13.1.dnslimits
+  stage: animation
+  narration: 13.1.dnslimits
+  pdf:
+  - lec13-multicast.pdf
+  - 4
+  concepts:
+  - IP Anycast
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: dl
+      zone: top
+      cols:
+      - Name
+      - TTL
+      - Address
+      rows:
+      - - www.example.test
+        - 300
+        - 192.0.2.19
+      - - www.example.test
+        - 300
+        - 192.0.2.25
+      - - www.example.test
+        - 300
+        - 192.0.2.26
+  - table.mark:
+      name: dl
+      r: 0
+      state: error
+      when: If a server fails
+  adjust: {}
+- id: 13.1.announce
+  stage: animation
+  narration: 13.1.announce
+  pdf:
+  - lec13-multicast.pdf
+  - 7
+  concepts:
+  - IP Anycast
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show: &id001
+      name: a
+      zone: left
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0.8
+          l: Client
+        R1:
+          k: router
+          at:
+          - 3
+          - 0.8
+          l: R1
+        R2:
+          k: router
+          at:
+          - 6
+          - 1.6
+          l: R2
+          lp: up
+        R3:
+          k: router
+          at:
+          - 6
+          - 0
+          l: R3
+        A:
+          k: server
+          at:
+          - 10
+          - 1.6
+          l: 'A: 10.0.0.1'
+          lp: up
+        B:
+          k: server
+          at:
+          - 10
+          - 0
+          l: 'B: 10.0.0.1'
+      links:
+      - - L
+        - R1
+      - - R1
+        - R2
+      - - R1
+        - R3
+      - - R2
+        - A
+      - - R3
+        - B
+  - table.show:
+      name: rt
+      zone: right
+      cols:
+      - Destination
+      - Via
+      - Cost
+      - Site
+      rows:
+      - - 10.0.0.1/32
+        - R2
+        - 1
+        - A
+      - - 10.0.0.1/32
+        - R3
+        - 2
+        - B
+    when: Router 1's table
+  - table.mark:
+      name: rt
+      r: 0
+      state: done
+      when: It chooses
+  - packet.spawn:
+      name: p
+      net: a
+      at: L
+      layers:
+      - ip
+      when: That's IP anycast
+  - packet.hop:
+      name: p
+      to:
+      - R1
+      - R2
+      - A
+  - packet.fade:
+      name: p
+  adjust: {}
+- id: 13.1.failover
+  stage: state
+  narration: 13.1.failover
+  pdf:
+  - lec13-multicast.pdf
+  - 11
+  concepts:
+  - IP Anycast
+  clarifications: []
+  moves:
+  - net.state:
+      name: a
+      nodes:
+        A: error
+      links:
+      - - R2
+        - A
+        - failed
+      when: Instance A
+  - table.mark:
+      name: rt
+      r: 0
+      state: error
+  - table.mark:
+      name: rt
+      r: 1
+      state: done
+      when: Router 1 falls
+  - packet.spawn:
+      name: p2
+      net: a
+      at: L
+      layers:
+      - ip
+  - packet.hop:
+      name: p2
+      to:
+      - R1
+      - R3
+      - B
+  - packet.fade:
+      name: p2
+  adjust: {}
+- id: 13.1.rule
+  stage: rule
+  narration: 13.1.rule
+  pdf:
+  - lec13-multicast.pdf
+  - 9
+  concepts:
+  - IP Anycast
+  clarifications: []
+  moves:
+  - rule:
+      text: 'Anycast: one address, many instances. Routing selects exactly one.'
+  adjust: {}
+- id: 13.1.pitfall
+  stage: rule
+  narration: 13.1.pitfall
+  pdf:
+  - lec13-multicast.pdf
+  - 9
+  concepts:
+  - IP Anycast
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Anycast can never work with TCP
+      right: The risk is a flow moving to an instance without its state
+  adjust: {}
+- id: 13.1.changed
+  stage: changed_example
+  narration: 13.1.changed
+  pdf:
+  - lec13-multicast.pdf
+  - 14
+  concepts:
+  - IP Anycast
+  clarifications:
+  - anycast-tcp
+  moves:
+  - clear: {}
+  - net.show: *id001
+  - packet.spawn:
+      name: t
+      net: a
+      at: L
+      layers:
+      - transport
+      - ip
+  - packet.hop:
+      name: t
+      to:
+      - R1
+      - R3
+      - B
+  adjust: {}
+- id: 13.1.predict
+  stage: prediction
+  narration: 13.1.predict
+  pdf:
+  - lec13-multicast.pdf
+  - 14
+  concepts:
+  - IP Anycast
+  clarifications: []
+  moves:
+  - pause:
+      text: what does B do with a packet from A's connection?
+  adjust: {}
+  hold: 6
+- id: 13.1.answer
+  stage: explanation
+  narration: 13.1.answer
+  pdf:
+  - lec13-multicast.pdf
+  - 14
+  concepts:
+  - IP Anycast
+  clarifications:
+  - anycast-tcp
+  - dns-roots
+  moves:
+  - card:
+      kind: clarification
+      text: The issue is lost connection state, not a blanket ban on anycast with TCP.
+      zone: bottom
+  - rule:
+      text: 'Next: delivery to every interested receiver.'
+  - keep: {}
+  adjust: {}

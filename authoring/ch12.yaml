@@ -1,0 +1,2353 @@
+dish: '12.1'
+title: What BGP carries
+deck: lec12-bgp.pdf
+target_min: 5.5
+concepts:
+- Autonomous Systems
+- BGP
+- AS Path
+beats:
+- id: question
+  stage: question
+  pdf: 3
+  c:
+  - Autonomous Systems
+  - BGP
+  say: Our laptop's packet to the web server has so far crossed two friendly routers.
+    On the real Internet, it would cross networks owned by companies that compete
+    with each other, each one keeping its internal design private, and each one with
+    its own idea of what a good route means. How can those rivals still cooperate
+    well enough to deliver a packet? There's exactly one protocol doing this job across
+    the whole planet, and we need to see what it actually says.
+  moves:
+  - heading:
+      text: 'Lecture 12: what BGP carries'
+  - spine:
+      current: Policy
+      zone: top
+  - q:
+      text: How do rival networks cooperate to deliver one packet?
+      zone: bottom
+- id: laptop
+  stage: animation
+  pdf: 3
+  c:
+  - Autonomous Systems
+  - BGP
+  say: Our laptop's server sits in a different network from the laptop, run by a different
+    company. Everything we've built so far works inside one organization. So who tells
+    R2's network that the server's prefix even exists, and why would they agree to
+    carry it?
+  moves:
+  - clear: {}
+  - net.show:
+      name: lp
+      zone: top
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        A:
+          k: router
+          at:
+          - 3.4
+          - 0
+          l: R1
+        B:
+          k: router
+          at:
+          - 6.8
+          - 0
+          l: R2
+        W:
+          k: server
+          at:
+          - 10.2
+          - 0
+          l: Web server
+      links:
+      - - L
+        - A
+      - - A
+        - B
+      - - B
+        - W
+  - net.state:
+      name: lp
+      nodes:
+        W: now
+      when: Our laptop's server
+  - net.state:
+      name: lp
+      nodes:
+        W: null
+        B: now
+      when: So who tells
+  pre_roll: 2.0
+- id: history
+  stage: animation
+  pdf: 3
+  c:
+  - BGP
+  say: A little context. The Internet's interdomain routing protocol is BGP, and it's
+    been in use, in revised versions, since the early days of the commercial Internet.
+    It's a path-vector protocol, the very idea from chapter 6. Now we can fill in
+    how it really works.
+  moves:
+  - clear: {}
+  - text:
+      name: hist
+      zone: top
+      lines:
+      - 'BGP: the Internet''s interdomain routing protocol'
+      - A path-vector protocol, as in chapter 6
+- id: as
+  stage: animation
+  pdf: 4
+  c:
+  - Autonomous Systems
+  say: The unit of cooperation is the autonomous system, or AS. That's a set of networks
+    under one routing administration, identified by a number. A university, an Internet
+    provider, or a content company can each be an AS. Inside, it may run many routers,
+    using OSPF or IS-IS, and that's nobody else's business. From the outside, we draw
+    it as a single cloud. This is an abstraction with a price, which we'll get to
+    in a moment.
+  moves:
+  - clear: {}
+  - net.show:
+      name: w
+      zone: top
+      nodes:
+        A:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: AS 100
+        B:
+          k: cloud
+          at:
+          - 4
+          - 0
+          l: AS 200
+        C:
+          k: cloud
+          at:
+          - 8
+          - 0
+          l: AS 300
+      links:
+      - - A
+        - B
+      - - B
+        - C
+  - text:
+      name: as
+      zone: bottom
+      lines:
+      - One routing administration, one AS number
+      - 'Internals stay private: outsiders see a cloud'
+      when: Inside, it may
+- id: session
+  stage: animation
+  pdf: 5
+  c:
+  - BGP
+  say: 'BGP, the Border Gateway Protocol, is what those clouds speak to each other.
+    Two routers open a TCP connection on port 179, called a session. First they exchange
+    all their active routes. After that they send only changes: announcements of new
+    routes, and withdrawals of old ones. That makes it an incremental protocol. It''s
+    also prefix based, so what it advertises is reachability to a block of addresses,
+    like 203.0.113.0/24, not to individual machines.'
+  moves:
+  - clear: {}
+  - seq.show:
+      name: s
+      zone: left
+      lanes:
+      - Router X
+      - Router Y
+      steps: 4
+  - seq.msg:
+      name: s
+      a: Router X
+      b: Router Y
+      text: TCP port 179
+      kind: transport
+      when: Two routers open
+  - seq.msg:
+      name: s
+      a: Router X
+      b: Router Y
+      text: all active routes
+      kind: ip
+      when: First they exchange
+  - seq.msg:
+      name: s
+      a: Router Y
+      b: Router X
+      text: announce
+      kind: ip
+      when: announcements of
+  - seq.msg:
+      name: s
+      a: Router Y
+      b: Router X
+      text: withdraw
+      kind: ip
+      state: error
+      when: withdrawals of
+  - text:
+      name: t
+      zone: right
+      lines:
+      - 'Reachability is per prefix:'
+      - 203.0.113.0/24
+      when: It's also prefix
+- id: route
+  stage: state
+  pdf: 7
+  c:
+  - AS Path
+  - BGP
+  say: What exactly is a BGP route? It's a prefix, plus attributes. Two matter most
+    right now. AS PATH is the list of autonomous systems the route has passed through.
+    NEXT HOP says which IP address to send toward. Watch how the path grows. AS 300
+    owns the prefix, and it tells AS 200 the path is just 300. AS 200 adds itself,
+    and tells AS 100 that the path is 200, 300.
+  moves:
+  - clear: {}
+  - net.show:
+      name: w
+      zone: top
+      nodes:
+        A:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: AS 100
+        B:
+          k: cloud
+          at:
+          - 4
+          - 0
+          l: AS 200
+        C:
+          k: cloud
+          at:
+          - 8
+          - 0
+          l: AS 300
+      links:
+      - - A
+        - B
+      - - B
+        - C
+  - table.show:
+      name: r
+      zone: bottom
+      cols:
+      - Attribute
+      - Value at AS 100
+      rows:
+      - - Prefix
+        - 203.0.113.0/24
+      - - AS_PATH
+        - 200, 300
+      - - NEXT_HOP
+        - AS 200's border router
+  - net.badge:
+      name: w
+      node: B
+      text: 'path: 300'
+      side: up
+      when: AS 300 owns
+  - net.badge:
+      name: w
+      node: A
+      text: 'path: 200, 300'
+      side: up
+      when: AS 200 adds
+- id: loopcheck
+  stage: rule
+  pdf: 8
+  c:
+  - AS Path
+  say: Inside that list is our loop check from before. A receiving AS looks for its
+    own number, and if it's there, the route is rejected. That handles one kind of
+    consistency. We've already seen that it doesn't prevent path exploration or policy
+    oscillation.
+  moves:
+  - rule:
+      text: See your own AS number in the path? Reject the route.
+- id: abstraction
+  stage: state
+  pdf: 10
+  c:
+  - AS Path
+  - Autonomous Systems
+  say: The price of the abstraction. Is a shorter AS path a shorter route? Not necessarily.
+    Here are two options. One crosses 2 ASes, but each contains a long chain of routers.
+    The other crosses 3 ASes, each with only one or two routers. Measured in router
+    hops, the 3 AS path is the shorter of the two. And it says nothing at all about
+    delay. AS path length counts organizations, not distance.
+  moves:
+  - clear: {}
+  - table.show:
+      name: cmp
+      zone: top
+      cols:
+      - Path
+      - AS hops
+      - Router hops
+      rows:
+      - - Via two big clouds
+        - 2
+        - 9
+      - - Via three small clouds
+        - 3
+        - 5
+  - rule:
+      text: AS path length counts organizations, not routers and not delay.
+- id: pitfall
+  stage: rule
+  pdf: 10
+  c:
+  - AS Path
+  - Autonomous Systems
+  say: Don't read too much into AS path length. It counts networks, not routers. It
+    says nothing about latency or capacity, and prepending can make it artificial.
+  moves:
+  - trap:
+      wrong: A shorter AS path means fewer routers or lower delay
+      right: AS length counts networks, not routers, latency, or capacity
+- id: changed
+  stage: changed_example
+  pdf: 8
+  c:
+  - AS Path
+  say: You try. AS 200 gets an offer of 300, 500. It passes that along to AS 100,
+    and AS 500 is also a neighbor of AS 100. Suppose AS 100 then re-advertises its
+    path to AS 500.
+  moves:
+  - text:
+      name: q
+      zone: bottom
+      lines:
+      - 'AS 200 received: 300, 500'
+      - AS 100 will advertise to AS 500
+- id: predict
+  stage: prediction
+  pdf: 8
+  hold: 6
+  c:
+  - AS Path
+  say: What is the path list when it reaches AS 500? And what will AS 500 do with
+    it?
+  moves:
+  - pause:
+      text: what path does AS 500 receive, and what does it do?
+- id: answer
+  stage: explanation
+  pdf: 8
+  c:
+  - AS Path
+  - BGP
+  say: 'AS 500 receives 100, 200, 300, 500. It sees its own number at the end, and
+    it rejects the route. Notice one thing we still haven''t said: when AS 100 has
+    several acceptable routes, how does it pick? And who decides which neighbors hear
+    about the choice? That isn''t physics, and it isn''t shortest paths. It''s policy.'
+  moves:
+  - text:
+      name: q
+      zone: bottom
+      lines:
+      - 'AS 500 receives: 100, 200, 300, 500'
+      - It sees 500 and rejects the route
+  - rule:
+      text: 'Next: how does an AS choose, and whom does it tell?'
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 12.1.predict
+  answer_beat: 12.1.answer
+  answer_events:
+  - 12.1.answer:move:0
+  - 12.1.answer:move:1
+  answer_objects:
+  - object: q
+    after: 12.1.answer:move:0
+    effect: text
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 12.1.answer:move:1
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '12.2'
+title: Import and export
+deck: lec12-bgp.pdf
+target_min: 5.5
+concepts:
+- BGP Import Policy
+- BGP Export Policy
+- Local Preference
+- AS Path Prepending
+beats:
+- id: question
+  stage: question
+  pdf: 12
+  c:
+  - BGP Import Policy
+  - BGP Export Policy
+  say: A neighbor hands you a route. Do you have to believe it? Do you have to use
+    it? If you use it, must you tell everyone else? With BGP, the answer to all three
+    questions is no. Those are three separate decisions, and getting them apart is
+    the key to the whole protocol.
+  moves:
+  - heading:
+      text: 'Lecture 12: import and export'
+  - q:
+      text: Must you believe, use, or repeat a route you're given?
+- id: pipeline
+  stage: animation
+  pdf: 13
+  c:
+  - BGP Import Policy
+  - BGP Export Policy
+  say: The pipeline in every BGP router. Routes arrive from neighbors. Import policy
+    filters them, and may change their attributes. Best-route selection picks one
+    route per prefix for use. That route goes into forwarding. Then export policy
+    decides, separately for each neighbor, what to advertise. Because the stages are
+    separate, a route rejected at import never becomes a candidate. A route suppressed
+    at export can still be the one you use yourself.
+  moves:
+  - clear: {}
+  - net.show:
+      name: p
+      zone: top
+      nodes:
+        a:
+          k: box
+          at:
+          - 0
+          - 0
+          l: Received
+        b:
+          k: box
+          at:
+          - 3.2
+          - 0
+          l: Import
+        c:
+          k: box
+          at:
+          - 6.4
+          - 0
+          l: Select best
+        d:
+          k: box
+          at:
+          - 9.8
+          - 1
+          l: Forwarding
+        e:
+          k: box
+          at:
+          - 9.8
+          - -1
+          l: Export
+      links:
+      - - a
+        - b
+      - - b
+        - c
+      - - c
+        - d
+      - - c
+        - e
+  - packet.spawn:
+      name: r
+      net: p
+      at: a
+      layers:
+      - label
+      when: Routes arrive
+  - packet.hop:
+      name: r
+      to: b
+      when: Import policy
+  - packet.hop:
+      name: r
+      to: c
+      when: Best-route selection
+  - packet.flood:
+      name: r
+      to:
+      - d
+      - e
+      when: That route goes
+  - rule:
+      text: Import, selection, and export are three separate decisions.
+      when: Because the stages
+- id: import
+  stage: state
+  pdf: 15
+  c:
+  - BGP Import Policy
+  say: Import first. Why would you ever reject a route? Say your customer owns one
+    prefix, and suddenly announces a route to a big video site. That's either a configuration
+    mistake, or an attack. Believing it would pull the world's traffic into your customer's
+    network. So on a session to a customer, a network commonly accepts only the prefixes
+    that customer actually holds. An advertisement is data to evaluate, not an order.
+  moves:
+  - clear:
+      keep:
+      - _rule
+  - table.show:
+      name: f
+      zone: top
+      cols:
+      - Customer announces
+      - Holds it?
+      - Import
+      rows:
+      - - Its own 203.0.113.0/24
+        - 'yes'
+        - accept
+      - - A video site's prefix
+        - 'no'
+        - reject
+      show: 0
+  - table.reveal:
+      name: f
+      when: Say your customer
+  - table.reveal:
+      name: f
+      when: suddenly announces
+  - table.mark:
+      name: f
+      r: 1
+      state: error
+      when: Believing it
+  - table.mark:
+      name: f
+      r: 0
+      state: done
+      when: So on a session
+  - rule:
+      text: An advertisement is data to evaluate, not an order.
+      when: An advertisement
+- id: lp
+  stage: state
+  pdf: 14
+  c:
+  - Local Preference
+  say: Import can also attach a value called local preference. It's a number used
+    only inside your own AS, and higher is better. It's checked before anything else,
+    so it directly states your own ranking. For example, you might set 100 on routes
+    from a customer, and 90 on routes from a peer, because customers pay you, and
+    carrying traffic to them earns money. Compare. A customer route with local preference
+    100 and an AS path of 4, against a peer route with local preference 90 and an
+    AS path of 2. The customer route wins. Length is never even looked at.
+  moves:
+  - sieve.show:
+      name: c
+      zone: bottom
+      rungs:
+      - Local preference
+      - AS path length
+      routes:
+      - name: Customer
+        vals:
+        - 100
+        - 4
+      - name: Peer
+        vals:
+        - 90
+        - 2
+      when: For example
+  - sieve.step:
+      name: c
+      rung: 0
+      keep:
+      - Customer
+      when: A customer route with
+  - sieve.win:
+      name: c
+      route: Customer
+      unused:
+      - 1
+      when: The customer route wins
+- id: export
+  stage: state
+  pdf: 16
+  c:
+  - BGP Export Policy
+  say: 'The other end of the pipeline. Export policy decides what each neighbor gets
+    to hear. Why not tell everyone everything? Because telling a neighbor about a
+    route is an offer: send your traffic through me, and I''ll carry it. Advertising
+    a route is promising to do work. So a network can use a route itself, while deliberately
+    keeping it from a neighbor. Using a route and offering transit are different acts.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: e
+      zone: top
+      nodes:
+        X:
+          k: cloud
+          at:
+          - 4
+          - 0
+          l: Our AS
+        A:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: Neighbor A
+        B:
+          k: cloud
+          at:
+          - 8
+          - 0
+          l: Neighbor B
+      links:
+      - - A
+        - X
+      - - X
+        - B
+        - s: blocked
+  - msg.send:
+      name: e
+      a: X
+      b: A
+      text: route offer
+      when: Export policy
+  - msg.send:
+      name: e
+      a: X
+      b: A
+      text: send through me
+      when: Because telling
+  - net.state:
+      name: e
+      nodes:
+        X: now
+      when: Advertising a route
+  - rule:
+      text: An advertisement is an offer to carry traffic. Using a route is not offering
+        it.
+  - net.state:
+      name: e
+      nodes:
+        B: candidate
+      when: So a network
+- id: prepend
+  stage: state
+  pdf: 18
+  c:
+  - AS Path Prepending
+  say: Export can also change how a route looks. Suppose you have two links to the
+    Internet, and want incoming traffic on just one of them. You can't control anybody
+    else's decision. But you can make one option look worse. AS path prepending repeats
+    your own number. Instead of announcing 300, you announce 300, 300, 300 over the
+    backup link. Remote networks comparing path lengths will tend to choose the other
+    link. Tend to, because prepending can't force anything. A remote network's local
+    preference is checked first, and it could still ignore you.
+  moves:
+  - fade:
+      names: _rule
+  - net.state:
+      name: e
+      nodes:
+        X: null
+        B: null
+  - net.badge:
+      name: e
+      node: A
+      text: Primary
+      side: down
+      when: Suppose you have
+  - net.badge:
+      name: e
+      node: B
+      text: Backup
+      side: down
+  - table.show:
+      name: pp
+      zone: bottom
+      cols:
+      - Link
+      - Announced path
+      - Apparent length
+      rows:
+      - - Primary
+        - '300'
+        - 1
+      - - Backup
+        - 300, 300, 300
+        - 3
+      show: 0
+      when: AS path prepending
+  - table.reveal:
+      name: pp
+      when: Instead of announcing
+  - msg.send:
+      name: e
+      a: X
+      b: A
+      text: '300'
+  - table.reveal:
+      name: pp
+  - msg.send:
+      name: e
+      a: X
+      b: B
+      text: 300, 300, 300
+      when: over the backup
+  - net.state:
+      name: e
+      links:
+      - - A
+        - X
+        - active
+      when: Remote networks
+  - net.state:
+      name: e
+      nodes:
+        B: now
+      when: A remote network's
+- id: rule
+  stage: rule
+  pdf: 18
+  c:
+  - Local Preference
+  - AS Path Prepending
+  say: Keep these two tools straight. Local preference ranks routes within your own
+    AS, and it controls your outgoing traffic. Prepending changes what others see,
+    so it only influences your incoming traffic. One is a decision. The other is a
+    suggestion.
+  moves:
+  - clear: {}
+  - bullets:
+      name: two
+      zone: top
+      show: 0
+      items:
+      - 'Local preference: your outgoing traffic'
+      - 'Prepending: your incoming traffic'
+  - reveal:
+      name: two
+      when: Local preference ranks
+  - reveal:
+      name: two
+      when: Prepending changes
+  - rule:
+      text: Local preference decides your outgoing traffic. Prepending suggests your
+        incoming traffic.
+      when: One is a decision
+- id: config
+  stage: rule
+  pdf: 19
+  c:
+  - BGP Export Policy
+  - BGP Import Policy
+  say: Where do all these policies live? Administrators write them, per neighbor,
+    in router configuration. That's a lot of manual work, spread over many routers
+    and many people, and mistakes do happen. A configuration error can be visible
+    across the entire Internet.
+  moves:
+  - fade:
+      names: two
+  - bullets:
+      name: cfg
+      zone: top
+      show: 0
+      items:
+      - Policies are written per neighbor, by people
+      - A mistake can be visible everywhere
+  - reveal:
+      name: cfg
+      when: Administrators write
+  - reveal:
+      name: cfg
+      when: A configuration error
+- id: pitfall
+  stage: rule
+  pdf: 19
+  c:
+  - BGP Export Policy
+  - BGP Import Policy
+  say: A common mistake is to weigh these numbers against each other. There's no trade
+    between preference and path length. Preference is compared first, and length matters
+    only if preference ties.
+  moves:
+  - trap:
+      wrong: Trade one unit of preference for one AS hop
+      right: 'Compare in order: preference first, length only on a tie'
+- id: changed
+  stage: changed_example
+  pdf: 14
+  c:
+  - Local Preference
+  say: A situation. Network A prepends heavily on its link to provider P, hoping traffic
+    will arrive by way of provider Q instead. But a far-off network, Z, assigns a
+    high local preference to routes learned through P.
+  moves:
+  - clear: {}
+  - net.show:
+      name: z
+      zone: top
+      nodes:
+        A:
+          k: cloud
+          at:
+          - 0
+          - 0.8
+          l: A
+        P:
+          k: cloud
+          at:
+          - 4
+          - 1.6
+          l: P
+        Q:
+          k: cloud
+          at:
+          - 4
+          - 0
+          l: Q
+        Z:
+          k: cloud
+          at:
+          - 8
+          - 0.8
+          l: Z
+      links:
+      - - A
+        - P
+        - s: dim
+      - - A
+        - Q
+      - - P
+        - Z
+      - - Q
+        - Z
+  - net.state:
+      name: z
+      nodes:
+        A: now
+      when: Network A prepends
+  - net.badge:
+      name: z
+      node: Z
+      text: high preference for P
+      side: down
+      state: now
+      when: But a far-off
+- id: predict
+  stage: prediction
+  pdf: 18
+  hold: 6
+  c:
+  - AS Path Prepending
+  say: Which way does Z's traffic arrive at A? And did the prepending do anything
+    at all?
+  moves:
+  - pause:
+      text: which way does Z's traffic reach A?
+- id: answer
+  stage: explanation
+  pdf: 18
+  c:
+  - AS Path Prepending
+  - Local Preference
+  say: It arrives through P, the path A was trying to discourage, because Z compares
+    local preference first, and never reaches the length comparison. Prepending may
+    still influence others who have tied preferences. So that's the outside view of
+    an AS. But an AS isn't really one node. It's a set of routers with their own geography.
+    How do they agree on what to do?
+  moves:
+  - net.walk:
+      name: z
+      path:
+      - Z
+      - P
+      - A
+      when: It arrives through
+  - rule:
+      text: Z's local preference is compared before A's prepended length.
+      when: because Z compares
+  - net.state:
+      name: z
+      nodes:
+        Q: candidate
+      when: Prepending may
+  - clear:
+      when: So that's the outside
+  - q:
+      text: An AS isn't one node. How do its routers agree?
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 12.2.predict
+  answer_beat: 12.2.answer
+  answer_events:
+  - 12.2.answer:move:0
+  - 12.2.answer:move:1
+  - 12.2.answer:move:2
+  - 12.2.answer:move:3
+  answer_objects:
+  - object: z
+    after: 12.2.answer:move:0
+    effect: net.walk
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 12.2.answer:move:1
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: z
+    after: 12.2.answer:move:2
+    effect: net.state
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '12.3'
+title: Inside an AS
+deck: lec12-bgp.pdf
+target_min: 6
+concepts:
+- eBGP
+- iBGP
+- BGP Next-Hop Resolution
+- Hot-Potato Routing
+- Default Routes
+beats:
+- id: question
+  stage: question
+  pdf: 21
+  c:
+  - eBGP
+  - iBGP
+  say: We've been drawing each AS as a dot. But a large provider has hundreds of routers
+    across a continent, and it may hear about the same destination at several different
+    border routers. How do all its internal routers learn about that, and how does
+    each one pick an exit?
+  moves:
+  - heading:
+      text: 'Lecture 12: inside an AS'
+  - q:
+      text: An AS is not one node. How do its routers pick an exit?
+- id: ibgp
+  stage: animation
+  pdf: 22
+  c:
+  - eBGP
+  - iBGP
+  say: A BGP session between different ASes is called eBGP, for external. A session
+    between routers within the same AS is iBGP, for internal. Here's the flow. Border
+    router R1 learns a route over eBGP. It passes this along to R2 and R3 over iBGP.
+    Now all of them know the route. Note that internal routers don't add their AS
+    number again as the update moves around inside.
+  moves:
+  - clear: {}
+  - net.show:
+      name: i
+      zone: full
+      nodes:
+        X:
+          k: cloud
+          at:
+          - 0
+          - 1
+          l: AS 300
+        R1:
+          k: router
+          at:
+          - 3.5
+          - 1
+          l: R1
+        R2:
+          k: router
+          at:
+          - 7
+          - 2.2
+          l: R2
+          lp: right
+        R3:
+          k: router
+          at:
+          - 7
+          - -0.2
+          l: R3
+          lp: right
+      links:
+      - - X
+        - R1
+        - c: eBGP
+      - - R1
+        - R2
+        - c: iBGP
+          s: control
+      - - R1
+        - R3
+        - c: iBGP
+          s: control
+      - - R2
+        - R3
+  - packet.spawn:
+      name: u
+      net: i
+      at: X
+      layers:
+      - label
+      when: Border router R1
+  - packet.hop:
+      name: u
+      to: R1
+  - packet.flood:
+      name: u
+      to:
+      - R2
+      - R3
+      when: It passes this
+- id: igp
+  stage: state
+  pdf: 23
+  c:
+  - iBGP
+  say: And iBGP does not replace the internal routing protocol. It says that a destination
+    is reachable through a certain exit. But it doesn't say how to get across your
+    own network to that exit. That's still the job of OSPF or IS-IS. BGP and the IGP
+    solve two halves of one problem.
+  moves:
+  - net.state:
+      name: i
+      nodes:
+        R2: now
+      when: It says that
+  - net.state:
+      name: i
+      nodes:
+        R1: done
+  - net.walk:
+      name: i
+      path:
+      - R2
+      - R3
+      - R1
+      when: how to get across
+  - rule:
+      text: BGP names the exit. The internal protocol finds the way to that exit.
+      when: BGP and the IGP
+- id: nexthop
+  stage: state
+  pdf: 29
+  c:
+  - BGP Next-Hop Resolution
+  say: 'How those halves are joined. BGP says: 203.0.113.0/24 has next hop 192.0.2.9.
+    But that router may be several hops away. So the router looks up 192.0.2.9 in
+    its internal routes, and finds it goes through neighbor 198.51.100.2 on port 3.
+    It combines the two, and installs: 203.0.113.0/24 goes through 198.51.100.2 on
+    port 3. A BGP next hop isn''t necessarily a directly connected neighbor. It has
+    to be resolved first.'
+  moves:
+  - clear: {}
+  - table.show:
+      name: bg
+      zone: top
+      cols:
+      - Table
+      - Key
+      - Gives
+      rows:
+      - - BGP
+        - 203.0.113.0/24
+        - next hop 192.0.2.9
+      - - Internal
+        - 192.0.2.9
+        - 198.51.100.2, port 3
+      - - Forwarding
+        - 203.0.113.0/24
+        - 198.51.100.2, port 3
+      show: 0
+  - table.reveal:
+      name: bg
+      when: BGP says
+  - table.reveal:
+      name: bg
+      when: So the router
+  - table.reveal:
+      name: bg
+      when: It combines
+  - table.mark:
+      name: bg
+      r: 2
+      state: done
+  - rule:
+      text: Resolve the BGP next hop through internal routing before forwarding.
+      when: A BGP next hop
+- id: order
+  stage: rule
+  pdf: 24
+  c:
+  - Local Preference
+  - Hot-Potato Routing
+  say: Now the decision process can be stated in full, in the lecture's simplified
+    order. Highest local preference. Then shortest AS path. Then lowest internal cost
+    to the exit. Then a tie break. Compare in order, and stop as soon as one route
+    remains. These are not added into a score. There's no formula that combines them.
+  moves:
+  - clear: {}
+  - stack.show:
+      name: order
+      zone: left
+      width: 6
+      layers:
+      - t: 1. Highest local preference
+        k: ip
+      - t: 2. Shortest AS path
+        k: eth
+      - t: 3. Lowest internal exit cost
+        k: transport
+      - t: 4. Tie break
+        k: data
+  - stack.mark:
+      name: order
+      layer: 0
+      when: Highest local
+  - stack.mark:
+      name: order
+      layer: 0
+      state: null
+      when: Then shortest
+  - stack.mark:
+      name: order
+      layer: 1
+  - stack.mark:
+      name: order
+      layer: 1
+      state: null
+      when: Then lowest
+  - stack.mark:
+      name: order
+      layer: 2
+  - stack.mark:
+      name: order
+      layer: 2
+      state: null
+      when: Then a tie
+  - stack.mark:
+      name: order
+      layer: 3
+  - stack.mark:
+      name: order
+      layer: 3
+      state: null
+      when: Compare in order
+  - text:
+      name: nosum
+      zone: right
+      lines:
+      - Compare in order
+      - Stop when one route remains
+      - Never added into a score
+      when: These are not
+- id: decide
+  stage: state
+  pdf: 26
+  c:
+  - Local Preference
+  say: 'Try three routes for one prefix. A has local preference 140, length 4, and
+    exit cost 50. B has 100, length 2, and cost 5. C has 100, length 2, and cost 1.
+    With all three available, A wins immediately on preference, despite being the
+    worst by every other number. Withdraw A. B and C tie on preference, and tie on
+    length, so internal cost decides: C wins. Now shorten B''s path to length 1. B
+    beats C at step two, and its higher exit cost never gets compared.'
+  moves:
+  - fade:
+      names: nosum
+  - sieve.show:
+      name: cand
+      zone: right
+      rungs:
+      - Local pref
+      - AS length
+      - Exit cost
+      routes:
+      - name: A
+        vals:
+        - 140
+        - 4
+        - 50
+      - name: B
+        vals:
+        - 100
+        - 2
+        - 5
+      - name: C
+        vals:
+        - 100
+        - 2
+        - 1
+      when: Try three
+  - stack.mark:
+      name: order
+      layer: 0
+      when: With all three
+  - sieve.step:
+      name: cand
+      rung: 0
+      keep:
+      - A
+  - sieve.win:
+      name: cand
+      route: A
+      unused:
+      - 1
+      - 2
+      when: despite being
+  - sieve.show:
+      name: cand
+      zone: right
+      rungs:
+      - Local pref
+      - AS length
+      - Exit cost
+      routes:
+      - name: B
+        vals:
+        - 100
+        - 2
+        - 5
+      - name: C
+        vals:
+        - 100
+        - 2
+        - 1
+      when: Withdraw A
+  - stack.mark:
+      name: order
+      layer: 0
+      state: null
+  - stack.mark:
+      name: order
+      layer: 2
+      when: so internal cost
+  - sieve.step:
+      name: cand
+      rung: 2
+      keep:
+      - C
+  - sieve.win:
+      name: cand
+      route: C
+      when: C wins
+  - sieve.show:
+      name: cand
+      zone: right
+      rungs:
+      - Local pref
+      - AS length
+      - Exit cost
+      routes:
+      - name: B
+        vals:
+        - 100
+        - 1
+        - 5
+      - name: C
+        vals:
+        - 100
+        - 2
+        - 1
+      when: Now shorten
+  - stack.mark:
+      name: order
+      layer: 2
+      state: null
+  - stack.mark:
+      name: order
+      layer: 1
+      when: B beats C
+  - sieve.step:
+      name: cand
+      rung: 1
+      keep:
+      - B
+  - sieve.win:
+      name: cand
+      route: B
+      unused:
+      - 2
+      when: and its higher
+  pre_roll: 0.6
+- id: hot
+  stage: state
+  pdf: 25
+  c:
+  - Hot-Potato Routing
+  say: 'That third step has a nickname: hot-potato routing. When outside attributes
+    tie, hand the traffic off at the nearest exit, and spend as little of your own
+    network as possible. Picture a network with exits on the west and east coasts.
+    A router with internal costs 4 and 9 picks west. A router on the other side, with
+    costs 12 and 3, picks east. Each one minimizes its own carrying cost. And so the
+    return path, chosen by a different network with its own hot potatoes, may take
+    a different route. Internet paths are often asymmetric for just this reason.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: h
+      zone: top
+      nodes:
+        W:
+          k: box
+          at:
+          - 0
+          - 0
+          l: West exit
+        R:
+          k: router
+          at:
+          - 3.6
+          - 1.4
+          l: R
+        S:
+          k: router
+          at:
+          - 7.4
+          - -1.4
+          l: S
+        E:
+          k: box
+          at:
+          - 11
+          - 0
+          l: East exit
+      links:
+      - - R
+        - W
+        - c: 4
+      - - R
+        - E
+        - c: 9
+          s: dim
+      - - S
+        - W
+        - c: 12
+          s: dim
+      - - S
+        - E
+        - c: 3
+  - net.pulse:
+      name: h
+      path:
+      - R
+      - W
+      when: A router with
+  - net.path:
+      name: h
+      path:
+      - R
+      - W
+      style: tree
+      when: picks west
+  - net.pulse:
+      name: h
+      path:
+      - S
+      - E
+      when: A router on the other
+  - net.path:
+      name: h
+      path:
+      - S
+      - E
+      style: tree
+      when: picks east
+  - rule:
+      text: 'Hot potato: when earlier attributes tie, use the nearest exit. Paths
+        may be asymmetric.'
+      when: Internet paths
+- id: default
+  stage: state
+  pdf: 30
+  c:
+  - Default Routes
+  say: 'Does every router need all those routes? No. A customer with a single provider
+    has only one way out. It can use a default route: a slash 0, matching everything,
+    pointing at the provider. Any longer prefix beats it. So a stub network, or an
+    internal router at the edge, can hold a very small table. Full tables belong where
+    real choices exist, not everywhere.'
+  moves:
+  - table.show:
+      name: d
+      zone: bottom
+      cols:
+      - Prefix
+      - Next hop
+      rows:
+      - - 192.0.2.0/24
+        - local
+      - - 0.0.0.0/0
+        - provider
+      show: 1
+      when: A customer with
+  - table.reveal:
+      name: d
+      when: It can use
+  - table.mark:
+      name: d
+      r: 1
+      state: now
+  - table.mark:
+      name: d
+      r: 0
+      state: done
+      when: Any longer prefix
+- id: pitfall
+  stage: rule
+  pdf: 30
+  c:
+  - Default Routes
+  say: The classic confusion. A BGP next hop isn't necessarily the neighbor you hand
+    the frame to. It can be several routers away, so it has to be resolved through
+    internal routing.
+  moves:
+  - trap:
+      wrong: The BGP next hop is always the next router
+      right: 'It may be several hops away: resolve it first'
+- id: changed
+  stage: changed_example
+  pdf: 25
+  c:
+  - Hot-Potato Routing
+  say: Change the costs. Internal maintenance raises router R's cost to the west exit
+    from 4 to 11. Its east cost stays at 9. Nothing outside the AS has changed.
+  moves:
+  - net.cost:
+      name: h
+      a: R
+      b: W
+      cost: 11
+      when: Internal maintenance
+  - net.state:
+      name: h
+      nodes:
+        R: now
+- id: predict
+  stage: prediction
+  pdf: 25
+  hold: 6
+  c:
+  - Hot-Potato Routing
+  say: Does R's exit change? And does some neighbor network now see traffic it wasn't
+    seeing before?
+  moves:
+  - pause:
+      text: does R's exit change? who outside notices?
+- id: answer
+  stage: explanation
+  pdf: 25
+  c:
+  - Hot-Potato Routing
+  - BGP Next-Hop Resolution
+  say: Yes. R now prefers east, at 9. Its traffic moves to a different exit, and possibly
+    to a different neighbor network. An internal change shifted traffic outside the
+    AS. That's the coupling between BGP and the internal protocol. We've now covered
+    how the decision works. But why do networks set these preferences in the first
+    place? Because each link between two networks has a contract, and someone pays.
+  moves:
+  - net.state:
+      name: h
+      links:
+      - - R
+        - W
+        - dim
+      - - R
+        - E
+        - tree
+      nodes:
+        R: done
+      when: R now prefers
+  - net.pulse:
+      name: h
+      path:
+      - R
+      - E
+      when: Its traffic moves
+  - rule:
+      text: An internal cost change can move traffic to a different neighbor.
+      when: An internal change
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 12.3.predict
+  answer_beat: 12.3.answer
+  answer_events:
+  - 12.3.answer:move:0
+  - 12.3.answer:move:1
+  - 12.3.answer:move:2
+  answer_objects:
+  - object: h
+    after: 12.3.answer:move:0
+    effect: net.state
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: h
+    after: 12.3.answer:move:1
+    effect: net.pulse
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 12.3.answer:move:2
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '12.4'
+title: Money shapes paths
+deck: lec12-bgp.pdf
+target_min: 7
+concepts:
+- Customer-Provider Relationships
+- Peering
+- Gao-Rexford Conditions
+- Valley-Free Paths
+beats:
+- id: question
+  stage: question
+  pdf: 34
+  c:
+  - Customer-Provider Relationships
+  say: Networks are businesses. Carrying traffic costs money, and some of it pays
+    and some doesn't. If you ran a network, whose traffic would you carry for free?
+    Whose routes would you repeat? Those two business questions end up explaining
+    most of Internet routing.
+  moves:
+  - heading:
+      text: 'Lecture 12: money shapes paths'
+  - q:
+      text: If you ran a network, whose traffic would you carry for free?
+  - keep: {}
+- id: rel
+  stage: animation
+  pdf: 35
+  c:
+  - Customer-Provider Relationships
+  - Peering
+  say: There are two main relationships. In a customer-provider link, the customer
+    pays the provider for connectivity to the rest of the Internet. We draw the arrow
+    pointing from customer up to provider. In peering, two networks exchange traffic,
+    typically without payment, but only for themselves and their customers. A peer
+    isn't offering you transit to the world. It's only offering you what's below it.
+  moves:
+  - clear: {}
+  - net.show:
+      name: r
+      zone: top
+      nodes:
+        P:
+          k: cloud
+          at:
+          - 0
+          - 1.5
+          l: Provider
+        Q:
+          k: cloud
+          at:
+          - 6
+          - 1.5
+          l: Peer
+        C:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: Customer
+      links:
+      - - C
+        - P
+        - s: up
+      - - P
+        - Q
+        - c: peer
+  - msg.send:
+      name: r
+      a: C
+      b: P
+      text: pays
+      when: the customer pays
+  - net.state:
+      name: r
+      nodes:
+        C: now
+      when: We draw
+  - msg.send:
+      name: r
+      a: P
+      b: Q
+      text: own traffic
+      when: In peering
+  - net.state:
+      name: r
+      nodes:
+        C: null
+        Q: now
+      when: A peer isn't
+  - rule:
+      text: Customer pays provider. Peers exchange only their own and their customers'
+        traffic.
+- id: export
+  stage: rule
+  pdf: 41
+  c:
+  - Customer-Provider Relationships
+  - Peering
+  - BGP Export Policy
+  say: From these contracts comes one question that decides every export. Would this
+    make me carry traffic between two networks, when neither is my customer? If a
+    route came from a customer, or it's my own, then I tell everyone, because traffic
+    toward it earns me money. If it came from a peer or a provider, I tell only my
+    customers. Telling a provider about my peer's route would invite my provider to
+    send traffic through me, to my peer, for free, while I pay for it. So read the
+    table. Own and customer routes go everywhere. Peer and provider routes go only
+    to customers.
+  moves:
+  - clear: {}
+  - table.show:
+      name: ex
+      zone: top
+      data: $bgp.export
+      show: 0
+  - rule:
+      text: Would this make me carry traffic between two non-customers? Then don't
+        advertise it.
+  - table.reveal:
+      name: ex
+      n: 2
+      when: If a route came
+  - table.reveal:
+      name: ex
+      n: 2
+      when: If it came
+  - table.mark:
+      name: ex
+      r: 2
+      state: now
+      when: Telling a provider
+- id: tiers
+  stage: state
+  pdf: 36
+  c:
+  - Customer-Provider Relationships
+  - Autonomous Systems
+  say: Those contracts stack up into a structure. At the top are Tier 1 providers,
+    with no upstream provider at all, connected to each other as peers. Below them
+    are other providers, which sell transit to customers, but must buy it from someone.
+    At the bottom are stub ASes, which provide no transit, and those are the vast
+    majority. And this graph has a key property. It's directed and acyclic. If u is
+    a customer of v, and v is a customer of w, then w isn't a customer of u. Remember
+    that when we come to stability.
+  moves:
+  - clear: {}
+  - net.show:
+      name: tier
+      zone: full
+      nodes:
+        T1:
+          k: cloud
+          at:
+          - 2
+          - 2
+          l: Tier 1
+        T2:
+          k: cloud
+          at:
+          - 7
+          - 2
+          l: Tier 1
+        P:
+          k: cloud
+          at:
+          - 2
+          - 1
+          l: Provider
+        Q:
+          k: cloud
+          at:
+          - 7
+          - 1
+          l: Provider
+        S1:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: Stub
+        S2:
+          k: cloud
+          at:
+          - 4
+          - 0
+          l: Stub
+        S3:
+          k: cloud
+          at:
+          - 8.5
+          - 0
+          l: Stub
+      links:
+      - - P
+        - T1
+        - s: up
+      - - Q
+        - T2
+        - s: up
+      - - T1
+        - T2
+      - - S1
+        - P
+        - s: up
+      - - S2
+        - P
+        - s: up
+      - - S3
+        - Q
+        - s: up
+  - net.state:
+      name: tier
+      nodes:
+        T1: now
+        T2: now
+      when: At the top
+  - net.state:
+      name: tier
+      nodes:
+        T1: null
+        T2: null
+        P: now
+        Q: now
+      when: Below them
+  - net.state:
+      name: tier
+      nodes:
+        P: null
+        Q: null
+        S1: now
+        S2: now
+        S3: now
+      when: At the bottom
+  - net.state:
+      name: tier
+      nodes:
+        S1: null
+        S2: null
+        S3: null
+      when: And this graph
+  - net.walk:
+      name: tier
+      path:
+      - S1
+      - P
+      - T1
+      state: done
+      when: If u is a customer
+- id: valley
+  stage: state
+  pdf: 43
+  c:
+  - Valley-Free Paths
+  say: 'Those exports have a visible consequence in the data path. A permitted path
+    climbs up through customer to provider links, crosses at most one peer link, and
+    then descends through provider to customer links. It''s up, peer, down. It''s
+    called valley free. Going down and then back up would be a valley: some customer
+    would be carrying traffic between its two providers, paying both for the privilege.
+    Nobody signs up for that.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: v
+      zone: left
+      nodes:
+        n1:
+          k: node
+          at:
+          - 4
+          - 5
+          l: '1'
+        n2:
+          k: node
+          at:
+          - 1.5
+          - 3.2
+          l: '2'
+        n3:
+          k: node
+          at:
+          - 5
+          - 3.2
+          l: '3'
+        n4:
+          k: node
+          at:
+          - 8
+          - 3.2
+          l: '4'
+        d:
+          k: node
+          at:
+          - 3.4
+          - 1.6
+          l: d
+        n5:
+          k: node
+          at:
+          - 6.4
+          - 1.6
+          l: '5'
+        n6:
+          k: node
+          at:
+          - 9.2
+          - 1.6
+          l: '6'
+        n7:
+          k: node
+          at:
+          - 1.6
+          - 0
+          l: '7'
+        n8:
+          k: node
+          at:
+          - 4.6
+          - 0
+          l: '8'
+      links:
+      - - n2
+        - n1
+        - s: up
+      - - n3
+        - n1
+        - s: up
+      - - n4
+        - n1
+        - s: up
+      - - d
+        - n2
+        - s: up
+      - - d
+        - n3
+        - s: up
+      - - n5
+        - n4
+        - s: up
+      - - n6
+        - n4
+        - s: up
+      - - n7
+        - d
+        - s: up
+      - - n8
+        - d
+        - s: up
+      - - n8
+        - n5
+        - s: up
+      - - n3
+        - n4
+      - - d
+        - n5
+      - - n5
+        - n6
+  - table.show:
+      name: key
+      zone: right_top
+      cols:
+      - Line
+      - Meaning
+      rows:
+      - - Arrow
+        - customer to provider
+      - - Plain line
+        - peer to peer
+  - net.walk:
+      name: v
+      path:
+      - n7
+      - d
+      - n3
+      - n4
+      - n5
+      state: done
+      when: A permitted path
+  - rule:
+      text: 'Valley free: up, then at most one peer link, then down.'
+      when: It's called
+  - net.walk:
+      name: v
+      path:
+      - n5
+      - n8
+      - d
+      state: error
+      when: Going down
+- id: classify
+  stage: state
+  pdf: 46
+  c:
+  - Valley-Free Paths
+  say: 'Classify the instructor''s paths, reading in the direction data travels. 1,
+    2, d: down, down. Valid. 7, d: up. Valid. 5, 8, d: 8 is 5''s customer, so that''s
+    down, then up. A valley. Invalid, since 8 would carry traffic between its providers.
+    6, 4, 3, d: up, peer, down. Valid. 8, 5, d: up, peer. Valid. 6, 5, d: peer, peer.
+    Invalid, because a path can have only one peer crossing. And 1, 4, 3, d: down,
+    peer, down. Invalid, because the peer crossing comes after descending.'
+  moves:
+  - clear:
+      keep:
+      - v
+      - _rule
+  - net.unwalk:
+      name: v
+  - table.show:
+      name: vt
+      zone: right
+      data: $bgp.valley_table
+      show: 0
+      size: 26
+  - net.walk:
+      name: v
+      path:
+      - n1
+      - n2
+      - d
+      state: done
+      when: 1, 2, d
+  - table.reveal:
+      name: vt
+  - net.walk:
+      name: v
+      path:
+      - n7
+      - d
+      state: done
+      when: 7, d
+  - table.reveal:
+      name: vt
+  - net.walk:
+      name: v
+      path:
+      - n5
+      - n8
+      - d
+      state: error
+      when: 5, 8, d
+  - table.reveal:
+      name: vt
+  - net.walk:
+      name: v
+      path:
+      - n6
+      - n4
+      - n3
+      - d
+      state: done
+      when: 6, 4, 3, d
+  - table.reveal:
+      name: vt
+  - net.walk:
+      name: v
+      path:
+      - n8
+      - n5
+      - d
+      state: done
+      when: 8, 5, d
+  - table.reveal:
+      name: vt
+  - net.walk:
+      name: v
+      path:
+      - n6
+      - n5
+      - d
+      state: error
+      when: 6, 5, d
+  - table.reveal:
+      name: vt
+  - net.walk:
+      name: v
+      path:
+      - n1
+      - n4
+      - n3
+      - d
+      state: error
+      when: And 1, 4, 3
+  - table.reveal:
+      name: vt
+- id: reverse
+  stage: rule
+  pdf: 47
+  c:
+  - Valley-Free Paths
+  say: Look at two of those again. 5, 8, d is invalid. And 8, 5, d is valid. They
+    use nearly the same networks, in a different direction. So direction matters,
+    and the set of nodes alone tells you nothing. Build the relationship sequence,
+    and read it, rather than memorizing node numbers.
+  moves:
+  - net.walk:
+      name: v
+      path:
+      - n5
+      - n8
+      - d
+      state: error
+      when: 5, 8, d is
+  - table.mark:
+      name: vt
+      r: 2
+      state: error
+  - net.walk:
+      name: v
+      path:
+      - n8
+      - n5
+      - d
+      state: done
+      when: And 8, 5, d
+  - table.mark:
+      name: vt
+      r: 4
+      state: done
+  - rule:
+      text: Validity depends on direction. Build the sequence of relationships.
+      when: So direction
+- id: gao
+  stage: rule
+  pdf: 39
+  c: &id001
+  - Gao-Rexford Conditions
+  say: 'The payoff, connecting to the oscillating ring from last chapter. Gao and
+    Rexford showed that three commercial habits are enough for stability, under their
+    model. One: the customer-provider hierarchy has no cycles, so nobody is their
+    own provider''s provider. Two: prefer customer routes over peer and provider routes.
+    Three: follow the export rule we just saw. Why does the bad gadget disappear?'
+  moves:
+  - clear: {}
+  - bullets:
+      name: gr
+      zone: top
+      show: 0
+      items:
+      - No customer-provider cycles
+      - Prefer customer routes
+      - Follow the export rule
+  - reveal:
+      name: gr
+      when: 'One: the customer'
+  - reveal:
+      name: gr
+      when: 'Two: prefer'
+  - reveal:
+      name: gr
+      when: 'Three: follow'
+  - net.show:
+      name: ring
+      zone: bottom
+      nodes:
+        n1:
+          k: node
+          at:
+          - 0
+          - 0
+          l: '1'
+        n2:
+          k: node
+          at:
+          - 4
+          - 0
+          l: '2'
+        n3:
+          k: node
+          at:
+          - 2
+          - 1.6
+          l: '3'
+      links:
+      - - n1
+        - n2
+      - - n2
+        - n3
+      - - n3
+        - n1
+      when: Why does the bad
+- id: gao-2
+  stage: rule
+  pdf: 39
+  c: *id001
+  say: Its cycle needs each network to prefer a route through its neighbor, around
+    a ring. Under these rules, that ring of preferences can't form. Those are sufficient
+    conditions in the model. They aren't a claim that every BGP deployment follows
+    them, or that every stable network must. Still, it's striking. No one coordinates
+    globally. Each business pursues its own interest, and the system tends to settle.
+  moves:
+  - net.walk:
+      name: ring
+      path:
+      - n1
+      - n2
+      - n3
+      - n1
+      state: error
+      when: around a ring
+  - fx.burst:
+      net: ring
+      node: n3
+      when: that ring
+  - rule:
+      text: Sufficient for stability in the model. Not a claim about every deployment.
+      when: Those are sufficient
+  - net.unwalk:
+      name: ring
+      when: No one coordinates
+  - net.state:
+      name: ring
+      nodes:
+        n1: done
+        n2: done
+        n3: done
+- id: laptop
+  stage: rule
+  pdf: 39
+  c:
+  - Gao-Rexford Conditions
+  say: Look at the whole path of our laptop's packet. It climbs from the laptop's
+    provider, perhaps crosses one peer link, and descends to the server's provider.
+    Contracts set that shape. The shortest path on a map had very little to do with
+    it.
+  moves:
+  - rule:
+      text: 'Up, across one peer link, and down: contracts set the laptop''s path.'
+      when: Look
+- id: pitfall
+  stage: rule
+  pdf: 39
+  c:
+  - Gao-Rexford Conditions
+  say: A short path in the drawing isn't necessarily a usable one. If export policy
+    never advertised it, no traffic will follow it, however connected it looks.
+  moves:
+  - trap:
+      wrong: A physically connected path is always usable
+      right: Export policy can forbid a short, connected route
+- id: changed
+  stage: changed_example
+  pdf: 41
+  c:
+  - BGP Export Policy
+  - Peering
+  say: A business decision. AS A has a peer P, a provider U, and a customer C. It
+    learns a route from P. And it learns another route from its customer C.
+  moves:
+  - clear: {}
+  - net.show:
+      name: a
+      zone: left
+      nodes:
+        U:
+          k: cloud
+          at:
+          - 2
+          - 2
+          l: Provider U
+        A:
+          k: cloud
+          at:
+          - 2
+          - 1
+          l: AS A
+        P:
+          k: cloud
+          at:
+          - 5
+          - 1
+          l: Peer P
+        C:
+          k: cloud
+          at:
+          - 2
+          - 0
+          l: Customer C
+      links:
+      - - A
+        - U
+        - s: up
+      - - A
+        - P
+      - - C
+        - A
+        - s: up
+  - msg.send:
+      name: a
+      a: P
+      b: A
+      text: route
+      when: It learns a route
+  - msg.send:
+      name: a
+      a: C
+      b: A
+      text: route
+      when: And it learns
+- id: predict
+  stage: prediction
+  pdf: 41
+  hold: 7
+  c:
+  - BGP Export Policy
+  say: Who hears about P's route from A? Who hears about C's route?
+  moves:
+  - pause:
+      text: who hears P's route? who hears C's route?
+- id: answer
+  stage: explanation
+  pdf: 41
+  c:
+  - BGP Export Policy
+  - Customer-Provider Relationships
+  - Peering
+  say: 'P''s route goes only to customer C. Telling U would have A carrying traffic
+    between its provider and its peer. C''s route goes to everyone: U, P, and C itself
+    has it already. That''s exactly the reachability A is being paid to spread. So
+    far, every packet has had one destination. But what if one address should mean
+    several servers? Or what if a thousand receivers all want the same stream? Our
+    next chapter changes who a destination is.'
+  moves:
+  - table.show:
+      name: an
+      zone: right
+      cols:
+      - Route from
+      - Told to
+      rows: &id002
+      - - Peer P
+        - customer C only
+      - - Customer C
+        - provider U and peer P
+      show: 0
+  - msg.send:
+      name: a
+      a: A
+      b: C
+      text: P's route
+      when: P's route goes
+  - table.reveal:
+      name: an
+  - net.state:
+      name: a
+      links:
+      - - A
+        - U
+        - blocked
+      when: Telling U
+  - net.state:
+      name: a
+      links:
+      - - A
+        - U
+        - up
+      when: C's route goes
+  - msg.send:
+      name: a
+      a: A
+      b: U
+      text: C's route
+      t: 1.1
+  - msg.send:
+      name: a
+      a: A
+      b: P
+      text: C's route
+      t: 1.1
+  - table.reveal:
+      name: an
+  - clear:
+      when: So far, every
+  - q:
+      text: What if one address means several servers, or a thousand receivers want
+        one stream?
+  - keep: {}
+  pre_roll: 1.0
+prediction_contracts:
+- prediction_beat: 12.4.predict
+  answer_beat: 12.4.answer
+  answer_events:
+  - 12.4.answer:move:0
+  - 12.4.answer:move:1
+  - 12.4.answer:move:2
+  - 12.4.answer:move:3
+  - 12.4.answer:move:4
+  - 12.4.answer:move:5
+  - 12.4.answer:move:6
+  - 12.4.answer:move:7
+  - 12.4.answer:move:8
+  answer_objects:
+  - object: an
+    after: 12.4.answer:move:0
+    effect: table.show
+    selector:
+      rows: *id002
+    before_answer: hidden_or_neutral
+  - object: a
+    after: 12.4.answer:move:1
+    effect: msg.send
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: an
+    after: 12.4.answer:move:2
+    effect: table.reveal
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: a
+    after: 12.4.answer:move:3
+    effect: net.state
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: a
+    after: 12.4.answer:move:4
+    effect: net.state
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: a
+    after: 12.4.answer:move:5
+    effect: msg.send
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: a
+    after: 12.4.answer:move:6
+    effect: msg.send
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: an
+    after: 12.4.answer:move:7
+    effect: table.reveal
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.

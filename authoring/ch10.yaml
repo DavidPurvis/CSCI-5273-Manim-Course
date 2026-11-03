@@ -1,0 +1,3050 @@
+dish: '10.1'
+title: Dijkstra
+deck: lec10-routing.pdf
+target_min: 9.5
+concepts:
+- Shortest-Path Routing
+- Link-State Routing
+- Dijkstra Algorithm
+- OSPF
+- IS-IS
+beats:
+- id: question
+  stage: question
+  pdf: 19
+  c:
+  - Shortest-Path Routing
+  say: We ended the last chapter with a cut link, and a router whose table had gone
+    wrong. So who fills in that table? A router forwards a packet using a table it
+    reads in nanoseconds. But something has to build that table, and rebuild it when
+    the network changes. An administrator cannot type routes into thousands of routers
+    by hand. So how can routers, talking only to each other, work out good paths through
+    a network none of them can see all at once?
+  moves:
+  - heading:
+      text: 'Lecture 10: Dijkstra'
+  - spine:
+      current: Route
+      zone: top
+  - q:
+      text: How do routers work out paths through a network none of them fully sees?
+      zone: bottom
+- id: laptop
+  stage: animation
+  pdf: 19
+  c:
+  - Shortest-Path Routing
+  say: Remember our laptop's packet, sitting at router R1, headed for a web server.
+    R1 looked up the destination, and sent it out one port. This chapter is about
+    where that table entry came from.
+  moves:
+  - clear: {}
+  - net.show:
+      name: lp
+      zone: top
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        A:
+          k: router
+          at:
+          - 3.4
+          - 0
+          l: R1
+        B:
+          k: router
+          at:
+          - 6.8
+          - 0
+          l: R2
+        W:
+          k: server
+          at:
+          - 10.2
+          - 0
+          l: Web server
+      links:
+      - - L
+        - A
+      - - A
+        - B
+      - - B
+        - W
+  - packet.spawn:
+      name: p
+      net: lp
+      at: A
+      layers:
+      - ip
+      when: sitting at router
+  - net.badge:
+      name: lp
+      node: A
+      text: which port?
+      side: up
+      state: now
+      when: R1 looked up
+  - packet.hop:
+      name: p
+      to: B
+      when: and sent it
+  - packet.fade:
+      name: p
+  - rule:
+      text: Who built that table?
+      when: This chapter
+- id: routing-forwarding
+  stage: animation
+  pdf: 12
+  say: 'Start by separating two words. Forwarding is what a router does to one packet,
+    right now: read the address, look it up, and send it out. Routing is how the table
+    got there in the first place, a network-wide process of exchanging information
+    and computing paths. And a route to a far prefix needs two pieces of knowledge.
+    Which router, or exit, can reach that prefix? And how do I reach that router from
+    here? This lecture solves the second piece. BGP will supply the first. Could you
+    just type all this in by hand? Static routes don''t adapt to failures, new equipment,
+    or load.'
+  moves:
+  - clear: {}
+  - table.show:
+      name: rf
+      zone: top
+      cols:
+      - ''
+      - Forwarding
+      - Routing
+      rows:
+      - - Plane
+        - data
+        - control
+      - - Timescale
+        - per packet
+        - per network event
+      - - Output
+        - one output port
+        - the table itself
+      show: 0
+  - bullets:
+      name: two
+      zone: bottom
+      show: 0
+      items:
+      - Which exit can reach the prefix? (BGP)
+      - How do I reach that exit? (this lecture)
+  - table.reveal:
+      name: rf
+  - rule:
+      text: 'Forwarding: one packet, right now'
+      when: Forwarding is what
+  - table.reveal:
+      name: rf
+      when: read the address
+  - rule:
+      text: 'Routing: how the table got there'
+      when: Routing is how
+  - table.reveal:
+      name: rf
+      when: a network-wide process
+  - rule:
+      text: A far prefix needs two pieces of knowledge
+      when: And a route to a far
+  - reveal:
+      name: two
+      when: Which router, or exit
+  - reveal:
+      name: two
+      when: And how do I
+  - rule:
+      text: This lecture solves the second piece
+      when: This lecture solves
+  - rule:
+      text: Static routes don't adapt to failures, equipment or load
+      when: Static routes
+- id: model
+  stage: animation
+  pdf: 19
+  c: &id001
+  - Shortest-Path Routing
+  say: First we need a model. Draw the network as a graph, with routers as nodes and
+    links as edges, each with a cost. A path's cost is the sum of its edge costs.
+    Our goal is the cheapest path from a source to each destination. If every edge
+    costs one, this just counts hops.
+  moves:
+  - clear: {}
+  - net.show: &id003
+      name: g
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.2
+          l: B
+        C:
+          k: node
+          at:
+          - 3
+          - -0.2
+          l: C
+        D:
+          k: node
+          at:
+          - 6
+          - 1
+          l: D
+      links:
+      - - A
+        - B
+        - c: 2
+      - - A
+        - C
+        - c: 5
+      - - B
+        - C
+        - c: 1
+      - - B
+        - D
+        - c: 4
+      - - C
+        - D
+        - c: 2
+  - rule:
+      text: Routers are nodes; links are edges with a cost
+      when: Draw the network
+  - rule:
+      text: If every edge costs one, this just counts hops
+      when: If every edge
+  - text:
+      name: goal
+      zone: right_top
+      lines:
+      - Path cost = sum of its edge costs
+      - 'Goal: the cheapest path to each destination'
+      when:
+        phrase: Our goal
+        frame_offset: 162
+- id: model-2
+  stage: animation
+  pdf: 19
+  c: *id001
+  say: But weights change the answer. Here, going from A to C directly costs 5. Going
+    through B costs 2 plus 1, which is only 3. So the path with more hops is the better
+    one. This makes sense inside one organization, where everyone agrees what the
+    numbers mean. We'll see later that it does not fit the whole Internet.
+  moves:
+  - fade:
+      names: _rule
+  - net.path:
+      name: g
+      path:
+      - A
+      - C
+      style: failed
+      when: going from A to C
+  - net.path:
+      name: g
+      path:
+      - A
+      - B
+      - C
+      style: now
+      when: Going through B
+  - fade:
+      names: goal
+  - rule:
+      text: Path cost = the sum of link costs. More hops can be cheaper.
+      when: So the path
+  - rule:
+      text: This fits inside one organization
+      when: This makes sense
+- id: linkstate
+  stage: animation
+  pdf: 22
+  c:
+  - Link-State Routing
+  - OSPF
+  - IS-IS
+  say: 'One approach is link-state routing, and its idea has two steps. Step one:
+    every router tells everyone about its own links. Those messages flood through
+    the whole network, so eventually every router holds the same map. Step two: each
+    router independently runs a shortest path computation on its copy of that map,
+    with itself as the source. It shares facts, not conclusions. OSPF and IS-IS are
+    the two link-state protocols you will meet in practice, both used inside a single
+    organization.'
+  moves:
+  - fade:
+      names: _rule
+  - net.path:
+      name: g
+      path:
+      - A
+      - C
+      style: solid
+  - net.path:
+      name: g
+      path:
+      - A
+      - B
+      - C
+      style: solid
+  - fade:
+      names: _rule
+  - text:
+      name: ls
+      zone: right
+      lines:
+      - 'Step 1: flood your own links'
+      - 'Step 2: compute from your map'
+      - OSPF and IS-IS work this way
+      when: Step one
+  - packet.spawn:
+      name: lsa
+      net: g
+      at: D
+      layers:
+      - label
+      when: Those messages flood
+  - packet.flood:
+      name: lsa
+      to:
+      - B
+      - C
+      - A
+  - packet.fade:
+      name: lsa
+  - rule:
+      text: Every router ends up with the same map
+      when: so eventually every
+  - rule:
+      text: 'Step two: compute shortest paths on that map'
+      when: Step two
+  - rule:
+      text: OSPF and IS-IS are link-state protocols
+      when: OSPF and IS-IS
+- id: ospf
+  stage: state
+  pdf: 22
+  c:
+  - OSPF
+  - IS-IS
+  say: One caution about that shared map. It's what the router currently believes,
+    not a perfect live view of the network. If a link has just failed, some routers
+    don't know yet. Hold on to that thought, because it creates a whole chapter of
+    trouble. For now, assume every router's map is correct, and look at the computation
+    itself, which comes from Edsger Dijkstra.
+  moves:
+  - card:
+      kind: note
+      text: The map is what a router currently believes, not a live view.
+      zone: right_bottom
+  - rule:
+      text: The map is what the router currently believes
+      when: It's what the router
+  - net.state:
+      name: g
+      links:
+      - - B
+        - D
+        - failed
+      when: If a link has
+  - rule:
+      text: 'A link just failed: some routers don''t know yet'
+      when:
+        phrase: If a link has
+        frame_offset: 23
+  - net.badge:
+      name: g
+      node: A
+      text: old map
+      side: left
+      state: error
+      when: some routers
+  - net.state:
+      name: g
+      links:
+      - - B
+        - D
+        - solid
+      when: For now
+  - net.unbadge:
+      name: g
+      node: A
+  - rule:
+      text: 'Next: Dijkstra''s computation'
+      when: look at the computation
+- id: idea
+  stage: rule
+  pdf: 22
+  c:
+  - Dijkstra Algorithm
+  say: 'Dijkstra''s algorithm grows a region of settled nodes, whose best distances
+    are final. It keeps a tentative distance for every other node. Then it repeats
+    one step. Pick the unsettled node with the smallest tentative distance, and settle
+    it. Next, relax its edges: for each neighbor v, ask whether going through this
+    node beats the best distance we had. Why is it safe to settle that smallest node?
+    Because weights are not negative, so any other route to it would have to leave
+    through a node that is already at least as far. No detour could ever come back
+    cheaper.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: g
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.2
+          l: B
+        C:
+          k: node
+          at:
+          - 3
+          - -0.2
+          l: C
+        D:
+          k: node
+          at:
+          - 6
+          - 1
+          l: D
+      links:
+      - - A
+        - B
+        - c: 2
+      - - A
+        - C
+        - c: 5
+      - - B
+        - C
+        - c: 1
+      - - B
+        - D
+        - c: 4
+      - - C
+        - D
+        - c: 2
+  - net.state:
+      name: g
+      nodes:
+        A: done
+      when: grows a region
+  - net.state:
+      name: g
+      nodes:
+        B: candidate
+        C: candidate
+        D: candidate
+      when: It keeps a tentative
+  - text:
+      name: key
+      zone: right_top
+      lines:
+      - 'Green: settled, distance is final'
+      - 'Dashed: tentative, may still improve'
+  - graph.promote:
+      name: g
+      node: B
+      via: A
+      when: Pick the unsettled
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - C
+      when: for each neighbor
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - D
+  - rule:
+      text: Settle the smallest tentative distance. Then relax its edges. Weights
+        must not be negative.
+      when: Why is it safe
+  pre_roll: 0.9
+- id: init
+  stage: state
+  pdf: 27
+  c:
+  - Dijkstra Algorithm
+  say: 'Run it from A. Start by settling A, at distance zero. Its neighbors get tentative
+    distances equal to their direct costs: B is 2, and C is 5. D is not adjacent,
+    so D is infinity.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: g
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.2
+          l: B
+        C:
+          k: node
+          at:
+          - 3
+          - -0.2
+          l: C
+        D:
+          k: node
+          at:
+          - 6
+          - 1
+          l: D
+      links:
+      - - A
+        - B
+        - c: 2
+      - - A
+        - C
+        - c: 5
+      - - B
+        - C
+        - c: 1
+      - - B
+        - D
+        - c: 4
+      - - C
+        - D
+        - c: 2
+  - table.show:
+      name: t
+      zone: right_top
+      data: $routing.small_table
+      show: 0
+  - graph.promote:
+      name: g
+      node: A
+      when: Start by settling
+  - net.badge:
+      name: g
+      node: A
+      text: '0'
+      side: left
+      state: done
+  - text:
+      name: dv
+      zone: right_bottom
+      lines:
+      - D(v) is the best known cost from A so far
+      when:
+        phrase: Start by settling
+        frame_offset: 40
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - B
+      when: Its neighbors get tentative
+  - rule:
+      text: "Direct costs: B = 2, C = 5, D = \u221E"
+      when:
+        phrase: Its neighbors get
+        frame_offset: 29
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - C
+      when: direct costs
+  - graph.relax:
+      name: g
+      via: A
+      node: B
+      text: '2'
+      side: up
+      when: B is 2
+  - graph.relax:
+      name: g
+      via: A
+      node: C
+      text: '5'
+      side: down
+      when:
+        phrase: and C is 5
+        frame_offset: 4
+  - net.badge:
+      name: g
+      node: D
+      text: "\u221E"
+      side: right
+      when: D is not
+  - table.reveal:
+      name: t
+  pre_roll: 1.1
+- id: settle-b
+  stage: state
+  pdf: 28
+  c:
+  - Dijkstra Algorithm
+  say: The frontier holds B at 2, C at 5, and D at infinity. The smallest is B, so
+    settle it, and record that its predecessor is A. Relax B's edges. Through B, C
+    costs 2 plus 1, which is 3. That beats 5, so C improves, and its predecessor becomes
+    B. Through B, D costs 2 plus 4, which is 6, and that beats infinity.
+  moves:
+  - net.state:
+      name: g
+      nodes:
+        B: candidate
+        C: candidate
+        D: candidate
+      when: The frontier holds
+  - rule:
+      text: "Frontier: B 2, C 5, D \u221E"
+      when:
+        phrase: The frontier holds
+        frame_offset: 23
+  - rule:
+      text: 'Smallest is B: settle it, predecessor A'
+      when: The smallest is B
+  - graph.promote:
+      name: g
+      node: B
+      via: A
+      when: so settle it
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - B
+      when: record that its predecessor
+  - graph.relax:
+      name: g
+      via: B
+      node: C
+      text: $routing.small.1.relaxed.0.new
+      side: down
+      when: Through B, C
+  - rule:
+      text: 'Through B, C: 2 + 1 = 3, which beats 5'
+      when:
+        phrase: Through B, C
+        frame_offset: 32
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - C
+      when: which is 3
+  - graph.relax:
+      name: g
+      via: B
+      node: D
+      text: $routing.small.1.relaxed.1.new
+      side: right
+      when: Through B, D
+  - rule:
+      text: "Through B, D: 2 + 4 = 6, which beats \u221E"
+      when:
+        phrase: Through B, D
+        frame_offset: 32
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - D
+      when:
+        phrase: costs 2 plus 4
+        frame_offset: 29
+  - table.reveal:
+      name: t
+      when: that beats infinity
+- id: settle-c
+  stage: state
+  pdf: 30
+  c:
+  - Dijkstra Algorithm
+  say: 'The frontier is C at 3, and D at 6. Settle C, through B. Relax its edge to
+    D: 3 plus 2 is 5. That beats 6, so D improves again, and its predecessor changes
+    from B to C. See how a tentative value can keep getting better until the moment
+    it''s settled, and never after that.'
+  moves:
+  - rule:
+      text: 'Frontier: C 3, D 6. Settle C.'
+      when: The frontier is C
+  - graph.promote:
+      name: g
+      node: C
+      via: B
+      when: Settle C
+  - graph.relax:
+      name: g
+      via: C
+      node: D
+      text: $routing.small.2.relaxed.0.new
+      side: right
+      when: Relax its edge
+  - rule:
+      text: 'Through C, D: 3 + 2 = 5, which beats 6'
+      when:
+        phrase: Relax its edge
+        frame_offset: 32
+  - net.pulse:
+      name: g
+      path:
+      - C
+      - D
+      when:
+        phrase: 3 plus 2 is 5
+        frame_offset: 18
+  - table.reveal:
+      name: t
+      when: That beats 6
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - C
+      when: its predecessor changes from B to C
+  - rule:
+      text: A tentative value can improve until it's settled
+      when: See how a tentative
+  - net.state:
+      name: g
+      nodes:
+        C: done
+      when: until the moment it's settled
+- id: settle-d
+  stage: state
+  pdf: 36
+  c:
+  - Dijkstra Algorithm
+  say: 'Finally settle D, at 5, through C. Every node is settled. The green edges
+    form a shortest path tree, rooted at A. Final distances: B is 2, C is 3, and D
+    is 5.'
+  moves:
+  - graph.promote:
+      name: g
+      node: D
+      via: C
+      when: Finally settle
+  - rule:
+      text: Settle D at 5, through C
+      when:
+        phrase: Finally settle
+        frame_offset: 26
+  - table.reveal:
+      name: t
+      when: Every node
+  - rule:
+      text: 'Green edges: the shortest path tree from A'
+      when: The green edges
+  - table.mark:
+      name: t
+      r: 3
+      state: done
+      when: Final distances
+  - rule:
+      text: 'Final: B 2, C 3, D 5'
+      when:
+        phrase: Final distances
+        frame_offset: 17
+  - fade:
+      names: dv
+  - tex:
+      name: rel
+      zone: right_bottom
+      tex: D(v) \leftarrow \min\big(D(v),\ D(w)+c(w,v)\big)
+      size: 40
+      when: and D is 5
+- id: firsthop
+  stage: rule
+  pdf: 36
+  c:
+  - Dijkstra Algorithm
+  say: 'The part that catches people out. The computation gave us predecessors, but
+    a forwarding table needs something else. D''s predecessor is C. That is the node
+    just before D on the path. But router A cannot hand a packet to C. It is not even
+    the right neighbor. The path to D is A, B, C, D, so A''s forwarding entry says:
+    to reach D, send to B. In fact, every entry at A says B here. Distance, predecessor,
+    and first hop are three different outputs. The first hop is the only one a forwarding
+    table stores.'
+  moves:
+  - fade:
+      names: _rule
+  - table.show:
+      name: fh
+      zone: right_bottom
+      cols:
+      - Dest
+      - Predecessor
+      - First hop
+      rows:
+      - - B
+        - $routing.small_pred.B
+        - $routing.small_first_hop.B
+      - - C
+        - $routing.small_pred.C
+        - $routing.small_first_hop.C
+      - - D
+        - $routing.small_pred.D
+        - $routing.small_first_hop.D
+      when:
+        phrase: The part
+        frame_offset: 17
+  - net.pulse:
+      name: g
+      path:
+      - C
+      - D
+      when: gave us predecessors
+  - rule:
+      text: A forwarding table needs something else
+      when: but a forwarding table
+  - net.state:
+      name: g
+      nodes:
+        C: now
+      when: D's predecessor is C
+  - rule:
+      text: D's predecessor is C, but A can't hand a packet to C
+      when:
+        phrase: D's predecessor is C
+        frame_offset: 23
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - C
+      state: error
+      when: But router A cannot hand
+  - net.walk:
+      name: g
+      path:
+      - A
+      - B
+      - C
+      - D
+      when: The path to D
+  - rule:
+      text: 'Path A, B, C, D: to reach D, send to B'
+      when:
+        phrase: The path to D
+        frame_offset: 32
+  - net.state:
+      name: g
+      nodes:
+        C: done
+        B: now
+      when: send to B
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - B
+      when: every entry at A says B
+  - rule:
+      text: A forwarding table stores the first hop, not the predecessor.
+      when: Distance, predecessor
+- id: slide
+  stage: rule
+  pdf: 26
+  c:
+  - Dijkstra Algorithm
+  say: Try the instructor's exercise. On this graph, find the shortest path from t
+    to v. It's tempting to go through x, since t reaches x directly at 5. But then
+    x to z to y to v adds 3, for a total of 8. The direct route from x to v, at 4,
+    also gives a total of 8 by way of s and w. The best path is t, s, w, x, z, y,
+    v, adding 2, 1, 1, 1, 1, and 1, which is 7. So the distance is 7, answer B, and
+    the forwarding entry at t points to s, also answer B. More hops, lower cost.
+  moves:
+  - clear: {}
+  - net.show:
+      name: e
+      zone: left
+      nodes:
+        u:
+          k: node
+          at:
+          - 0
+          - 2
+          l: u
+        v:
+          k: node
+          at:
+          - 2
+          - 4
+          l: v
+        y:
+          k: node
+          at:
+          - 5
+          - 4
+          l: y
+        z:
+          k: node
+          at:
+          - 8
+          - 2.6
+          l: z
+        x:
+          k: node
+          at:
+          - 3.2
+          - 2.6
+          l: x
+        w:
+          k: node
+          at:
+          - 2
+          - 1
+          l: w
+        s:
+          k: node
+          at:
+          - 4
+          - 0
+          l: s
+        t:
+          k: node
+          at:
+          - 6.5
+          - 1
+          l: t
+      links:
+      - - u
+        - v
+        - c: 4
+      - - u
+        - w
+        - c: 3
+      - - v
+        - y
+        - c: 1
+      - - v
+        - x
+        - c: 4
+      - - x
+        - w
+        - c: 1
+      - - x
+        - z
+        - c: 1
+      - - x
+        - t
+        - c: 5
+      - - y
+        - z
+        - c: 1
+      - - w
+        - s
+        - c: 1
+      - - s
+        - t
+        - c: 2
+  - net.state:
+      name: e
+      nodes:
+        t: now
+        v: now
+  - table.show:
+      name: opts
+      zone: right_top
+      cols:
+      - Route from t
+      - Cost
+      rows:
+      - - x z y v
+        - $routing.slide26_alt_direct
+      - - s w x v
+        - $routing.slide26_alt_via_x
+      - - s w x z y v
+        - $routing.slide26_cost
+      show: 0
+  - net.walk:
+      name: e
+      path:
+      - t
+      - x
+      - z
+      - y
+      - v
+      when: But then x
+  - table.reveal:
+      name: opts
+  - rule:
+      text: 'Through x, then z, y, v: 5 + 3 = 8'
+      when:
+        phrase: But then x
+        frame_offset: 50
+  - net.walk:
+      name: e
+      path:
+      - t
+      - s
+      - w
+      - x
+      - v
+      when: The direct route
+  - table.reveal:
+      name: opts
+  - rule:
+      text: 'Direct x to v at 4: also 8'
+      when:
+        phrase: The direct route
+        frame_offset: 50
+  - net.walk:
+      name: e
+      path:
+      - t
+      - s
+      - w
+      - x
+      - z
+      - y
+      - v
+      state: done
+      when: The best path
+  - table.reveal:
+      name: opts
+  - rule:
+      text: 't, s, w, x, z, y, v: total 7'
+      when:
+        phrase: The best path
+        frame_offset: 50
+  - table.mark:
+      name: opts
+      r: 2
+      state: done
+      when: So the distance
+  - rule:
+      text: Distance 7; the entry at t points to s
+      when:
+        phrase: So the distance
+        frame_offset: 17
+  - rule:
+      text: More hops, lower cost.
+      when: More hops
+- id: bigger
+  stage: state
+  pdf: 36
+  c: &id002
+  - Dijkstra Algorithm
+  say: The slides also trace a bigger graph from source A, over eight nodes. The method
+    doesn't change. Settle B at 2, which improves D from 5 to 4, and gives E 9 and
+    F 14. C and D then tie at 4. Either may go first, since a tie can alter a predecessor
+    but no shortest distance.
+  moves:
+  - clear: {}
+  - net.show:
+      name: big
+      zone: upper
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: A
+        B:
+          k: node
+          at:
+          - 2.5
+          - 2.4
+          l: B
+        C:
+          k: node
+          at:
+          - 2.5
+          - -0.4
+          l: C
+        D:
+          k: node
+          at:
+          - 4.2
+          - 1
+          l: D
+        G:
+          k: node
+          at:
+          - 6.4
+          - -0.4
+          l: G
+        E:
+          k: node
+          at:
+          - 7
+          - 1.2
+          l: E
+        F:
+          k: node
+          at:
+          - 7.8
+          - 2.8
+          l: F
+        H:
+          k: node
+          at:
+          - 10
+          - 1
+          l: H
+      links:
+      - - A
+        - B
+        - c: 2
+      - - A
+        - C
+        - c: 4
+      - - A
+        - D
+        - c: 5
+      - - B
+        - D
+        - c: 2
+      - - B
+        - E
+        - c: 7
+      - - B
+        - F
+        - c: 12
+      - - C
+        - D
+        - c: 1
+      - - C
+        - G
+        - c: 4
+      - - D
+        - E
+        - c: 4
+      - - D
+        - G
+        - c: 3
+      - - E
+        - G
+        - c: 1
+      - - E
+        - H
+        - c: 5
+      - - F
+        - H
+        - c: 3
+      - - G
+        - H
+        - c: 7
+  - table.show:
+      name: bigt
+      zone: lower
+      data: $routing.slide27_table
+      size: 28
+      show: 0
+  - graph.promote:
+      name: big
+      node: A
+  - graph.promote:
+      name: big
+      node: B
+      via: A
+      when: at 2, which improves
+  - rule:
+      text: 'Settle B at 2: D improves to 4, E 9, F 14'
+      when:
+        phrase: at 2, which improves
+        frame_offset: 26
+  - net.pulse:
+      name: big
+      path:
+      - B
+      - D
+      when:
+        phrase: which improves D
+        frame_offset: 35
+  - net.pulse:
+      name: big
+      path:
+      - B
+      - E
+      when: gives E 9
+  - net.state:
+      name: big
+      nodes:
+        C: candidate
+        D: candidate
+      when: C and D then
+  - rule:
+      text: A tie can alter a predecessor, not a shortest distance
+      when: Either may go
+- id: bigger-2
+  stage: state
+  pdf: 36
+  c: *id002
+  say: Settling D improves E to 8, and gives G 7. Settling G offers E another route
+    costing 8, another tie. Settling E improves H from 14 to 13. And F stays at 14,
+    since going through H would cost 16. Check any of these by adding the edges along
+    the final path. Keep your settled set, tentative distances, and tie policy all
+    explicit, and it's mechanical.
+  moves:
+  - graph.promote:
+      name: big
+      node: D
+      via: B
+      when: Settling D improves
+  - net.pulse:
+      name: big
+      path:
+      - D
+      - E
+  - rule:
+      text: 'Settle D: E improves to 8, G gets 7'
+      when:
+        phrase: Settling D improves
+        frame_offset: 53
+  - net.pulse:
+      name: big
+      path:
+      - D
+      - G
+      when:
+        phrase: and gives G
+        frame_offset: 21
+  - graph.promote:
+      name: big
+      node: C
+      via: A
+  - graph.promote:
+      name: big
+      node: G
+      via: D
+      when:
+        phrase: Settling G offers
+        frame_offset: 6
+  - net.pulse:
+      name: big
+      path:
+      - G
+      - E
+  - rule:
+      text: 'Settle G: another route to E at 8, a tie'
+      when:
+        phrase: Settling G offers
+        frame_offset: 59
+  - graph.promote:
+      name: big
+      node: E
+      via: D
+      when: Settling E improves
+  - net.pulse:
+      name: big
+      path:
+      - E
+      - H
+  - graph.promote:
+      name: big
+      node: H
+      via: E
+  - net.pulse:
+      name: big
+      path:
+      - H
+      - F
+      when: And F stays
+  - graph.promote:
+      name: big
+      node: F
+      via: B
+  - rule:
+      text: F stays at 14; through H would cost 16
+      when:
+        phrase: And F stays
+        frame_offset: 53
+  - table.reveal:
+      name: bigt
+      when: Check any of these
+  - rule:
+      text: Keep settled set, distances and tie policy explicit
+      when: Keep your settled
+- id: pitfall
+  stage: rule
+  pdf: 36
+  c:
+  - Dijkstra Algorithm
+  say: Don't confuse the two sets. A tentative distance can keep improving. A settled
+    one is final, and that's only guaranteed because weights aren't negative.
+  moves:
+  - trap:
+      wrong: Settled nodes can still improve
+      right: A settled distance is final. Only tentative ones can improve.
+- id: changed
+  stage: changed_example
+  pdf: 36
+  c:
+  - Dijkstra Algorithm
+  say: Return to our small graph, and change one number. Raise the cost of the link
+    between B and C from 1 to 6. Everything else stays the same.
+  moves:
+  - clear: {}
+  - net.show: *id003
+  - net.cost:
+      name: g
+      a: B
+      b: C
+      cost: 6
+  - table.show:
+      name: chg
+      zone: right_top
+      cols:
+      - Dest
+      - Distance
+      - First hop
+      rows:
+      - - B
+        - '?'
+        - '?'
+      - - C
+        - '?'
+        - '?'
+      - - D
+        - '?'
+        - '?'
+- id: predict
+  stage: prediction
+  pdf: 36
+  hold: 12
+  c:
+  - Dijkstra Algorithm
+  say: Run Dijkstra in your head. What are the three distances now? And which neighbor
+    does A use to reach C?
+  moves:
+  - pause:
+      text: the new distances, and A's first hop toward C?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 36
+  c:
+  - Dijkstra Algorithm
+  - Link-State Routing
+  say: Settle B at 2. Through B, C would now cost 8, which doesn't beat the direct
+    5. D becomes 6 through B. Then settle C at 5. Through C, D would cost 7, which
+    doesn't beat 6. So the distances are 2, 5, and 6. A's first hop to B is B, to
+    C is C itself, and to D is B. One number changed, and A's route to C changed completely.
+    But before A could install this, the new cost had to reach it. Flooding carries
+    the whole map to everyone. What if routers shared something much smaller instead?
+  moves:
+  - table.set:
+      name: chg
+      r: 0
+      c: 1
+      v: $routing.changed_dist.B
+      when: Settle B at 2
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - C
+      state: error
+      when: Through B, C
+  - rule:
+      text: 'Through B, C would cost 8: it doesn''t beat 5'
+      when:
+        phrase: Through B, C
+        frame_offset: 29
+  - table.set:
+      name: chg
+      r: 2
+      c: 1
+      v: $routing.changed_dist.D
+      when: D becomes 6
+  - table.set:
+      name: chg
+      r: 1
+      c: 1
+      v: $routing.changed_dist.C
+      state: now
+      when: Then settle C
+  - rule:
+      text: 'Settle C at 5. Through C, D would cost 7: no change'
+      when:
+        phrase: Then settle C
+        frame_offset: 20
+  - net.pulse:
+      name: g
+      path:
+      - C
+      - D
+      state: error
+      when: Through C, D would cost 7
+  - rule:
+      text: 'Distances: 2, 5, 6'
+      when: So the distances
+  - table.set:
+      name: chg
+      r: 0
+      c: 2
+      v: $routing.changed_first_hop.B
+      when: A's first hop to B
+  - rule:
+      text: 'First hops: B, C, B'
+      when:
+        phrase: A's first hop
+        frame_offset: 20
+  - table.set:
+      name: chg
+      r: 1
+      c: 2
+      v: $routing.changed_first_hop.C
+      state: now
+      when: to C is C
+  - table.set:
+      name: chg
+      r: 2
+      c: 2
+      v: $routing.changed_first_hop.D
+      when: and to D
+  - net.walk:
+      name: g
+      path:
+      - A
+      - C
+      when: One number changed
+  - rule:
+      text: One number changed A's route to C
+      when:
+        phrase: One number changed
+        frame_offset: 32
+  - net.pulse:
+      name: g
+      path:
+      - B
+      - C
+      state: error
+      when: the new cost had to reach it
+  - rule:
+      text: 'Next: what if routers share distances instead of a map?'
+      when: Flooding carries
+prediction_contracts:
+- prediction_beat: 10.1.predict
+  answer_beat: 10.1.answer
+  answer_events:
+  - 10.1.answer:move:0
+  - 10.1.answer:move:1
+  - 10.1.answer:move:3
+  - 10.1.answer:move:4
+  - 10.1.answer:move:6
+  - 10.1.answer:move:8
+  - 10.1.answer:move:10
+  - 10.1.answer:move:11
+  - 10.1.answer:move:12
+  - 10.1.answer:move:14
+  - 10.1.answer:move:15
+  answer_objects:
+  - object: chg
+    after: 10.1.answer:move:0
+    effect: table.set
+    selector:
+      r: 0
+      c: 1
+    before_answer: hidden_or_neutral
+  - object: g
+    after: 10.1.answer:move:1
+    effect: net.pulse
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: chg
+    after: 10.1.answer:move:3
+    effect: table.set
+    selector:
+      r: 2
+      c: 1
+    before_answer: hidden_or_neutral
+  - object: chg
+    after: 10.1.answer:move:4
+    effect: table.set
+    selector:
+      r: 1
+      c: 1
+    before_answer: hidden_or_neutral
+  - object: chg
+    after: 10.1.answer:move:8
+    effect: table.set
+    selector:
+      r: 0
+      c: 2
+    before_answer: hidden_or_neutral
+  - object: chg
+    after: 10.1.answer:move:10
+    effect: table.set
+    selector:
+      r: 1
+      c: 2
+    before_answer: hidden_or_neutral
+  - object: chg
+    after: 10.1.answer:move:11
+    effect: table.set
+    selector:
+      r: 2
+      c: 2
+    before_answer: hidden_or_neutral
+  - object: g
+    after: 10.1.answer:move:12
+    effect: net.walk
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 10.1.answer:move:15
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '10.2'
+title: Distance vector
+deck: lec10-routing.pdf
+target_min: 7
+concepts:
+- Distance-Vector Routing
+- Bellman-Ford Updates
+- RIP
+- EIGRP
+beats:
+- id: question
+  stage: question
+  pdf: 37
+  c:
+  - Distance-Vector Routing
+  say: Link state asks every router to store and process a map of the whole network.
+    Could a router find good paths knowing almost nothing, just by asking its neighbors
+    one simple question? How far are you from the destination?
+  moves:
+  - heading:
+      text: 'Lecture 10: distance vector'
+  - q:
+      text: Can a router find good paths just by asking its neighbors?
+- id: idea
+  stage: animation
+  pdf: 37
+  c:
+  - Distance-Vector Routing
+  say: That's distance-vector routing. No router keeps a map. Each one keeps a list
+    of destinations and its best known distance to each, and it tells that list only
+    to its direct neighbors. Then each router combines what its neighbors said with
+    the cost of reaching them. It's like asking for directions. You can't see the
+    route. But if your neighbor says they're 3 kilometers from the station, and they
+    are 3 kilometers from you, then you know something about your own distance.
+  moves:
+  - clear: {}
+  - net.show:
+      name: a
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 1.1
+          l: B
+        C:
+          k: node
+          at:
+          - 3
+          - -1.1
+          l: C
+        Z:
+          k: node
+          at:
+          - 6
+          - 0
+          l: Z
+      links:
+      - - A
+        - B
+        - c: 3
+      - - A
+        - C
+        - c: 2
+      - - B
+        - Z
+        - s: dim
+      - - C
+        - Z
+        - s: dim
+  - rule:
+      text: Each keeps destinations and best known distances
+      when: Each one keeps
+  - msg.send:
+      name: a
+      a: B
+      b: A
+      text: 3 to Z
+      when: only to its direct
+  - msg.send:
+      name: a
+      a: C
+      b: A
+      text: 5 to Z
+  - net.state:
+      name: a
+      nodes:
+        A: now
+      when: Then each router combines
+  - rule:
+      text: Like asking a neighbor for directions
+      when: It's like asking
+  - net.badge:
+      name: a
+      node: B
+      text: says 3 to Z
+      side: up
+      when: they're 3
+  - net.badge:
+      name: a
+      node: C
+      text: says 5 to Z
+      side: down
+- id: compute
+  stage: state
+  pdf: 40
+  c:
+  - Bellman-Ford Updates
+  say: 'Compute one. A''s link to B costs 3, and B says it''s 3 away from Z. That''s
+    a total of 6. A''s link to C costs 2, and C says 5. That''s a total of 7. The
+    minimum is 6, through B. So A''s distance is 6, and its next hop is B. A doesn''t
+    know B''s internal path to Z, and it doesn''t need to. Now B advertises something
+    new: its distance is 10. Through B would now cost 13. Through C still costs 7.
+    So A switches to C, and its table changes with no map in sight.'
+  moves:
+  - clear:
+      keep:
+      - a
+  - table.show:
+      name: u
+      zone: right
+      cols:
+      - Via
+      - Link
+      - Says
+      - Total
+      rows:
+      - - B
+        - 3
+        - 3
+        - $routing.bf_first.totals.B
+      - - C
+        - 2
+        - 5
+        - $routing.bf_first.totals.C
+      show: 0
+  - net.pulse:
+      name: a
+      path:
+      - B
+      - A
+      when: A's link to B
+  - table.reveal:
+      name: u
+  - rule:
+      text: 'Through B: 3 + 3 = 6'
+      when:
+        phrase: A's link to B
+        frame_offset: 47
+  - net.pulse:
+      name: a
+      path:
+      - C
+      - A
+      when: A's link to C
+  - table.reveal:
+      name: u
+  - rule:
+      text: 'Through C: 2 + 5 = 7'
+      when:
+        phrase: A's link to C
+        frame_offset: 47
+  - table.mark:
+      name: u
+      r: 0
+      state: done
+      when: The minimum is 6
+  - rule:
+      text: 'Minimum 6: next hop B'
+      when:
+        phrase: The minimum is 6
+        frame_offset: 17
+  - net.walk:
+      name: a
+      path:
+      - A
+      - B
+      state: done
+      when: So A's distance
+  - rule:
+      text: A doesn't need B's internal path to Z
+      when: A doesn't know
+  - msg.send:
+      name: a
+      a: B
+      b: A
+      text: now 10
+      kind: error
+      when: Now B advertises
+  - net.badge:
+      name: a
+      node: B
+      text: says 10 to Z
+      side: up
+  - rule:
+      text: 'B now says 10: through B costs 13'
+      when:
+        phrase: Now B advertises
+        frame_offset: 56
+  - table.set:
+      name: u
+      r: 0
+      c: 2
+      v: 10
+      when: Through B would
+  - table.set:
+      name: u
+      r: 0
+      c: 3
+      v: $routing.bf_second.totals.B
+  - table.mark:
+      name: u
+      r: 0
+      state: null
+  - table.mark:
+      name: u
+      r: 1
+      state: done
+      when: So A switches
+  - net.walk:
+      name: a
+      path:
+      - A
+      - C
+      state: done
+  - rule:
+      text: 'Through C is still 7: A switches to C'
+      when:
+        phrase: So A switches
+        frame_offset: 47
+- id: formula
+  stage: rule
+  pdf: 38
+  c:
+  - Bellman-Ford Updates
+  say: The rule, called the Bellman-Ford update. x is me. y is the destination. v
+    ranges over my neighbors. My distance to y is the minimum, over all neighbors
+    v, of my link cost to v, plus v's advertised distance to y. And the neighbor that
+    gives the minimum becomes my next hop. Two terms, and they come from different
+    places. The first I can measure myself. The second I'm trusting my neighbor about.
+  moves:
+  - fade:
+      names: _rule
+  - tex:
+      name: bf
+      zone: right_top
+      tex: D_x(y)=\min_{v}\{c(x,v)+D_v(y)\}
+      size: 46
+  - net.state:
+      name: a
+      nodes:
+        A: now
+        Z: now
+      when: x is me
+  - rule:
+      text: x is me, y the destination, v a neighbor
+      when:
+        phrase: x is me
+        frame_offset: 23
+  - net.state:
+      name: a
+      nodes:
+        B: candidate
+        C: candidate
+      when: v ranges over
+  - net.pulse:
+      name: a
+      path:
+      - A
+      - B
+      when: of my link cost
+  - rule:
+      text: My link cost to v, plus v's advertised distance
+      when:
+        phrase: of my link cost
+        frame_offset: 29
+  - msg.send:
+      name: a
+      a: B
+      b: A
+      text: 3 to Z
+      when:
+        phrase: plus v's advertised
+        frame_offset: 8
+  - net.state:
+      name: a
+      nodes:
+        B: done
+        C: null
+      when: And the neighbor
+  - rule:
+      text: The neighbor giving the minimum is my next hop
+      when:
+        phrase: And the neighbor
+        frame_offset: 23
+  - text:
+      name: terms
+      zone: right_bottom
+      lines:
+      - 'c(x,v): I measure this myself'
+      - 'D_v(y): I trust my neighbor'
+      when: Two terms
+  - rule:
+      text: One term I measure; the other I trust
+      when:
+        phrase: Two terms
+        frame_offset: 29
+- id: setup-rounds
+  stage: animation
+  pdf: 42
+  c:
+  - Distance-Vector Routing
+  say: 'How does a whole network find its answers? Knowledge spreads in rounds. Use
+    our graph from before, and an idealized synchronous exercise: in each round, every
+    router uses only the advertisements from the previous round. In round one, each
+    router knows just itself and its direct neighbors. So A has B at 2, C at 5, and
+    D at infinity.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: g
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.2
+          l: B
+        C:
+          k: node
+          at:
+          - 3
+          - -0.2
+          l: C
+        D:
+          k: node
+          at:
+          - 6
+          - 1
+          l: D
+      links:
+      - - A
+        - B
+        - c: 2
+      - - A
+        - C
+        - c: 5
+      - - B
+        - C
+        - c: 1
+      - - B
+        - D
+        - c: 4
+      - - C
+        - D
+        - c: 2
+  - table.show:
+      name: dv
+      zone: right_top
+      data: $routing.dv_table_A
+      show: 0
+  - rule:
+      text: Knowledge spreads in rounds
+      when: Knowledge spreads
+  - rule:
+      text: Each round uses only last round's advertisements
+      when: in each round
+  - table.reveal:
+      name: dv
+      when: In round one
+  - rule:
+      text: 'Round one: only direct neighbors'
+      when:
+        phrase: In round one
+        frame_offset: 20
+  - rule:
+      text: "A has B 2, C 5, D \u221E"
+      when: So A has
+- id: round2
+  stage: state
+  pdf: 43
+  c:
+  - Bellman-Ford Updates
+  - Distance-Vector Routing
+  say: Round two. A hears B's vector from round one. B says it's 1 from C, and 4 from
+    D. So through B, C costs 2 plus 1, which is 3. And D costs 2 plus 4, which is
+    6. A's table now reflects paths of up to two edges.
+  moves:
+  - msg.send:
+      name: g
+      a: B
+      b: A
+      text: C 1, D 4
+      when: A hears B's
+  - rule:
+      text: 'A hears B: C is 1 away, D is 4'
+      when:
+        phrase: A hears B's
+        frame_offset: 41
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - B
+      - C
+      when: So through B
+  - table.reveal:
+      name: dv
+  - rule:
+      text: 'Through B, C: 2 + 1 = 3'
+      when:
+        phrase: So through B
+        frame_offset: 47
+  - net.pulse:
+      name: g
+      path:
+      - A
+      - B
+      - D
+      when: And D costs
+  - rule:
+      text: After round two, A's table reflects paths of up to two edges.
+      when: A's table now
+- id: round3
+  stage: state
+  pdf: 44
+  c:
+  - Bellman-Ford Updates
+  - Distance-Vector Routing
+  say: Here's the subtle step. During round two, B also heard from C, and learned
+    it can reach D for 1 plus 2, which is 3. In round three, B advertises that better
+    number. A computes 2 plus 3, which is 5, through B. It has discovered the path
+    A, B, C, D, without ever knowing that C was involved. The next round changes nothing,
+    so it has converged, on the same answers Dijkstra gave.
+  moves:
+  - msg.send:
+      name: g
+      a: C
+      b: B
+      text: D 2
+      when: During round two
+  - rule:
+      text: In round two, B learned D for 1 + 2 = 3
+      when:
+        phrase: During round two
+        frame_offset: 41
+  - net.badge:
+      name: g
+      node: B
+      text: D is 3
+      side: up
+      state: now
+      when: and learned
+  - msg.send:
+      name: g
+      a: B
+      b: A
+      text: D 3
+      when: In round three
+  - rule:
+      text: 'Round three: A computes 2 + 3 = 5 through B'
+      when:
+        phrase: In round three
+        frame_offset: 41
+  - table.reveal:
+      name: dv
+      when: A computes
+  - net.walk:
+      name: g
+      path:
+      - A
+      - B
+      - C
+      - D
+      state: done
+      when: It has discovered
+  - rule:
+      text: A found A, B, C, D without knowing C was involved
+      when:
+        phrase: It has discovered
+        frame_offset: 32
+  - table.mark:
+      name: dv
+      r: 2
+      state: done
+      when: The next round
+  - rule:
+      text: 'Nothing changes next round: converged, same as Dijkstra'
+      when:
+        phrase: The next round
+        frame_offset: 17
+- id: real
+  stage: rule
+  pdf: 38
+  c:
+  - RIP
+  - EIGRP
+  say: Those neat rounds are a classroom picture. Real routers update whenever they
+    like, with no global clock. A value from a neighbor could also be old, not a final
+    truth. RIP and EIGRP are the named members of this family. RIP uses hop count
+    as its metric. Don't assume EIGRP behaves identically, because its rules differ
+    in detail.
+  moves:
+  - fade:
+      names: _rule
+  - rule:
+      text: Real updates have no global clock, and a neighbor's value may be old.
+      when: Real routers
+  - rule:
+      text: A neighbor's value could be old
+      when: A value from
+  - table.show:
+      name: fam
+      zone: right_bottom
+      cols:
+      - Protocol
+      - Family
+      rows:
+      - - RIP
+        - distance vector, hop count
+      - - EIGRP
+        - advanced distance vector
+      when: RIP and EIGRP
+  - rule:
+      text: EIGRP's rules differ in detail
+      when: Don't assume
+- id: real-more
+  stage: state
+  pdf: 38
+  c:
+  - RIP
+  - EIGRP
+  say: Classify them. OSPF and IS-IS belong with link state. RIP and EIGRP belong
+    with distance vector. RIP gives each link a hop cost of 1, so usable distances
+    run from 1 to 15, and 16 means unreachable. Only RIP has that limit, as far as
+    this lecture shows, so don't carry it over to EIGRP.
+  moves:
+  - clear: {}
+  - table.show:
+      name: fam2
+      zone: top
+      cols:
+      - Family
+      - Protocols
+      rows:
+      - - Link state
+        - OSPF, IS-IS
+      - - Distance vector
+        - RIP, EIGRP
+      show: 0
+  - table.reveal:
+      name: fam2
+      when:
+        phrase: OSPF and IS-IS
+        frame_offset: 16
+  - rule:
+      text: 'Link state: OSPF and IS-IS'
+      when:
+        phrase: OSPF and IS-IS
+        frame_offset: 36
+  - table.reveal:
+      name: fam2
+      when: RIP and EIGRP
+  - rule:
+      text: 'Distance vector: RIP and EIGRP'
+      when:
+        phrase: RIP and EIGRP
+        frame_offset: 20
+  - tex:
+      name: rp
+      zone: bottom
+      tex: '\text{RIP: 1 to 15 usable, and }16=\infty'
+      size: 44
+      when: RIP gives
+  - rule:
+      text: 'RIP: usable 1 to 15; 16 means unreachable'
+      when:
+        phrase: RIP gives
+        frame_offset: 32
+  - rule:
+      text: Don't carry RIP's limit over to EIGRP
+      when: Only RIP
+- id: compare
+  stage: rule
+  pdf: 46
+  c:
+  - Distance-Vector Routing
+  say: 'Compare what''s being trusted. Link state trusts link facts, and computes
+    its own paths. Distance vector trusts its neighbors'' computed results. Both reach
+    shortest paths with a shared metric. But they share different knowledge, and that
+    decides how they behave when things break. The reusable distinction is simple:
+    a map, versus neighbors'' distances.'
+  moves:
+  - clear: {}
+  - table.show:
+      name: cmp
+      zone: top
+      cols:
+      - ''
+      - Link state
+      - Distance vector
+      rows:
+      - - Shares
+        - link facts
+        - computed distances
+      - - With
+        - everyone
+        - neighbors only
+      - - Computes
+        - own full tree
+        - one update at a time
+      show: 0
+  - table.reveal:
+      name: cmp
+      when: Link state trusts
+  - table.reveal:
+      name: cmp
+      when: Distance vector trusts
+  - table.reveal:
+      name: cmp
+      when: Both reach
+  - rule:
+      text: Link state shares a map. Distance vector shares neighbors' distances.
+      when: The reusable
+- id: robustness
+  stage: rule
+  pdf: 46
+  c:
+  - Distance-Vector Routing
+  say: The lecture adds a broad comparison, and you should treat it as a family-level
+    teaching picture, rather than a universal benchmark. Link state sends more messages,
+    since facts flood everywhere, and each router runs its own computation. If one
+    router computes something wrong, that error stays mostly local. Distance vector
+    exchanges only with its neighbors. But a wrong number is passed along as if it
+    were a fact, so one router's error can spread through everyone's tables. Real
+    costs depend on graph size and on protocol details.
+  moves:
+  - clear: {}
+  - table.show:
+      name: rb
+      zone: top
+      cols:
+      - ''
+      - Link state
+      - Distance vector
+      rows:
+      - - Messages
+        - flooded everywhere
+        - neighbors only
+      - - A wrong result
+        - mostly local
+        - spreads to others
+      show: 0
+  - table.reveal:
+      name: rb
+      when: Link state sends
+  - table.reveal:
+      name: rb
+      when: If one router
+  - table.mark:
+      name: rb
+      r: 1
+      state: error
+      when: But a wrong number
+  - rule:
+      text: A family-level picture, not a universal benchmark.
+      when: Real costs
+- id: pitfall
+  stage: rule
+  pdf: 46
+  c:
+  - Distance-Vector Routing
+  say: In a synchronous trace, here's where marks get lost. Every router computes
+    from the previous round's advertisements. Mixing in values from the current round
+    changes the answer.
+  moves:
+  - trap:
+      wrong: Use this round's freshly updated values
+      right: In a synchronous exercise, use only the previous round's values
+- id: changed
+  stage: changed_example
+  pdf: 41
+  c:
+  - Bellman-Ford Updates
+  say: You do one. Router x has two neighbors. Its link to P costs 4, and P advertises
+    7 to the destination. Its link to Q costs 9, and Q advertises 1.
+  moves:
+  - table.show:
+      name: y
+      zone: bottom
+      cols:
+      - Via
+      - Link
+      - Says
+      - Total
+      rows:
+      - - P
+        - 4
+        - 7
+        - '?'
+      - - Q
+        - 9
+        - 1
+        - '?'
+  - rule:
+      text: x to P costs 4; P advertises 7
+      when: Its link to P
+  - rule:
+      text: x to Q costs 9; Q advertises 1
+      when: Its link to Q
+- id: predict
+  stage: prediction
+  pdf: 41
+  hold: 12
+  c:
+  - Bellman-Ford Updates
+  say: Which neighbor wins? Then suppose P's link cost rises to 6. Does your answer
+    change?
+  moves:
+  - pause:
+      text: which neighbor wins? and if P's link rises to 6?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 41
+  c:
+  - Bellman-Ford Updates
+  - Distance-Vector Routing
+  say: P gives 11, and Q gives 10, so Q wins, even though its link is the expensive
+    one. Raise P's link to 6, and P only gets worse, at 13, so Q still wins. Notice
+    that the router is relying on a number somebody else told it. It has no way to
+    know how that number was produced, and no way to know whether the path behind
+    it runs right back through itself. We'll come back to exactly that danger. First,
+    there's one situation where neither of these approaches works at all.
+  moves:
+  - table.set:
+      name: y
+      r: 0
+      c: 3
+      v: 11
+      when: P gives 11
+  - table.set:
+      name: y
+      r: 1
+      c: 3
+      v: 10
+      state: done
+      when: and Q gives 10
+  - table.set:
+      name: y
+      r: 0
+      c: 1
+      v: 6
+      when: Raise P's link
+  - table.set:
+      name: y
+      r: 0
+      c: 3
+      v: 13
+      when: at 13
+  - rule:
+      text: The router trusts a number. It cannot see the path behind it.
+      when: Notice that
+  - rule:
+      text: Or whether its path runs back through this router
+      when: and no way to know
+  - rule:
+      text: 'Next: where neither approach works'
+      when: First, there's one
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 10.2.predict
+  answer_beat: 10.2.answer
+  answer_events:
+  - 10.2.answer:move:0
+  - 10.2.answer:move:1
+  - 10.2.answer:move:2
+  - 10.2.answer:move:3
+  - 10.2.answer:move:4
+  answer_objects:
+  - object: y
+    after: 10.2.answer:move:0
+    effect: table.set
+    selector:
+      r: 0
+      c: 3
+    before_answer: hidden_or_neutral
+  - object: y
+    after: 10.2.answer:move:1
+    effect: table.set
+    selector:
+      r: 1
+      c: 3
+    before_answer: hidden_or_neutral
+  - object: y
+    after: 10.2.answer:move:2
+    effect: table.set
+    selector:
+      r: 0
+      c: 1
+    before_answer: hidden_or_neutral
+  - object: y
+    after: 10.2.answer:move:3
+    effect: table.set
+    selector:
+      r: 0
+      c: 3
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 10.2.answer:move:4
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '10.3'
+title: Path vector
+deck: lec10-routing.pdf
+target_min: 3.5
+concepts:
+- Path-Vector Routing
+beats:
+- id: question
+  stage: question
+  pdf: 47
+  c:
+  - Path-Vector Routing
+  say: Between organizations, neither method fits. Would your company publish its
+    internal map to its competitors, as link state needs? Would it accept a single
+    cost number from them, whose meaning it can't check? Networks run by different
+    owners need something else.
+  moves:
+  - heading:
+      text: 'Lecture 10: path vector'
+  - q:
+      text: Would a network share its map, or trust a rival's number?
+- id: limits
+  stage: animation
+  pdf: 48
+  c:
+  - Path-Vector Routing
+  say: Consider why each one breaks down. Link state floods topology, which reveals
+    private structure, and it requires a common metric. Distance vector hides the
+    structure, so it's on the right track. But one bare number has two problems. Different
+    networks measure cost differently, so the numbers aren't comparable. And the number
+    hides the route, so nobody can apply a preference such as, avoid that competitor.
+  moves:
+  - clear: {}
+  - table.show:
+      name: lim
+      zone: top
+      cols:
+      - Method
+      - Problem between organizations
+      rows:
+      - - Link state
+        - reveals topology; needs a shared metric
+      - - Distance vector
+        - one number hides the path
+  - rule:
+      text: Link state reveals topology and needs a common metric
+      when: Link state floods
+  - rule:
+      text: Distance vector hides the structure
+      when: Distance vector hides
+  - rule:
+      text: Costs aren't comparable across networks
+      when: Different networks
+  - rule:
+      text: The number hides the route, so no preferences
+      when: And the number hides
+- id: fix
+  stage: state
+  pdf: 50
+  c:
+  - Path-Vector Routing
+  say: The fix is to advertise the whole path. Instead of saying, I'm 3 away, a network
+    says, I can reach it through networks 3, 2, 1. Each network that passes this along
+    adds its own identifier at the front. This is path-vector routing, and it's the
+    basis of BGP.
+  moves:
+  - net.show:
+      name: pv
+      zone: bottom
+      nodes:
+        n1:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: AS 1
+        n2:
+          k: cloud
+          at:
+          - 3.5
+          - 0
+          l: AS 2
+        n3:
+          k: cloud
+          at:
+          - 7
+          - 0
+          l: AS 3
+        n4:
+          k: cloud
+          at:
+          - 10.5
+          - 0
+          l: AS 4
+      links:
+      - - n1
+        - n2
+      - - n2
+        - n3
+      - - n3
+        - n4
+  - rule:
+      text: 'The fix: advertise the whole path'
+      when:
+        phrase: The fix is
+        frame_offset: 41
+  - msg.send:
+      name: pv
+      a: n1
+      b: n2
+      text: '1'
+      when: I can reach it through
+  - net.badge:
+      name: pv
+      node: n2
+      text: 2, 1
+      side: up
+      when: Each network
+  - rule:
+      text: Each network adds its own number at the front
+      when:
+        phrase: Each network that passes
+        frame_offset: 17
+  - msg.send:
+      name: pv
+      a: n2
+      b: n3
+      text: 2, 1
+      when: adds its own identifier
+  - net.badge:
+      name: pv
+      node: n3
+      text: 3, 2, 1
+      side: up
+      when:
+        phrase: adds its own identifier at the front
+        frame_offset: 40
+  - msg.send:
+      name: pv
+      a: n3
+      b: n4
+      text: 3, 2, 1
+      when: This is path-vector routing
+  - net.badge:
+      name: pv
+      node: n4
+      text: 4, 3, 2, 1
+      side: up
+      when: it's the basis of BGP
+  - net.walk:
+      name: pv
+      path:
+      - n1
+      - n2
+      - n3
+      - n4
+- id: loop
+  stage: state
+  pdf: 51
+  c:
+  - Path-Vector Routing
+  say: Benefit one is easy loop detection. Say AS 3 offers the path 3, 2, 1 back to
+    AS 1. AS 1 looks through the list, sees itself, and rejects it. It doesn't need
+    to count, or wait. The loop is visible right there in the data.
+  moves:
+  - fade:
+      names: _rule
+  - packet.spawn:
+      name: false
+      net: pv
+      at: n3
+      layers:
+      - label
+  - packet.hop:
+      name: false
+      to:
+      - n2
+      - n1
+  - packet.drop:
+      name: false
+      when: sees itself
+  - rule:
+      text: A router rejects any path containing itself.
+- id: policy
+  stage: rule
+  pdf: 52
+  c:
+  - Path-Vector Routing
+  say: Benefit two is policy. Now that you can see the whole route, you can apply
+    your own judgment. A network may prefer a longer path, for business reasons. It
+    may avoid one that crosses a particular network. It may decide not to pass a route
+    on to some neighbor. There's no shared definition of best anymore. That flexibility
+    is the point. But it also means that loop-free does not imply everyone's choices
+    fit together. We'll return to that.
+  moves:
+  - rule:
+      text: Seeing the whole path lets each network apply its own policy.
+  - rule:
+      text: Prefer a longer path, for business reasons
+      when: A network may prefer
+  - rule:
+      text: No shared definition of best anymore
+      when: There's no shared
+  - rule:
+      text: Loop-free doesn't mean the choices fit together
+      when: But it also means
+- id: pitfall
+  stage: rule
+  pdf: 52
+  c:
+  - Path-Vector Routing
+  say: Don't overclaim here. Rejecting paths that contain your own AS stops loops.
+    It doesn't promise immediate convergence, and it doesn't rule out policy oscillation.
+  moves:
+  - trap:
+      wrong: Path vector guarantees quick, stable routing
+      right: It rejects loops. Convergence and stability are separate.
+- id: changed
+  stage: changed_example
+  pdf: 51
+  c:
+  - Path-Vector Routing
+  say: Test the rule. AS 4 receives the path 3, 2, 1. Next, AS 2 receives the path
+    3, 4, 2, 1. And then AS 5 is offered a path of length two and a path of length
+    five.
+  moves:
+  - clear: {}
+  - table.show:
+      name: c
+      zone: top
+      cols:
+      - Receiver
+      - Offered path
+      - Accept?
+      rows:
+      - - AS 4
+        - 3, 2, 1
+        - '?'
+      - - AS 2
+        - 3, 4, 2, 1
+        - '?'
+      - - AS 5
+        - 4, 1 or 3, 2, 6, 7, 1
+        - '?'
+- id: predict
+  stage: prediction
+  pdf: 51
+  hold: 6
+  c:
+  - Path-Vector Routing
+  say: Which paths get rejected as loops? And must AS 5 choose the shorter one?
+  moves:
+  - pause:
+      text: which are loops? must AS 5 pick the short path?
+- id: answer
+  stage: explanation
+  pdf: 52
+  c:
+  - Path-Vector Routing
+  say: 'AS 4 accepts: it isn''t in the list. AS 2 rejects: its own number appears.
+    And AS 5 may take either one. Its local policy can prefer the longer path. Path
+    vector tells it what''s possible, and it decides what''s best. One routing idea
+    remains in this lecture, and it asks a different question. Once a path is known,
+    must every router really look up the address all over again?'
+  moves:
+  - table.set:
+      name: c
+      r: 0
+      c: 2
+      v: accept
+      state: done
+  - table.set:
+      name: c
+      r: 1
+      c: 2
+      v: reject
+      state: error
+  - table.set:
+      name: c
+      r: 2
+      c: 2
+      v: either
+      state: now
+  - table.mark:
+      name: c
+      r: 2
+      state: now
+      when: Its local policy
+  - rule:
+      text: Path vector shows what's possible; AS 5 decides what's best
+      when: Path vector tells
+  - table.mark:
+      name: c
+      r: 2
+      state: done
+      when: decides what's best
+  - rule:
+      text: One routing idea remains
+      when: One routing idea
+  - rule:
+      text: Must every router look up the address again?
+      when: Once a path
+prediction_contracts:
+- prediction_beat: 10.3.predict
+  answer_beat: 10.3.answer
+  answer_events:
+  - 10.3.answer:move:0
+  - 10.3.answer:move:1
+  - 10.3.answer:move:2
+  answer_objects:
+  - object: c
+    after: 10.3.answer:move:0
+    effect: table.set
+    selector:
+      r: 0
+      c: 2
+    before_answer: hidden_or_neutral
+  - object: c
+    after: 10.3.answer:move:1
+    effect: table.set
+    selector:
+      r: 1
+      c: 2
+    before_answer: hidden_or_neutral
+  - object: c
+    after: 10.3.answer:move:2
+    effect: table.set
+    selector:
+      r: 2
+      c: 2
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '10.4'
+title: MPLS labels
+deck: lec10-routing.pdf
+target_min: 4.5
+concepts:
+- MPLS Label Switching
+- RSVP Signaling
+beats:
+- id: question
+  stage: question
+  pdf: 53
+  c:
+  - MPLS Label Switching
+  say: Every router on a path repeats a longest prefix match, for the very same packet.
+    And all traffic to one destination follows the shortest path, even when another
+    route has spare capacity. Could we set up a path in advance, and just follow it?
+  moves:
+  - heading:
+      text: 'Lecture 10: MPLS labels'
+  - q:
+      text: Could we set up a path in advance, and just follow it?
+- id: label
+  stage: animation
+  pdf: 54
+  c:
+  - MPLS Label Switching
+  say: That's what MPLS does. At the edge of the network, an ingress router classifies
+    the packet, and pushes a short label in front of the IP header. Routers inside
+    read only the label, and look it up in a small exact table. The label says which
+    prepared path this packet is on. The last router pops the label, and ordinary
+    IP takes over.
+  moves:
+  - clear: {}
+  - net.show:
+      name: m
+      zone: top
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        R1:
+          k: router
+          at:
+          - 3
+          - 0
+          l: R1
+        R2:
+          k: router
+          at:
+          - 6
+          - 0
+          l: R2
+        R3:
+          k: router
+          at:
+          - 9
+          - 0
+          l: R3
+        W:
+          k: server
+          at:
+          - 12
+          - 0
+          l: Server
+      links:
+      - - L
+        - R1
+      - - R1
+        - R2
+        - s: active
+      - - R2
+        - R3
+        - s: active
+      - - R3
+        - W
+  - stack.show:
+      name: st
+      zone: left_bottom
+      width: 5.6
+      reserve: 1
+      layers:
+      - t: "IP: laptop \u2192 server"
+        k: ip
+  - packet.spawn:
+      name: p
+      net: m
+      at: L
+      layers:
+      - ip
+  - packet.hop:
+      name: p
+      to: R1
+  - packet.wrap:
+      name: p
+      kind: label
+      when: an ingress router
+  - stack.push:
+      name: st
+      text: MPLS label 17
+      kind: label
+  - rule:
+      text: Ingress classifies the packet and pushes a label
+      when:
+        phrase: an ingress router
+        frame_offset: 44
+  - rule:
+      text: Routers inside read only the label
+      when: Routers inside
+  - rule:
+      text: The last router pops the label
+      when: The last router
+  pre_roll: 0.2
+- id: swap
+  stage: state
+  pdf: 56
+  c:
+  - MPLS Label Switching
+  say: 'Labels only have local meaning. Label 17 reaches R2, whose table says: incoming
+    17, swap to 42, and send on this interface. Then R3 sees 42, and its table says
+    to pop. Each router picks its own numbers, so the label changes at each hop while
+    the path stays fixed. Does that remind you of something? The label behaves just
+    like the yellow envelope. Only the IP header stays the same throughout.'
+  moves:
+  - fade:
+      names: _rule
+  - table.show:
+      name: sw
+      zone: right_bottom
+      cols:
+      - Router
+      - In
+      - Out
+      rows:
+      - - R2
+        - 17
+        - 42
+      - - R3
+        - 42
+        - pop
+      show: 0
+  - packet.hop:
+      name: p
+      to: R2
+      when: Label 17 reaches
+  - table.reveal:
+      name: sw
+  - stack.set:
+      name: st
+      layer: 0
+      text: MPLS label 42
+      kind: label
+  - packet.hop:
+      name: p
+      to: R3
+      when: Then R3 sees
+  - table.reveal:
+      name: sw
+  - packet.peel:
+      name: p
+  - stack.pop:
+      name: st
+  - packet.hop:
+      name: p
+      to: W
+- id: signal
+  stage: state
+  pdf: 53
+  c:
+  - RSVP Signaling
+  clar:
+  - rsvp-te
+  say: Who installed those table entries? Signaling. Before any data flows, messages
+    travel along the chosen path, setting up state at each router. The lecture names
+    RSVP, and for MPLS traffic engineering, the specific extension is RSVP-TE. Because
+    the path is explicit, an operator can steer some traffic away from the shortest
+    route, onto spare capacity. That is traffic engineering.
+  moves:
+  - clear:
+      keep:
+      - m
+  - packet.spawn:
+      name: sg
+      net: m
+      at: R1
+      layers:
+      - transport
+      when: Before any data
+  - packet.hop:
+      name: sg
+      to:
+      - R2
+      - R3
+  - rule:
+      text: Signaling sets up state along the chosen path
+      when:
+        phrase: Before any data
+        frame_offset: 50
+  - card:
+      kind: clarification
+      text: For MPLS traffic engineering the specific extension is RSVP-TE.
+      zone: bottom
+      when: The lecture names
+  - rule:
+      text: An explicit path can steer traffic onto spare capacity
+      when: Because the path
+- id: te
+  stage: state
+  pdf: 55
+  c:
+  - MPLS Label Switching
+  say: See what that buys. With ordinary IP, two packets for the same destination
+    take the same route from any given router, because they match the same prefix.
+    With labels, an ingress router can place them on different prepared paths. The
+    original motive for MPLS included faster lookup. Today, traffic engineering is
+    the bigger reason.
+  moves:
+  - clear:
+      keep:
+      - m
+  - rule:
+      text: 'Plain IP: same prefix, same route'
+      when: With ordinary IP
+  - fade:
+      names: _rule
+      when: With labels
+  - card:
+      kind: note
+      text: 'Same destination, different prepared paths: that''s traffic engineering.'
+      zone: bottom
+      when:
+        phrase: With labels
+        frame_offset: 17
+  - rule:
+      text: Original motive included faster lookup
+      when: The original motive
+  - rule:
+      text: 'Today: traffic engineering is the bigger reason'
+      when: Today
+- id: rule
+  stage: rule
+  pdf: 54
+  c:
+  - MPLS Label Switching
+  say: Remember what a label path is, and what it is not. It's prepared forwarding
+    state. It doesn't by itself reserve bandwidth, and it doesn't make delivery reliable.
+    Something must still decide what state to install, and that's the control plane
+    again.
+  moves:
+  - rule:
+      text: 'A label path is prepared forwarding state: not a reservation, and not
+        reliable delivery.'
+  - rule:
+      text: It doesn't reserve bandwidth or make delivery reliable
+      when: It doesn't by itself
+  - rule:
+      text: The control plane decides what state to install
+      when: Something must
+- id: laptop
+  stage: rule
+  pdf: 54
+  c:
+  - MPLS Label Switching
+  say: Back to our laptop's packet. At every router on the way to the server, it now
+    finds a table entry, built from a shared map, from neighbors' distances, or from
+    paths. Where MPLS is in use, it may even carry a label for part of the way. The
+    packet itself never knew any of this happened.
+  moves:
+  - rule:
+      text: 'Maps, distances, paths, and labels: the packet never knew.'
+      when: Back to our
+  - rule:
+      text: Entries come from a map, distances or paths
+      when: built from a shared
+  - rule:
+      text: With MPLS, maybe a label for part of the way
+      when: Where MPLS
+  - rule:
+      text: The packet itself never knew
+      when: The packet itself
+- id: pitfall
+  stage: rule
+  pdf: 54
+  c:
+  - MPLS Label Switching
+  say: A label alone doesn't reserve anything. It's just how a router finds the next
+    step. Reserving capacity takes signaling, and not every MPLS deployment uses it.
+  moves:
+  - trap:
+      wrong: An MPLS label reserves bandwidth
+      right: A label only says how to forward. Reservation is separate.
+- id: changed
+  stage: changed_example
+  pdf: 56
+  c:
+  - MPLS Label Switching
+  say: Change the question. R2's own table reuses label 17 for a totally different
+    path, on another interface. And a packet with label 99 arrives at R2, where no
+    entry exists.
+  moves:
+  - clear: {}
+  - table.show:
+      name: r2
+      zone: top
+      cols:
+      - At R2
+      - In
+      - Out
+      rows:
+      - - From R1
+        - 17
+        - 42
+      - - From R5
+        - 17
+        - 8
+      - - New packet
+        - 99
+        - '?'
+- id: predict
+  stage: prediction
+  pdf: 56
+  hold: 6
+  c:
+  - MPLS Label Switching
+  say: Is reusing 17 a conflict? And can the router just fall back to searching the
+    label space for the packet with 99?
+  moves:
+  - pause:
+      text: is reusing a label a conflict? what happens to 99?
+- id: answer
+  stage: explanation
+  pdf: 56
+  c:
+  - MPLS Label Switching
+  say: Reuse isn't automatically a conflict, because labels are local, and each entry's
+    scope is defined by its table. Different routers routinely reuse the same number.
+    A label with no matching state has no installed instruction, so it has no valid
+    forwarding action. State has to exist before it can be used. And that raises this
+    chapter's biggest question. We've treated every table as correct and complete.
+    What really happens in the seconds after a link fails?
+  moves:
+  - rule:
+      text: 'Labels are local. No state means no valid action. Next: what happens
+        when a link fails?'
+  - rule:
+      text: No matching state, no valid forwarding action
+      when: A label with no
+  - rule:
+      text: State has to exist before it can be used
+      when: State has to
+  - rule:
+      text: 'Next: what happens in the seconds after a link fails?'
+      when: We've treated
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 10.4.predict
+  answer_beat: 10.4.answer
+  answer_events:
+  - 10.4.answer:move:0
+  answer_objects:
+  - object: _rule
+    after: 10.4.answer:move:0
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.

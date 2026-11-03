@@ -1,0 +1,213 @@
+version: 3
+# Applied in order. Patterns first, then whole words (case sensitive).
+patterns:
+  '\(\*,\s?G\)': 'star comma G'
+  '\(S,\s?G\)': 'S comma G'
+  '802\.1Q': 'eight oh two dot one Q'
+  '(\d+)\.(\d+)\.(\d+)\.(\d+)': '\1 dot \2 dot \3 dot \4'
+  '/(\d+)\b': ' slash \1'
+  '\bMb/s\b': 'megabits per second'
+  '\bGb/s\b': 'gigabits per second'
+  '\bms\b': 'milliseconds'
+  '\b([01])([01])([01])([01])([01])([01])([01])([01])\b': '\1 \2 \3 \4 \5 \6 \7 \8'
+words:
+  ARPed: arpt
+  route: rowt
+  Route: Rowt
+  routes: rowts
+  Routes: Rowts
+  route's: rowt's
+  routed: rowted
+  rerouted: re rowted
+  reroute: re rowt
+  traceroute: trace rowt
+  best-route: best rowt
+  anycast: any cast
+  Anycast: Any cast
+  trie: try
+  tries: tries
+  IPv4: I P version four
+  IP: I P
+  IGMPv1: I G M P version one
+  IGMPv2: I G M P version two
+  IGMPv3: I G M P version three
+  IGMP: I G M P
+  DHCP: D H C P
+  ARP: arp
+  DNS: D N S
+  BGP: B G P
+  eBGP: E B G P
+  iBGP: I B G P
+  AS: A S
+  ASes: A esses
+  VLAN: V lan
+  VLANs: V lans
+  STP: S T P
+  MAC: mack
+  MACs: macks
+  TTL: T T L
+  TTLs: T T Ls
+  MTU: M T U
+  CRC: C R C
+  CIDR: cider
+  VLSM: V L S M
+  LPM: L P M
+  TCAM: tee cam
+  CAM: cam
+  HOL: head of line
+  MPLS: M P L S
+  RSVP: R S V P
+  RSVP-TE: R S V P T E
+  OSPF: O S P F
+  IS-IS: I S I S
+  RIP: rip
+  EIGRP: E I G R P
+  SPP: S P P
+  PIM: pim
+  PIM-SM: pim sparse mode
+  PIM-DM: pim dense mode
+  RPF: R P F
+  RP: R P
+  SPT: S P T
+  DR: D R
+  MST: M S T
+  CDMA: C D M A
+  OFDM: O F D M
+  MIMO: my moe
+  SNR: S N R
+  BER: B E R
+  NAV: nav
+  RTS: R T S
+  CTS: C T S
+  ACK: ack
+  ACKs: acks
+  DIFS: diffs
+  SIFS: siffs
+  SSID: S S I D
+  BSS: B S S
+  BSSID: B S S I D
+  AP: A P
+  APs: A Ps
+  UE: U E
+  eNodeB: E node B
+  HSS: H S S
+  MME: M M E
+  S-GW: S gateway
+  P-GW: P gateway
+  GTP: G T P
+  GTP-U: G T P U
+  PDCP: P D C P
+  RLC: R L C
+  LTE: L T E
+  IMSI: im zee
+  BTS: B T S
+  BSC: B S C
+  MSC: M S C
+  SGSN: S G S N
+  GGSN: G G S N
+  5G: five G
+  4G: four G
+  3G: three G
+  2G: two G
+  QoS: Q o S
+  ATM: A T M
+  CBR: C B R
+  ABR: A B R
+  SDN: S D N
+  ICMP: I C M P
+  UDP: U D P
+  TCP: T C P
+  NAT: nat
+  FIFO: fife oh
+  ISP: I S P
+  RFC: R F C
+  CSMA: C S M A
+  CSMA/CD: C S M A C D
+  CSMA/CA: C S M A C A
+  LAN: lan
+  LANs: lans
+  FIB: fib
+  TLD: T L D
+  Dijkstra: Dike struh
+  Dijkstra's: Dike strah's
+  Kruskal: Kruss kull
+  Kruskal's: Kruss kull's
+  Gao-Rexford: Gow Rex ford
+  Wi-Fi: why fye
+  dig: dig
+  ID: I D
+  IDs: I Ds
+  ARPs: arps
+  NS: N S
+  MX: M X
+  IHL: I H L
+  CNAME: C name
+  all-IP: all I P
+  GPRS: G P R S
+  MAC-based: mack based
+  PATH: path
+  NEXT: next
+  HOP: hop
+  CBT: C B T
+  AND: and
+  ANDs: ands
+  IGP: I G P
+  MSTs: M S Ts
+  SYN: sin
+  SYN-ACK: sin ack
+  ICANN: eye can
+# Kokoro reads plain words well and knows Dijkstra; say needed respellings. Entries replace `words` when the engine is kokoro.
+# [word](/phonemes/) is Kokoro's own notation, for the words its dictionary lacks. Lowercase keys also match a capitalized first letter.
+kokoro:
+  ARPed: '[ARPed](/ˈɑɹpt/)'
+  route: '[route](/ɹˈWt/)'
+  routes: '[routes](/ɹˈWts/)'
+  route's: '[route''s](/ɹˈWts/)'
+  routed: '[routed](/ɹˈWTᵻd/)'
+  rerouted: '[rerouted](/ɹiɹˈWTᵻd/)'
+  reroute: '[reroute](/ɹiɹˈWt/)'
+  traceroute: '[traceroute](/tɹˈAsɹˌWt/)'
+  best-route: 'best [route](/ɹˈWt/)'
+  Dijkstra: Dijkstra
+  Dijkstra's: Dijkstra's
+  Kruskal: '[Kruskal](/kɹˈʌskᵊl/)'
+  Kruskal's: '[Kruskal''s](/kɹˈʌskᵊlz/)'
+  Gao-Rexford: '[Gao](/ɡˈW/) [Rexford](/ɹˈɛksfəɹd/)'
+  Wi-Fi: '[Wi-Fi](/wˈIfˌI/)'
+  ARP: '[ARP](/ˈɑɹp/)'
+  ARPs: '[ARPs](/ˈɑɹps/)'
+  ACK: '[ACK](/ˈæk/)'
+  ACKs: '[ACKs](/ˈæks/)'
+  PIM: '[PIM](/pˈɪm/)'
+  PIM-SM: '[PIM](/pˈɪm/) sparse mode'
+  PIM-DM: '[PIM](/pˈɪm/) dense mode'
+  ASes: '[ASes](/ˌAˈɛsɪz/)'
+  NAT: '[NAT](/nˈæt/)'
+  MSTs: '[MSTs](/ˌɛmˌɛsˈtiz/)'
+  IDs: '[IDs](/ˌIˈdiz/)'
+  SIFS: '[SIFS](/sˈɪfs/)'
+  subnet: '[subnet](/sˈʌbnˌɛt/)'
+  subnets: '[subnets](/sˈʌbnˌɛts/)'
+  anycast: '[anycast](/ˈɛnikˌæst/)'
+  datagram: '[datagram](/dˈætəɡɹˌæm/)'
+  datagrams: '[datagrams](/dˈætəɡɹˌæmz/)'
+  copied: '[copied](/kˈɑpid/)'
+  multiplied: '[multiplied](/mˈʌltəplˌId/)'
+  blackhole: '[blackhole](/blˈækhˌOl/)'
+  blackholes: '[blackholes](/blˈækhˌOlz/)'
+  nonfinal: '[nonfinal](/nˌɑnfˈInᵊl/)'
+  hoc: '[hoc](/hˈɑk/)'
+  keepalive: '[keepalive](/kˈipəlˌIv/)'
+  www: '[www](/dˈʌbᵊljudˌʌbᵊljudˌʌbᵊlju/)'
+  trie: '[trie](/tɹˈI/)'
+  interdomain: '[interdomain](/ˌɪntəɹdOmˈAn/)'
+  subtrees: '[subtrees](/sˈʌbtɹˌiz/)'
+  Edsger: '[Edsger](/ˈɛtskəɹ/)'
+  querier: '[querier](/kwˈɪɹiəɹ/)'
+  hostnames: '[hostnames](/hˈOstnˌAmz/)'
+  Patricia: '[Patricia](/pətɹˈɪʃə/)'
+  gigahertz: '[gigahertz](/ɡˈɪɡəhˌɜɹts/)'
+  multipath: '[multipath](/mˈʌltipˌæθ/)'
+  goodput: '[goodput](/ɡˈʊdpˌʊt/)'
+  piconet: '[piconet](/pˈikOnˌɛt/)'
+  test: '[test](/tˈɛst/)'

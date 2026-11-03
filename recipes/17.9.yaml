@@ -1,0 +1,225 @@
+dish: '17.9'
+title: 'Practice question 9: Dijkstra'
+deck: lec10-routing.pdf
+target_min: 2
+concepts: []
+pad: 2.2
+beats:
+- id: 17.9.question
+  stage: question
+  narration: 17.9.question
+  pdf:
+  - lec10-routing.pdf
+  - 27
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 9: Dijkstra'
+  - net.show:
+      name: g
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.2
+          l: B
+        C:
+          k: node
+          at:
+          - 3
+          - -0.2
+          l: C
+        D:
+          k: node
+          at:
+          - 6
+          - 1
+          l: D
+      links:
+      - - A
+        - B
+        - c: 2
+      - - A
+        - C
+        - c: 6
+      - - B
+        - C
+        - c: 1
+      - - B
+        - D
+        - c: 5
+      - - C
+        - D
+        - c: 2
+      when: Undirected edges are
+  - table.show:
+      name: t
+      zone: right_top
+      data: $practice.q9.table
+      show: 0
+  adjust: {}
+- id: 17.9.predict
+  stage: prediction
+  narration: 17.9.predict
+  pdf:
+  - lec10-routing.pdf
+  - 27
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: the distances, D's predecessor, and A's first hop to D
+  adjust: {}
+  hold: 20
+- id: 17.9.run
+  stage: state
+  narration: 17.9.run
+  pdf:
+  - lec10-routing.pdf
+  - 28
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - graph.promote:
+      name: g
+      node: A
+      when: Settle A
+  - table.reveal:
+      name: t
+  - graph.relax:
+      name: g
+      via: A
+      node: B
+      text: '2'
+      side: up
+      when: Tentative
+  - graph.relax:
+      name: g
+      via: A
+      node: C
+      text: '6'
+      side: down
+      t: 0.7
+  - graph.promote:
+      name: g
+      node: B
+      via: A
+      when: Settle B
+  - graph.relax:
+      name: g
+      via: B
+      node: C
+      text: $practice.q9.steps.1.relaxed.0.new
+      side: down
+      when: Through B, C
+  - graph.relax:
+      name: g
+      via: B
+      node: D
+      text: $practice.q9.steps.1.relaxed.1.new
+      side: right
+      when: and D costs
+  - table.reveal:
+      name: t
+  - graph.promote:
+      name: g
+      node: C
+      via: B
+      when: Settle C
+  - graph.relax:
+      name: g
+      via: C
+      node: D
+      text: $practice.q9.steps.2.relaxed.0.new
+      side: right
+      when: Through C, D
+  - table.reveal:
+      name: t
+  - graph.promote:
+      name: g
+      node: D
+      via: C
+      when: Settle D
+  - table.reveal:
+      name: t
+  - keep: {}
+  adjust: {}
+- id: 17.9.answer
+  stage: explanation
+  narration: 17.9.answer
+  pdf:
+  - lec10-routing.pdf
+  - 36
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - table.mark:
+      name: t
+      r: 3
+      state: done
+      when: The distances
+  - net.state:
+      name: g
+      nodes:
+        C: now
+      when: D's predecessor
+  - net.walk:
+      name: g
+      path:
+      - A
+      - B
+      - C
+      - D
+      when: But A's first
+  - net.state:
+      name: g
+      nodes:
+        C: done
+        B: now
+  - rule:
+      text: Weights must be nonnegative.
+      when: And Dijkstra
+  - keep: {}
+  adjust: {}
+- id: 17.9.trap
+  stage: rule
+  narration: 17.9.trap
+  pdf:
+  - lec10-routing.pdf
+  - 36
+  concepts:
+  - Dijkstra Algorithm
+  clarifications: []
+  moves:
+  - trap:
+      wrong: D's predecessor is C, so A's first hop to D is C
+      right: 'The predecessor is just before D. The first hop is just after A: B.'
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.9.marks
+  stage: explanation
+  narration: 17.9.marks
+  pdf:
+  - lec10-routing.pdf
+  - 36
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '2 points: distances. 1 each: predecessor, first hop, weight condition.'
+      when: On marks
+  - keep: {}
+  adjust: {}

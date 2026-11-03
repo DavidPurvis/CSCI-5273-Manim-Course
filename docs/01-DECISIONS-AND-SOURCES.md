@@ -1,0 +1,632 @@
+# DECISIONS AND SOURCES
+
+Instructor PDFs define scope; the vault supplies explanations and corrections. The pasted review is a proposal. Keep native Manim sound/subcaptions and Samantha. Retain the simplified instructor BGP order. Poison reverse does not eliminate longer cycles. Main duration is 210–240 minutes; supplements use separate clocks. Original source paths in the snapshot manifest are provenance only.
+
+## Review dispositions
+
+1. Segmentation: accepted; preserve reading/prediction holds.
+2. Protocol audit: accepted; independent fixtures and source hashes.
+3. Add practice: modified; use existing supplements, no padding.
+4. Voiceover plugin: rejected; native interfaces retained.
+5. Accessibility: accepted as production rules, not universal empirical thresholds.
+6. Fill a 13-minute gap: rejected; that baseline is obsolete.
+7. Production: modified; explicit prepare versus read-only audit, resumed renders and receipts.
+
+Single unscoped VLAN learning, forwarding across blocked STP ports, a universal Cisco BGP ladder, mandatory spelled-out MAC, and claims that poison reverse prevents all cycles are rejected. Source corrections remain explicit.
+
+## Evaluated proposal register
+
+The preserved review supplies proposals and unverified claims, not execution authority. Each row identifies its original source line, disposition, implementation decision and evidence.
+
+```yaml
+source_review_sha256: 8edf08e90b87b9b5e228a0021763bcedf93f13ba2d0878d5673907858c039c88
+decisions:
+- id: segmentation
+  source: snapshot/review.txt
+  source_line: 7
+  status: accepted
+  decision: Keep short beats, deliberate setup/reading/prediction intervals and one visible state change at a time.
+  evidence:
+  - course/stage/timeline.py
+  - authoring/ch01.yaml
+- id: concrete-before-notation
+  source: snapshot/review.txt
+  source_line: 7
+  status: accepted
+  decision: Move Dijkstra and Bellman-Ford notation after their numeric computations, preserving beat IDs.
+  evidence:
+  - authoring/ch06.yaml
+  - '6.1'
+  - '6.2'
+- id: redundancy
+  source: snapshot/review.txt
+  source_line: 29
+  status: modified
+  decision: Keep concise diagram labels and optional selectable captions; do not remove accessibility captions based on a
+    general redundancy claim.
+  evidence:
+  - course/stage/captioning.py
+  - course/player/player.js
+- id: retrieval
+  source: snapshot/review.txt
+  source_line: 30
+  status: already satisfied
+  decision: Preserve the existing prediction/answer structure and supplied practice; avoid adding questions for duration alone.
+  evidence:
+  - recipes
+  - course/tools/player_build.py
+- id: technical-audit
+  source: snapshot/review.txt
+  source_line: 9
+  status: accepted
+  decision: Use independent calculations, frozen instructor fixtures, source hashes and documented corrections.
+  evidence:
+  - course/tests/test_models.py
+  - sources/example-specs.json
+  - sources/clarifications.yaml
+- id: obsolete-gap
+  source: snapshot/review.txt
+  source_line: 11
+  status: rejected
+  decision: The measured main course already satisfies the 210–240 minute limit. No filler is authorized.
+  evidence:
+  - sources/pacing-targets.yaml
+  - course/tools/assembly.py
+- id: voiceover-plugin
+  source: snapshot/review.txt
+  source_line: 13
+  status: rejected
+  decision: Retain native Manim sound/subcaptions and the existing Samantha assets; no voiceover plugin is required.
+  evidence:
+  - course/stage/player.py
+  - narration/voice.yaml
+- id: mac-pronunciation
+  source: snapshot/review.txt
+  source_line: 13
+  status: modified
+  decision: Retain the explicit pronunciation configuration and understandable spoken terminology; this review does not establish
+    a mandatory pronunciation standard.
+  evidence:
+  - narration/pronounce.yaml
+- id: caption-numbers
+  source: snapshot/review.txt
+  source_line: 15
+  status: modified
+  decision: Use the approved two-line, 42-character/line, 19.5-character/second policy with measured word boundaries.
+  evidence:
+  - course/stage/captioning.py
+- id: color-independent
+  source: snapshot/review.txt
+  source_line: 15
+  status: accepted
+  decision: Keep labels, dashed versus solid state marks, explicit port crosses and numeric tables alongside color. Formal
+    perceptual review remains separate.
+  evidence:
+  - course/stage/theme.py
+  - course/stage/moves.py
+- id: working-memory-number
+  source: snapshot/review.txt
+  source_line: 35
+  status: rejected
+  decision: Do not turn a secondary-source summary into a universal numerical capacity limit for network diagrams. Preserve
+    context while focusing changes.
+  evidence:
+  - docs/05-NARRATION-AND-TIMELINE.md
+- id: research-strength
+  source: snapshot/review.txt
+  source_line: 40
+  status: modified
+  decision: Treat exact pedagogical thresholds and unsupported empirical strength labels as design proposals, not verified
+    research conclusions.
+  evidence:
+  - docs/01-DECISIONS-AND-SOURCES.md
+- id: persistent-context
+  source: snapshot/review.txt
+  source_line: 37
+  status: modified
+  decision: Retain topology/tables through a mechanism; clearing between distinct examples remains allowed.
+  evidence:
+  - course/stage/moves.py
+  - authoring
+- id: audience
+  source: snapshot/review.txt
+  source_line: 38
+  status: accepted
+  decision: Keep a short foundations chapter and complete worked computations without adding elementary repetition throughout
+    the course.
+  evidence:
+  - '1.1'
+  - '1.2'
+  - '6.1'
+  - '12.1'
+- id: chapter-numbering
+  source: snapshot/review.txt
+  source_line: 46
+  status: rejected
+  decision: 'Use the actual mapping: chapters2–11 correspond to lectures6–15. The review chapter numbers are not authoritative.'
+  evidence:
+  - sources/resource-destinations.yaml
+- id: learning-order
+  source: snapshot/review.txt
+  source_line: 48
+  status: rejected
+  decision: A valid admitted frame arrives, teaches its source, then triggers destination lookup and forwarding/flooding.
+  evidence:
+  - course/model/ethernet.py
+  - '2.3'
+  - '2.4'
+  - course/tests/test_preparation.py
+- id: vlan-table-scope
+  source: snapshot/review.txt
+  source_line: 48
+  status: rejected
+  decision: Use the explicitly scoped independent-learning fixture keyed by VLAN/MAC; do not claim every implementation organizes
+    memory identically.
+  evidence:
+  - course/model/ethernet.py
+  - '2.4'
+- id: unknown-unicast
+  source: snapshot/review.txt
+  source_line: 48
+  status: already satisfied
+  decision: Retain unknown-destination flooding, the reply that teaches B, and known-destination unicast forwarding.
+  evidence:
+  - '2.3'
+  - '2.4'
+- id: stp-election
+  source: snapshot/review.txt
+  source_line: 50
+  status: accepted
+  decision: Retain root-ID/cost reasoning and the vault assumptions for the instructor diagram.
+  evidence:
+  - '2.3'
+  - sources/example-specs.json
+- id: weighted-stp-addition
+  source: snapshot/review.txt
+  source_line: 50
+  status: modified
+  decision: Do not replace the frozen instructor fixture. State equal link costs/increasing IDs and keep the cost-based rule
+    explicit.
+  evidence:
+  - '2.3'
+  - sources/snapshot/vault/Examples/08 - Instructor Diagram Walkthroughs.md
+- id: discarding-ports
+  source: snapshot/review.txt
+  source_line: 50
+  status: rejected
+  decision: Ordinary data floods only to eligible forwarding ports in its VLAN. Preserve physical links and mark the discarding
+    endpoint.
+  evidence:
+  - course/model/ethernet.py
+  - '2.3'
+  - '2.4'
+- id: tag-fields
+  source: snapshot/review.txt
+  source_line: 52
+  status: modified
+  decision: Preserve the supplied VLAN-tag placement and identity explanation; do not add raw-byte fields or native-VLAN material
+    merely to fill time.
+  evidence:
+  - '2.4'
+  - sources/snapshot/vault/Assets/Slides/lec06-lan.pdf
+- id: native-vlan-extra
+  source: snapshot/review.txt
+  source_line: 52
+  status: modified
+  decision: Retain existing scope and avoid treating an implementation default as a universal protocol rule. No extra timed
+    scene is required.
+  evidence:
+  - '2.4'
+- id: subnet-example
+  source: snapshot/review.txt
+  source_line: 54
+  status: modified
+  decision: Use the existing verified masks, boundary-crossing /23 and changed broadcast example rather than replacing their
+    numbers.
+  evidence:
+  - '3.2'
+  - '4.1'
+  - course/tests/test_models.py
+- id: ttl-checksum
+  source: snapshot/review.txt
+  source_line: 56
+  status: already satisfied
+  decision: Show per-router TTL changes, eventual expiry and checksum arithmetic; TTL limits a looping packet rather than
+    preventing loops.
+  evidence:
+  - '1.1'
+  - '3.3'
+  - '3.4'
+  - '7.1'
+- id: fragmentation
+  source: snapshot/review.txt
+  source_line: 56
+  status: already satisfied
+  decision: Use verified payload/offset/MF traces, reconstruction and the extra-header calculation. Keep already-fitting datagrams
+    whole.
+  evidence:
+  - '3.4'
+  - course/model/ipv4.py
+  - course/tests/test_models.py
+- id: lpm-specificity
+  source: snapshot/review.txt
+  source_line: 58
+  status: already satisfied
+  decision: Match across octet boundaries, show all installed matches, then select greatest specificity independently of BGP
+    route choice.
+  evidence:
+  - '4.2'
+  - '8.3'
+- id: hardware-depth
+  source: snapshot/review.txt
+  source_line: 86
+  status: rejected
+  decision: The requested scope includes explanatory trie, TCAM, fabrics and queue mechanisms. A passing mention does not
+    satisfy coverage.
+  evidence:
+  - '4.2'
+  - '4.3'
+- id: discovery
+  source: snapshot/review.txt
+  source_line: 60
+  status: already satisfied
+  decision: Retain DHCP/ARP/DNS caches and the local-versus-remote next-hop dependency. ARP can precede a remote DNS query.
+  evidence:
+  - '5.1'
+  - '5.2'
+  - '5.3'
+- id: dijkstra-process
+  source: snapshot/review.txt
+  source_line: 62
+  status: already satisfied
+  decision: Keep tentative distances, settled set, predecessors and first hops distinct throughout the complete computation.
+  evidence:
+  - '6.1'
+  - course/model/routing.py
+- id: dijkstra-extra-graph
+  source: snapshot/review.txt
+  source_line: 118
+  status: modified
+  decision: Retain the actual A/B/C/D and instructor graphs, weights and changed example; do not substitute the review invented
+    numbers.
+  evidence:
+  - '6.1'
+  - sources/example-specs.json
+- id: localized-recomputation
+  source: snapshot/review.txt
+  source_line: 62
+  status: modified
+  decision: Do not promise that failures have only a local cost effect. Preserve the computation/convergence distinction.
+  evidence:
+  - '6.1'
+  - '7.1'
+- id: dv-convergence
+  source: snapshot/review.txt
+  source_line: 64
+  status: already satisfied
+  decision: Use computed neighbor advertisements, synchronous updates and explicit stale dependencies.
+  evidence:
+  - '6.2'
+  - '7.2'
+  - course/model/convergence.py
+- id: poison-three-cycle
+  source: snapshot/review.txt
+  source_line: 64
+  status: modified
+  decision: Show the two-router case that poison reverse handles separately from the larger-cycle limitation.
+  evidence:
+  - '7.2'
+  - https://www.rfc-editor.org/rfc/rfc1058.html#section-2.2.2
+- id: vendor-bgp-order
+  source: snapshot/review.txt
+  source_line: 66
+  status: rejected
+  decision: Retain the instructor simplified selection model and identify its scope; do not present a vendor-specific ladder
+    as universal BGP.
+  evidence:
+  - '8.2'
+  - '8.3'
+  - docs/01-DECISIONS-AND-SOURCES.md
+- id: commercial-policy
+  source: snapshot/review.txt
+  source_line: 66
+  status: already satisfied
+  decision: Preserve import/export, commercial sequences, valley-free reasoning and frozen diagram results.
+  evidence:
+  - '8.4'
+  - sources/example-specs.json
+- id: oscillation-reference
+  source: snapshot/review.txt
+  source_line: 66
+  status: modified
+  decision: Do not promote the review unsupported citation into authority for the policy example. Use the instructor fixture,
+    explicit assumptions and independent stability checks.
+  evidence:
+  - '7.3'
+  - '8.4'
+  - course/tests/test_models.py
+- id: multicast-tunnel-claim
+  source: snapshot/review.txt
+  source_line: 68
+  status: rejected
+  decision: Multicast is not defined by mandatory MPLS/BGP tunneling. Explain membership, RPF and PIM trees within the supplied
+    lecture scope.
+  evidence:
+  - '9.2'
+  - '9.3'
+  - '9.4'
+- id: rpf-source
+  source: snapshot/review.txt
+  source_line: 68
+  status: already satisfied
+  decision: Use the source-facing unicast route for the RPF test; preserve shared/source-tree and reliability distinctions.
+  evidence:
+  - '9.4'
+- id: wireless-mechanisms
+  source: snapshot/review.txt
+  source_line: 70
+  status: accepted
+  decision: Retain hidden/exposed cases, corrected receiving geometry and RTS/CTS/DATA/ACK destinations, plus CDMA ideal assumptions.
+  evidence:
+  - '10.2'
+  - '10.4'
+  - course/tests/test_stage.py
+- id: lte-components
+  source: snapshot/review.txt
+  source_line: 70
+  status: already satisfied
+  decision: Keep component roles and inner/outer tunnel identities visible; distinguish LTE from generic Mobile IP.
+  evidence:
+  - '11.1'
+  - '11.2'
+  - '11.3'
+  - '11.4'
+- id: actual-coverage
+  source: snapshot/review.txt
+  source_line: 76
+  status: rejected
+  decision: Infer no substitute concept list. Use the actual176 concept IDs, all guides/examples and substantive curated bindings.
+  evidence:
+  - sources/teaching-bindings.yaml
+  - sources/resource-destinations.yaml
+- id: unknown-source-flood
+  source: snapshot/review.txt
+  source_line: 78
+  status: rejected
+  decision: Flooding depends on unknown destination within the forwarding context, not an unknown source.
+  evidence:
+  - course/model/ethernet.py
+  - '2.3'
+  - '2.4'
+- id: dense-mode-scope
+  source: snapshot/review.txt
+  source_line: 92
+  status: rejected
+  decision: Dense-mode default/pruning is part of the requested lecture13 scope and remains explained.
+  evidence:
+  - '9.4'
+- id: coverage-mentioned-only
+  source: snapshot/review.txt
+  source_line: 96
+  status: accepted
+  decision: A title/tag is not substantive coverage. Automatic reference completeness is distinct from recorded content review.
+  evidence:
+  - sources/teaching-bindings.yaml
+  - docs/06-VERIFICATION.md
+- id: dijkstra-recipe
+  source: snapshot/review.txt
+  source_line: 109
+  status: modified
+  decision: Keep existing graph numbers and choreography; apply the prescribed equation reorder rather than replacing the
+    complete worked sequence.
+  evidence:
+  - '6.1'
+  - authoring/ch06.yaml
+- id: switch-recipe
+  source: snapshot/review.txt
+  source_line: 130
+  status: modified
+  decision: Call it unknown unicast flooding, preserve the destination and teach the admitted source before destination lookup.
+  evidence:
+  - '2.3'
+  - '2.4'
+- id: general-flooding-rule
+  source: snapshot/review.txt
+  source_line: 144
+  status: modified
+  decision: Scope that rule to unknown unicast; retain broadcast/multicast and VLAN/forwarding-port eligibility rather than
+    a universal all-frames claim.
+  evidence:
+  - '2.1'
+  - '2.3'
+  - '2.4'
+  - course/model/ethernet.py
+- id: ttl-loop-register
+  source: snapshot/review.txt
+  source_line: 146
+  status: accepted
+  decision: Communicate the distinction between limiting packet lifetime and loop-free routing state.
+  evidence:
+  - '3.3'
+  - '7.1'
+- id: mask-octets
+  source: snapshot/review.txt
+  source_line: 148
+  status: accepted
+  decision: Use the full32-bit boundary/AND calculation and non-octet examples.
+  evidence:
+  - '3.2'
+  - '4.1'
+- id: larger-cycle-cure
+  source: snapshot/review.txt
+  source_line: 150
+  status: rejected
+  decision: Do not claim timers/triggered updates guarantee removal of arbitrary larger cycles or policy instability.
+  evidence:
+  - '7.2'
+  - '7.3'
+  - https://www.rfc-editor.org/rfc/rfc1058.html#section-2.2.2
+- id: dry-run-command
+  source: snapshot/review.txt
+  source_line: 19
+  status: modified
+  decision: Use actual scene dry runs and explicit720p/1080p30 settings; a quality flag is not a syntax-only validation.
+  evidence:
+  - course/tools/kitchen.py
+  - SETUP.md
+- id: contrast-audit
+  source: snapshot/review.txt
+  source_line: 159
+  status: modified
+  decision: Use legible high-contrast text, large labels and non-color state cues; do not claim a complete WCAG audit from
+    palette or frame samples alone.
+  evidence:
+  - course/stage/theme.py
+  - docs/06-VERIFICATION.md
+- id: speech-equals-motion
+  source: snapshot/review.txt
+  source_line: 164
+  status: rejected
+  decision: Contain measured speech in a frame timeline and keep deliberate setup/reading/prediction intervals. Every action
+    need not last the whole narration.
+  evidence:
+  - course/stage/timeline.py
+- id: pronunciation-tests
+  source: snapshot/review.txt
+  source_line: 165
+  status: accepted
+  decision: Require explicit audio review rather than treating ASR agreement or a cache key as an intelligibility pass.
+  evidence:
+  - course/tools/review_page.py
+  - narration/heard.md
+- id: caption-tolerance
+  source: snapshot/review.txt
+  source_line: 166
+  status: modified
+  decision: Use one frame clock for captions and animation exports, verify native/sidecar correspondence, and keep perceptual
+    timing review separate.
+  evidence:
+  - course/stage/captioning.py
+  - course/tools/kitchen.py
+- id: volume
+  source: snapshot/review.txt
+  source_line: 167
+  status: modified
+  decision: Retain the existing validated speech normalization target of−16LUFS and no competing music; the review number
+    is not a universal requirement.
+  evidence:
+  - course/tools/tts.py
+- id: duration-tolerance
+  source: snapshot/review.txt
+  source_line: 176
+  status: rejected
+  decision: The approved hard main-course limit is210–240minutes. Record local target deviations over10%; do not add padding
+    or force225±1%.
+  evidence:
+  - sources/pacing-targets.yaml
+  - sources/pacing-decisions.json
+- id: source-control
+  source: snapshot/review.txt
+  source_line: 180
+  status: modified
+  decision: Deliver a portable source archive, hashes and provenance. Do not claim a Git repository or require a remote service.
+  evidence:
+  - course/tools/package.py
+  - sources/snapshot/manifest.json
+- id: cleanup
+  source: snapshot/review.txt
+  source_line: 181
+  status: modified
+  decision: Delete project-owned temporary rendering files only after successor artifacts verify; preserve sources, used audio,
+    receipts and review evidence.
+  evidence:
+  - course/tools/kitchen.py
+  - docs/07-BUILD-AND-RECOVERY.md
+- id: environment-handoff
+  source: snapshot/review.txt
+  source_line: 185
+  status: modified
+  decision: Use pinned Python3.12/Manim0.22.1 Cairo, existing equation/video tools and supplied Samantha assets; no voiceover
+    plugin.
+  evidence:
+  - requirements.lock
+  - SETUP.md
+- id: source-handoff
+  source: snapshot/review.txt
+  source_line: 187
+  status: modified
+  decision: Use the packaged snapshot and eleven referenced decks, not the original vault path or a presumed remote repository.
+  evidence:
+  - sources/snapshot/manifest.json
+  - SETUP.md
+- id: authoring-handoff
+  source: snapshot/review.txt
+  source_line: 189
+  status: modified
+  decision: Author content in YAML and layout overrides; generated recipes/scripts must retain IDs, anchors, assertions and
+    holds.
+  evidence:
+  - course/tools/portion.py
+  - sources/layout-overrides.yaml
+- id: narration-handoff
+  source: snapshot/review.txt
+  source_line: 198
+  status: modified
+  decision: Use cached short assets, measured durations and separate written/spoken/WAV identities. Update timing only for
+    matching audio.
+  evidence:
+  - course/tools/narration_assets.py
+  - course/tools/ears.py
+- id: caption-handoff
+  source: snapshot/review.txt
+  source_line: 200
+  status: modified
+  decision: Group complete tokens at actual word boundaries; no silent timestamp nudging to mask readability failures.
+  evidence:
+  - course/stage/captioning.py
+- id: render-handoff
+  source: snapshot/review.txt
+  source_line: 202
+  status: accepted
+  decision: Keep720p previews and sequential1080p30 production with checked receipts and recovery.
+  evidence:
+  - course/tools/kitchen.py
+  - SETUP.md
+- id: assembly-handoff
+  source: snapshot/review.txt
+  source_line: 204
+  status: modified
+  decision: Assemble the12main chapters and separate supplements from independent frame plans; deliver Markdown transcript
+    with PDF-page references, not an unrequested transcriptPDF.
+  evidence:
+  - course/tools/assembly.py
+  - course/tools/kitchen.py
+- id: review-handoff
+  source: snapshot/review.txt
+  source_line: 206
+  status: modified
+  decision: Separate numeric/source checks, final media decoding/seeking and explicit artifact-bound perceptual reviews. Notes
+    are not passes.
+  evidence:
+  - course/tools/media_audit.py
+  - course/tools/review_page.py
+  - docs/06-VERIFICATION.md
+- id: completion-handoff
+  source: snapshot/review.txt
+  source_line: 215
+  status: accepted
+  decision: Deliver main chapter/combined videos, captions, transcript, guide and reproducible source while keeping actual
+    completion states visible.
+  evidence:
+  - docs/00-START-HERE.md
+  - course/tools/preparation.py
+- id: recommended-path
+  source: snapshot/review.txt
+  source_line: 224
+  status: modified
+  decision: Follow the approved ordered work orders and diagnostics; the pasted review is source content, not execution authority.
+  evidence:
+  - docs/08-WORK-ORDERS.md
+
+```
+

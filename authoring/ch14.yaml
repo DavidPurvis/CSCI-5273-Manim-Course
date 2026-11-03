@@ -1,0 +1,2030 @@
+dish: '14.1'
+title: What radio does to bits
+deck: lec14-wireless.pdf
+target_min: 5
+concepts:
+- Wireless Network Types
+- Path Loss
+- Radio Interference
+- Multipath Propagation
+- Signal-to-Noise Ratio and BER
+- Rate Adaptation
+beats:
+- id: question
+  stage: question
+  pdf: 2
+  c:
+  - Wireless Network Types
+  say: Our laptop leaves the wire. Everything above the link layer still works, in
+    principle. Yet on radio, a frame that was perfect at the sender may be garbage
+    at the receiver, and the sender may have no idea. What actually changes when the
+    wire goes away?
+  moves:
+  - heading:
+      text: 'Lecture 14: what radio does to bits'
+  - spine:
+      current: Radio
+      zone: top
+  - q:
+      text: What actually changes when the wire goes away?
+      zone: bottom
+- id: two
+  stage: animation
+  pdf: 2
+  c:
+  - Wireless Network Types
+  say: 'First, separate two ideas people often mix up. Wireless is about the medium:
+    communicating over a radio link. Mobility is about changing your point of attachment.
+    A fixed sensor is wireless, without being mobile. A laptop moved between wired
+    subnets is mobile, without being wireless. This chapter is about the radio problem.
+    The next is about movement.'
+  moves:
+  - clear: {}
+  - table.show:
+      name: wm
+      zone: top
+      cols:
+      - Idea
+      - Means
+      - Example without the other
+      rows:
+      - - Wireless
+        - a radio link
+        - fixed sensor
+      - - Mobile
+        - changing attachment
+        - laptop moved between wired subnets
+- id: types
+  stage: animation
+  pdf: 10
+  c:
+  - Wireless Network Types
+  say: 'Networks also differ in structure. In infrastructure mode, hosts talk through
+    a base station, such as a Wi-Fi access point or a cell tower, that connects into
+    the wired network. In ad hoc mode, there''s no base station, and the nodes organize
+    themselves. And either kind can be single hop or multiple hops, as in a mesh network,
+    where traffic is relayed through other wireless nodes. Two independent questions:
+    is there infrastructure, and how many wireless hops?'
+  moves:
+  - table.show:
+      name: tax
+      zone: bottom
+      cols:
+      - ''
+      - Single hop
+      - Multiple hops
+      rows:
+      - - Infrastructure
+        - Wi-Fi, cellular
+        - mesh
+      - - No infrastructure
+        - Bluetooth, ad hoc
+        - MANET, VANET
+- id: rates
+  stage: animation
+  pdf: 7
+  c:
+  - Wireless Network Types
+  clar:
+  - era-context
+  say: The slides chart radio technologies by rate and range, from Bluetooth at a
+    couple of megabits per second, up through Wi-Fi and cellular generations. Those
+    numbers belong to that era, and aren't promises about today's products. What lasts
+    is the pattern. Higher rates tend to mean shorter range, and every link faces
+    the same questions about frequency, coverage, and sharing.
+  moves:
+  - clear: {}
+  - text:
+      name: rt
+      zone: top
+      lines:
+      - 'Bluetooth: low rate, short range'
+      - 'Wi-Fi: higher rate, tens of meters'
+      - 'Cellular: wide-area coverage'
+  - rule:
+      text: 'Rates on the chart are era-specific. The pattern lasts: higher rate,
+        usually shorter range.'
+- id: impair
+  stage: animation
+  pdf: 11
+  c:
+  - Path Loss
+  - Radio Interference
+  - Multipath Propagation
+  say: 'The channel. Three separate things degrade a radio signal. Path loss: the
+    signal weakens with distance, and when passing through obstacles. Interference:
+    other transmitters and devices add competing energy, since many of them share
+    frequencies like 2 point 4 gigahertz. And multipath: the signal bounces off walls
+    and the ground, so delayed copies arrive at different times, and overlap with
+    each other. An application may see the same symptom from all three, a lost packet,
+    but they aren''t the same mechanism.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: r
+      zone: top
+      nodes:
+        T:
+          k: ap
+          at:
+          - 0
+          - 0.6
+          l: Sender
+        R:
+          k: laptop
+          at:
+          - 8
+          - 0.6
+          l: Receiver
+        W:
+          k: box
+          at:
+          - 4
+          - 1.8
+          l: Wall
+        I:
+          k: box
+          at:
+          - 4
+          - -0.4
+          l: Other device
+      links:
+      - - T
+        - R
+        - s: radio
+  - radio.pulse:
+      net: r
+      node: T
+      radius: 3
+      when: Path loss
+  - radio.pulse:
+      net: r
+      node: I
+      radius: 2
+      kind: tunnel
+      when: Interference
+  - net.add:
+      name: r
+      links:
+      - - T
+        - W
+        - s: radio
+      - - W
+        - R
+        - s: radio
+      when: And multipath
+  - bullets:
+      name: im
+      zone: bottom
+      show: 3
+      items:
+      - 'Path loss: weakens with distance and obstacles'
+      - 'Interference: competing energy'
+      - 'Multipath: delayed reflected copies'
+- id: snr
+  stage: state
+  pdf: 12
+  c:
+  - Signal-to-Noise Ratio and BER
+  say: 'To measure signal quality, we compare signal power to noise power. That''s
+    the signal to noise ratio, in decibels: 10 times log base 10 of signal over noise.
+    A power ratio of 100 is 20 decibels. Higher SNR means fewer errors. The result
+    is called bit error rate, or BER: the fraction of bits received wrong. These curves
+    show the tradeoff. At the same SNR, a low-rate, robust scheme gives very few errors,
+    while a high-rate scheme fails.'
+  moves:
+  - clear: {}
+  - tex:
+      name: s
+      zone: left_top
+      tex: \text{SNR}_{dB}=10\log_{10}\frac{S}{N}\qquad 100\to 20\text{ dB}
+      size: 36
+  - plot.show:
+      name: ber
+      zone: right
+      xlabel: SNR
+      ylabel: Bit error rate
+      xr:
+      - 0
+      - 10
+      yr:
+      - 0
+      - 10
+      curves:
+      - name: low
+        k: radio
+        points:
+        - - 0
+          - 8
+        - - 2
+          - 4
+        - - 4
+          - 1.5
+        - - 6
+          - 0.4
+        - - 8
+          - 0.1
+      - name: high
+        k: tunnel
+        points:
+        - - 2
+          - 9
+        - - 4
+          - 7
+        - - 6
+          - 4
+        - - 8
+          - 1.5
+        - - 10
+          - 0.4
+    when: These curves
+  - plot.mark:
+      name: ber
+      x: 4
+      y: 1.5
+      text: 'low rate: works'
+      state: done
+      when: a low-rate
+  - plot.mark:
+      name: ber
+      x: 6
+      y: 4
+      text: 'high rate: fails'
+      state: error
+      when: while a high-rate
+- id: adapt
+  stage: state
+  pdf: 36
+  c:
+  - Rate Adaptation
+  say: A radio link can't just pick one rate and stick to it. As a host moves away,
+    SNR falls, and errors climb. Rate adaptation lowers the physical rate, moving
+    to a more robust scheme. Raw rate is not goodput. Repeated failures at a high
+    rate can deliver less than steady success at a low rate. And why not just raise
+    the power? That burns energy, and it interferes with everybody else.
+  moves:
+  - text:
+      name: ad
+      zone: left_bottom
+      lines:
+      - 'SNR falls: lower the rate'
+      - Raw rate is not goodput
+- id: rule
+  stage: rule
+  pdf: 12
+  c:
+  - Signal-to-Noise Ratio and BER
+  say: The rule is, the link's capacity isn't a fixed number. It depends on distance,
+    surroundings, and everyone else who's transmitting at this moment.
+  moves:
+  - rule:
+      text: A radio link's usable rate changes with distance, surroundings, and other
+        transmitters.
+- id: pitfall
+  stage: rule
+  pdf: 12
+  c:
+  - Signal-to-Noise Ratio and BER
+  say: Turning up the power seems like an easy fix for a weak signal. But it drains
+    the battery, and it raises interference for everyone nearby.
+  moves:
+  - trap:
+      wrong: More power is a free fix
+      right: It costs battery, and raises interference for others
+- id: changed
+  stage: changed_example
+  pdf: 12
+  c:
+  - Signal-to-Noise Ratio and BER
+  say: Try the arithmetic. A receiver's signal is 1,000 times stronger than the noise.
+    Then the laptop walks behind a wall, and the ratio drops to 10.
+  moves:
+  - clear: {}
+  - table.show:
+      name: db
+      zone: top
+      cols:
+      - Power ratio
+      - SNR
+      rows:
+      - - '100'
+        - 20 dB
+      - - '1000'
+        - '?'
+      - - '10'
+        - '?'
+- id: predict
+  stage: prediction
+  pdf: 12
+  hold: 12
+  c:
+  - Signal-to-Noise Ratio and BER
+  say: What are those two values, in decibels? And what should the sender do after
+    the drop?
+  moves:
+  - pause:
+      text: both SNR values in dB? what should the sender do?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 12
+  c:
+  - Signal-to-Noise Ratio and BER
+  say: 1,000 is 30 decibels. 10 is 10 decibels. That's a large drop, and the sender
+    should adapt to a slower, more robust rate. Each station can react to its own
+    radio conditions. But here's something it can't deal with alone. How do many stations
+    share this one radio channel? Here's a very different answer to that question.
+  moves:
+  - table.set:
+      name: db
+      r: 1
+      c: 1
+      v: 30 dB
+      state: done
+  - table.set:
+      name: db
+      r: 2
+      c: 1
+      v: 10 dB
+      state: done
+  - rule:
+      text: 'Next: can two senders use the same channel at the same time?'
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 14.1.predict
+  answer_beat: 14.1.answer
+  answer_events:
+  - 14.1.answer:move:0
+  - 14.1.answer:move:1
+  - 14.1.answer:move:2
+  answer_objects:
+  - object: db
+    after: 14.1.answer:move:0
+    effect: table.set
+    selector:
+      r: 1
+      c: 1
+    before_answer: hidden_or_neutral
+  - object: db
+    after: 14.1.answer:move:1
+    effect: table.set
+    selector:
+      r: 2
+      c: 1
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 14.1.answer:move:2
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '14.2'
+title: CDMA
+deck: lec14-wireless.pdf
+target_min: 4
+concepts:
+- CDMA
+beats:
+- id: question
+  stage: question
+  pdf: 14
+  c:
+  - CDMA
+  say: In a crowded room, two pairs can talk at once if one pair speaks English and
+    the other speaks French. You filter out what you can't decode. Could two senders
+    transmit on the same frequency at the same time, with the receiver still separating
+    them?
+  moves:
+  - heading:
+      text: 'Lecture 14: CDMA'
+  - q:
+      text: Can two senders share a channel at the same moment?
+- id: codes
+  stage: animation
+  pdf: 14
+  c:
+  - CDMA
+  say: 'That''s the idea behind code division multiple access. Each sender gets its
+    own code, a sequence of plus and minus ones, called chips. Sender one uses 1,
+    1, minus 1, minus 1. Sender two uses 1, minus 1, 1, minus 1. The magic is in how
+    these two relate. Multiply them chip by chip, and add: 1, minus 1, minus 1, plus
+    1. That''s zero. The codes are orthogonal.'
+  moves:
+  - clear: {}
+  - chips.show:
+      name: c
+      zone: top
+      rows:
+      - label: c1
+        values: $wireless.c1
+      - label: c2
+        values: $wireless.c2
+      show: 0
+  - chips.reveal:
+      name: c
+      when: Sender one uses
+  - chips.reveal:
+      name: c
+      when: Sender two uses
+  - tex:
+      name: d
+      zone: bottom
+      tex: c_1\cdot c_2 = 1-1-1+1 = 0
+      size: 48
+      when: Multiply them
+- id: send
+  stage: state
+  pdf: 15
+  c:
+  - CDMA
+  say: To send a bit, multiply the whole code by the bit's value. Sender one sends
+    plus 1, so it transmits its code unchanged. Sender two sends minus 1, so it transmits
+    its code flipped. On the air, the signals simply add. Chip by chip, the receiver
+    gets 0, 2, minus 2, 0. This sum looks like neither sender.
+  moves:
+  - clear: {}
+  - chips.show:
+      name: w
+      zone: full
+      rows:
+      - label: c1, bit +1
+        values: $wireless.first_rows.a
+      - label: c2, bit -1
+        values: $wireless.c2
+      - label: z
+        values: $wireless.first.z
+      show: 0
+  - chips.reveal:
+      name: w
+      when: Sender one sends
+  - chips.reveal:
+      name: w
+      when: Sender two sends
+  - chips.flip:
+      name: w
+      row: 1
+      values: $wireless.first_rows.b
+      label: c2, bit -1
+      when: so it transmits its code flipped
+  - chips.sum:
+      name: w
+      when: On the air
+  - rule:
+      text: The sum on the air looks like neither sender.
+      when: This sum
+- id: decode
+  stage: state
+  pdf: 16
+  c:
+  - CDMA
+  say: Decode. To hear sender one, take the dot product of the received signal with
+    c 1, then divide by 4, the code length. 0 times 1, plus 2 times 1, plus minus
+    2 times minus 1, plus 0. That's 4, over 4, which is plus 1. Sender one's bit is
+    recovered. With c 2, 0, minus 2, minus 2, plus 0 gives minus 4, over 4, which
+    is minus 1. Why does this work? Correlating with c 1 leaves sender two's contribution
+    multiplied by c 1 dot c 2, and that's zero. Sender two simply vanishes.
+  moves:
+  - clear: {}
+  - chips.show:
+      name: w
+      zone: left
+      rows:
+      - label: z
+        values: $wireless.first.z
+      - label: c1
+        values: $wireless.c1
+      - label: c2
+        values: $wireless.c2
+  - chips.dot:
+      name: w
+      a: 0
+      b: 1
+      products: $wireless.first_rows.corr1
+      total: 4
+      result: '+1'
+      when: 0 times 1
+      t: 4.5
+  - chips.dot:
+      name: w
+      a: 0
+      b: 2
+      products: $wireless.first_rows.corr2
+      total: -4
+      result: '-1'
+      when: With c 2
+      t: 4
+  - rule:
+      text: "Correlating with c1 multiplies sender two by c1 \xB7 c2, and that's zero."
+      when: Why does this
+- id: rule
+  stage: rule
+  pdf: 16
+  c:
+  - CDMA
+  say: 'In formula form: the sum of each bit times its code goes out on the air. The
+    receiver takes z dot c k, over M, the code length. This is an ideal model. It
+    assumes synchronized chips and well balanced powers. It''s a clean demonstration,
+    not a promise of zero interference in the real world.'
+  moves:
+  - clear: {}
+  - tex:
+      name: f1
+      zone: top
+      tex: z=\sum_k d_k\,c_k
+      size: 54
+      when: In formula form
+  - tex:
+      name: f2
+      zone: bottom
+      tex: d_k=\frac{z\cdot c_k}{M}
+      size: 54
+      when: The receiver takes
+  - rule:
+      text: 'Ideal model: synchronized chips, balanced power.'
+      when: This is an ideal
+  pre_roll: 0.7
+- id: pitfall
+  stage: rule
+  pdf: 16
+  c:
+  - CDMA
+  say: 'Don''t treat orthogonality as magic. It cancels the other sender only under
+    ideal conditions: synchronized chips, balanced powers, and little noise.'
+  moves:
+  - trap:
+      wrong: Orthogonal codes never interfere
+      right: Only with synchronized chips and balanced powers
+- id: changed
+  stage: changed_example
+  pdf: 16
+  c:
+  - CDMA
+  say: Change one bit. Sender one also sends minus 1, so both bits are minus 1.
+  moves:
+  - clear: {}
+  - chips.show:
+      name: w
+      zone: upper
+      rows:
+      - label: c1, bit -1
+        values: $wireless.second_rows.a
+      - label: c2, bit -1
+        values: $wireless.second_rows.b
+      - label: z
+        values: $wireless.second.z
+      show: 2
+- id: predict
+  stage: prediction
+  pdf: 16
+  hold: 12
+  c:
+  - CDMA
+  say: What's the new sum z? And what do you get when you decode each sender?
+  moves:
+  - pause:
+      text: the new z? what does each sender decode to?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 16
+  c:
+  - CDMA
+  say: 'z is minus 2, 0, 0, 2. Correlate with c 1: minus 2, plus 0, minus 0, minus
+    2, which is minus 4, over 4, or minus 1. Correlate with c 2: also minus 4 over
+    4, or minus 1. Both bits come out right. Codes are one way to share a medium,
+    and cellular networks have used them. But Wi-Fi takes a completely different approach.
+    Before that, a laptop has to find a network to join in the first place.'
+  moves:
+  - chips.sum:
+      name: w
+      when: z is minus 2
+  - tex:
+      name: dc1
+      zone: lower
+      tex: z\cdot c_1/4=(-2+0+0-2)/4=-1
+      size: 38
+      when: Correlate with c 1
+  - tex:
+      name: dc2
+      zone: lower
+      tex: z\cdot c_2/4=(-2+0+0-2)/4=-1
+      size: 38
+      when: Correlate with c 2
+  - rule:
+      text: "Both decode to \u22121. Next: joining a Wi-Fi network."
+      when: Both bits
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 14.2.predict
+  answer_beat: 14.2.answer
+  answer_events:
+  - 14.2.answer:move:0
+  - 14.2.answer:move:1
+  - 14.2.answer:move:2
+  - 14.2.answer:move:3
+  answer_objects:
+  - object: w
+    after: 14.2.answer:move:0
+    effect: chips.sum
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: dc1
+    after: 14.2.answer:move:1
+    effect: tex
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: dc2
+    after: 14.2.answer:move:2
+    effect: tex
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 14.2.answer:move:3
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '14.3'
+title: Joining and moving
+deck: lec14-wireless.pdf
+target_min: 5
+concepts:
+- Wireless Channels
+- Wi-Fi Association
+- Passive Scanning
+- Active Scanning
+- Wi-Fi Frame Addressing
+- Same-Subnet Roaming
+beats:
+- id: question
+  stage: question
+  pdf: 18
+  c:
+  - Wi-Fi Association
+  say: Open your laptop in a coffee shop. Several networks appear, and you click one.
+    What has actually happened? Are you on the Internet yet? And when the frame leaves
+    the laptop, whose address goes on it, the access point's, or the router's?
+  moves:
+  - heading:
+      text: 'Lecture 14: joining and moving'
+  - q:
+      text: You click a Wi-Fi network. Are you on the Internet yet?
+- id: channels
+  stage: animation
+  pdf: 17
+  c:
+  - Wireless Channels
+  say: Start with the vocabulary. An access point and the stations associated with
+    it form a basic service set, or BSS. Wi-Fi divides its spectrum into channels,
+    and each access point operates on a chosen channel. Neighboring access points
+    on overlapping channels interfere. The SSID is the human-readable network name,
+    and the BSSID identifies one particular BSS. None of these are subnet masks, or
+    IP addresses.
+  moves:
+  - clear: {}
+  - table.show:
+      name: v
+      zone: top
+      cols:
+      - Term
+      - Means
+      rows:
+      - - BSS
+        - an AP and its stations
+      - - Channel
+        - a frequency resource
+      - - SSID
+        - the network's name
+      - - BSSID
+        - one particular BSS
+- id: scan
+  stage: animation
+  pdf: 20
+  c:
+  - Passive Scanning
+  - Active Scanning
+  say: How do you find one? Two ways. In passive scanning, access points regularly
+    send out beacons, and the laptop just listens. In active scanning, the laptop
+    sends a probe request, and access points answer with probe responses. Either way,
+    you end up with a list of candidates, and you choose one. Passive scanning costs
+    the laptop only listening time. Active scanning finds networks sooner, at the
+    price of a few transmissions.
+  moves:
+  - clear: {}
+  - seq.show:
+      name: pa
+      zone: left
+      lanes:
+      - AP
+      - Laptop
+      steps: 4
+  - seq.show:
+      name: ac
+      zone: right
+      lanes:
+      - AP
+      - Laptop
+      steps: 4
+  - seq.msg:
+      name: pa
+      a: AP
+      b: Laptop
+      text: beacon
+      kind: radio
+      when: In passive
+  - seq.msg:
+      name: ac
+      a: Laptop
+      b: AP
+      text: probe request
+      kind: eth
+      when: In active
+  - seq.msg:
+      name: ac
+      a: AP
+      b: Laptop
+      text: probe response
+      kind: radio
+  - seq.msg:
+      name: pa
+      a: Laptop
+      b: AP
+      text: association request
+      kind: eth
+      when: you end up
+  - seq.msg:
+      name: pa
+      a: AP
+      b: Laptop
+      text: association reply
+      kind: radio
+  - seq.msg:
+      name: ac
+      a: Laptop
+      b: AP
+      text: association request
+      kind: eth
+      when: you choose
+  - seq.msg:
+      name: ac
+      a: AP
+      b: Laptop
+      text: association reply
+      kind: radio
+- id: assoc
+  stage: rule
+  pdf: 20
+  c:
+  - Wi-Fi Association
+  say: That final exchange, a request and a reply, is association. It creates a link-layer
+    relationship with one access point. It doesn't give you an IP address. So your
+    laptop still needs DHCP, then ARP, then DNS, exactly as in chapter 5. Being associated
+    means you can reach the AP, and nothing more.
+  moves:
+  - rule:
+      text: Association is link-layer attachment. DHCP, ARP, and DNS still come afterward.
+- id: addressing
+  stage: state
+  pdf: 31
+  c:
+  - Wi-Fi Frame Addressing
+  say: The frame. An access point isn't a router. It bridges between radio and Ethernet.
+    So a Wi-Fi frame needs to name both the immediate radio hop, and the final link-layer
+    destination. Say host H1 sends to router R. Address one is the receiver on this
+    radio hop, the AP. Address two is the transmitter, H1. Address three is R's MAC,
+    which is where the AP should bridge the frame. The AP then emits an ordinary Ethernet
+    frame, from H1 to R. H1 stays the Ethernet source. The AP never becomes the IP
+    destination.
+  moves:
+  - clear: {}
+  - net.show:
+      name: f
+      zone: top
+      nodes:
+        H:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: H1
+        A:
+          k: ap
+          at:
+          - 4
+          - 0
+          l: AP
+        R:
+          k: router
+          at:
+          - 8
+          - 0
+          l: R
+      links:
+      - - H
+        - A
+        - s: radio
+      - - A
+        - R
+  - table.show:
+      name: ad
+      zone: bottom
+      cols:
+      - Hop
+      - Receiver
+      - Transmitter
+      - Also carries
+      rows:
+      - - Radio
+        - AP
+        - H1
+        - 'Address 3: R'
+      - - Ethernet
+        - R
+        - H1
+        - (no AP address)
+      show: 0
+  - packet.spawn:
+      name: p
+      net: f
+      at: H
+      layers:
+      - radio
+      - ip
+      when: Say host H1
+  - table.reveal:
+      name: ad
+      when: Address one
+  - packet.hop:
+      name: p
+      to: A
+  - packet.swap_link_header:
+      name: p
+      when: The AP then
+  - packet.hop:
+      name: p
+      to: R
+  - table.reveal:
+      name: ad
+- id: four
+  stage: state
+  pdf: 32
+  c:
+  - Wi-Fi Frame Addressing
+  clar:
+  - wifi-4addr
+  say: There's also a fourth address field. The slide says address 4 appears only
+    in ad hoc mode, but its own table shows a bridged case. Don't memorize that note
+    as a universal rule. Four-address operation is used for bridging and distribution
+    scenarios.
+  moves:
+  - card:
+      kind: clarification
+      text: Four-address frames are a bridging case, not an ad hoc rule.
+      zone: right_bottom
+- id: roam
+  stage: state
+  pdf: 35
+  c:
+  - Same-Subnet Roaming
+  say: Move. The laptop walks from access point 1 to access point 2. Both connect
+    to one switch, on the same subnet. It associates with AP 2. Its IP address stays
+    valid, because the subnet hasn't changed. So who updates what? The switch does,
+    through its ordinary self-learning. The laptop's next frame arrives on a new port,
+    so the switch's table changes. No Internet routes change. Chapter 2's mechanism
+    handles this mobility case for free.
+  moves:
+  - clear: {}
+  - net.show:
+      name: r
+      zone: left
+      nodes:
+        S:
+          k: switch
+          at:
+          - 3
+          - 2
+          l: Switch
+          lp: up
+        A1:
+          k: ap
+          at:
+          - 0
+          - 0.8
+          l: AP 1
+          lp: left
+        A2:
+          k: ap
+          at:
+          - 6
+          - 0.8
+          l: AP 2
+          lp: right
+        L:
+          k: laptop
+          at:
+          - 0
+          - -0.8
+          l: Laptop
+      links:
+      - - S
+        - A1
+      - - S
+        - A2
+      - - A1
+        - L
+        - s: radio
+  - table.show:
+      name: sw
+      zone: right_top
+      cols:
+      - MAC
+      - Port
+      rows:
+      - - Laptop
+        - 1
+  - net.unlink:
+      name: r
+      a: A1
+      b: L
+      when:
+        phrase: The laptop walks
+        frame_offset: 8
+  - net.move:
+      name: r
+      node: L
+      to:
+      - 6
+      - -0.8
+  - net.relink:
+      name: r
+      a: A2
+      b: L
+      style: radio
+      when: It associates
+  - table.set:
+      name: sw
+      r: 0
+      c: 1
+      v: 2
+      state: now
+      when: the switch's table
+  pre_roll: 1.4000000000000001
+- id: pitfall
+  stage: rule
+  pdf: 35
+  c:
+  - Same-Subnet Roaming
+  say: Keep the steps apart. Scanning finds an AP, and association attaches to it.
+    Neither one gives you an IP address. That's still DHCP's job, afterward.
+  moves:
+  - trap:
+      wrong: Associating with an AP gives you an IP address
+      right: Association attaches the radio link. DHCP comes after.
+- id: changed
+  stage: changed_example
+  pdf: 35
+  c:
+  - Same-Subnet Roaming
+  say: Change the scenario. A new access point has the very same SSID, but it sits
+    behind a different router, on a different IP subnet.
+  moves:
+  - card:
+      kind: note
+      text: Same SSID, but a different router and subnet.
+      zone: right_bottom
+- id: predict
+  stage: prediction
+  pdf: 35
+  hold: 6
+  c:
+  - Same-Subnet Roaming
+  say: Does the laptop keep working with its old address? Does matching SSID text
+    guarantee anything?
+  moves:
+  - pause:
+      text: does the old address still work? what does the SSID guarantee?
+- id: answer
+  stage: explanation
+  pdf: 35
+  c:
+  - Same-Subnet Roaming
+  say: 'It does not keep working. The old address doesn''t belong on that subnet,
+    so return traffic gets routed to the wrong place. A matching SSID is just a matching
+    name. What counts is subnet continuity. Crossing subnets is the true mobility
+    problem, and we''ll take that on next chapter. First, a problem that hits every
+    Wi-Fi network: when stations share one channel, who''s allowed to talk?'
+  moves:
+  - rule:
+      text: Matching SSIDs are just matching names. Subnet continuity is what counts.
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 14.3.predict
+  answer_beat: 14.3.answer
+  answer_events:
+  - 14.3.answer:move:0
+  answer_objects:
+  - object: _rule
+    after: 14.3.answer:move:0
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '14.4'
+title: Contention and reservations
+deck: lec14-wireless.pdf
+target_min: 8.5
+concepts:
+- CSMA-CA
+- Hidden Terminals
+- Exposed Terminals
+- RTS and CTS
+- Network Allocation Vector
+- Wireless Power Management
+- Bluetooth Piconets
+- Wireless Error Recovery
+beats:
+- id: question
+  stage: question
+  pdf: 21
+  c:
+  - CSMA-CA
+  say: Ethernet senders listen before and during transmission, and they abort on a
+    collision. Why can't Wi-Fi do the same thing? It has a radio, it can listen. Is
+    there something about radio that breaks collision detection?
+  moves:
+  - heading:
+      text: 'Lecture 14: contention and reservations'
+  - q:
+      text: Why can't Wi-Fi simply detect collisions like Ethernet?
+  - keep: {}
+- id: why
+  stage: animation
+  pdf: 22
+  c:
+  - CSMA-CA
+  say: There are two reasons. First, while transmitting, a radio's own signal overwhelms
+    the tiny signal arriving from elsewhere, so it can't really listen while it talks.
+    Second, and more deeply, what matters isn't what the sender hears. What matters
+    is what the receiver hears. That difference needs a picture.
+  moves:
+  - clear: {}
+  - bullets:
+      name: y
+      zone: top
+      show: 0
+      items:
+      - Its own signal drowns out what it would hear
+      - The collision happens at the receiver, not at the sender
+  - reveal:
+      name: y
+      when: First, while
+  - reveal:
+      name: y
+      when: Second, and more
+- id: hidden
+  stage: animation
+  pdf: 13
+  c:
+  - Hidden Terminals
+  say: 'A, B, and C sit in a row. Each one''s radio range reaches only its neighbors.
+    A hears B. C hears B. But A and C can''t hear each other. A senses the channel:
+    silence. It starts sending to B. C senses too: silence, because it''s out of A''s
+    range. It also starts sending to B. Each sender was perfectly polite, and both
+    frames are destroyed at B. Neither of them noticed anything. This is the hidden
+    terminal problem. Local sensing simply can''t see interference at a distant receiver.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: h
+      zone: full
+      spread:
+      - 0.6
+      - 1
+      nodes:
+        A:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: laptop
+          at:
+          - 4
+          - 0
+          l: B
+        C:
+          k: laptop
+          at:
+          - 8
+          - 0
+          l: C
+      links:
+      - - A
+        - B
+        - s: radio
+      - - B
+        - C
+        - s: radio
+  - radio.zone:
+      net: h
+      node: A
+      radius: 2.6
+      kind: ip
+      name: za
+      when: Each one's radio
+  - radio.zone:
+      net: h
+      node: C
+      radius: 2.6
+      kind: eth
+      name: zc
+  - net.badge:
+      name: h
+      node: A
+      text: silence
+      side: up
+      state: done
+      when: A senses
+  - radio.pulse:
+      net: h
+      node: A
+      radius: 2.6
+      kind: ip
+      when: It starts sending
+  - net.badge:
+      name: h
+      node: C
+      text: silence
+      side: up
+      state: done
+      when: C senses
+  - radio.pulse:
+      net: h
+      node: C
+      radius: 2.6
+      kind: eth
+      when: It also starts
+  - fx.burst:
+      net: h
+      node: B
+      when: both frames
+  - net.state:
+      name: h
+      nodes:
+        B: error
+  - rule:
+      text: 'Hidden terminals: inaudible to each other, yet they collide at the receiver.'
+      when: This is the hidden
+- id: exposed
+  stage: animation
+  pdf: 27
+  c:
+  - Exposed Terminals
+  clar:
+  - exposed-ideal
+  say: There's a mirror image. Now B sends to A, and C wants to send to D, on the
+    far side. C hears B, so carrier sense says wait. But C's signal wouldn't reach
+    A at all. These two transmissions could have happened at the same time safely.
+    Sensing suppressed useful concurrency. That's the exposed terminal problem. A
+    note of care, though. The slide's shortcut, about hearing an RTS but not a CTS,
+    is an idealized thought experiment. Real timing and acknowledgments must work
+    too, so the drawing alone isn't permission to transmit.
+  moves:
+  - clear: {}
+  - net.show:
+      name: e
+      zone: top
+      nodes:
+        A:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: laptop
+          at:
+          - 3.4
+          - 0
+          l: B
+        C:
+          k: laptop
+          at:
+          - 6.8
+          - 0
+          l: C
+        D:
+          k: laptop
+          at:
+          - 10.2
+          - 0
+          l: D
+      links:
+      - - A
+        - B
+        - s: radio
+      - - B
+        - C
+        - s: dim
+      - - C
+        - D
+        - s: dim
+  - radio.pulse:
+      net: e
+      node: B
+      radius: 3.9
+      kind: ip
+      when: Now B sends
+  - net.state:
+      name: e
+      nodes:
+        C: candidate
+      when: C hears B
+  - net.badge:
+      name: e
+      node: C
+      text: waits
+      side: up
+      state: now
+  - radio.pulse:
+      net: e
+      node: C
+      radius: 3.9
+      kind: eth
+      when: But C's signal
+  - net.state:
+      name: e
+      links:
+      - - C
+        - D
+        - radio
+      when: These two transmissions
+  - rule:
+      text: 'Exposed terminals: sensing can block a transmission that would have been
+        safe.'
+      when: That's the exposed
+  - card:
+      kind: clarification
+      text: The exposed-terminal shortcut is idealized. Real timing and ACK rules
+        still apply.
+      zone: bottom
+      when: A note of care
+- id: csmaca
+  stage: state
+  pdf: 28
+  c:
+  - CSMA-CA
+  say: Wi-Fi avoids collisions instead of detecting them. It's called CSMA/CA. Here's
+    the sender's routine. Wait until the channel has been idle for a period called
+    DIFS. Then count down a random backoff, one idle slot at a time. If the channel
+    goes busy, freeze the counter. Do not reset it. Transmit when it reaches zero.
+    Then the receiver checks the frame, and after a shorter gap called SIFS, returns
+    an ACK. Why shorter? So the ACK goes first, before anyone else can grab the channel.
+    If no ACK arrives, the sender retries with a larger backoff range.
+  moves:
+  - clear: {}
+  - tl.show:
+      name: c
+      zone: top
+      tracks:
+      - Sender
+      - Receiver
+      span:
+      - 0
+      - 12
+  - tl.block:
+      name: c
+      track: Sender
+      start: 0
+      end: 2
+      text: DIFS
+      kind: data
+      when: Wait until
+  - tl.block:
+      name: c
+      track: Sender
+      start: 2
+      end: 4
+      text: backoff
+      kind: label
+      when: Then count down
+  - tl.block:
+      name: c
+      track: Sender
+      start: 4
+      end: 9
+      text: DATA
+      kind: radio
+      when: Transmit when
+  - tl.block:
+      name: c
+      track: Receiver
+      start: 9
+      end: 10
+      text: SIFS
+      kind: data
+      when: after a shorter
+  - tl.block:
+      name: c
+      track: Receiver
+      start: 10
+      end: 12
+      text: ACK
+      kind: ip
+      when: returns an ACK
+  - rule:
+      text: CSMA/CA avoids collisions. A shorter gap lets the ACK go first.
+      when: So the ACK goes
+- id: counter
+  stage: state
+  pdf: 28
+  c:
+  - CSMA-CA
+  say: Trace a counter. It starts at 4. Two idle slots go by, and it reads 2. Another
+    station transmits for a long time, and the counter stays at 2. When the channel
+    is idle again, two more slots bring it to zero, and we can send. The waiting already
+    done is not thrown away, which makes things fairer for stations that have waited.
+  moves:
+  - tl.show:
+      name: ct
+      zone: bottom
+      tracks:
+      - Channel
+      - Counter
+      span:
+      - 0
+      - 12
+      ticks: []
+  - tl.block:
+      name: ct
+      track: Counter
+      start: 0
+      end: 1
+      text: 4
+      kind: label
+      when: It starts at 4
+  - tl.block:
+      name: ct
+      track: Channel
+      start: 1
+      end: 2
+      text: idle
+      kind: data
+      when: Two idle slots
+  - tl.block:
+      name: ct
+      track: Counter
+      start: 1
+      end: 2
+      text: $wireless.backoff.0.counter
+      kind: label
+      t: 0.4
+  - tl.block:
+      name: ct
+      track: Channel
+      start: 2
+      end: 3
+      text: idle
+      kind: data
+      t: 0.4
+  - tl.block:
+      name: ct
+      track: Counter
+      start: 2
+      end: 3
+      text: $wireless.backoff.1.counter
+      kind: label
+      t: 0.4
+  - tl.block:
+      name: ct
+      track: Channel
+      start: 3
+      end: 9
+      text: 'busy: another station'
+      state: error
+      when: Another station
+  - tl.block:
+      name: ct
+      track: Counter
+      start: 3
+      end: 9
+      text: frozen at 2
+      state: now
+      when: the counter stays
+  - tl.block:
+      name: ct
+      track: Channel
+      start: 9
+      end: 10
+      text: idle
+      kind: data
+      when: two more slots
+  - tl.block:
+      name: ct
+      track: Counter
+      start: 9
+      end: 10
+      text: $wireless.backoff.3.counter
+      kind: label
+      t: 0.4
+  - tl.block:
+      name: ct
+      track: Channel
+      start: 10
+      end: 11
+      text: idle
+      kind: data
+      t: 0.4
+  - tl.block:
+      name: ct
+      track: Counter
+      start: 10
+      end: 11
+      text: $wireless.backoff.4.counter
+      state: done
+      t: 0.4
+  - tl.block:
+      name: ct
+      track: Channel
+      start: 11
+      end: 12
+      text: send
+      kind: radio
+      when: and we can send
+- id: noack
+  stage: rule
+  pdf: 40
+  c:
+  - Wireless Error Recovery
+  say: And a missing ACK does not prove a collision. The data might have been corrupted
+    by noise, or the ACK itself might have been lost. Note too that this is a local,
+    link-layer ACK, not TCP's. It repairs one radio hop. Together with coding, retries,
+    and rate changes, that's wireless error recovery. It's done locally because the
+    radio hop is where the errors happen. Local repair doesn't guarantee end to end
+    delivery, though.
+  moves:
+  - clear: {}
+  - bullets:
+      name: na
+      zone: top
+      show: 0
+      items:
+      - Noise may have corrupted the data
+      - The ACK itself may have been lost
+      - A link-layer ACK repairs one radio hop, not TCP's job
+  - reveal:
+      name: na
+      when: The data might
+  - reveal:
+      name: na
+      when: or the ACK
+  - reveal:
+      name: na
+      when: Note too
+  - rule:
+      text: No ACK does not prove a collision. Local recovery repairs one hop, not
+        the whole path.
+      when: Local repair
+- id: rts
+  stage: state
+  pdf: 24
+  c:
+  - RTS and CTS
+  say: CSMA/CA still doesn't cure the hidden terminal. For that, there's an optional
+    reservation. Before sending data, A sends a short request to send, RTS, to B.
+    B answers with clear to send, CTS. Here's the clever part. CTS comes from the
+    receiver, so everybody near the receiver hears it, including hidden C. Now C knows
+    to stay quiet. Then A sends the data, and B acknowledges.
+  moves:
+  - clear: {}
+  - net.show:
+      name: h
+      zone: top
+      nodes:
+        A:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: laptop
+          at:
+          - 4
+          - 0
+          l: B
+        C:
+          k: laptop
+          at:
+          - 8
+          - 0
+          l: C
+      links:
+      - - A
+        - B
+        - s: radio
+      - - B
+        - C
+        - s: radio
+      spread:
+      - 0.6
+      - 1
+  - seq.show:
+      name: s
+      zone: bottom
+      lanes:
+      - A
+      - B
+      - C
+      steps: 4
+  - seq.msg:
+      name: s
+      a: A
+      b: B
+      text: RTS
+      kind: label
+      when: Before sending
+  - seq.msg:
+      name: s
+      a: B
+      b: A
+      text: CTS to A; C overhears
+      kind: ip
+      when: B answers
+  - radio.pulse:
+      net: h
+      node: B
+      radius: 2.6
+      kind: ip
+      when: CTS comes from
+  - net.state:
+      name: h
+      nodes:
+        C: candidate
+      when: Now C knows
+  - seq.msg:
+      name: s
+      a: A
+      b: B
+      text: DATA
+      kind: radio
+      when: Then A sends
+  - seq.msg:
+      name: s
+      a: B
+      b: A
+      text: ACK
+      kind: ip
+      when: and B acknowledges
+- id: nav
+  stage: state
+  pdf: 25
+  c:
+  - Network Allocation Vector
+  say: How long should C stay quiet? The CTS carries a duration, and C sets a timer,
+    called the network allocation vector, or NAV. This acts as virtual carrier sensing.
+    Even during silent gaps between the protected frames, C treats the channel as
+    busy.
+  moves:
+  - clear:
+      keep:
+      - h
+  - tl.show:
+      name: nv
+      zone: bottom
+      tracks:
+      - A sends
+      - B sends
+      - C's NAV
+      span:
+      - 0
+      - 12
+  - tl.block:
+      name: nv
+      track: A sends
+      start: 0
+      end: 1
+      text: RTS
+      kind: label
+      t: 0.4
+  - tl.block:
+      name: nv
+      track: B sends
+      start: 1.3
+      end: 2.3
+      text: CTS
+      kind: ip
+      when: The CTS carries
+  - tl.block:
+      name: nv
+      track: C's NAV
+      start: 2.3
+      end: 10.5
+      text: 'defer: NAV counts down'
+      state: now
+      when: and C sets
+  - net.badge:
+      name: h
+      node: C
+      text: NAV set
+      side: up
+      state: now
+  - tl.block:
+      name: nv
+      track: A sends
+      start: 2.6
+      end: 9
+      text: DATA
+      kind: radio
+      when: This acts
+  - tl.block:
+      name: nv
+      track: B sends
+      start: 9.3
+      end: 10.5
+      text: ACK
+      kind: ip
+      when: Even during
+- id: tradeoff
+  stage: rule
+  pdf: 26
+  c:
+  - RTS and CTS
+  say: Is this free? No. RTS frames can themselves collide, but they're short, so
+    a collision costs much less than losing a long data frame. And the four-frame
+    exchange adds overhead. For short frames on a quiet channel, that overhead can
+    exceed what it saves. So choose it for long frames under real contention.
+  moves:
+  - clear: {}
+  - bullets:
+      name: tr
+      zone: top
+      show: 0
+      items:
+      - An RTS collision is short, so it costs little
+      - The four-frame exchange adds overhead
+      - Short frames on a quiet channel may lose more than they save
+  - reveal:
+      name: tr
+      when: RTS frames can
+  - reveal:
+      name: tr
+      when: And the four-frame
+  - reveal:
+      name: tr
+      when: For short frames
+  - rule:
+      text: RTS/CTS trades overhead for cheaper collisions. Good for long frames under
+        contention.
+      when: So choose
+- id: power
+  stage: state
+  pdf: 37
+  c:
+  - Wireless Power Management
+  say: Radio also costs battery, and listening is expensive. In power management,
+    a station tells its AP it's going to sleep. The AP buffers any frames for it.
+    Each beacon lists who has data waiting. So the station wakes just in time for
+    the beacon, and if it's named, it asks for its frames. Otherwise it goes straight
+    back to sleep.
+  moves:
+  - clear: {}
+  - tl.show:
+      name: pw
+      zone: top
+      tracks:
+      - AP beacons
+      - Station
+      span:
+      - 0
+      - 12
+  - tl.block:
+      name: pw
+      track: Station
+      start: 0.6
+      end: 5
+      text: asleep
+      state: idle
+      when: tells its AP
+  - tl.block:
+      name: pw
+      track: AP beacons
+      start: 0
+      end: 0.6
+      kind: radio
+      when: Each beacon
+  - tl.block:
+      name: pw
+      track: AP beacons
+      start: 5
+      end: 5.6
+      kind: radio
+      t: 0.3
+  - tl.block:
+      name: pw
+      track: AP beacons
+      start: 10
+      end: 10.6
+      kind: radio
+      t: 0.3
+  - tl.block:
+      name: pw
+      track: Station
+      start: 5
+      end: 7
+      text: awake
+      kind: ip
+      when: So the station
+  - tl.block:
+      name: pw
+      track: Station
+      start: 7
+      end: 12
+      text: asleep
+      state: idle
+      when: Otherwise it
+- id: idlelisten
+  stage: rule
+  pdf: 39
+  c:
+  - Wireless Power Management
+  say: Notice the shared pattern with soft state and with queues. The AP holds data
+    on the sleeper's behalf, and a periodic signal tells it when to check. You pay
+    with delay, and you gain battery. There's a tradeoff in every design here.
+  moves:
+  - rule:
+      text: 'Sleep trades delay for battery: the AP buffers, and beacons announce
+        what''s waiting.'
+      when: The AP holds
+- id: bluetooth
+  stage: state
+  pdf: 38
+  c:
+  - Bluetooth Piconets
+  say: Bluetooth shows yet another coordination model. A piconet has one controller,
+    which schedules its nearby devices, so there's no contention at all. It also uses
+    frequency hopping, moving among channels in a pattern. The slide's classic figures
+    are 79 channels, and a 625 microsecond slot. Those describe the classic system,
+    not all Bluetooth modes.
+  moves:
+  - fade:
+      names: _rule
+  - net.show:
+      name: bt
+      zone: bottom
+      nodes:
+        M:
+          k: box
+          at:
+          - 4
+          - 1
+          l: Controller
+          lp: up
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: a
+        B:
+          k: node
+          at:
+          - 4
+          - -0.4
+          l: b
+        C:
+          k: node
+          at:
+          - 8
+          - 1
+          l: c
+      links:
+      - - M
+        - A
+        - s: radio
+      - - M
+        - B
+        - s: radio
+      - - M
+        - C
+        - s: radio
+  - net.pulse:
+      name: bt
+      path:
+      - M
+      - A
+      when: which schedules
+  - net.pulse:
+      name: bt
+      path:
+      - M
+      - B
+  - net.pulse:
+      name: bt
+      path:
+      - M
+      - C
+  - net.badge:
+      name: bt
+      node: A
+      text: 79 channels
+      side: down
+      when: The slide's classic
+  - net.badge:
+      name: bt
+      node: C
+      text: "625 \xB5s slot"
+      side: down
+- id: bluetooth-more
+  stage: state
+  pdf: 38
+  c:
+  - Bluetooth Piconets
+  say: With 625 microseconds per slot, 1,600 slots fit in one second. The controller
+    grants one client a transmit opportunity at a time, and the group follows a shared
+    hopping sequence. These are classic Bluetooth's numbers, so don't apply them to
+    every mode.
+  moves:
+  - tex:
+      name: sl
+      zone: top
+      tex: 1\ \text{s}\div 625\ \mu\text{s}=1600\ \text{slots}
+      size: 46
+      when: With 625
+  - net.pulse:
+      name: bt
+      path:
+      - M
+      - B
+      when: The controller grants
+- id: pitfall
+  stage: rule
+  pdf: 38
+  c:
+  - Bluetooth Piconets
+  say: A hidden terminal isn't simply a weak signal. The key is two senders that can't
+    hear each other, while both reach a shared receiver.
+  moves:
+  - trap:
+      wrong: A hidden terminal just has a weak signal
+      right: Two senders can't hear each other, yet interfere at the receiver
+- id: changed
+  stage: changed_example
+  pdf: 26
+  c:
+  - Hidden Terminals
+  - RTS and CTS
+  say: Test yourself on the geometry. A sends RTS to B. B's CTS is heard by C, which
+    can't hear A. Separately, E can hear A, but not B.
+  moves:
+  - clear: {}
+  - net.show:
+      name: g
+      zone: top
+      nodes:
+        E:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: E
+        A:
+          k: laptop
+          at:
+          - 3
+          - 0
+          l: A
+        B:
+          k: laptop
+          at:
+          - 6
+          - 0
+          l: B
+        C:
+          k: laptop
+          at:
+          - 9
+          - 0
+          l: C
+      links:
+      - - E
+        - A
+        - s: radio
+      - - A
+        - B
+        - s: radio
+      - - B
+        - C
+        - s: radio
+      spread:
+      - 0.8
+      - 1
+  - radio.pulse:
+      net: g
+      node: A
+      radius: 2.6
+      kind: ip
+      when: A sends RTS
+  - radio.pulse:
+      net: g
+      node: B
+      radius: 2.6
+      kind: eth
+      when: B's CTS
+  - net.state:
+      name: g
+      nodes:
+        E: candidate
+        C: candidate
+      when: Separately
+  pre_roll: 0.30000000000000004
+- id: predict
+  stage: prediction
+  pdf: 26
+  hold: 7
+  c:
+  - Network Allocation Vector
+  say: Which station sets its NAV from the CTS? Which station hears only the RTS?
+    And what might each one do?
+  moves:
+  - pause:
+      text: who defers on the CTS? who hears only the RTS?
+- id: answer
+  stage: explanation
+  pdf: 27
+  c:
+  - Network Allocation Vector
+  - Exposed Terminals
+  say: C hears the CTS, so it sets its NAV, and it defers. That protects B's reception.
+    E hears only the RTS. RTS frames also carry a duration, so in the standard behavior,
+    E sets its NAV too, even though it might not harm B. E is exposed, and the shortcut
+    of ignoring it is the idealization we flagged. So the radio link now works, for
+    a laptop that stays put. But what if it doesn't? When a phone drives across a
+    city, changing towers every few minutes, how can a call stay up, and how can anyone
+    even find it?
+  moves:
+  - table.show:
+      name: g2
+      zone: bottom
+      cols:
+      - Station
+      - Hears
+      - Result
+      rows: &id001
+      - - C
+        - CTS from B
+        - defers; protects B
+      - - E
+        - RTS from A
+        - sets NAV; exposed
+      show: 0
+  - table.reveal:
+      name: g2
+      when: C hears the CTS
+  - table.reveal:
+      name: g2
+      when: E hears only
+  - rule:
+      text: 'Next: a moving phone, and how anyone finds it.'
+      when: So the radio link
+  - keep: {}
+  pre_roll: 1.0
+prediction_contracts:
+- prediction_beat: 14.4.predict
+  answer_beat: 14.4.answer
+  answer_events:
+  - 14.4.answer:move:0
+  - 14.4.answer:move:1
+  - 14.4.answer:move:2
+  - 14.4.answer:move:3
+  answer_objects:
+  - object: g2
+    after: 14.4.answer:move:0
+    effect: table.show
+    selector:
+      rows: *id001
+    before_answer: hidden_or_neutral
+  - object: g2
+    after: 14.4.answer:move:1
+    effect: table.reveal
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: g2
+    after: 14.4.answer:move:2
+    effect: table.reveal
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 14.4.answer:move:3
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.

@@ -1,0 +1,198 @@
+dish: '17.20'
+title: 'Practice question 20: locator and handover'
+deck: lec15-mobile.pdf
+target_min: 1.5
+concepts: []
+pad: 2.2
+beats:
+- id: 17.20.question
+  stage: question
+  narration: 17.20.question
+  pdf:
+  - lec15-mobile.pdf
+  - 34
+  concepts:
+  - IP Tunneling
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 20: locator and handover'
+  - bullets:
+      name: q
+      zone: top
+      show: 2
+      items:
+      - Inner and outer destinations through the home agent?
+      - 'S-GW and base-station paths: before, during, after?'
+      when: A Mobile IP
+  adjust: {}
+- id: 17.20.predict
+  stage: prediction
+  narration: 17.20.predict
+  pdf:
+  - lec15-mobile.pdf
+  - 34
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: the two destinations, and all three data paths
+  adjust: {}
+  hold: 12
+- id: 17.20.tunnel
+  stage: state
+  narration: 17.20.tunnel
+  pdf:
+  - lec15-mobile.pdf
+  - 34
+  concepts:
+  - IP Tunneling
+  clarifications: []
+  moves:
+  - clear: {}
+  - stack.show:
+      name: st
+      zone: top
+      layers:
+      - t: 'Outer destination: C, the location'
+        k: tunnel
+      - t: 'Inner destination: H, the identity'
+        k: ip
+  - stack.mark:
+      name: st
+      layer: 1
+      state: done
+      when: The inner
+  - stack.mark:
+      name: st
+      layer: 0
+      state: now
+      when: The outer
+  adjust: {}
+  pre_roll: 1.6
+- id: 17.20.paths
+  stage: state
+  narration: 17.20.paths
+  pdf:
+  - lec15-mobile.pdf
+  - 40
+  concepts:
+  - Cellular Handover
+  clarifications: []
+  moves:
+  - net.show:
+      name: h
+      zone: mobility_bottom
+      nodes:
+        S:
+          k: box
+          at:
+          - 4
+          - 1.6
+          l: S-GW
+        A:
+          k: tower
+          at:
+          - 0
+          - 0
+          l: A
+          lp: left
+        B:
+          k: tower
+          at:
+          - 8
+          - 0
+          l: B
+          lp: right
+        U:
+          k: phone
+          at:
+          - 4
+          - -0.4
+          l: UE
+          lp: down
+      links:
+      - - S
+        - A
+        - s: dim
+      - - S
+        - B
+        - s: dim
+      - - A
+        - B
+        - s: dim
+      - - A
+        - U
+        - s: dim
+      - - B
+        - U
+        - s: dim
+  - net.walk:
+      name: h
+      path:
+      - S
+      - A
+      - U
+      when: Before
+  - net.walk:
+      name: h
+      path:
+      - S
+      - A
+      - B
+      - U
+      state: now
+      when: During
+  - net.walk:
+      name: h
+      path:
+      - S
+      - B
+      - U
+      state: done
+      when: After
+  adjust: {}
+  pre_roll: 1.4000000000000001
+- id: 17.20.trap
+  stage: rule
+  narration: 17.20.trap
+  pdf:
+  - lec15-mobile.pdf
+  - 34
+  concepts:
+  - IP Tunneling
+  clarifications: []
+  moves:
+  - trap:
+      wrong: The inner destination changes to C
+      right: The inner stays H. Only the outer destination is C.
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.20.marks
+  stage: explanation
+  narration: 17.20.marks
+  pdf:
+  - lec15-mobile.pdf
+  - 40
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: 1 point per destination. 1 point per path phase.
+      when: On marks
+  - clear:
+      when: That's the whole
+  - bullets:
+      name: why
+      zone: top
+      show: 6
+      items:
+      - Wrong scope
+      - Wrong table
+      - Wrong unit
+      - Wrong order
+      - Stale dependency
+      - Confused role
+  - keep: {}
+  adjust: {}

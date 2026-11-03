@@ -1,0 +1,442 @@
+dish: '18.1'
+title: The packet story, from memory
+deck: lec09-discovery.pdf
+target_min: 5
+concepts: []
+pad: 2.2
+beats:
+- id: 18.1.open
+  stage: question
+  narration: 18.1.open
+  pdf:
+  - lec09-discovery.pdf
+  - 49
+  concepts: []
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Wednesday warm-up: the packet story'
+  - spine:
+      current: LAN
+      zone: top
+  - q:
+      text: What does a waking laptop need before it can send anything?
+      zone: bottom
+  adjust: {}
+- id: 18.1.p1
+  stage: prediction
+  narration: 18.1.p1
+  pdf:
+  - lec09-discovery.pdf
+  - 49
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: draw the devices, and name the missing facts
+  adjust: {}
+  hold: 12
+- id: 18.1.a1
+  stage: explanation
+  narration: 18.1.a1
+  pdf:
+  - lec09-discovery.pdf
+  - 22
+  concepts:
+  - DHCP
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: n
+      zone: story_upper
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        S:
+          k: switch
+          at:
+          - 2.6
+          - 0
+          l: Switch
+        R:
+          k: router
+          at:
+          - 5.2
+          - 0
+          l: Gateway
+        D:
+          k: server
+          at:
+          - 5.2
+          - 2.2
+          l: DNS resolver
+          lp: right
+        Q:
+          k: router
+          at:
+          - 8
+          - 0
+          l: Next router
+          lp: up
+        W:
+          k: server
+          at:
+          - 11
+          - 0
+          l: Web server
+      links:
+      - - L
+        - S
+      - - S
+        - R
+      - - R
+        - D
+      - - R
+        - Q
+      - - Q
+        - W
+  - table.show:
+      name: t
+      zone: story_lower
+      cols:
+      - Missing fact
+      - Mechanism
+      rows:
+      - - Address, mask, gateway, resolver
+        - DHCP
+      show: 0
+  - table.reveal:
+      name: t
+      when: DHCP supplies
+  - msg.send:
+      name: n
+      a: L
+      b: R
+      text: 'DHCP: 4 messages'
+      when: in four messages
+      t: 1.2
+  adjust: {}
+- id: 18.1.p2
+  stage: prediction
+  narration: 18.1.p2
+  pdf:
+  - lec09-discovery.pdf
+  - 54
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: what goes out first, and to whom?
+  adjust: {}
+  hold: 10
+- id: 18.1.a2
+  stage: explanation
+  narration: 18.1.a2
+  pdf:
+  - lec09-discovery.pdf
+  - 54
+  concepts:
+  - ARP
+  clarifications: []
+  moves:
+  - msg.send:
+      name: n
+      a: L
+      b: R
+      text: 'ARP: gateway?'
+      when: so the first
+      t: 1.1
+  - packet.spawn:
+      name: p
+      net: n
+      at: L
+      layers:
+      - eth
+      - ip
+      when: Then the DNS
+  - packet.hop:
+      name: p
+      to:
+      - S
+      - R
+      t: 1.1
+  - packet.swap_link_header:
+      name: p
+  - packet.hop:
+      name: p
+      to: D
+      t: 0.7
+  - packet.fade:
+      name: p
+  - rule:
+      text: A frame crosses one link. A packet crosses the network.
+      when: The frame crosses
+  adjust: {}
+- id: 18.1.p3
+  stage: prediction
+  narration: 18.1.p3
+  pdf:
+  - lec09-discovery.pdf
+  - 33
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: what did the switch learn, and do?
+  adjust: {}
+  hold: 10
+- id: 18.1.a3
+  stage: explanation
+  narration: 18.1.a3
+  pdf:
+  - lec06-lan.pdf
+  - 31
+  concepts:
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - net.state:
+      name: n
+      nodes:
+        S: now
+      when: It learned
+  - table.show:
+      name: t
+      zone: story_lower
+      cols:
+      - Missing fact
+      - Mechanism
+      rows:
+      - - Which port for a MAC
+        - Switch learning
+  - fade:
+      names: _rule
+  - rule:
+      text: Source teaches. Destination decides.
+      when: Source teaches
+  adjust: {}
+- id: 18.1.p4
+  stage: prediction
+  narration: 18.1.p4
+  pdf:
+  - lec09-discovery.pdf
+  - 13
+  concepts: []
+  clarifications: []
+  moves:
+  - net.state:
+      name: n
+      nodes:
+        S: null
+  - pause:
+      text: what does the router read, and what changes?
+  adjust: {}
+  hold: 10
+- id: 18.1.a4
+  stage: explanation
+  narration: 18.1.a4
+  pdf:
+  - lec08-network2.pdf
+  - 13
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - table.show:
+      name: t
+      zone: story_lower
+      cols:
+      - Missing fact
+      - Mechanism
+      rows:
+      - - Which output for a prefix
+        - Longest prefix match
+  - fade:
+      names: _rule
+  - packet.spawn:
+      name: p
+      net: n
+      at: R
+      layers:
+      - eth
+      - ip
+      when: It reads
+  - packet.swap_link_header:
+      name: p
+      when: It replaces
+  - packet.hop:
+      name: p
+      to:
+      - Q
+      - W
+      t: 1.4
+  - packet.fade:
+      name: p
+  adjust: {}
+  pre_roll: 1.5
+- id: 18.1.p5
+  stage: prediction
+  narration: 18.1.p5
+  pdf:
+  - lec09-discovery.pdf
+  - 19
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: who builds the table, inside and between networks?
+  adjust: {}
+  hold: 10
+- id: 18.1.a5
+  stage: explanation
+  narration: 18.1.a5
+  pdf:
+  - lec10-routing.pdf
+  - 37
+  concepts:
+  - Link-State Routing
+  - Distance-Vector Routing
+  clarifications: []
+  moves:
+  - table.show:
+      name: t
+      zone: story_lower
+      cols:
+      - Scope
+      - Mechanism
+      rows:
+      - - Inside an AS
+        - link state or distance vector
+      - - Between ASes
+        - BGP with policy
+      show: 0
+  - table.reveal:
+      name: t
+      when: Inside one AS
+  - table.reveal:
+      name: t
+      when: Between ASes
+  - net.walk:
+      name: n
+      path:
+      - R
+      - Q
+      - W
+      state: done
+      when: The chosen
+  adjust: {}
+  pre_roll: 1.0
+- id: 18.1.p6
+  stage: prediction
+  narration: 18.1.p6
+  pdf:
+  - lec09-discovery.pdf
+  - 8
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: name two things that go wrong during convergence
+  adjust: {}
+  hold: 10
+- id: 18.1.a6
+  stage: explanation
+  narration: 18.1.a6
+  pdf:
+  - lec11-convergence.pdf
+  - 8
+  concepts:
+  - Forwarding Blackholes
+  - Transient Forwarding Loops
+  clarifications: []
+  moves:
+  - net.unwalk:
+      name: n
+  - net.state:
+      name: n
+      links:
+      - - R
+        - Q
+        - failed
+      when: A blackhole
+  - table.show:
+      name: t
+      zone: story_lower
+      cols:
+      - Shape
+      - Cause
+      rows:
+      - - Blackhole
+        - old route, no way on
+      - - Transient loop
+        - installs at different times
+      show: 0
+  - table.reveal:
+      name: t
+  - table.reveal:
+      name: t
+      when: And a transient
+  - rule:
+      text: Detect, disseminate, compute, install.
+      when: Detect, disseminate
+  adjust: {}
+  pre_roll: 0.5
+- id: 18.1.p7
+  stage: prediction
+  narration: 18.1.p7
+  pdf:
+  - lec09-discovery.pdf
+  - 39
+  concepts: []
+  clarifications: []
+  moves:
+  - net.state:
+      name: n
+      links:
+      - - R
+        - Q
+        - solid
+  - pause:
+      text: what stays the same, and what changes?
+  adjust: {}
+  hold: 10
+- id: 18.1.a7
+  stage: explanation
+  narration: 18.1.a7
+  pdf:
+  - lec15-mobile.pdf
+  - 38
+  concepts:
+  - Cellular Handover
+  - IP Tunneling
+  clarifications: []
+  moves:
+  - clear: {}
+  - stack.show:
+      name: st
+      zone: top
+      layers:
+      - t: 'Outer destination: changes as the phone moves'
+        k: tunnel
+      - t: 'Inner packet: stays the same'
+        k: ip
+  - stack.mark:
+      name: st
+      layer: 1
+      state: done
+      when: The inner packet
+  - stack.mark:
+      name: st
+      layer: 0
+      state: now
+      when: The outer destination
+  - rule:
+      text: A local envelope changes, around a global packet that doesn't.
+      when: That's the picture
+  adjust: {}
+  pre_roll: 1.6

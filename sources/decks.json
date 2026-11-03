@@ -1,0 +1,52 @@
+{
+  "lec06-lan.pdf": {
+    "pages": 49,
+    "sha256": "d46442e88ee5e100344fe9acc62140bb6e3c44e0ec36f5b6ad17a0f68930b7d7",
+    "vault_verified": true
+  },
+  "lec07-network1.pdf": {
+    "pages": 42,
+    "sha256": "68d6c3a699bfa1d69cdd2d8897da146c0e330c857fa959aec5a669ba60f9da8b",
+    "vault_verified": true
+  },
+  "lec08-network2.pdf": {
+    "pages": 36,
+    "sha256": "afdd5870118dd4d13b2e1f2ef78339ac7a8fcb00a765e4be8e4df2edcc93fdff",
+    "vault_verified": true
+  },
+  "lec09-discovery.pdf": {
+    "pages": 60,
+    "sha256": "07a274157d878987009a400dde37610cd1fd7d0da6d852ad7930e5bd01b612b3",
+    "vault_verified": true
+  },
+  "lec10-routing.pdf": {
+    "pages": 57,
+    "sha256": "65bfe393f5fde25bb11f5a377afa62387ccf3b898d7fba226ff059b83df616d4",
+    "vault_verified": true
+  },
+  "lec11-convergence.pdf": {
+    "pages": 37,
+    "sha256": "1fc1ec9f57c8d3e6fca36dde9ef9140eceef06168024c2c0423642faee835457",
+    "vault_verified": true
+  },
+  "lec12-bgp.pdf": {
+    "pages": 47,
+    "sha256": "2d792868c28b3110cd0429f36d76c9d3b53546222bf4fd29354c4f038fcff135",
+    "vault_verified": true
+  },
+  "lec13-multicast.pdf": {
+    "pages": 50,
+    "sha256": "908c77e8f1b6fc38988fcc14c6fd207524ad98e86e910fa0789aa8dddded6b8d",
+    "vault_verified": true
+  },
+  "lec14-wireless.pdf": {
+    "pages": 41,
+    "sha256": "daea314579b42723649a2b485986eb167cef8a93be53a28aed19ab9897d21b1c",
+    "vault_verified": true
+  },
+  "lec15-mobile.pdf": {
+    "pages": 41,
+    "sha256": "741fa9d384f539e251b152f7c42f3ae687946c43d7adf197a6c41fe28da04544",
+    "vault_verified": true
+  }
+}

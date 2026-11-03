@@ -1,0 +1,472 @@
+dish: '15.2'
+title: Radio stack and tunnels
+deck: lec15-mobile.pdf
+target_min: 6
+concepts:
+- LTE PDCP
+- LTE RLC
+- LTE Radio Scheduling
+- OFDM
+- GTP Tunnels
+- LTE Attachment and System Information
+- LTE Sleep and Paging
+- 5G New Radio
+- MIMO
+pad: 2.2
+beats:
+- id: 15.2.question
+  stage: question
+  narration: 15.2.question
+  pdf:
+  - lec15-mobile.pdf
+  - 16
+  concepts:
+  - LTE PDCP
+  - LTE RLC
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 15: radio stack and tunnels'
+  - q:
+      text: How does a packet cross all this without having to know?
+  - keep: {}
+  adjust: {}
+- id: 15.2.stack
+  stage: animation
+  narration: 15.2.stack
+  pdf:
+  - lec15-mobile.pdf
+  - 16
+  concepts:
+  - LTE PDCP
+  - LTE RLC
+  clarifications: []
+  moves:
+  - clear: {}
+  - stack.show:
+      name: rs
+      zone: left
+      width: 6
+      layers:
+      - t: IP packet
+        k: ip
+      - t: 'PDCP: compress and encrypt'
+        k: radio
+      - t: 'RLC: segment and recover'
+        k: radio
+      - t: 'MAC: scheduled access'
+        k: radio
+      - t: 'Physical: radio'
+        k: data
+  - stack.mark:
+      name: rs
+      layer: 1
+      when: PDCP handles
+  - stack.mark:
+      name: rs
+      layer: 1
+      state: null
+      when: RLC handles
+  - stack.mark:
+      name: rs
+      layer: 2
+  - card:
+      kind: note
+      text: 'RLC segmentation is not IPv4 fragmentation: different headers, different scope.'
+      zone: right
+      when: Note that RLC
+  adjust: {}
+- id: 15.2.sched
+  stage: state
+  narration: 15.2.sched
+  pdf:
+  - lec15-mobile.pdf
+  - 17
+  concepts:
+  - LTE Radio Scheduling
+  - OFDM
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: g
+      zone: top
+      cols:
+      - Frequency
+      - t1
+      - t2
+      - t3
+      - t4
+      - t5
+      rows:
+      - - f3
+        - A
+        - A
+        - B
+        - C
+        - C
+      - - f2
+        - B
+        - B
+        - B
+        - C
+        - A
+      - - f1
+        - A
+        - C
+        - C
+        - B
+        - B
+      show: 0
+  - table.reveal:
+      name: g
+      n: 3
+      when: Picture a grid
+  - rule:
+      text: The base station schedules time-frequency blocks. No contention on the downlink.
+  adjust: {}
+- id: 15.2.gtp
+  stage: animation
+  narration: 15.2.gtp
+  pdf:
+  - lec15-mobile.pdf
+  - 18
+  concepts:
+  - GTP Tunnels
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: t
+      zone: top
+      nodes:
+        U:
+          k: phone
+          at:
+          - 0
+          - 0
+          l: UE
+        E:
+          k: tower
+          at:
+          - 3
+          - 0
+          l: eNodeB
+        S:
+          k: box
+          at:
+          - 6.4
+          - 0
+          l: S-GW
+        G:
+          k: box
+          at:
+          - 9.8
+          - 0
+          l: P-GW
+        I:
+          k: cloud
+          at:
+          - 13
+          - 0
+          l: Internet
+      links:
+      - - U
+        - E
+        - s: radio
+      - - E
+        - S
+        - s: tunnel
+      - - S
+        - G
+        - s: tunnel
+      - - G
+        - I
+  - stack.show:
+      name: enc
+      zone: bottom
+      width: 6.5
+      reserve: 3
+      layers:
+      - t: 'Inner IP: UE → server'
+        k: ip
+  - packet.spawn:
+      name: p
+      net: t
+      at: U
+      layers:
+      - ip
+  - packet.hop:
+      name: p
+      to: E
+  - packet.wrap:
+      name: p
+      kind: tunnel
+      when: The eNodeB wraps
+  - stack.push:
+      name: enc
+      text: GTP-U
+      kind: tunnel
+  - stack.push:
+      name: enc
+      text: UDP
+      kind: transport
+  - stack.push:
+      name: enc
+      text: 'Outer IP: eNodeB → S-GW'
+      kind: tunnel
+  - packet.hop:
+      name: p
+      to: S
+      when: Core routers read
+  - tunnel.reencapsulate:
+      stack: enc
+      outer: 'Outer IP: S-GW → P-GW'
+      when: The S-GW then
+  - packet.hop:
+      name: p
+      to: G
+  - packet.peel:
+      name: p
+      when: There the outer
+  - packet.hop:
+      name: p
+      to: I
+  adjust: {}
+- id: 15.2.why
+  stage: rule
+  narration: 15.2.why
+  pdf:
+  - lec15-mobile.pdf
+  - 18
+  concepts:
+  - GTP Tunnels
+  clarifications: []
+  moves:
+  - rule:
+      text: The inner packet stays fixed. Only the tunnel's outer destination moves.
+  adjust: {}
+- id: 15.2.attach
+  stage: state
+  narration: 15.2.attach
+  pdf:
+  - lec15-mobile.pdf
+  - 19
+  concepts:
+  - LTE Attachment and System Information
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: at
+      zone: left
+      show: 4
+      items:
+      - Synchronize, read system information
+      - Select a base station
+      - Authenticate through MME and HSS
+      - Build the user data path
+  adjust: {}
+- id: 15.2.sleep
+  stage: state
+  narration: 15.2.sleep
+  pdf:
+  - lec15-mobile.pdf
+  - 20
+  concepts:
+  - LTE Sleep and Paging
+  clarifications: []
+  moves:
+  - tl.show:
+      name: sl
+      zone: right
+      tracks:
+      - Phone
+      - Network
+      span:
+      - 0
+      - 10
+  - tl.block:
+      name: sl
+      track: Phone
+      start: 0
+      end: 7
+      text: asleep
+      state: idle
+  - tl.block:
+      name: sl
+      track: Network
+      start: 6
+      end: 8
+      text: page
+      kind: label
+      when: To reach it
+  - tl.block:
+      name: sl
+      track: Phone
+      start: 7
+      end: 10
+      text: awake
+      kind: ip
+      when: When it wakes
+  adjust: {}
+- id: 15.2.sleep-more
+  stage: state
+  narration: 15.2.sleep-more
+  pdf:
+  - lec15-mobile.pdf
+  - 20
+  concepts:
+  - LTE Sleep and Paging
+  clarifications: []
+  moves:
+  - rule:
+      text: A sleeper may wake in a new cell, and must reattach.
+      when: The old radio
+  - tl.block:
+      name: sl
+      track: Network
+      start: 8
+      end: 10
+      text: reattach
+      state: now
+      when: so it may need
+  adjust: {}
+- id: 15.2.interconnect
+  stage: state
+  narration: 15.2.interconnect
+  pdf:
+  - lec15-mobile.pdf
+  - 22
+  concepts:
+  - LTE Attachment and System Information
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: ic
+      zone: top
+      nodes:
+        V:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: Visited
+        I:
+          k: cloud
+          at:
+          - 5
+          - 0
+          l: Internet
+        H:
+          k: cloud
+          at:
+          - 10
+          - 0
+          l: Home
+      links:
+      - - V
+        - I
+      - - I
+        - H
+  adjust: {}
+- id: 15.2.fiveg
+  stage: state
+  narration: 15.2.fiveg
+  pdf:
+  - lec15-mobile.pdf
+  - 23
+  concepts:
+  - 5G New Radio
+  - MIMO
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: f
+      zone: top
+      cols:
+      - Technique
+      - Gain
+      - Cost
+      rows:
+      - - Higher frequency
+        - more capacity
+        - shorter range and denser cells
+      - - MIMO
+        - multiple spatial streams
+        - more antennas
+  - rule:
+      text: Numbers on these slides are era-specific. The trade-off is what lasts.
+  adjust: {}
+- id: 15.2.pitfall
+  stage: rule
+  narration: 15.2.pitfall
+  pdf:
+  - lec15-mobile.pdf
+  - 23
+  concepts:
+  - 5G New Radio
+  - MIMO
+  clarifications: []
+  moves:
+  - trap:
+      wrong: OFDM separates users by code, like CDMA
+      right: OFDM separates by frequency and time
+  adjust: {}
+- id: 15.2.changed
+  stage: changed_example
+  narration: 15.2.changed
+  pdf:
+  - lec15-mobile.pdf
+  - 18
+  concepts:
+  - GTP Tunnels
+  clarifications: []
+  moves:
+  - clear: {}
+  - stack.show:
+      name: k
+      zone: top
+      width: 7
+      layers:
+      - t: 'Outer IP: S-GW → P-GW'
+        k: tunnel
+      - t: UDP and GTP-U
+        k: transport
+      - t: 'Inner IP: UE → web server'
+        k: ip
+  adjust: {}
+- id: 15.2.predict
+  stage: prediction
+  narration: 15.2.predict
+  pdf:
+  - lec15-mobile.pdf
+  - 18
+  concepts:
+  - GTP Tunnels
+  clarifications: []
+  moves:
+  - pause:
+      text: which address does a core router read?
+  adjust: {}
+  hold: 6
+- id: 15.2.answer
+  stage: explanation
+  narration: 15.2.answer
+  pdf:
+  - lec15-mobile.pdf
+  - 18
+  concepts:
+  - GTP Tunnels
+  clarifications: []
+  moves:
+  - stack.mark:
+      name: k
+      layer: 0
+      state: done
+  - rule:
+      text: 'Core routers follow the outer header. Next: finding a phone that moved.'
+  - keep: {}
+  adjust: {}

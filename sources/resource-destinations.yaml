@@ -1,0 +1,63 @@
+examples:
+  Examples/01 - From Joining a LAN to Sending a Packet.md:
+  - '1.1'
+  - '5.1'
+  - '5.2'
+  - '5.3'
+  - '12.1'
+  Examples/02 - Subnetting LPM and Fragmentation.md:
+  - '3.2'
+  - '3.4'
+  - '4.1'
+  - '4.2'
+  Examples/03 - Dijkstra DV and Failure.md:
+  - '6.1'
+  - '6.2'
+  - '7.1'
+  - '7.2'
+  Examples/04 - BGP Selection Export and Paths.md:
+  - '8.1'
+  - '8.2'
+  - '8.3'
+  - '8.4'
+  Examples/05 - Multicast Membership and Trees.md:
+  - '9.1'
+  - '9.2'
+  - '9.3'
+  - '9.4'
+  Examples/06 - Wireless Contention and CDMA.md:
+  - '10.1'
+  - '10.2'
+  - '10.3'
+  - '10.4'
+  Examples/07 - Mobile Tunnels and Handover.md:
+  - '11.1'
+  - '11.2'
+  - '11.3'
+  - '11.4'
+  Examples/08 - Instructor Diagram Exercises.md:
+  - '2.3'
+  - '6.1'
+  - '7.3'
+  - '8.4'
+lectures:
+  Lectures/L06 - Ethernet and LAN Switching.md:
+  - '2'
+  Lectures/L07 - IP Addressing and Packets.md:
+  - '3'
+  Lectures/L08 - Subnetting and Router Forwarding.md:
+  - '4'
+  Lectures/L09 - Discovery with DHCP ARP and DNS.md:
+  - '5'
+  Lectures/L10 - Routing Algorithms and MPLS.md:
+  - '6'
+  Lectures/L11 - Routing Convergence and Stability.md:
+  - '7'
+  Lectures/L12 - BGP and Interdomain Policy.md:
+  - '8'
+  Lectures/L13 - Anycast and Multicast.md:
+  - '9'
+  Lectures/L14 - Wireless Networks and Wi-Fi.md:
+  - '10'
+  Lectures/L15 - Cellular Networks and Mobility.md:
+  - '11'

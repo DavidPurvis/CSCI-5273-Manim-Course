@@ -1,0 +1,68 @@
+- id: ttl-aging
+  dish: '6.3'
+  text: The slide's table TTL is a local aging timer, not an Ethernet hop-limit field
+    (lec06 p30).
+- id: stp-simplified
+  dish: '6.3'
+  text: The STP presentation is simplified; real STP needs deterministic ties and
+    designated forwarding (lec06 pp37-40).
+- id: ipv4-max
+  dish: '7.3'
+  text: The slide prints 63,535; the 16-bit Total Length maximum is 65,535 bytes (lec07
+    p35; RFC 791).
+- id: parent-23
+  dish: '8.1'
+  text: The slide's 128.101.5.0/23 normalizes to 128.101.4.0/23; the 31-host department
+    needs /26 (lec08 p7).
+- id: budget-51
+  dish: '8.2'
+  text: The 51.2 ns figure omits physical Ethernet overhead; it is a processing-budget
+    illustration.
+- id: dns-roots
+  dish: '9.2'
+  text: 13 refers to root identities A to M, each deployed as many instances (lec09
+    p31).
+- id: tcp-recap
+  dish: '9.3'
+  text: The recap compresses the TCP handshake; SYN and SYN/ACK are followed by a
+    final ACK (lec10 p8).
+- id: rsvp-te
+  dish: '10.4'
+  text: For MPLS tunnels the specific extension is RSVP-TE (lec10 p53; RFC 3209).
+- id: anycast-tcp
+  dish: '13.1'
+  text: The issue is lost connection state, not a blanket incompatibility with TCP
+    (lec13 p14; RFC 4786).
+- id: igmp-dest
+  dish: '13.2'
+  text: In v1, queries go to all hosts and a report goes to the group being reported
+    (lec13 pp27, 31; RFC 1112).
+- id: igmp-timer
+  dish: '13.2'
+  text: The slide computes 270 s; RFC 2236's default formula gives 260 s (lec13 p33).
+- id: tree-objectives
+  dish: '13.3'
+  text: STP, shortest-path trees, and MSTs have different objectives.
+- id: pim-shared
+  dish: '13.4'
+  text: Sparse mode starts with a shared (*,G) RP tree and may switch to (S,G) (lec13
+    p45; RFC 7761).
+- id: wifi-4addr
+  dish: '14.3'
+  text: Four-address operation is a bridging case, not an ad hoc rule (lec14 p32).
+- id: exposed-ideal
+  dish: '14.4'
+  text: The exposed-terminal shortcut is an idealized argument; real timing rules
+    still apply (lec14 p27).
+- id: era-context
+  dish: '14.1'
+  text: Rate charts and generation targets are slide-era context, not current deployment
+    facts.
+- id: imsi
+  dish: '15.1'
+  text: IMSI is a decimal subscriber identity of at most 15 digits, not a MAC address
+    (lec15 p10; 3GPP TS 23.003).
+- id: fa-coa
+  dish: '15.3'
+  text: The foreign-agent drawing is one Mobile IPv4 arrangement; do not conflate
+    it with LTE (lec15 p34; RFC 5944).

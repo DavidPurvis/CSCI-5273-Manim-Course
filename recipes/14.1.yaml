@@ -1,0 +1,360 @@
+dish: '14.1'
+title: What radio does to bits
+deck: lec14-wireless.pdf
+target_min: 5
+concepts:
+- Wireless Network Types
+- Path Loss
+- Radio Interference
+- Multipath Propagation
+- Signal-to-Noise Ratio and BER
+- Rate Adaptation
+pad: 2.2
+beats:
+- id: 14.1.question
+  stage: question
+  narration: 14.1.question
+  pdf:
+  - lec14-wireless.pdf
+  - 2
+  concepts:
+  - Wireless Network Types
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 14: what radio does to bits'
+  - spine:
+      current: Radio
+      zone: top
+  - q:
+      text: What actually changes when the wire goes away?
+      zone: bottom
+  adjust: {}
+- id: 14.1.two
+  stage: animation
+  narration: 14.1.two
+  pdf:
+  - lec14-wireless.pdf
+  - 2
+  concepts:
+  - Wireless Network Types
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: wm
+      zone: top
+      cols:
+      - Idea
+      - Means
+      - Example without the other
+      rows:
+      - - Wireless
+        - a radio link
+        - fixed sensor
+      - - Mobile
+        - changing attachment
+        - laptop moved between wired subnets
+  adjust: {}
+- id: 14.1.types
+  stage: animation
+  narration: 14.1.types
+  pdf:
+  - lec14-wireless.pdf
+  - 10
+  concepts:
+  - Wireless Network Types
+  clarifications: []
+  moves:
+  - table.show:
+      name: tax
+      zone: bottom
+      cols:
+      - ''
+      - Single hop
+      - Multiple hops
+      rows:
+      - - Infrastructure
+        - Wi-Fi, cellular
+        - mesh
+      - - No infrastructure
+        - Bluetooth, ad hoc
+        - MANET, VANET
+  adjust: {}
+- id: 14.1.rates
+  stage: animation
+  narration: 14.1.rates
+  pdf:
+  - lec14-wireless.pdf
+  - 7
+  concepts:
+  - Wireless Network Types
+  clarifications:
+  - era-context
+  moves:
+  - clear: {}
+  - text:
+      name: rt
+      zone: top
+      lines:
+      - 'Bluetooth: low rate, short range'
+      - 'Wi-Fi: higher rate, tens of meters'
+      - 'Cellular: wide-area coverage'
+  - rule:
+      text: 'Rates on the chart are era-specific. The pattern lasts: higher rate, usually shorter range.'
+  adjust: {}
+- id: 14.1.impair
+  stage: animation
+  narration: 14.1.impair
+  pdf:
+  - lec14-wireless.pdf
+  - 11
+  concepts:
+  - Path Loss
+  - Radio Interference
+  - Multipath Propagation
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: r
+      zone: top
+      nodes:
+        T:
+          k: ap
+          at:
+          - 0
+          - 0.6
+          l: Sender
+        R:
+          k: laptop
+          at:
+          - 8
+          - 0.6
+          l: Receiver
+        W:
+          k: box
+          at:
+          - 4
+          - 1.8
+          l: Wall
+        I:
+          k: box
+          at:
+          - 4
+          - -0.4
+          l: Other device
+      links:
+      - - T
+        - R
+        - s: radio
+  - radio.pulse:
+      net: r
+      node: T
+      radius: 3
+      when: Path loss
+  - radio.pulse:
+      net: r
+      node: I
+      radius: 2
+      kind: tunnel
+      when: Interference
+  - net.add:
+      name: r
+      links:
+      - - T
+        - W
+        - s: radio
+      - - W
+        - R
+        - s: radio
+      when: And multipath
+  - bullets:
+      name: im
+      zone: bottom
+      show: 3
+      items:
+      - 'Path loss: weakens with distance and obstacles'
+      - 'Interference: competing energy'
+      - 'Multipath: delayed reflected copies'
+  adjust: {}
+- id: 14.1.snr
+  stage: state
+  narration: 14.1.snr
+  pdf:
+  - lec14-wireless.pdf
+  - 12
+  concepts:
+  - Signal-to-Noise Ratio and BER
+  clarifications: []
+  moves:
+  - clear: {}
+  - tex:
+      name: s
+      zone: left_top
+      tex: \text{SNR}_{dB}=10\log_{10}\frac{S}{N}\qquad 100\to 20\text{ dB}
+      size: 36
+  - plot.show:
+      name: ber
+      zone: right
+      xlabel: SNR
+      ylabel: Bit error rate
+      xr:
+      - 0
+      - 10
+      yr:
+      - 0
+      - 10
+      curves:
+      - name: low
+        k: radio
+        points:
+        - - 0
+          - 8
+        - - 2
+          - 4
+        - - 4
+          - 1.5
+        - - 6
+          - 0.4
+        - - 8
+          - 0.1
+      - name: high
+        k: tunnel
+        points:
+        - - 2
+          - 9
+        - - 4
+          - 7
+        - - 6
+          - 4
+        - - 8
+          - 1.5
+        - - 10
+          - 0.4
+    when: These curves
+  - plot.mark:
+      name: ber
+      x: 4
+      y: 1.5
+      text: 'low rate: works'
+      state: done
+      when: a low-rate
+  - plot.mark:
+      name: ber
+      x: 6
+      y: 4
+      text: 'high rate: fails'
+      state: error
+      when: while a high-rate
+  adjust: {}
+- id: 14.1.adapt
+  stage: state
+  narration: 14.1.adapt
+  pdf:
+  - lec14-wireless.pdf
+  - 36
+  concepts:
+  - Rate Adaptation
+  clarifications: []
+  moves:
+  - text:
+      name: ad
+      zone: left_bottom
+      lines:
+      - 'SNR falls: lower the rate'
+      - Raw rate is not goodput
+  adjust: {}
+- id: 14.1.rule
+  stage: rule
+  narration: 14.1.rule
+  pdf:
+  - lec14-wireless.pdf
+  - 12
+  concepts:
+  - Signal-to-Noise Ratio and BER
+  clarifications: []
+  moves:
+  - rule:
+      text: A radio link's usable rate changes with distance, surroundings, and other transmitters.
+  adjust: {}
+- id: 14.1.pitfall
+  stage: rule
+  narration: 14.1.pitfall
+  pdf:
+  - lec14-wireless.pdf
+  - 12
+  concepts:
+  - Signal-to-Noise Ratio and BER
+  clarifications: []
+  moves:
+  - trap:
+      wrong: More power is a free fix
+      right: It costs battery, and raises interference for others
+  adjust: {}
+- id: 14.1.changed
+  stage: changed_example
+  narration: 14.1.changed
+  pdf:
+  - lec14-wireless.pdf
+  - 12
+  concepts:
+  - Signal-to-Noise Ratio and BER
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: db
+      zone: top
+      cols:
+      - Power ratio
+      - SNR
+      rows:
+      - - '100'
+        - 20 dB
+      - - '1000'
+        - '?'
+      - - '10'
+        - '?'
+  adjust: {}
+- id: 14.1.predict
+  stage: prediction
+  narration: 14.1.predict
+  pdf:
+  - lec14-wireless.pdf
+  - 12
+  concepts:
+  - Signal-to-Noise Ratio and BER
+  clarifications: []
+  moves:
+  - pause:
+      text: both SNR values in dB? what should the sender do?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 14.1.answer
+  stage: explanation
+  narration: 14.1.answer
+  pdf:
+  - lec14-wireless.pdf
+  - 12
+  concepts:
+  - Signal-to-Noise Ratio and BER
+  clarifications: []
+  moves:
+  - table.set:
+      name: db
+      r: 1
+      c: 1
+      v: 30 dB
+      state: done
+  - table.set:
+      name: db
+      r: 2
+      c: 1
+      v: 10 dB
+      state: done
+  - rule:
+      text: 'Next: can two senders use the same channel at the same time?'
+  - keep: {}
+  adjust: {}

@@ -1,0 +1,200 @@
+dish: '17.16'
+title: 'Practice question 16: membership and trees'
+deck: lec13-multicast.pdf
+target_min: 1.5
+concepts: []
+pad: 2.2
+beats:
+- id: 17.16.question
+  stage: question
+  narration: 17.16.question
+  pdf:
+  - lec13-multicast.pdf
+  - 46
+  concepts:
+  - PIM Sparse Mode
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 16: membership and trees'
+  - net.show:
+      name: s
+      zone: top
+      nodes:
+        S:
+          k: server
+          at:
+          - 0
+          - 0
+          l: Source
+        DS:
+          k: router
+          at:
+          - 2.6
+          - 0
+          l: Source DR
+        RP:
+          k: router
+          at:
+          - 5.8
+          - 1.6
+          l: RP
+          lp: right
+        DR:
+          k: router
+          at:
+          - 9
+          - 0
+          l: Receiver DR
+        H:
+          k: host
+          at:
+          - 11.6
+          - 0
+          l: Receiver
+      links:
+      - - S
+        - DS
+      - - DS
+        - RP
+      - - RP
+        - DR
+      - - DS
+        - DR
+        - s: dim
+      - - DR
+        - H
+      when: Explain the roles
+  adjust: {}
+- id: 17.16.predict
+  stage: prediction
+  narration: 17.16.predict
+  pdf:
+  - lec13-multicast.pdf
+  - 46
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: IGMP, the join, Register, the defaults, and the switch
+  adjust: {}
+  hold: 12
+- id: 17.16.roles
+  stage: state
+  narration: 17.16.roles
+  pdf:
+  - lec13-multicast.pdf
+  - 47
+  concepts:
+  - PIM Sparse Mode
+  - PIM Register
+  clarifications: []
+  moves:
+  - msg.send:
+      name: s
+      a: H
+      b: DR
+      text: IGMP
+      kind: ip
+      when: IGMP expresses
+  - msg.send:
+      name: s
+      a: DR
+      b: RP
+      text: (*,G) join
+      when: The star comma
+  - net.path:
+      name: s
+      path:
+      - RP
+      - DR
+      style: tree
+  - packet.spawn:
+      name: r
+      net: s
+      at: DS
+      layers:
+      - tunnel
+      - ip
+      when: And Register
+  - packet.hop:
+      name: r
+      to: RP
+  - packet.fade:
+      name: r
+  - keep: {}
+  adjust: {}
+- id: 17.16.defaults
+  stage: state
+  narration: 17.16.defaults
+  pdf:
+  - lec13-multicast.pdf
+  - 50
+  concepts:
+  - PIM Sparse Mode
+  clarifications: []
+  moves:
+  - table.show:
+      name: t
+      zone: bottom
+      cols:
+      - Mode
+      - Default
+      rows:
+      - - Dense
+        - forward unless pruned
+      - - Sparse
+        - nothing until joined
+      show: 0
+  - table.reveal:
+      name: t
+      when: Dense mode
+  - table.reveal:
+      name: t
+      when: Sparse mode
+  - msg.send:
+      name: s
+      a: DR
+      b: DS
+      text: (S,G) join
+      when: An S comma
+  - net.state:
+      name: s
+      links:
+      - - DS
+        - DR
+        - tree
+      - - RP
+        - DR
+        - dim
+  - keep: {}
+  adjust: {}
+  pre_roll: 1.0
+- id: 17.16.trap
+  stage: rule
+  narration: 17.16.trap
+  pdf:
+  - lec13-multicast.pdf
+  - 50
+  concepts:
+  - PIM Sparse Mode
+  clarifications: []
+  moves:
+  - trap:
+      wrong: IGMP builds the multicast tree
+      right: IGMP is the LAN's membership. PIM connects the routers.
+      when: The tempting
+  adjust: {}
+- id: 17.16.marks
+  stage: explanation
+  narration: 17.16.marks
+  pdf:
+  - lec13-multicast.pdf
+  - 50
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: 1 point per role or distinction.
+      when: On marks
+  adjust: {}

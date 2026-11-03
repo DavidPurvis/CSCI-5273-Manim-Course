@@ -1,0 +1,4239 @@
+[
+{
+"id": "cue:2G Circuit-Switched Core",
+"kind": "cue",
+"lecture": "L15",
+"q": "Which legacy component connects toward the public telephone network?",
+"a": "The gateway MSC in the lecture diagram.",
+"concepts": [
+"2G Circuit-Switched Core"
+],
+"dishes": [
+"15.1"
+]
+},
+{
+"id": "cue:3G Parallel Voice and Data",
+"kind": "cue",
+"lecture": "L15",
+"q": "What is the central architectural difference from the 2G voice picture?",
+"a": "A packet-data network operates alongside the legacy voice core.",
+"concepts": [
+"3G Parallel Voice and Data"
+],
+"dishes": [
+"15.1"
+]
+},
+{
+"id": "cue:5G New Radio",
+"kind": "cue",
+"lecture": "L15",
+"q": "Why can a higher-capacity radio approach require more base stations?",
+"a": "Its useful coverage can be shorter, requiring denser cells to cover the same area.",
+"concepts": [
+"5G New Radio"
+],
+"dishes": [
+"15.2"
+]
+},
+{
+"id": "cue:802.1Q Trunking",
+"kind": "cue",
+"lecture": "L06",
+"q": "What problem would arise if a multi-VLAN trunk carried no VLAN identifier?",
+"a": "The receiving switch could not reliably classify each frame into its original VLAN.",
+"concepts": [
+"802.1Q Trunking"
+],
+"dishes": [
+"6.4"
+]
+},
+{
+"id": "cue:ARP",
+"kind": "cue",
+"lecture": "L09",
+"q": "When sending to a remote subnet, whose MAC does the host need?",
+"a": "The MAC of the local next-hop gateway, not the remote destination's MAC.",
+"concepts": [
+"ARP"
+],
+"dishes": [
+"9.3",
+"17.7",
+"18.1",
+"9.1"
+]
+},
+{
+"id": "cue:AS Path",
+"kind": "cue",
+"lecture": "L12",
+"q": "What does finding your own AS in a received path indicate?",
+"a": "Accepting the advertisement would create an AS-level routing loop in the basic path-vector model.",
+"concepts": [
+"AS Path"
+],
+"dishes": [
+"12.1"
+]
+},
+{
+"id": "cue:AS Path Prepending",
+"kind": "cue",
+"lecture": "L12",
+"q": "Why can prepending fail to shift inbound traffic?",
+"a": "A remote policy preference can outweigh AS-path length.",
+"concepts": [
+"AS Path Prepending"
+],
+"dishes": [
+"12.2"
+]
+},
+{
+"id": "cue:ATM Available Bit Rate",
+"kind": "cue",
+"lecture": "L07",
+"q": "Is a guaranteed minimum identical to a constant rate?",
+"a": "No. A minimum is a floor; a constant-rate contract specifies a different allocation model.",
+"concepts": [
+"ATM Available Bit Rate"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "cue:ATM Constant Bit Rate",
+"kind": "cue",
+"lecture": "L07",
+"q": "Which word captures the rate model?",
+"a": "Constant, under the relevant admitted service contract.",
+"concepts": [
+"ATM Constant Bit Rate"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "cue:Active Scanning",
+"kind": "cue",
+"lecture": "L14",
+"q": "What two messages precede association in active scanning?",
+"a": "A station probe request and one or more AP probe responses.",
+"concepts": [
+"Active Scanning"
+],
+"dishes": [
+"14.3"
+]
+},
+{
+"id": "cue:Autonomous Systems",
+"kind": "cue",
+"lecture": "L12",
+"q": "Does an AS path of length two mean two router hops?",
+"a": "No. Each AS can contain many internal router hops.",
+"concepts": [
+"Autonomous Systems"
+],
+"dishes": [
+"12.4",
+"12.1"
+]
+},
+{
+"id": "cue:BGP",
+"kind": "cue",
+"lecture": "L12",
+"q": "What changes after the initial route exchange?",
+"a": "Peers send incremental route announcements or withdrawals as relevant active reachability changes.",
+"concepts": [
+"BGP"
+],
+"dishes": [
+"12.1"
+]
+},
+{
+"id": "cue:BGP Export Policy",
+"kind": "cue",
+"lecture": "L12",
+"q": "Can a route be active locally but hidden from one neighbor?",
+"a": "Yes. Selection and export are separate decisions.",
+"concepts": [
+"BGP Export Policy"
+],
+"dishes": [
+"12.2",
+"18.3",
+"12.4",
+"17.14"
+]
+},
+{
+"id": "cue:BGP Import Policy",
+"kind": "cue",
+"lecture": "L12",
+"q": "Can import policy affect selection without deleting the route?",
+"a": "Yes. It can alter preference attributes so one accepted route outranks another.",
+"concepts": [
+"BGP Import Policy"
+],
+"dishes": [
+"12.2"
+]
+},
+{
+"id": "cue:BGP Next-Hop Resolution",
+"kind": "cue",
+"lecture": "L12",
+"q": "Why does BGP alone not tell an internal interface exactly where to emit the frame?",
+"a": "Its next-hop address may require recursive resolution through internal reachability.",
+"concepts": [
+"BGP Next-Hop Resolution"
+],
+"dishes": [
+"12.3",
+"17.13"
+]
+},
+{
+"id": "cue:BGP Path Exploration",
+"kind": "cue",
+"lecture": "L11",
+"q": "How is path exploration different from count-to-infinity?",
+"a": "It tries different explicit path sequences rather than repeatedly increasing one circular distance estimate.",
+"concepts": [
+"BGP Path Exploration"
+],
+"dishes": [
+"17.12",
+"11.3"
+]
+},
+{
+"id": "cue:BGP Session Liveness",
+"kind": "cue",
+"lecture": "L11",
+"q": "Why does running BGP over TCP not remove the need for BGP keepalives?",
+"a": "Reliable byte delivery does not guarantee immediate detection of an idle unreachable peer.",
+"concepts": [
+"BGP Session Liveness"
+],
+"dishes": [
+"11.3"
+]
+},
+{
+"id": "cue:Bellman-Ford Updates",
+"kind": "cue",
+"lecture": "L10",
+"q": "Why is the neighbor's distance insufficient by itself?",
+"a": "A must also pay the cost of reaching that neighbor.",
+"concepts": [
+"Bellman-Ford Updates"
+],
+"dishes": [
+"10.2",
+"17.10"
+]
+},
+{
+"id": "cue:Best-Effort Service",
+"kind": "cue",
+"lecture": "L07",
+"q": "Which of delivery, ordering, timing, and bandwidth does ordinary IP guarantee?",
+"a": "None of those is guaranteed by the basic best-effort service model.",
+"concepts": [
+"Best-Effort Service"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "cue:Binary Exponential Backoff",
+"kind": "cue",
+"lecture": "L06",
+"q": "After m=3 collisions, what is the retry range in the slide model?",
+"a": "K ranges from 0 to 7; multiply the selected K by the slot duration.",
+"concepts": [
+"Binary Exponential Backoff"
+],
+"dishes": [
+"6.1"
+]
+},
+{
+"id": "cue:Bluetooth Piconets",
+"kind": "cue",
+"lecture": "L14",
+"q": "Why does hopping reduce persistent interference from one narrowband source?",
+"a": "The group occupies that interfering frequency only during some of its hopping intervals.",
+"concepts": [
+"Bluetooth Piconets"
+],
+"dishes": [
+"14.4"
+]
+},
+{
+"id": "cue:Bus Switching",
+"kind": "cue",
+"lecture": "L08",
+"q": "Can two unrelated output transfers always occur simultaneously on a single shared bus?",
+"a": "No. They still contend for the shared bus.",
+"concepts": [
+"Bus Switching"
+],
+"dishes": [
+"8.3"
+]
+},
+{
+"id": "cue:CDMA",
+"kind": "cue",
+"lecture": "L14",
+"q": "Why divide the code correlation by M?",
+"a": "A code of M chips with entries ±1 has self-dot-product M, so division normalizes the recovered bit.",
+"concepts": [
+"CDMA"
+],
+"dishes": [
+"14.2",
+"17.18"
+]
+},
+{
+"id": "cue:CIDR and Aggregation",
+"kind": "cue",
+"lecture": "L07",
+"q": "What two properties must adjacent blocks satisfy to aggregate exactly?",
+"a": "They need equal size and the correct binary alignment so their common prefix covers exactly their union.",
+"concepts": [
+"CIDR and Aggregation"
+],
+"dishes": [
+"7.2"
+]
+},
+{
+"id": "cue:CSMA-CA",
+"kind": "cue",
+"lecture": "L14",
+"q": "Why is the backoff timer frozen during a busy medium?",
+"a": "It should measure idle transmission opportunities rather than elapsing toward a collision during someone else's frame.",
+"concepts": [
+"CSMA-CA"
+],
+"dishes": [
+"14.4"
+]
+},
+{
+"id": "cue:CSMA-CD",
+"kind": "cue",
+"lecture": "L06",
+"q": "Why does carrier sensing alone not prevent every collision?",
+"a": "A distant sender may start during the propagation delay before it can hear the first sender.",
+"concepts": [
+"CSMA-CD"
+],
+"dishes": [
+"6.1"
+]
+},
+{
+"id": "cue:Cellular Handover",
+"kind": "cue",
+"lecture": "L15",
+"q": "Why might the source base station forward packets to the target temporarily?",
+"a": "To bridge the period before the core tunnel points directly to the target.",
+"concepts": [
+"Cellular Handover"
+],
+"dishes": [
+"17.20",
+"18.3",
+"18.1",
+"15.4"
+]
+},
+{
+"id": "cue:Channel Partitioning",
+"kind": "cue",
+"lecture": "L06",
+"q": "Why can partitioning waste capacity at low load?",
+"a": "An idle user leaves its assigned resource unused; another user cannot automatically borrow it.",
+"concepts": [
+"Channel Partitioning"
+],
+"dishes": [
+"6.1"
+]
+},
+{
+"id": "cue:Circuit Switching",
+"kind": "cue",
+"lecture": "L07",
+"q": "What cost accompanies a reserved idle circuit?",
+"a": "Capacity can remain unavailable to other users despite having no useful data on the circuit.",
+"concepts": [
+"Circuit Switching"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "cue:Classful Addressing",
+"kind": "cue",
+"lecture": "L07",
+"q": "Does a class-C-looking first octet force a modern route to be /24?",
+"a": "No. CIDR uses the route's stated prefix length.",
+"concepts": [
+"Classful Addressing"
+],
+"dishes": [
+"7.2"
+]
+},
+{
+"id": "cue:Collision Detection Window",
+"kind": "cue",
+"lecture": "L06",
+"q": "What happens if a frame ends before a collision can return?",
+"a": "The sender may finish believing it succeeded even though a far-end collision corrupted the frame.",
+"concepts": [
+"Collision Detection Window"
+],
+"dishes": [
+"6.1"
+]
+},
+{
+"id": "cue:Content-Addressable Memory",
+"kind": "cue",
+"lecture": "L08",
+"q": "What extra value makes a CAM ternary?",
+"a": "The don't-care value, in addition to zero and one.",
+"concepts": [
+"Content-Addressable Memory"
+],
+"dishes": [
+"8.2"
+]
+},
+{
+"id": "cue:Core-Based Trees",
+"kind": "cue",
+"lecture": "L13",
+"q": "What is the direction of a membership join in a core-based tree?",
+"a": "Toward the core, extending or attaching to the existing distribution tree.",
+"concepts": [
+"Core-Based Trees"
+],
+"dishes": [
+"13.3"
+]
+},
+{
+"id": "cue:Count to Infinity",
+"kind": "cue",
+"lecture": "L11",
+"q": "What missing information makes this failure possible?",
+"a": "The distance alone does not reveal that a neighbor's route depends on the receiving router.",
+"concepts": [
+"Count to Infinity"
+],
+"dishes": [
+"17.11",
+"11.2"
+]
+},
+{
+"id": "cue:Crossbar and Clos Switching",
+"kind": "cue",
+"lecture": "L08",
+"q": "Why can a large fabric still suffer congestion?",
+"a": "Many inputs can target one output whose line rate remains fixed.",
+"concepts": [
+"Crossbar and Clos Switching"
+],
+"dishes": [
+"8.3"
+]
+},
+{
+"id": "cue:Customer-Provider Relationships",
+"kind": "cue",
+"lecture": "L12",
+"q": "Why is P→C→Q generally forbidden as transit in the basic commercial model?",
+"a": "C would be carrying traffic between two upstream providers rather than only serving its own customer destinations.",
+"concepts": [
+"Customer-Provider Relationships"
+],
+"dishes": [
+"12.4"
+]
+},
+{
+"id": "cue:Cut-Through Switching",
+"kind": "cue",
+"lecture": "L06",
+"q": "What is the main validation tradeoff?",
+"a": "Forwarding can begin before the trailing CRC is available.",
+"concepts": [
+"Cut-Through Switching"
+],
+"dishes": [
+"6.2"
+]
+},
+{
+"id": "cue:DHCP",
+"kind": "cue",
+"lecture": "L09",
+"q": "What is the complete initial allocation order?",
+"a": "Discover → Offer → Request → ACK; the selected offer is confirmed by ACK.",
+"concepts": [
+"DHCP"
+],
+"dishes": [
+"17.7",
+"18.1",
+"9.1"
+]
+},
+{
+"id": "cue:DHCP Leases and Reservations",
+"kind": "cue",
+"lecture": "L09",
+"q": "Why might long leases make a busy visitor pool harder to reuse?",
+"a": "Departed clients' unexpired allocations remain unavailable longer.",
+"concepts": [
+"DHCP Leases and Reservations"
+],
+"dishes": [
+"9.1"
+]
+},
+{
+"id": "cue:DNS A Records",
+"kind": "cue",
+"lecture": "L09",
+"q": "Does an A record contain an Ethernet address?",
+"a": "No. Its value is an IPv4 address.",
+"concepts": [
+"DNS A Records"
+],
+"dishes": [
+"9.3"
+]
+},
+{
+"id": "cue:DNS CNAME Records",
+"kind": "cue",
+"lecture": "L09",
+"q": "What extra step follows finding a CNAME when an IPv4 address is needed?",
+"a": "Resolve the canonical target name to an A record.",
+"concepts": [
+"DNS CNAME Records"
+],
+"dishes": [
+"9.3"
+]
+},
+{
+"id": "cue:DNS Caching",
+"kind": "cue",
+"lecture": "L09",
+"q": "Why does reducing TTL not make all existing connections migrate instantly?",
+"a": "An existing connection already has its destination and state; DNS refresh alone does not move that connection.",
+"concepts": [
+"DNS Caching"
+],
+"dishes": [
+"9.2",
+"17.8"
+]
+},
+{
+"id": "cue:DNS Hierarchy and Zones",
+"kind": "cue",
+"lecture": "L09",
+"q": "Why is a hierarchy more scalable than a hosts file downloaded by everybody?",
+"a": "Authority and query load are distributed, while caching reuses learned results.",
+"concepts": [
+"DNS Hierarchy and Zones"
+],
+"dishes": [
+"9.2"
+]
+},
+{
+"id": "cue:DNS MX Records",
+"kind": "cue",
+"lecture": "L09",
+"q": "Is the value of an MX record the final IP address?",
+"a": "No. It names a mail exchanger, whose address is resolved separately.",
+"concepts": [
+"DNS MX Records"
+],
+"dishes": [
+"9.3"
+]
+},
+{
+"id": "cue:DNS NS Records",
+"kind": "cue",
+"lecture": "L09",
+"q": "What type of value does an NS record contain?",
+"a": "A name server hostname; an address record is needed to obtain its IP.",
+"concepts": [
+"DNS NS Records"
+],
+"dishes": [
+"9.3"
+]
+},
+{
+"id": "cue:DNS Reliability",
+"kind": "cue",
+"lecture": "L09",
+"q": "Why does a DNS resolver need a timeout with UDP?",
+"a": "A lost query or response does not automatically trigger recovery at the UDP layer.",
+"concepts": [
+"DNS Reliability"
+],
+"dishes": [
+"9.3"
+]
+},
+{
+"id": "cue:DNS Resource Records",
+"kind": "cue",
+"lecture": "L09",
+"q": "Why is a DNS name not enough to specify a lookup?",
+"a": "The requested record type determines which information the resolver should retrieve.",
+"concepts": [
+"DNS Resource Records"
+],
+"dishes": [
+"9.3",
+"17.8"
+]
+},
+{
+"id": "cue:Default Routes",
+"kind": "cue",
+"lecture": "L12",
+"q": "Why does a connected /24 beat /0?",
+"a": "Both match, but the /24 is the longer and more specific prefix.",
+"concepts": [
+"Default Routes"
+],
+"dishes": [
+"12.3"
+]
+},
+{
+"id": "cue:Differentiated Services",
+"kind": "cue",
+"lecture": "L07",
+"q": "Does class priority automatically guarantee delay across the Internet?",
+"a": "No. The guarantee would depend on the complete configured service and path.",
+"concepts": [
+"Differentiated Services"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "cue:Dijkstra Algorithm",
+"kind": "cue",
+"lecture": "L10",
+"q": "Why does settling C update D from 6 to 5 in the example?",
+"a": "The candidate via C costs D(C)+c(C,D)=3+2=5.",
+"concepts": [
+"Dijkstra Algorithm"
+],
+"dishes": [
+"17.9",
+"10.1"
+]
+},
+{
+"id": "cue:Direct Mobile Routing",
+"kind": "cue",
+"lecture": "L15",
+"q": "What new problem appears when the mobile moves again?",
+"a": "The correspondent's current-locator information can become stale.",
+"concepts": [
+"Direct Mobile Routing"
+],
+"dishes": [
+"15.3"
+]
+},
+{
+"id": "cue:Distance-Vector Routing",
+"kind": "cue",
+"lecture": "L10",
+"q": "What information does A need for one distance-vector update?",
+"a": "Each neighbor's advertised distance to the destination and A's link cost to that neighbor.",
+"concepts": [
+"Distance-Vector Routing"
+],
+"dishes": [
+"10.2",
+"18.1"
+]
+},
+{
+"id": "cue:EIGRP",
+"kind": "cue",
+"lecture": "L10",
+"q": "Can you infer EIGRP's maximum path metric from RIP's 16?",
+"a": "No. The lecture names a shared family, not identical protocol parameters.",
+"concepts": [
+"EIGRP"
+],
+"dishes": [
+"10.2"
+]
+},
+{
+"id": "cue:Ethernet Frames",
+"kind": "cue",
+"lecture": "L06",
+"q": "Which address changes at a router hop?",
+"a": "The link-layer envelope changes for the next link; the ordinary unicast IP destination remains the final host, absent translation or tunneling.",
+"concepts": [
+"Ethernet Frames"
+],
+"dishes": [
+"6.1"
+]
+},
+{
+"id": "cue:Ethernet Switching",
+"kind": "cue",
+"lecture": "L06",
+"q": "Why can two transfers through one switch still queue?",
+"a": "Both can need the same output port even though their input links are independent.",
+"concepts": [
+"Ethernet Switching"
+],
+"dishes": [
+"6.2",
+"6.4"
+]
+},
+{
+"id": "cue:Exposed Terminals",
+"kind": "cue",
+"lecture": "L14",
+"q": "What is wasted in the exposed-terminal problem?",
+"a": "A safe concurrent transmission opportunity is lost because sensing is overly conservative.",
+"concepts": [
+"Exposed Terminals"
+],
+"dishes": [
+"14.4"
+]
+},
+{
+"id": "cue:Failure Detection",
+"kind": "cue",
+"lecture": "L11",
+"q": "Why do shorter hello timers have a cost?",
+"a": "They add overhead and can declare failures when delay or loss temporarily hides a healthy neighbor.",
+"concepts": [
+"Failure Detection"
+],
+"dishes": [
+"11.1"
+]
+},
+{
+"id": "cue:Forwarding Blackholes",
+"kind": "cue",
+"lecture": "L11",
+"q": "Can a blackhole occur without a forwarding loop?",
+"a": "Yes. A packet can reach a failed output or a router with no valid continuation and be dropped.",
+"concepts": [
+"Forwarding Blackholes"
+],
+"dishes": [
+"11.1",
+"18.1"
+]
+},
+{
+"id": "cue:Full-Duplex Links",
+"kind": "cue",
+"lecture": "L06",
+"q": "Does full duplex imply a switch never buffers?",
+"a": "No. Multiple inputs can compete for one output, requiring queuing.",
+"concepts": [
+"Full-Duplex Links"
+],
+"dishes": [
+"6.2",
+"17.2"
+]
+},
+{
+"id": "cue:GTP Tunnels",
+"kind": "cue",
+"lecture": "L15",
+"q": "Which destination do ordinary core routers inspect while carrying the tunnel?",
+"a": "The outer IP destination for that tunnel segment.",
+"concepts": [
+"GTP Tunnels"
+],
+"dishes": [
+"15.2"
+]
+},
+{
+"id": "cue:Gao-Rexford Conditions",
+"kind": "cue",
+"lecture": "L12",
+"q": "What are the three restrictions to remember?",
+"a": "Acyclic provider hierarchy, customer-route preference, and restricted export of peer/provider-learned routes.",
+"concepts": [
+"Gao-Rexford Conditions"
+],
+"dishes": [
+"12.4",
+"17.14"
+]
+},
+{
+"id": "cue:Generalized Forwarding",
+"kind": "cue",
+"lecture": "L08",
+"q": "What is generalized compared with ordinary destination forwarding?",
+"a": "The rule can match additional header fields and select actions beyond a simple destination-prefix next hop.",
+"concepts": [
+"Generalized Forwarding"
+],
+"dishes": [
+"8.2"
+]
+},
+{
+"id": "cue:Hidden Terminals",
+"kind": "cue",
+"lecture": "L14",
+"q": "Where does the collision matter in the hidden-terminal diagram?",
+"a": "At the receiver B, which can hear both senders.",
+"concepts": [
+"Hidden Terminals"
+],
+"dishes": [
+"14.4",
+"17.17"
+]
+},
+{
+"id": "cue:Home and Visited Networks",
+"kind": "cue",
+"lecture": "L15",
+"q": "What two kinds of knowledge must cooperate while roaming?",
+"a": "Home subscriber identity/service knowledge and visited access/location knowledge.",
+"concepts": [
+"Home and Visited Networks"
+],
+"dishes": [
+"15.3"
+]
+},
+{
+"id": "cue:Hot-Potato Routing",
+"kind": "cue",
+"lecture": "L12",
+"q": "Does the nearest exit override higher local preference?",
+"a": "No. It is considered only after the earlier criteria in the lecture's simplified order.",
+"concepts": [
+"Hot-Potato Routing"
+],
+"dishes": [
+"12.3",
+"18.3"
+]
+},
+{
+"id": "cue:IGMP Snooping",
+"kind": "cue",
+"lecture": "L13",
+"q": "Which forwarding scope does snooping optimize?",
+"a": "Traffic inside the local switched layer-2 domain.",
+"concepts": [
+"IGMP Snooping"
+],
+"dishes": [
+"13.2"
+]
+},
+{
+"id": "cue:IGMPv1",
+"kind": "cue",
+"lecture": "L13",
+"q": "Why can one report be enough for a local network?",
+"a": "The router needs to know that some member exists, not necessarily enumerate every receiver.",
+"concepts": [
+"IGMPv1"
+],
+"dishes": [
+"13.2"
+]
+},
+{
+"id": "cue:IGMPv2",
+"kind": "cue",
+"lecture": "L13",
+"q": "Why does a leave trigger a query instead of immediate pruning?",
+"a": "Another receiver on the same local network may still need the group.",
+"concepts": [
+"IGMPv2"
+],
+"dishes": [
+"13.2"
+]
+},
+{
+"id": "cue:IGMPv3",
+"kind": "cue",
+"lecture": "L13",
+"q": "What new selection dimension does v3 add?",
+"a": "The source address, through include or exclude filtering.",
+"concepts": [
+"IGMPv3"
+],
+"dishes": [
+"13.2"
+]
+},
+{
+"id": "cue:IP Anycast",
+"kind": "cue",
+"lecture": "L13",
+"q": "Does anycast deliver each packet to all announcing instances?",
+"a": "No. Routing ordinarily selects one instance for the packet.",
+"concepts": [
+"IP Anycast"
+],
+"dishes": [
+"13.1",
+"17.15"
+]
+},
+{
+"id": "cue:IP Multicast",
+"kind": "cue",
+"lecture": "L13",
+"q": "Who determines multicast membership?",
+"a": "Receivers express interest; the sender does not need a complete global receiver list.",
+"concepts": [
+"IP Multicast"
+],
+"dishes": [
+"13.2"
+]
+},
+{
+"id": "cue:IP TTL and Traceroute",
+"kind": "cue",
+"lecture": "L07",
+"q": "Does a missing traceroute reply prove that no router forwarded the probe?",
+"a": "No. A router may forward traffic while suppressing or losing the diagnostic response.",
+"concepts": [
+"IP TTL and Traceroute"
+],
+"dishes": [
+"7.3"
+]
+},
+{
+"id": "cue:IP Tunneling",
+"kind": "cue",
+"lecture": "L15",
+"q": "Why does tunneling create an MTU concern?",
+"a": "The outer headers increase the total size carried by the underlying link.",
+"concepts": [
+"IP Tunneling"
+],
+"dishes": [
+"17.20",
+"18.1",
+"15.3"
+]
+},
+{
+"id": "cue:IPv4 Addresses",
+"kind": "cue",
+"lecture": "L07",
+"q": "Why can one router have several IPv4 addresses?",
+"a": "Each connected IP interface normally needs an address appropriate to its attached network.",
+"concepts": [
+"IPv4 Addresses"
+],
+"dishes": [
+"7.2"
+]
+},
+{
+"id": "cue:IPv4 Fragmentation",
+"kind": "cue",
+"lecture": "L07",
+"q": "Why is the second offset 185 rather than 1500?",
+"a": "It is 1480 payload bytes divided by eight; headers are not included in the original-data offset.",
+"concepts": [
+"IPv4 Fragmentation"
+],
+"dishes": [
+"18.2",
+"7.4",
+"17.4"
+]
+},
+{
+"id": "cue:IPv4 Header",
+"kind": "cue",
+"lecture": "L07",
+"q": "If Total Length is 1500 and IHL is 5, how much IP payload is present?",
+"a": "1500−5×4=1480 bytes.",
+"concepts": [
+"IPv4 Header"
+],
+"dishes": [
+"7.3"
+]
+},
+{
+"id": "cue:IPv4 Header Checksum",
+"kind": "cue",
+"lecture": "L07",
+"q": "Why must TTL changes be reflected in the IPv4 checksum?",
+"a": "TTL is part of the protected header, so changing it changes the checksum input.",
+"concepts": [
+"IPv4 Header Checksum"
+],
+"dishes": [
+"7.3"
+]
+},
+{
+"id": "cue:IS-IS",
+"kind": "cue",
+"lecture": "L10",
+"q": "Is IS-IS a path-vector interdomain protocol?",
+"a": "No. In these decks it is a link-state interior protocol.",
+"concepts": [
+"IS-IS"
+],
+"dishes": [
+"10.1"
+]
+},
+{
+"id": "cue:Indirect Mobile Routing",
+"kind": "cue",
+"lecture": "L15",
+"q": "Why can the correspondent keep using the home address after a move?",
+"a": "The home-side binding redirects delivery to the new registered locator.",
+"concepts": [
+"Indirect Mobile Routing"
+],
+"dishes": [
+"15.3"
+]
+},
+{
+"id": "cue:Input Queuing and HOL Blocking",
+"kind": "cue",
+"lecture": "L08",
+"q": "What makes HOL blocking different from ordinary output contention?",
+"a": "A packet for an available output is delayed by another packet ahead of it.",
+"concepts": [
+"Input Queuing and HOL Blocking"
+],
+"dishes": [
+"17.6",
+"8.3"
+]
+},
+{
+"id": "cue:Integrated Services",
+"kind": "cue",
+"lecture": "L07",
+"q": "What is the main contrast with best effort in this table?",
+"a": "An explicitly guaranteed service for the flow rather than no network delivery-performance guarantees.",
+"concepts": [
+"Integrated Services"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "cue:Iterated Unicast",
+"kind": "cue",
+"lecture": "L13",
+"q": "What is the main sender scaling cost?",
+"a": "One separate transmission per receiver, so source data work grows linearly with receiver count.",
+"concepts": [
+"Iterated Unicast"
+],
+"dishes": [
+"13.2",
+"17.15"
+]
+},
+{
+"id": "cue:Iterative DNS Queries",
+"kind": "cue",
+"lecture": "L09",
+"q": "Who asks the next server after an iterative referral?",
+"a": "The requester that received the referral, commonly a recursive resolver acting on behalf of a client.",
+"concepts": [
+"Iterative DNS Queries"
+],
+"dishes": [
+"9.2",
+"9.3",
+"17.8"
+]
+},
+{
+"id": "cue:Kruskal Algorithm",
+"kind": "cue",
+"lecture": "L13",
+"q": "Why is the 2.5-cost A–C edge skipped in the example?",
+"a": "A and C are already connected through B, so adding it creates a cycle.",
+"concepts": [
+"Kruskal Algorithm"
+],
+"dishes": [
+"13.3"
+]
+},
+{
+"id": "cue:LTE All-IP Core",
+"kind": "cue",
+"lecture": "L15",
+"q": "Which listed elements carry the normal user data path?",
+"a": "eNodeB, S-GW, and P-GW; MME/HSS are control and subscriber-management roles in this model.",
+"concepts": [
+"LTE All-IP Core"
+],
+"dishes": [
+"15.1"
+]
+},
+{
+"id": "cue:LTE Attachment and System Information",
+"kind": "cue",
+"lecture": "L15",
+"q": "Why is detecting a synchronization signal not equivalent to a complete connection?",
+"a": "Authentication, control state, and the user data path still need to be established.",
+"concepts": [
+"LTE Attachment and System Information"
+],
+"dishes": [
+"15.2"
+]
+},
+{
+"id": "cue:LTE Home Subscriber Server",
+"kind": "cue",
+"lecture": "L15",
+"q": "Does the HSS normally forward each user IP datagram?",
+"a": "No. It supplies subscriber and control information in this architecture.",
+"concepts": [
+"LTE Home Subscriber Server"
+],
+"dishes": [
+"15.1",
+"17.19"
+]
+},
+{
+"id": "cue:LTE Mobility Management Entity",
+"kind": "cue",
+"lecture": "L15",
+"q": "Which plane does the MME primarily belong to here?",
+"a": "The control plane.",
+"concepts": [
+"LTE Mobility Management Entity"
+],
+"dishes": [
+"15.1",
+"17.19"
+]
+},
+{
+"id": "cue:LTE PDCP",
+"kind": "cue",
+"lecture": "L15",
+"q": "Which radio-stack layer is associated with header compression in the slides?",
+"a": "PDCP, Packet Data Convergence Protocol.",
+"concepts": [
+"LTE PDCP"
+],
+"dishes": [
+"15.2"
+]
+},
+{
+"id": "cue:LTE Packet Gateway",
+"kind": "cue",
+"lecture": "L15",
+"q": "What role does P-GW have that S-GW does not emphasize?",
+"a": "The external packet-network gateway role.",
+"concepts": [
+"LTE Packet Gateway"
+],
+"dishes": [
+"15.1",
+"17.19"
+]
+},
+{
+"id": "cue:LTE RLC",
+"kind": "cue",
+"lecture": "L15",
+"q": "Why is RLC segmentation different from IPv4 fragmentation?",
+"a": "They operate at different layers with different headers and reassembly boundaries.",
+"concepts": [
+"LTE RLC"
+],
+"dishes": [
+"15.2"
+]
+},
+{
+"id": "cue:LTE Radio Scheduling",
+"kind": "cue",
+"lecture": "L15",
+"q": "Why is the scheduling policy distinct from the resource grid?",
+"a": "The grid defines available opportunities; the policy decides who receives which opportunities.",
+"concepts": [
+"LTE Radio Scheduling"
+],
+"dishes": [
+"15.2"
+]
+},
+{
+"id": "cue:LTE Serving Gateway",
+"kind": "cue",
+"lecture": "L15",
+"q": "Which tunnel endpoint changes in the illustrated base-station handover?",
+"a": "The access-facing endpoint used to reach the target eNodeB.",
+"concepts": [
+"LTE Serving Gateway"
+],
+"dishes": [
+"15.1",
+"17.19"
+]
+},
+{
+"id": "cue:LTE Sleep and Paging",
+"kind": "cue",
+"lecture": "L15",
+"q": "Why does deeper sleep complicate location management?",
+"a": "The mobile may move while not maintaining the same active radio association.",
+"concepts": [
+"LTE Sleep and Paging"
+],
+"dishes": [
+"15.2"
+]
+},
+{
+"id": "cue:LTE eNodeB",
+"kind": "cue",
+"lecture": "L15",
+"q": "What changes first from the mobile's perspective in a radio handover?",
+"a": "Its serving base station changes; the core path update can follow through additional signaling.",
+"concepts": [
+"LTE eNodeB"
+],
+"dishes": [
+"15.1"
+]
+},
+{
+"id": "cue:Link-State Routing",
+"kind": "cue",
+"lecture": "L10",
+"q": "What does link state distribute: complete routes or local link facts?",
+"a": "Link facts that let each router independently compute its paths.",
+"concepts": [
+"Link-State Routing"
+],
+"dishes": [
+"18.1",
+"10.1"
+]
+},
+{
+"id": "cue:Local Preference",
+"kind": "cue",
+"lecture": "L12",
+"q": "Can a shorter AS path beat a higher local-preference route in the slide decision order?",
+"a": "No. Local preference is compared first.",
+"concepts": [
+"Local Preference"
+],
+"dishes": [
+"12.3",
+"12.2",
+"18.3",
+"17.13"
+]
+},
+{
+"id": "cue:Longest Prefix Matching",
+"kind": "cue",
+"lecture": "L08",
+"q": "Can a /21 with a lower routing metric beat an installed matching /23?",
+"a": "Ordinary destination forwarding uses the /23; the routing metric does not override prefix specificity.",
+"concepts": [
+"Longest Prefix Matching"
+],
+"dishes": [
+"18.2",
+"8.2",
+"18.1",
+"17.5"
+]
+},
+{
+"id": "cue:MAC Addresses",
+"kind": "cue",
+"lecture": "L06",
+"q": "Why are MAC addresses poorly suited to Internet-wide prefix routing?",
+"a": "Their assignment does not normally group nearby interfaces by Internet topology.",
+"concepts": [
+"MAC Addresses"
+],
+"dishes": [
+"6.1"
+]
+},
+{
+"id": "cue:MAC-Based VLANs",
+"kind": "cue",
+"lecture": "L06",
+"q": "What extra mapping is needed beyond port configuration?",
+"a": "A mapping from endpoint MAC addresses to VLAN identifiers.",
+"concepts": [
+"MAC-Based VLANs"
+],
+"dishes": [
+"6.4"
+]
+},
+{
+"id": "cue:MIMO",
+"kind": "cue",
+"lecture": "L15",
+"q": "Why is antenna count not by itself a throughput guarantee?",
+"a": "The channel, receiver, interference, and transmission scheme determine which spatial capabilities are usable.",
+"concepts": [
+"MIMO"
+],
+"dishes": [
+"15.2"
+]
+},
+{
+"id": "cue:MPLS Label Switching",
+"kind": "cue",
+"lecture": "L10",
+"q": "Must a packet keep the same MPLS label at every hop?",
+"a": "No. Label swapping is a central operation; labels can have only local significance.",
+"concepts": [
+"MPLS Label Switching"
+],
+"dishes": [
+"10.4"
+]
+},
+{
+"id": "cue:Memory Switching",
+"kind": "cue",
+"lecture": "L08",
+"q": "Why does each forwarded datagram consume two memory transfers?",
+"a": "It must first enter shared memory and then leave it toward an output.",
+"concepts": [
+"Memory Switching"
+],
+"dishes": [
+"8.3"
+]
+},
+{
+"id": "cue:Minimum Spanning Trees",
+"kind": "cue",
+"lecture": "L13",
+"q": "Can an MST contain a non-shortest route between two vertices?",
+"a": "Yes. It minimizes total selected-edge cost, not all pairwise route costs.",
+"concepts": [
+"Minimum Spanning Trees"
+],
+"dishes": [
+"13.3"
+]
+},
+{
+"id": "cue:Mobile IP Registration",
+"kind": "cue",
+"lecture": "L15",
+"q": "Does a care-of address always belong to a foreign agent?",
+"a": "No. A mobile can also use a co-located care-of address and terminate the tunnel itself.",
+"concepts": [
+"Mobile IP Registration"
+],
+"dishes": [
+"15.3"
+]
+},
+{
+"id": "cue:Mobile Identity and Location",
+"kind": "cue",
+"lecture": "L15",
+"q": "Why is announcing one new Internet host route per mobile movement unattractive?",
+"a": "It produces enormous rapidly changing global routing state.",
+"concepts": [
+"Mobile Identity and Location"
+],
+"dishes": [
+"15.3"
+]
+},
+{
+"id": "cue:Multicast Group Addresses",
+"kind": "cue",
+"lecture": "L13",
+"q": "What are the first four bits of an IPv4 multicast address?",
+"a": "1110, corresponding to 224.0.0.0/4.",
+"concepts": [
+"Multicast Group Addresses"
+],
+"dishes": [
+"13.2"
+]
+},
+{
+"id": "cue:Multipath Propagation",
+"kind": "cue",
+"lecture": "L14",
+"q": "Can movement change reception without a large change in distance?",
+"a": "Yes. It can change how reflected paths combine at the receiver.",
+"concepts": [
+"Multipath Propagation"
+],
+"dishes": [
+"14.1"
+]
+},
+{
+"id": "cue:Names Addresses and Indirection",
+"kind": "cue",
+"lecture": "L09",
+"q": "Which mapping is needed to send an off-subnet packet over Ethernet?",
+"a": "The next-hop gateway IP to its local MAC mapping, while the IP destination remains the remote host.",
+"concepts": [
+"Names Addresses and Indirection"
+],
+"dishes": [
+"9.1"
+]
+},
+{
+"id": "cue:Negative DNS Caching",
+"kind": "cue",
+"lecture": "L09",
+"q": "Can caching make a failed lookup faster?",
+"a": "Yes. A valid negative cache entry can avoid repeating the hierarchy search.",
+"concepts": [
+"Negative DNS Caching"
+],
+"dishes": [
+"9.2"
+]
+},
+{
+"id": "cue:Network Allocation Vector",
+"kind": "cue",
+"lecture": "L14",
+"q": "Why is physical silence alone insufficient during a reserved exchange?",
+"a": "The next protected response may follow a short gap while the NAV still reserves the medium.",
+"concepts": [
+"Network Allocation Vector"
+],
+"dishes": [
+"14.4"
+]
+},
+{
+"id": "cue:Network Planes",
+"kind": "cue",
+"lecture": "L07",
+"q": "Is looking up a destination prefix routing or forwarding?",
+"a": "Using the installed lookup is data-plane forwarding; choosing what to install is control-plane routing.",
+"concepts": [
+"Network Planes"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "cue:Network and Broadcast Addresses",
+"kind": "cue",
+"lecture": "L07",
+"q": "Is 10.10.0.255 a broadcast address in 10.10.0.0/23?",
+"a": "No. The broadcast is 10.10.1.255; .0.255 is an ordinary host address under this subnet.",
+"concepts": [
+"Network and Broadcast Addresses"
+],
+"dishes": [
+"7.2",
+"18.2",
+"17.3"
+]
+},
+{
+"id": "cue:OFDM",
+"kind": "cue",
+"lecture": "L15",
+"q": "How does the resource separation differ from CDMA?",
+"a": "OFDM uses orthogonal frequency subcarriers; CDMA separates spread signals by codes.",
+"concepts": [
+"OFDM"
+],
+"dishes": [
+"15.2"
+]
+},
+{
+"id": "cue:OSPF",
+"kind": "cue",
+"lecture": "L10",
+"q": "Which algorithm family is associated with OSPF here?",
+"a": "Link-state routing with shortest-path computation.",
+"concepts": [
+"OSPF"
+],
+"dishes": [
+"10.1"
+]
+},
+{
+"id": "cue:Output Queuing and Scheduling",
+"kind": "cue",
+"lecture": "L08",
+"q": "What is the difference between drop policy and scheduling?",
+"a": "Dropping selects what to discard when storage is constrained; scheduling selects what to transmit next.",
+"concepts": [
+"Output Queuing and Scheduling"
+],
+"dishes": [
+"17.6",
+"8.3"
+]
+},
+{
+"id": "cue:Overlay Multicast",
+"kind": "cue",
+"lecture": "L13",
+"q": "Where is replication implemented in an overlay?",
+"a": "At application endpoints or helper nodes rather than requiring multicast-aware routers.",
+"concepts": [
+"Overlay Multicast"
+],
+"dishes": [
+"13.2"
+]
+},
+{
+"id": "cue:PIM Dense Mode",
+"kind": "cue",
+"lecture": "L13",
+"q": "What happens without an explicit prune in dense mode?",
+"a": "The default is to forward on otherwise eligible downstream interfaces.",
+"concepts": [
+"PIM Dense Mode"
+],
+"dishes": [
+"18.3",
+"13.4"
+]
+},
+{
+"id": "cue:PIM Register",
+"kind": "cue",
+"lecture": "L13",
+"q": "Who sends Register traffic, and where does it go?",
+"a": "The source's designated router sends it by unicast to the group RP.",
+"concepts": [
+"PIM Register"
+],
+"dishes": [
+"17.16",
+"13.4"
+]
+},
+{
+"id": "cue:PIM Rendezvous Point",
+"kind": "cue",
+"lecture": "L13",
+"q": "Why can the initial RP tree take a detour?",
+"a": "The route goes through the common rendezvous structure rather than directly from source to receiver.",
+"concepts": [
+"PIM Rendezvous Point"
+],
+"dishes": [
+"13.4"
+]
+},
+{
+"id": "cue:PIM SPT Switchover",
+"kind": "cue",
+"lecture": "L13",
+"q": "Does SPT switchover require a new group address?",
+"a": "No. It changes forwarding state and the distribution path for the same source/group traffic.",
+"concepts": [
+"PIM SPT Switchover"
+],
+"dishes": [
+"13.4"
+]
+},
+{
+"id": "cue:PIM Sparse Mode",
+"kind": "cue",
+"lecture": "L13",
+"q": "What is sparse mode's default if no branch expresses interest?",
+"a": "Do not forward data onto that branch.",
+"concepts": [
+"PIM Sparse Mode"
+],
+"dishes": [
+"17.16",
+"18.3",
+"13.4"
+]
+},
+{
+"id": "cue:Packet Switching",
+"kind": "cue",
+"lecture": "L07",
+"q": "Why can a packet network accept data without reserving an entire route?",
+"a": "It shares link capacity packet by packet and may buffer or drop excess traffic.",
+"concepts": [
+"Packet Switching"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "cue:Passive Scanning",
+"kind": "cue",
+"lecture": "L14",
+"q": "Who initiates the discovery announcements in passive scanning?",
+"a": "The AP sends beacons; the station listens.",
+"concepts": [
+"Passive Scanning"
+],
+"dishes": [
+"14.3"
+]
+},
+{
+"id": "cue:Path Loss",
+"kind": "cue",
+"lecture": "L14",
+"q": "Does weak signal necessarily mean another station is transmitting?",
+"a": "No. Attenuation alone can reduce the desired signal at the receiver.",
+"concepts": [
+"Path Loss"
+],
+"dishes": [
+"14.1"
+]
+},
+{
+"id": "cue:Path-Vector Routing",
+"kind": "cue",
+"lecture": "L10",
+"q": "Why can path vector avoid ordinary count-to-infinity yet still converge slowly?",
+"a": "It rejects explicit loops but may explore many different loop-free alternatives.",
+"concepts": [
+"Path-Vector Routing"
+],
+"dishes": [
+"10.3"
+]
+},
+{
+"id": "cue:Patricia Tries",
+"kind": "cue",
+"lecture": "L08",
+"q": "Why remember intermediate matching prefixes?",
+"a": "A deeper search can fail while an earlier valid prefix remains the longest available match.",
+"concepts": [
+"Patricia Tries"
+],
+"dishes": [
+"8.2"
+]
+},
+{
+"id": "cue:Peering",
+"kind": "cue",
+"lecture": "L12",
+"q": "Which routes are exported to a peer in the lecture model?",
+"a": "The AS's own routes and routes learned through its customers.",
+"concepts": [
+"Peering"
+],
+"dishes": [
+"12.4"
+]
+},
+{
+"id": "cue:Poison Reverse",
+"kind": "cue",
+"lecture": "L11",
+"q": "If Z uses Y, does Z advertise infinity to every neighbor?",
+"a": "No. Poison reverse is targeted to the neighbor through which the destination is reached.",
+"concepts": [
+"Poison Reverse"
+],
+"dishes": [
+"17.11",
+"11.2"
+]
+},
+{
+"id": "cue:Policy Oscillation",
+"kind": "cue",
+"lecture": "L11",
+"q": "Does an unchanging physical topology guarantee BGP stability?",
+"a": "No. Conflicting selection and export policies can prevent a stable solution.",
+"concepts": [
+"Policy Oscillation"
+],
+"dishes": [
+"17.12",
+"11.3"
+]
+},
+{
+"id": "cue:Port-Based VLANs",
+"kind": "cue",
+"lecture": "L06",
+"q": "What determines membership for an untagged frame on an access port?",
+"a": "The receiving port's configured VLAN.",
+"concepts": [
+"Port-Based VLANs"
+],
+"dishes": [
+"6.4"
+]
+},
+{
+"id": "cue:Prim Algorithm",
+"kind": "cue",
+"lecture": "L13",
+"q": "What key differs between Prim and Dijkstra?",
+"a": "Prim chooses the cheapest crossing edge; Dijkstra chooses the smallest tentative total distance from the source.",
+"concepts": [
+"Prim Algorithm"
+],
+"dishes": [
+"13.3"
+]
+},
+{
+"id": "cue:QoS Service Models",
+"kind": "cue",
+"lecture": "L07",
+"q": "What must you name when claiming quality of service?",
+"a": "The specific property, its bound, and the service assumptions.",
+"concepts": [
+"QoS Service Models"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "cue:RIP",
+"kind": "cue",
+"lecture": "L10",
+"q": "Why is RIP's infinity not an arbitrarily large integer?",
+"a": "A small bound limits failure counting, at the cost of rejecting paths beyond 15 hops.",
+"concepts": [
+"RIP"
+],
+"dishes": [
+"10.2"
+]
+},
+{
+"id": "cue:RSVP Signaling",
+"kind": "cue",
+"lecture": "L10",
+"q": "Which plane installs path state through signaling?",
+"a": "The control plane; the data plane later uses that installed state.",
+"concepts": [
+"RSVP Signaling"
+],
+"dishes": [
+"10.4"
+]
+},
+{
+"id": "cue:RTS and CTS",
+"kind": "cue",
+"lecture": "L14",
+"q": "Why can short control packets help even if they can collide?",
+"a": "A collision involving a short RTS can waste less airtime than colliding long data frames.",
+"concepts": [
+"RTS and CTS"
+],
+"dishes": [
+"14.4",
+"17.17"
+]
+},
+{
+"id": "cue:Radio Interference",
+"kind": "cue",
+"lecture": "L14",
+"q": "Why can two different Wi-Fi networks still interfere?",
+"a": "They can transmit on overlapping radio resources even though their network names differ.",
+"concepts": [
+"Radio Interference"
+],
+"dishes": [
+"14.1"
+]
+},
+{
+"id": "cue:Random Access",
+"kind": "cue",
+"lecture": "L06",
+"q": "Why is random access attractive for bursty users?",
+"a": "An active user can use idle capacity without first obtaining a fixed reservation.",
+"concepts": [
+"Random Access"
+],
+"dishes": [
+"6.1"
+]
+},
+{
+"id": "cue:Rate Adaptation",
+"kind": "cue",
+"lecture": "L14",
+"q": "Why can lowering the raw rate help communication?",
+"a": "The more robust scheme can reduce errors and wasted retransmissions.",
+"concepts": [
+"Rate Adaptation"
+],
+"dishes": [
+"14.1"
+]
+},
+{
+"id": "cue:Recursive DNS Queries",
+"kind": "cue",
+"lecture": "L09",
+"q": "Can one lookup contain both recursive and iterative behavior?",
+"a": "Yes: client-to-resolver can be recursive while resolver-to-hierarchy is iterative.",
+"concepts": [
+"Recursive DNS Queries"
+],
+"dishes": [
+"9.2",
+"17.8"
+]
+},
+{
+"id": "cue:Repeaters and Hubs",
+"kind": "cue",
+"lecture": "L06",
+"q": "Does a hub learn a source MAC address?",
+"a": "No. Source-MAC learning belongs to link-layer switches and bridges.",
+"concepts": [
+"Repeaters and Hubs"
+],
+"dishes": [
+"6.2"
+]
+},
+{
+"id": "cue:Reverse Path Forwarding",
+"kind": "cue",
+"lecture": "L13",
+"q": "Which address drives the basic source-rooted RPF test?",
+"a": "The source address S, using the route back toward S.",
+"concepts": [
+"Reverse Path Forwarding"
+],
+"dishes": [
+"13.4"
+]
+},
+{
+"id": "cue:Reverse Path Multicasting",
+"kind": "cue",
+"lecture": "L13",
+"q": "When can a router prune its upstream branch?",
+"a": "When it has neither local receivers nor downstream branches still requiring that source/group traffic.",
+"concepts": [
+"Reverse Path Multicasting"
+],
+"dishes": [
+"13.4"
+]
+},
+{
+"id": "cue:Router Architecture",
+"kind": "cue",
+"lecture": "L08",
+"q": "Where can packets queue inside a router?",
+"a": "At inputs before the fabric and at outputs before link transmission, depending on contention and architecture.",
+"concepts": [
+"Router Architecture"
+],
+"dishes": [
+"8.3"
+]
+},
+{
+"id": "cue:Routing Convergence",
+"kind": "cue",
+"lecture": "L11",
+"q": "What four delays should be checked before blaming the path algorithm?",
+"a": "Detection, control dissemination, computation, and forwarding-table installation.",
+"concepts": [
+"Routing Convergence"
+],
+"dishes": [
+"11.1",
+"17.12"
+]
+},
+{
+"id": "cue:Same-Subnet Roaming",
+"kind": "cue",
+"lecture": "L14",
+"q": "Why is a new Internet-wide host route unnecessary in this example?",
+"a": "The IP prefix and address remain in the same routed subnet; only the local attachment changes.",
+"concepts": [
+"Same-Subnet Roaming"
+],
+"dishes": [
+"14.3"
+]
+},
+{
+"id": "cue:Self-Learning Switch Tables",
+"kind": "cue",
+"lecture": "L06",
+"q": "Which address populates the table, and which selects an output?",
+"a": "The source populates the table; the destination selects forwarding.",
+"concepts": [
+"Self-Learning Switch Tables"
+],
+"dishes": [
+"17.1",
+"6.3",
+"18.1",
+"6.4"
+]
+},
+{
+"id": "cue:Shared Multicast Trees",
+"kind": "cue",
+"lecture": "L13",
+"q": "What does the star mean in (*,G)?",
+"a": "Receiver interest or tree state for group G independent of a particular source.",
+"concepts": [
+"Shared Multicast Trees"
+],
+"dishes": [
+"13.3"
+]
+},
+{
+"id": "cue:Shortest-Path Routing",
+"kind": "cue",
+"lecture": "L10",
+"q": "Does shortest path always mean fewest hops?",
+"a": "Only if the metric gives every edge equal cost.",
+"concepts": [
+"Shortest-Path Routing"
+],
+"dishes": [
+"10.1"
+]
+},
+{
+"id": "cue:Signal-to-Noise Ratio and BER",
+"kind": "cue",
+"lecture": "L14",
+"q": "How much is S/N when SNR is 20 dB?",
+"a": "10^(20/10)=100.",
+"concepts": [
+"Signal-to-Noise Ratio and BER"
+],
+"dishes": [
+"14.1"
+]
+},
+{
+"id": "cue:Soft State",
+"kind": "cue",
+"lecture": "L09",
+"q": "Why is an explicit release message insufficient by itself?",
+"a": "The participant can crash, disconnect, or lose the release message before cleanup happens.",
+"concepts": [
+"Soft State"
+],
+"dishes": [
+"9.1"
+]
+},
+{
+"id": "cue:Software-Defined Networking",
+"kind": "cue",
+"lecture": "L07",
+"q": "Must a controller process every data packet?",
+"a": "No. Devices normally apply installed forwarding rules locally.",
+"concepts": [
+"Software-Defined Networking"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "cue:Source-Based Multicast Trees",
+"kind": "cue",
+"lecture": "L13",
+"q": "What extra identity distinguishes (S,G) from (*,G)?",
+"a": "The particular source S, so different senders can have different trees.",
+"concepts": [
+"Source-Based Multicast Trees"
+],
+"dishes": [
+"13.3"
+]
+},
+{
+"id": "cue:Spanning Tree Protocol",
+"kind": "cue",
+"lecture": "L06",
+"q": "Why does an ordinary Ethernet broadcast not die after enough switch hops?",
+"a": "Ethernet has no IP-like hop TTL; a loop must be prevented by the active topology.",
+"concepts": [
+"Spanning Tree Protocol"
+],
+"dishes": [
+"6.3",
+"17.2"
+]
+},
+{
+"id": "cue:Stable Paths Problem",
+"kind": "cue",
+"lecture": "L11",
+"q": "Why can node 5 lack a route even when a physical path to 0 exists?",
+"a": "Its permitted ranked path may require suffix choices that neighboring nodes do not make.",
+"concepts": [
+"Stable Paths Problem"
+],
+"dishes": [
+"11.3"
+]
+},
+{
+"id": "cue:Statistical Multiplexing",
+"kind": "cue",
+"lecture": "L07",
+"q": "Why can queues form when average demand is modest?",
+"a": "Short-term arrivals can exceed output service even if the long-term average does not.",
+"concepts": [
+"Statistical Multiplexing"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "cue:Store-and-Forward Switching",
+"kind": "cue",
+"lecture": "L06",
+"q": "What extra waiting does store-and-forward introduce?",
+"a": "It waits for complete frame reception rather than beginning after the forwarding header arrives.",
+"concepts": [
+"Store-and-Forward Switching"
+],
+"dishes": [
+"6.2"
+]
+},
+{
+"id": "cue:Subnet Masks",
+"kind": "cue",
+"lecture": "L07",
+"q": "What is the mask for /26?",
+"a": "255.255.255.192: 24 ones, then two ones in the last octet.",
+"concepts": [
+"Subnet Masks"
+],
+"dishes": [
+"7.2",
+"18.2",
+"17.3"
+]
+},
+{
+"id": "cue:TCAM",
+"kind": "cue",
+"lecture": "L08",
+"q": "What does the third TCAM symbol represent?",
+"a": "A don't-care bit that matches either zero or one.",
+"concepts": [
+"TCAM"
+],
+"dishes": [
+"8.2"
+]
+},
+{
+"id": "cue:Taking Turns",
+"kind": "cue",
+"lecture": "L06",
+"q": "How does taking turns differ from random access?",
+"a": "Permission is coordinated before data transmission rather than discovered through contention.",
+"concepts": [
+"Taking Turns"
+],
+"dishes": [
+"6.1"
+]
+},
+{
+"id": "cue:Transient Forwarding Loops",
+"kind": "cue",
+"lecture": "L11",
+"q": "How can two loop-free route sets produce a loop during transition?",
+"a": "Different routers may install different sets at different times, creating a mixed inconsistent state.",
+"concepts": [
+"Transient Forwarding Loops"
+],
+"dishes": [
+"11.1",
+"18.1"
+]
+},
+{
+"id": "cue:Triangle Routing",
+"kind": "cue",
+"lecture": "L15",
+"q": "Is triangle routing itself a forwarding loop?",
+"a": "No. It is usually a valid but inefficient detour through the home anchor.",
+"concepts": [
+"Triangle Routing"
+],
+"dishes": [
+"15.3"
+]
+},
+{
+"id": "cue:Truncated Reverse Path Broadcasting",
+"kind": "cue",
+"lecture": "L13",
+"q": "What information allows truncating a leaf?",
+"a": "The absence of group members on that attached local network.",
+"concepts": [
+"Truncated Reverse Path Broadcasting"
+],
+"dishes": [
+"13.4"
+]
+},
+{
+"id": "cue:UE and Subscriber Identity",
+"kind": "cue",
+"lecture": "L15",
+"q": "Why is an IP address insufficient as the complete cellular subscriber identity?",
+"a": "Addressing reflects delivery location or session state; subscription and authentication persist across attachment changes.",
+"concepts": [
+"UE and Subscriber Identity"
+],
+"dishes": [
+"15.1"
+]
+},
+{
+"id": "cue:VLANs",
+"kind": "cue",
+"lecture": "L06",
+"q": "Can two VLANs communicate just because they share a physical switch?",
+"a": "They need an inter-VLAN routing function and appropriate policy.",
+"concepts": [
+"VLANs"
+],
+"dishes": [
+"6.4"
+]
+},
+{
+"id": "cue:VLSM Subnetting",
+"kind": "cue",
+"lecture": "L08",
+"q": "Why does a 31-host department need /26 rather than /27?",
+"a": "A conventional /27 contains 32 total addresses but only 30 usable host addresses.",
+"concepts": [
+"VLSM Subnetting"
+],
+"dishes": [
+"8.1"
+]
+},
+{
+"id": "cue:Valley-Free Paths",
+"kind": "cue",
+"lecture": "L12",
+"q": "Why does a down-then-up segment violate the basic commercial rule?",
+"a": "The intermediate customer would need to export provider-learned reachability to another provider.",
+"concepts": [
+"Valley-Free Paths"
+],
+"dishes": [
+"18.3",
+"12.4",
+"17.14"
+]
+},
+{
+"id": "cue:Wi-Fi Association",
+"kind": "cue",
+"lecture": "L14",
+"q": "Why can a station be associated but still unable to reach an Internet server?",
+"a": "It may lack valid IP configuration, gateway reachability, DNS, or a usable onward route.",
+"concepts": [
+"Wi-Fi Association"
+],
+"dishes": [
+"14.3"
+]
+},
+{
+"id": "cue:Wi-Fi Frame Addressing",
+"kind": "cue",
+"lecture": "L14",
+"q": "Why can the radio receiver and final layer-2 destination differ?",
+"a": "The AP receives the radio hop while bridging the frame onward to another link-layer destination.",
+"concepts": [
+"Wi-Fi Frame Addressing"
+],
+"dishes": [
+"14.3"
+]
+},
+{
+"id": "cue:Wireless Channels",
+"kind": "cue",
+"lecture": "L14",
+"q": "Does a new SSID automatically create more radio capacity?",
+"a": "No. The radios may still share the same channel.",
+"concepts": [
+"Wireless Channels"
+],
+"dishes": [
+"14.3"
+]
+},
+{
+"id": "cue:Wireless Effects on Transport",
+"kind": "cue",
+"lecture": "L15",
+"q": "Why can a radio loss cause an inappropriate congestion response?",
+"a": "The end-to-end transport may observe the loss without knowing its radio-error cause.",
+"concepts": [
+"Wireless Effects on Transport"
+],
+"dishes": [
+"15.4"
+]
+},
+{
+"id": "cue:Wireless Error Recovery",
+"kind": "cue",
+"lecture": "L14",
+"q": "Why can local reliability affect TCP timing?",
+"a": "Link-layer retries add variable delay even when the eventual IP packet is delivered.",
+"concepts": [
+"Wireless Error Recovery"
+],
+"dishes": [
+"14.4"
+]
+},
+{
+"id": "cue:Wireless Network Types",
+"kind": "cue",
+"lecture": "L14",
+"q": "Can a network be wireless but non-mobile?",
+"a": "Yes. The transmission medium and change of attachment are separate dimensions.",
+"concepts": [
+"Wireless Network Types"
+],
+"dishes": [
+"14.1"
+]
+},
+{
+"id": "cue:Wireless Power Management",
+"kind": "cue",
+"lecture": "L14",
+"q": "Why must the AP buffer traffic for a sleeping station?",
+"a": "The station's radio is temporarily unavailable to receive it.",
+"concepts": [
+"Wireless Power Management"
+],
+"dishes": [
+"14.4"
+]
+},
+{
+"id": "cue:eBGP",
+"kind": "cue",
+"lecture": "L12",
+"q": "What makes a BGP session external?",
+"a": "Its peers belong to different ASes.",
+"concepts": [
+"eBGP"
+],
+"dishes": [
+"12.3"
+]
+},
+{
+"id": "cue:iBGP",
+"kind": "cue",
+"lecture": "L12",
+"q": "Does iBGP remove the need for an IGP?",
+"a": "No. The network still needs internal reachability to the selected next hops.",
+"concepts": [
+"iBGP"
+],
+"dishes": [
+"12.3"
+]
+},
+{
+"id": "L06.1",
+"kind": "lecture",
+"lecture": "L06",
+"section": "Theory / Definitions",
+"q": "What does a hub inspect before selecting a destination port?",
+"a": "Nothing at the frame-address level; it repeats physical signals. See Repeaters and Hubs.",
+"concepts": [
+"Repeaters and Hubs"
+],
+"dishes": [
+"6.2"
+]
+},
+{
+"id": "L06.2",
+"kind": "lecture",
+"lecture": "L06",
+"section": "Theory / Definitions",
+"q": "What fact does a switch learn from an incoming frame?",
+"a": "Source MAC→arrival port. See Self-Learning Switch Tables.",
+"concepts": [
+"Self-Learning Switch Tables"
+],
+"dishes": [
+"6.3",
+"6.4"
+]
+},
+{
+"id": "L06.3",
+"kind": "lecture",
+"lecture": "L06",
+"section": "Theory / Definitions",
+"q": "What does a VLAN separate?",
+"a": "Logical layer-2 broadcast domains. See VLANs.",
+"concepts": [
+"VLANs"
+],
+"dishes": [
+"6.4"
+]
+},
+{
+"id": "L06.4",
+"kind": "lecture",
+"lecture": "L06",
+"section": "Understanding / Comparison",
+"q": "Why can full-duplex switching still queue?",
+"a": "Multiple inputs may need the same output. See Full-Duplex Links.",
+"concepts": [
+"Full-Duplex Links"
+],
+"dishes": [
+"6.2"
+]
+},
+{
+"id": "L06.5",
+"kind": "lecture",
+"lecture": "L06",
+"section": "Understanding / Comparison",
+"q": "Compare cut-through and store-and-forward.",
+"a": "Early forwarding reduces some reception delay; full reception permits CRC validation first. See Cut-Through Switching.",
+"concepts": [
+"Cut-Through Switching"
+],
+"dishes": [
+"6.2"
+]
+},
+{
+"id": "L06.6",
+"kind": "lecture",
+"lecture": "L06",
+"section": "Understanding / Comparison",
+"q": "Is STP an all-pairs shortest-path algorithm?",
+"a": "No; it selects a loop-free active bridge structure. See Spanning Tree Protocol.",
+"concepts": [
+"Spanning Tree Protocol"
+],
+"dishes": [
+"6.3"
+]
+},
+{
+"id": "L06.7",
+"kind": "lecture",
+"lecture": "L06",
+"section": "Application / Worked problem",
+"q": "Trace A→B on port 1, B→A on port 2, then A→B.",
+"a": "Learn A/flood; learn B/forward 1; forward 2.",
+"concepts": [],
+"dishes": [
+"6.1",
+"6.3",
+"6.2",
+"6.4"
+]
+},
+{
+"id": "L06.8",
+"kind": "lecture",
+"lecture": "L06",
+"section": "Application / Worked problem",
+"q": "At 10 Mb/s and one-way delay 20 microseconds, what minimum L covers collision return?",
+"a": "L≥2×20e−6×10e6=400 bits. This calculation does not replace Ethernet's actual minimum frame rule.",
+"concepts": [],
+"dishes": [
+"6.1",
+"6.3",
+"6.2",
+"6.4"
+]
+},
+{
+"id": "L06.9",
+"kind": "lecture",
+"lecture": "L06",
+"section": "Critical thinking",
+"q": "Why is Ethernet flooding dangerous in a cycle?",
+"a": "Copies can circulate and multiply without an IP TTL. See Spanning Tree Protocol.",
+"concepts": [
+"Spanning Tree Protocol"
+],
+"dishes": [
+"6.3"
+]
+},
+{
+"id": "L06.10",
+"kind": "lecture",
+"lecture": "L06",
+"section": "Critical thinking",
+"q": "Does a trunk route between VLANs?",
+"a": "No. It preserves VLAN identity across switches; routing is a separate function. See 802.1Q Trunking.",
+"concepts": [
+"802.1Q Trunking"
+],
+"dishes": [
+"6.4"
+]
+},
+{
+"id": "L07.1",
+"kind": "lecture",
+"lecture": "L07",
+"section": "Theory / Definitions",
+"q": "What does best effort guarantee about order?",
+"a": "No delivery-order guarantee. See Best-Effort Service.",
+"concepts": [
+"Best-Effort Service"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "L07.2",
+"kind": "lecture",
+"lecture": "L07",
+"section": "Theory / Definitions",
+"q": "What does IHL=7 mean?",
+"a": "A 28-byte IPv4 header. See IPv4 Header.",
+"concepts": [
+"IPv4 Header"
+],
+"dishes": [
+"7.3"
+]
+},
+{
+"id": "L07.3",
+"kind": "lecture",
+"lecture": "L07",
+"section": "Theory / Definitions",
+"q": "What does a /23 fix?",
+"a": "The leading 23 address bits. See CIDR and Aggregation.",
+"concepts": [
+"CIDR and Aggregation"
+],
+"dishes": [
+"7.2"
+]
+},
+{
+"id": "L07.4",
+"kind": "lecture",
+"lecture": "L07",
+"section": "Understanding / Comparison",
+"q": "Why can an IP prefix reduce table size compared with host-specific state?",
+"a": "Many topologically related hosts share one forwarding entry.",
+"concepts": [],
+"dishes": [
+"7.3",
+"7.2",
+"7.4",
+"7.1"
+]
+},
+{
+"id": "L07.5",
+"kind": "lecture",
+"lecture": "L07",
+"section": "Understanding / Comparison",
+"q": "How do IP TTL and DNS TTL differ?",
+"a": "Router-hop lifetime versus seconds of cache validity. See IP TTL and Traceroute and DNS Caching.",
+"concepts": [
+"IP TTL and Traceroute",
+"DNS Caching"
+],
+"dishes": [
+"7.3"
+]
+},
+{
+"id": "L07.6",
+"kind": "lecture",
+"lecture": "L07",
+"section": "Understanding / Comparison",
+"q": "Why is header checksum not end-to-end payload protection?",
+"a": "It covers only the IPv4 header. See IPv4 Header Checksum.",
+"concepts": [
+"IPv4 Header Checksum"
+],
+"dishes": [
+"7.3"
+]
+},
+{
+"id": "L07.7",
+"kind": "lecture",
+"lecture": "L07",
+"section": "Application / Worked problem",
+"q": "Find network and broadcast for 10.10.1.97/23.",
+"a": "10.10.0.0 and 10.10.1.255. See Network and Broadcast Addresses.",
+"concepts": [
+"Network and Broadcast Addresses"
+],
+"dishes": [
+"7.2"
+]
+},
+{
+"id": "L07.8",
+"kind": "lecture",
+"lecture": "L07",
+"section": "Application / Worked problem",
+"q": "Fragment a 4000-byte datagram over MTU 1500 with 20-byte headers.",
+"a": "Totals 1500,1500,1040; offsets 0,185,370; MF 1,1,0.",
+"concepts": [],
+"dishes": [
+"7.3",
+"7.2",
+"7.4",
+"7.1"
+]
+},
+{
+"id": "L07.9",
+"kind": "lecture",
+"lecture": "L07",
+"section": "Critical thinking",
+"q": "Does SDN force user packets through one controller?",
+"a": "No; devices can apply installed rules locally. See Software-Defined Networking.",
+"concepts": [
+"Software-Defined Networking"
+],
+"dishes": [
+"7.1"
+]
+},
+{
+"id": "L07.10",
+"kind": "lecture",
+"lecture": "L07",
+"section": "Critical thinking",
+"q": "Can a packet be dropped although its addresses and checksum are valid?",
+"a": "Yes: congestion, TTL expiry, failure, policy, or no usable route can prevent delivery.",
+"concepts": [],
+"dishes": [
+"7.3",
+"7.2",
+"7.4",
+"7.1"
+]
+},
+{
+"id": "L08.1",
+"kind": "lecture",
+"lecture": "L08",
+"section": "Theory / Definitions",
+"q": "Define longest prefix match.",
+"a": "Choose the matching route with the largest prefix length. See Longest Prefix Matching.",
+"concepts": [
+"Longest Prefix Matching"
+],
+"dishes": [
+"8.2"
+]
+},
+{
+"id": "L08.2",
+"kind": "lecture",
+"lecture": "L08",
+"section": "Theory / Definitions",
+"q": "Define HOL blocking.",
+"a": "A blocked queue head delays later packets even if their outputs are free. See Input Queuing and HOL Blocking.",
+"concepts": [
+"Input Queuing and HOL Blocking"
+],
+"dishes": [
+"8.3"
+]
+},
+{
+"id": "L08.3",
+"kind": "lecture",
+"lecture": "L08",
+"section": "Theory / Definitions",
+"q": "What does TCAM add to binary CAM?",
+"a": "A don't-care state. See TCAM.",
+"concepts": [
+"TCAM"
+],
+"dishes": [
+"8.2"
+]
+},
+{
+"id": "L08.4",
+"kind": "lecture",
+"lecture": "L08",
+"section": "Understanding / Comparison",
+"q": "Why can a crossbar outperform a shared bus?",
+"a": "Independent input/output pairs can transfer concurrently.",
+"concepts": [],
+"dishes": [
+"8.1",
+"8.2",
+"8.3"
+]
+},
+{
+"id": "L08.5",
+"kind": "lecture",
+"lecture": "L08",
+"section": "Understanding / Comparison",
+"q": "How do input and output congestion differ?",
+"a": "Waiting before fabric versus waiting for the output link's service.",
+"concepts": [],
+"dishes": [
+"8.1",
+"8.2",
+"8.3"
+]
+},
+{
+"id": "L08.6",
+"kind": "lecture",
+"lecture": "L08",
+"section": "Understanding / Comparison",
+"q": "Why does more buffer not fix persistent overload?",
+"a": "Arrival still exceeds service; eventual backlog or drops remain.",
+"concepts": [],
+"dishes": [
+"8.1",
+"8.2",
+"8.3"
+]
+},
+{
+"id": "L08.7",
+"kind": "lecture",
+"lecture": "L08",
+"section": "Application / Worked problem",
+"q": "Choose a subnet for 31 conventional hosts.",
+"a": "/26, since /27 has only 30 usable addresses.",
+"concepts": [],
+"dishes": [
+"8.1",
+"8.2",
+"8.3"
+]
+},
+{
+"id": "L08.8",
+"kind": "lecture",
+"lecture": "L08",
+"section": "Application / Worked problem",
+"q": "Resolve 201.10.6.17 with /21→A, /23 for 201.10.6.0→B, /0→C.",
+"a": "B wins.",
+"concepts": [],
+"dishes": [
+"8.1",
+"8.2",
+"8.3"
+]
+},
+{
+"id": "L08.9",
+"kind": "lecture",
+"lecture": "L08",
+"section": "Critical thinking",
+"q": "Why must a trie remember internal prefix matches?",
+"a": "A later search can fail while an earlier valid route is still the answer.",
+"concepts": [],
+"dishes": [
+"8.1",
+"8.2",
+"8.3"
+]
+},
+{
+"id": "L08.10",
+"kind": "lecture",
+"lecture": "L08",
+"section": "Critical thinking",
+"q": "Would doubling the fabric rate fix ten senders saturating one output?",
+"a": "Not by itself; the output's physical capacity remains the limit.",
+"concepts": [],
+"dishes": [
+"8.1",
+"8.2",
+"8.3"
+]
+},
+{
+"id": "L09.1",
+"kind": "lecture",
+"lecture": "L09",
+"section": "Theory / Definitions",
+"q": "What does DHCP supply beyond an address?",
+"a": "Mask, gateway, DNS configuration, and lease information.",
+"concepts": [
+"DHCP"
+],
+"dishes": [
+"9.1"
+]
+},
+{
+"id": "L09.2",
+"kind": "lecture",
+"lecture": "L09",
+"section": "Theory / Definitions",
+"q": "What does ARP map?",
+"a": "On-link next-hop IPv4 address→MAC. See ARP.",
+"concepts": [
+"ARP"
+],
+"dishes": [
+"9.3",
+"9.1"
+]
+},
+{
+"id": "L09.3",
+"kind": "lecture",
+"lecture": "L09",
+"section": "Theory / Definitions",
+"q": "What is a recursive query?",
+"a": "A request that the server obtain the answer on the requester's behalf.",
+"concepts": [],
+"dishes": [
+"9.2",
+"9.3",
+"9.1"
+]
+},
+{
+"id": "L09.4",
+"kind": "lecture",
+"lecture": "L09",
+"section": "Understanding / Comparison",
+"q": "Compare ARP and switch tables.",
+"a": "IP→MAC at a node versus MAC→port at a switch.",
+"concepts": [
+"ARP"
+],
+"dishes": [
+"9.3",
+"9.1"
+]
+},
+{
+"id": "L09.5",
+"kind": "lecture",
+"lecture": "L09",
+"section": "Understanding / Comparison",
+"q": "Compare A, NS, CNAME, MX values.",
+"a": "IPv4 address; name server hostname; canonical hostname; mail exchanger hostname/preference.",
+"concepts": [],
+"dishes": [
+"9.2",
+"9.3",
+"9.1"
+]
+},
+{
+"id": "L09.6",
+"kind": "lecture",
+"lecture": "L09",
+"section": "Understanding / Comparison",
+"q": "Why can long DNS TTL hurt failover?",
+"a": "Caches can keep returning the old address. See DNS Caching.",
+"concepts": [
+"DNS Caching"
+],
+"dishes": [
+"9.2"
+]
+},
+{
+"id": "L09.7",
+"kind": "lecture",
+"lecture": "L09",
+"section": "Application / Worked problem",
+"q": "Client 192.0.2.10/24 sends to 203.0.113.8 through .1. Which IP is ARPed?",
+"a": "192.0.2.1.",
+"concepts": [
+"ARP"
+],
+"dishes": [
+"9.3",
+"9.1"
+]
+},
+{
+"id": "L09.8",
+"kind": "lecture",
+"lecture": "L09",
+"section": "Application / Worked problem",
+"q": "A resolver has no cached record or delegation for www.example.edu. Outline lookup.",
+"a": "Client→resolver; resolver→root→TLD→authoritative through referrals; answer returns and is cached.",
+"concepts": [],
+"dishes": [
+"9.2",
+"9.3",
+"9.1"
+]
+},
+{
+"id": "L09.9",
+"kind": "lecture",
+"lecture": "L09",
+"section": "Critical thinking",
+"q": "Must DNS finish before any ARP occurs?",
+"a": "No. Reaching an off-link DNS resolver can first require ARP for the gateway.",
+"concepts": [
+"ARP"
+],
+"dishes": [
+"9.3",
+"9.1"
+]
+},
+{
+"id": "L09.10",
+"kind": "lecture",
+"lecture": "L09",
+"section": "Critical thinking",
+"q": "Does a DHCP offer authorize immediate normal use of that address?",
+"a": "In the slide's initial allocation model, wait for ACK.",
+"concepts": [
+"DHCP"
+],
+"dishes": [
+"9.1"
+]
+},
+{
+"id": "L10.1",
+"kind": "lecture",
+"lecture": "L10",
+"section": "Theory / Definitions",
+"q": "What does link state distribute?",
+"a": "Topology/link facts. See Link-State Routing.",
+"concepts": [
+"Link-State Routing"
+],
+"dishes": [
+"10.1"
+]
+},
+{
+"id": "L10.2",
+"kind": "lecture",
+"lecture": "L10",
+"section": "Theory / Definitions",
+"q": "What does distance vector distribute?",
+"a": "Neighbors' destination distances. See Distance-Vector Routing.",
+"concepts": [
+"Distance-Vector Routing"
+],
+"dishes": [
+"10.2"
+]
+},
+{
+"id": "L10.3",
+"kind": "lecture",
+"lecture": "L10",
+"section": "Theory / Definitions",
+"q": "What does a path vector add?",
+"a": "The explicit identifier sequence. See Path-Vector Routing.",
+"concepts": [
+"Path-Vector Routing"
+],
+"dishes": [
+"10.3"
+]
+},
+{
+"id": "L10.4",
+"kind": "lecture",
+"lecture": "L10",
+"section": "Understanding / Comparison",
+"q": "Why are OSPF and BGP not interchangeable?",
+"a": "Interior common-metric routing and interdomain policy have different scopes and information.",
+"concepts": [
+"OSPF",
+"BGP"
+],
+"dishes": [
+"10.1"
+]
+},
+{
+"id": "L10.5",
+"kind": "lecture",
+"lecture": "L10",
+"section": "Understanding / Comparison",
+"q": "How is a predecessor different from a first hop?",
+"a": "The predecessor is adjacent to the destination along the source tree; the first hop is adjacent to the source.",
+"concepts": [],
+"dishes": [
+"10.2",
+"10.3",
+"10.4",
+"10.1"
+]
+},
+{
+"id": "L10.6",
+"kind": "lecture",
+"lecture": "L10",
+"section": "Understanding / Comparison",
+"q": "Why can local policy prefer a longer path?",
+"a": "Business or operational preference can rank it ahead of raw length.",
+"concepts": [],
+"dishes": [
+"10.2",
+"10.3",
+"10.4",
+"10.1"
+]
+},
+{
+"id": "L10.7",
+"kind": "lecture",
+"lecture": "L10",
+"section": "Application / Worked problem",
+"q": "Compute min(3+3,2+5).",
+"a": "6 through the first neighbor. See Bellman-Ford Updates.",
+"concepts": [
+"Bellman-Ford Updates"
+],
+"dishes": [
+"10.2"
+]
+},
+{
+"id": "L10.8",
+"kind": "lecture",
+"lecture": "L10",
+"section": "Application / Worked problem",
+"q": "Trace Dijkstra on A–B=2,A–C=5,B–C=1,B–D=4,C–D=2.",
+"a": "Distances B2,C3,D5; D's first hop from A is B.",
+"concepts": [],
+"dishes": [
+"10.2",
+"10.3",
+"10.4",
+"10.1"
+]
+},
+{
+"id": "L10.9",
+"kind": "lecture",
+"lecture": "L10",
+"section": "Critical thinking",
+"q": "Does an MPLS label automatically reserve capacity?",
+"a": "No; forwarding state and service reservation are separate.",
+"concepts": [],
+"dishes": [
+"10.2",
+"10.3",
+"10.4",
+"10.1"
+]
+},
+{
+"id": "L10.10",
+"kind": "lecture",
+"lecture": "L10",
+"section": "Critical thinking",
+"q": "Does knowing the full AS path prove a route is currently usable?",
+"a": "No; advertisements can be stale and policy can affect availability.",
+"concepts": [
+"AS Path"
+],
+"dishes": [
+"10.2",
+"10.3",
+"10.4",
+"10.1"
+]
+},
+{
+"id": "L11.1",
+"kind": "lecture",
+"lecture": "L11",
+"section": "Theory / Definitions",
+"q": "Name four convergence stages.",
+"a": "Detection, dissemination, computation, installation.",
+"concepts": [],
+"dishes": [
+"11.1",
+"11.2",
+"11.3"
+]
+},
+{
+"id": "L11.2",
+"kind": "lecture",
+"lecture": "L11",
+"section": "Theory / Definitions",
+"q": "What is poison reverse?",
+"a": "Advertise infinity back to the neighbor currently used for that destination.",
+"concepts": [
+"Poison Reverse"
+],
+"dishes": [
+"11.2"
+]
+},
+{
+"id": "L11.3",
+"kind": "lecture",
+"lecture": "L11",
+"section": "Theory / Definitions",
+"q": "What is an SPP solution?",
+"a": "Mutually suffix-consistent best available permitted paths.",
+"concepts": [],
+"dishes": [
+"11.1",
+"11.2",
+"11.3"
+]
+},
+{
+"id": "L11.4",
+"kind": "lecture",
+"lecture": "L11",
+"section": "Understanding / Comparison",
+"q": "Blackhole versus loop?",
+"a": "No working continuation versus repeated circulation.",
+"concepts": [],
+"dishes": [
+"11.1",
+"11.2",
+"11.3"
+]
+},
+{
+"id": "L11.5",
+"kind": "lecture",
+"lecture": "L11",
+"section": "Understanding / Comparison",
+"q": "Count-to-infinity versus path exploration?",
+"a": "Circular metric inflation versus successive explicit path candidates.",
+"concepts": [],
+"dishes": [
+"11.1",
+"11.2",
+"11.3"
+]
+},
+{
+"id": "L11.6",
+"kind": "lecture",
+"lecture": "L11",
+"section": "Understanding / Comparison",
+"q": "Transient convergence versus oscillation?",
+"a": "Temporary inconsistent adaptation versus persistent policy-driven route change.",
+"concepts": [],
+"dishes": [
+"11.1",
+"11.2",
+"11.3"
+]
+},
+{
+"id": "L11.7",
+"kind": "lecture",
+"lecture": "L11",
+"section": "Application / Worked problem",
+"q": "Y reaches X directly; Z uses Y. What must Z advertise to Y under poison reverse?",
+"a": "Infinity for X.",
+"concepts": [
+"Poison Reverse"
+],
+"dishes": [
+"11.2"
+]
+},
+{
+"id": "L11.8",
+"kind": "lecture",
+"lecture": "L11",
+"section": "Application / Worked problem",
+"q": "In p30, if 3 uses 30 and 1 prefers 130, does 5's sole 5210 work?",
+"a": "No: 1 chooses 130, so 2 cannot use 210, breaking 5's required suffix.",
+"concepts": [],
+"dishes": [
+"11.1",
+"11.2",
+"11.3"
+]
+},
+{
+"id": "L11.9",
+"kind": "lecture",
+"lecture": "L11",
+"section": "Critical thinking",
+"q": "Can two individually loop-free route configurations create a transition loop?",
+"a": "Yes, if routers install the new state at different times.",
+"concepts": [],
+"dishes": [
+"11.1",
+"11.2",
+"11.3"
+]
+},
+{
+"id": "L11.10",
+"kind": "lecture",
+"lecture": "L11",
+"section": "Critical thinking",
+"q": "Does a fixed topology guarantee one stable BGP result?",
+"a": "No; SPP can have multiple solutions or none.",
+"concepts": [
+"BGP"
+],
+"dishes": [
+"11.1",
+"11.2",
+"11.3"
+]
+},
+{
+"id": "L12.1",
+"kind": "lecture",
+"lecture": "L12",
+"section": "Theory / Definitions",
+"q": "What are BGP's session transport and port?",
+"a": "TCP, port 179.",
+"concepts": [
+"BGP"
+],
+"dishes": [
+"12.1"
+]
+},
+{
+"id": "L12.2",
+"kind": "lecture",
+"lecture": "L12",
+"section": "Theory / Definitions",
+"q": "What do import and export policies operate on?",
+"a": "Received route candidates versus neighbor-specific advertised routes.",
+"concepts": [],
+"dishes": [
+"12.3",
+"12.2",
+"12.4",
+"12.1"
+]
+},
+{
+"id": "L12.3",
+"kind": "lecture",
+"lecture": "L12",
+"section": "Theory / Definitions",
+"q": "What makes a route valley-free?",
+"a": "Upward provider steps, at most one peer, then downward customer steps.",
+"concepts": [],
+"dishes": [
+"12.3",
+"12.2",
+"12.4",
+"12.1"
+]
+},
+{
+"id": "L12.4",
+"kind": "lecture",
+"lecture": "L12",
+"section": "Understanding / Comparison",
+"q": "iBGP versus IGP?",
+"a": "Internal distribution of BGP reachability versus internal connectivity/path computation.",
+"concepts": [
+"iBGP",
+"BGP"
+],
+"dishes": [
+"12.3",
+"12.1"
+]
+},
+{
+"id": "L12.5",
+"kind": "lecture",
+"lecture": "L12",
+"section": "Understanding / Comparison",
+"q": "AS length versus router hops?",
+"a": "Different abstraction levels; one does not determine the other.",
+"concepts": [],
+"dishes": [
+"12.3",
+"12.2",
+"12.4",
+"12.1"
+]
+},
+{
+"id": "L12.6",
+"kind": "lecture",
+"lecture": "L12",
+"section": "Understanding / Comparison",
+"q": "Prepending versus local preference?",
+"a": "Influence remote apparent length versus rank routes inside the local AS.",
+"concepts": [
+"Local Preference"
+],
+"dishes": [
+"12.3",
+"12.2"
+]
+},
+{
+"id": "L12.7",
+"kind": "lecture",
+"lecture": "L12",
+"section": "Application / Worked problem",
+"q": "LP100/path4 versus LP90/path2: which wins?",
+"a": "LP100/path4 under the slide order.",
+"concepts": [],
+"dishes": [
+"12.3",
+"12.2",
+"12.4",
+"12.1"
+]
+},
+{
+"id": "L12.8",
+"kind": "lecture",
+"lecture": "L12",
+"section": "Application / Worked problem",
+"q": "A learns from a provider. May it export to a customer? Another provider?",
+"a": "Yes to customer, no to another provider in the commercial model.",
+"concepts": [],
+"dishes": [
+"12.3",
+"12.2",
+"12.4",
+"12.1"
+]
+},
+{
+"id": "L12.9",
+"kind": "lecture",
+"lecture": "L12",
+"section": "Critical thinking",
+"q": "Does nearest-exit choice guarantee shortest end-to-end delay?",
+"a": "No; it optimizes the choosing AS's internal egress metric after earlier criteria.",
+"concepts": [],
+"dishes": [
+"12.3",
+"12.2",
+"12.4",
+"12.1"
+]
+},
+{
+"id": "L12.10",
+"kind": "lecture",
+"lecture": "L12",
+"section": "Critical thinking",
+"q": "Are Gao-Rexford constraints necessary for every stable instance?",
+"a": "They are sufficient constraints in the model, not a characterization of all possible stable policies.",
+"concepts": [],
+"dishes": [
+"12.3",
+"12.2",
+"12.4",
+"12.1"
+]
+},
+{
+"id": "L13.1",
+"kind": "lecture",
+"lecture": "L13",
+"section": "Theory / Definitions",
+"q": "Anycast versus multicast?",
+"a": "One routing-selected replica versus delivery to an interested group.",
+"concepts": [],
+"dishes": [
+"13.1",
+"13.3",
+"13.2",
+"13.4"
+]
+},
+{
+"id": "L13.2",
+"kind": "lecture",
+"lecture": "L13",
+"section": "Theory / Definitions",
+"q": "What is (S,G)?",
+"a": "Source S and group G-specific state.",
+"concepts": [],
+"dishes": [
+"13.1",
+"13.3",
+"13.2",
+"13.4"
+]
+},
+{
+"id": "L13.3",
+"kind": "lecture",
+"lecture": "L13",
+"section": "Theory / Definitions",
+"q": "What is IGMP's scope?",
+"a": "Host-to-local-router membership, not full inter-router tree construction.",
+"concepts": [],
+"dishes": [
+"13.1",
+"13.3",
+"13.2",
+"13.4"
+]
+},
+{
+"id": "L13.4",
+"kind": "lecture",
+"lecture": "L13",
+"section": "Understanding / Comparison",
+"q": "Dense versus sparse default?",
+"a": "Forward unless pruned versus forward only onto joined branches.",
+"concepts": [],
+"dishes": [
+"13.1",
+"13.3",
+"13.2",
+"13.4"
+]
+},
+{
+"id": "L13.5",
+"kind": "lecture",
+"lecture": "L13",
+"section": "Understanding / Comparison",
+"q": "MST versus shortest-path tree?",
+"a": "Minimum total edge weight versus distances from a selected source.",
+"concepts": [],
+"dishes": [
+"13.1",
+"13.3",
+"13.2",
+"13.4"
+]
+},
+{
+"id": "L13.6",
+"kind": "lecture",
+"lecture": "L13",
+"section": "Understanding / Comparison",
+"q": "Shared tree versus source tree?",
+"a": "Reused group structure versus source-specific state and potentially shorter paths.",
+"concepts": [],
+"dishes": [
+"13.1",
+"13.3",
+"13.2",
+"13.4"
+]
+},
+{
+"id": "L13.7",
+"kind": "lecture",
+"lecture": "L13",
+"section": "Application / Worked problem",
+"q": "Three 5 Mb/s receiver copies share one upstream link: unicast versus multicast load?",
+"a": "15 versus 5 Mb/s before overhead and branching.",
+"concepts": [],
+"dishes": [
+"13.1",
+"13.3",
+"13.2",
+"13.4"
+]
+},
+{
+"id": "L13.8",
+"kind": "lecture",
+"lecture": "L13",
+"section": "Application / Worked problem",
+"q": "R reaches source S via port 1; data from S arrives on port 3. Basic RPF result?",
+"a": "Fail the expected-source-interface test.",
+"concepts": [],
+"dishes": [
+"13.1",
+"13.3",
+"13.2",
+"13.4"
+]
+},
+{
+"id": "L13.9",
+"kind": "lecture",
+"lecture": "L13",
+"section": "Critical thinking",
+"q": "Does anycast automatically pick the least-loaded healthy process?",
+"a": "No; routing needs suitable route/health integration and does not inherently know application load.",
+"concepts": [],
+"dishes": [
+"13.1",
+"13.3",
+"13.2",
+"13.4"
+]
+},
+{
+"id": "L13.10",
+"kind": "lecture",
+"lecture": "L13",
+"section": "Critical thinking",
+"q": "Can an IGMP leave from one host justify instant pruning of a shared LAN?",
+"a": "No. Other local members may remain.",
+"concepts": [],
+"dishes": [
+"13.1",
+"13.3",
+"13.2",
+"13.4"
+]
+},
+{
+"id": "L14.1",
+"kind": "lecture",
+"lecture": "L14",
+"section": "Theory / Definitions",
+"q": "Wireless versus mobile?",
+"a": "Radio medium versus changing network attachment.",
+"concepts": [],
+"dishes": [
+"14.4",
+"14.3",
+"14.2",
+"14.1"
+]
+},
+{
+"id": "L14.2",
+"kind": "lecture",
+"lecture": "L14",
+"section": "Theory / Definitions",
+"q": "Define SNR and BER.",
+"a": "Signal/noise power relation versus bit-error measure.",
+"concepts": [],
+"dishes": [
+"14.4",
+"14.3",
+"14.2",
+"14.1"
+]
+},
+{
+"id": "L14.3",
+"kind": "lecture",
+"lecture": "L14",
+"section": "Theory / Definitions",
+"q": "What does NAV track?",
+"a": "Reserved medium duration inferred from relevant frames.",
+"concepts": [],
+"dishes": [
+"14.4",
+"14.3",
+"14.2",
+"14.1"
+]
+},
+{
+"id": "L14.4",
+"kind": "lecture",
+"lecture": "L14",
+"section": "Understanding / Comparison",
+"q": "Hidden versus exposed terminal?",
+"a": "Undetected harmful overlap versus unnecessary deferral.",
+"concepts": [],
+"dishes": [
+"14.4",
+"14.3",
+"14.2",
+"14.1"
+]
+},
+{
+"id": "L14.5",
+"kind": "lecture",
+"lecture": "L14",
+"section": "Understanding / Comparison",
+"q": "CSMA/CD versus CSMA/CA?",
+"a": "Collision detection while sending in shared Ethernet versus avoidance/backoff/ACK in Wi-Fi.",
+"concepts": [],
+"dishes": [
+"14.4",
+"14.3",
+"14.2",
+"14.1"
+]
+},
+{
+"id": "L14.6",
+"kind": "lecture",
+"lecture": "L14",
+"section": "Understanding / Comparison",
+"q": "Passive versus active scanning?",
+"a": "Listen for beacons versus issue probes first.",
+"concepts": [
+"Active Scanning"
+],
+"dishes": [
+"14.3"
+]
+},
+{
+"id": "L14.7",
+"kind": "lecture",
+"lecture": "L14",
+"section": "Application / Worked problem",
+"q": "Decode z=(0,2,−2,0) with c1=(1,1,−1,−1).",
+"a": "Dot product 4, divide by 4→+1.",
+"concepts": [],
+"dishes": [
+"14.4",
+"14.3",
+"14.2",
+"14.1"
+]
+},
+{
+"id": "L14.8",
+"kind": "lecture",
+"lecture": "L14",
+"section": "Application / Worked problem",
+"q": "A backoff counter has 3 slots, gets 2 idle then a busy interval. What remains?",
+"a": "One slot; busy time freezes the counter in the model.",
+"concepts": [],
+"dishes": [
+"14.4",
+"14.3",
+"14.2",
+"14.1"
+]
+},
+{
+"id": "L14.9",
+"kind": "lecture",
+"lecture": "L14",
+"section": "Critical thinking",
+"q": "Does missing an ACK prove a collision?",
+"a": "No; radio corruption or ACK loss can also cause it.",
+"concepts": [],
+"dishes": [
+"14.4",
+"14.3",
+"14.2",
+"14.1"
+]
+},
+{
+"id": "L14.10",
+"kind": "lecture",
+"lecture": "L14",
+"section": "Critical thinking",
+"q": "Does a same-SSID move guarantee unchanged IP subnet?",
+"a": "No. Subnet continuity is a separate network configuration fact.",
+"concepts": [],
+"dishes": [
+"14.4",
+"14.3",
+"14.2",
+"14.1"
+]
+},
+{
+"id": "L15.1",
+"kind": "lecture",
+"lecture": "L15",
+"section": "Theory / Definitions",
+"q": "What is LTE's main core transition?",
+"a": "An all-IP packet core rather than separate legacy voice and data cores in the lecture comparison.",
+"concepts": [],
+"dishes": [
+"15.1",
+"15.4",
+"15.3",
+"15.2"
+]
+},
+{
+"id": "L15.2",
+"kind": "lecture",
+"lecture": "L15",
+"section": "Theory / Definitions",
+"q": "What does the MME do?",
+"a": "Mobility/authentication/control-state coordination and tunnel setup.",
+"concepts": [],
+"dishes": [
+"15.1",
+"15.4",
+"15.3",
+"15.2"
+]
+},
+{
+"id": "L15.3",
+"kind": "lecture",
+"lecture": "L15",
+"section": "Theory / Definitions",
+"q": "What is a care-of address?",
+"a": "A current tunnel locator associated with a mobile's home address.",
+"concepts": [],
+"dishes": [
+"15.1",
+"15.4",
+"15.3",
+"15.2"
+]
+},
+{
+"id": "L15.4",
+"kind": "lecture",
+"lecture": "L15",
+"section": "Understanding / Comparison",
+"q": "HSS versus P-GW?",
+"a": "Subscriber/control information versus external packet-network data gateway.",
+"concepts": [],
+"dishes": [
+"15.1",
+"15.4",
+"15.3",
+"15.2"
+]
+},
+{
+"id": "L15.5",
+"kind": "lecture",
+"lecture": "L15",
+"section": "Understanding / Comparison",
+"q": "Indirect versus direct mobility routing?",
+"a": "Home-anchor transparency versus more direct delivery with added binding/correspondent complexity.",
+"concepts": [],
+"dishes": [
+"15.1",
+"15.4",
+"15.3",
+"15.2"
+]
+},
+{
+"id": "L15.6",
+"kind": "lecture",
+"lecture": "L15",
+"section": "Understanding / Comparison",
+"q": "RLC segmentation versus IPv4 fragmentation?",
+"a": "Different layers, headers, and reassembly scopes.",
+"concepts": [
+"IPv4 Fragmentation"
+],
+"dishes": [
+"15.1",
+"15.4",
+"15.3",
+"15.2"
+]
+},
+{
+"id": "L15.7",
+"kind": "lecture",
+"lecture": "L15",
+"section": "Application / Worked problem",
+"q": "Inner dest H, current locator C: what is outer tunnel destination?",
+"a": "C; the carried packet still targets H in the generic Mobile IP example.",
+"concepts": [],
+"dishes": [
+"15.1",
+"15.4",
+"15.3",
+"15.2"
+]
+},
+{
+"id": "L15.8",
+"kind": "lecture",
+"lecture": "L15",
+"section": "Application / Worked problem",
+"q": "Show before/during/after handover.",
+"a": "S-GW→A→UE; S-GW→A→B→UE; S-GW→B→UE.",
+"concepts": [],
+"dishes": [
+"15.1",
+"15.4",
+"15.3",
+"15.2"
+]
+},
+{
+"id": "L15.9",
+"kind": "lecture",
+"lecture": "L15",
+"section": "Critical thinking",
+"q": "Why not advertise every cell move globally?",
+"a": "It creates massive rapidly changing per-mobile routing state.",
+"concepts": [],
+"dishes": [
+"15.1",
+"15.4",
+"15.3",
+"15.2"
+]
+},
+{
+"id": "L15.10",
+"kind": "lecture",
+"lecture": "L15",
+"section": "Critical thinking",
+"q": "Can preserved IP identity guarantee unchanged RTT or zero loss?",
+"a": "No; path changes and transition mechanics can still alter performance.",
+"concepts": [],
+"dishes": [
+"15.1",
+"15.4",
+"15.3",
+"15.2"
+]
+},
+{
+"id": "PM.1",
+"kind": "midterm",
+"n": 1,
+"lecture": "L06",
+"title": "Switch learning",
+"q": "A switch starts with an empty table and has A on port 1, B on port 2, C on port 3, all in one VLAN. Trace A→B, B→A, then C→B. After each event, give the table changes and output port(s).",
+"a": "A→B: learn A→1; B unknown, flood 2 and 3. B→A: learn B→2; A known, forward 1. C→B: learn C→3; B known, forward 2. Final table A1,B2,C3. Award three points for the three actions and two for correct source learning/final table. Self-Learning Switch Tables.",
+"concepts": [
+"Self-Learning Switch Tables"
+],
+"dishes": [
+"6.3",
+"6.4"
+],
+"points": 5
+},
+{
+"id": "PM.2",
+"kind": "midterm",
+"n": 2,
+"lecture": "L06",
+"title": "Collision and loop boundaries",
+"q": "Explain why (a) full-duplex switching can still queue and (b) redundant Ethernet links need STP. Identify which of collision, output contention, and flooding loop each mechanism addresses.",
+"a": "Full duplex prevents the shared half-duplex collision contest on each point-to-point link, but several inputs can contend for one output and queue. STP prevents cycles in the active bridged topology so flooded frames do not circulate indefinitely. Award two points for output contention, two for flooding/STP, one for separating the scopes. Full-Duplex Links · Spanning Tree Protocol.",
+"concepts": [
+"Full-Duplex Links",
+"Spanning Tree Protocol"
+],
+"dishes": [
+"6.2",
+"6.3"
+],
+"points": 5
+},
+{
+"id": "PM.3",
+"kind": "midterm",
+"n": 3,
+"lecture": "L07",
+"title": "Prefix arithmetic",
+"q": "For 172.16.5.130/22, give the mask, network, broadcast, conventional usable count, and whether 172.16.7.12 is on the same subnet.",
+"a": "/22 mask=255.255.252.0. Third-octet blocks have size four; 5 lies in 4–7. Network=172.16.4.0; broadcast=172.16.7.255; 2^10−2=1022 conventional usable addresses. 172.16.7.12 is inside the same subnet. One point for each requested result. Network and Broadcast Addresses.",
+"concepts": [
+"Network and Broadcast Addresses"
+],
+"dishes": [
+"7.2"
+],
+"points": 5
+},
+{
+"id": "PM.4",
+"kind": "midterm",
+"n": 4,
+"lecture": "L07",
+"title": "Fragmentation",
+"q": "A 2600-byte IPv4 datagram has a 20-byte header, no options, and may be fragmented over MTU 1000. Give each fragment's payload length, total length, offset, and MF. Explain the offset unit.",
+"a": "Original payload=2580. Nonfinal maximum=floor((1000−20)/8)×8=976. Payloads=976,976,628. Total lengths=996,996,648. Offsets=0,122,244. MF=1,1,0. The offset unit is eight original-payload bytes. Award one point each for payload calculation, totals, offsets, MF, and unit/explanation. IPv4 Fragmentation.",
+"concepts": [
+"IPv4 Fragmentation"
+],
+"dishes": [
+"7.4"
+],
+"points": 5
+},
+{
+"id": "PM.5",
+"kind": "midterm",
+"n": 5,
+"lecture": "L08",
+"title": "LPM",
+"q": "Installed routes are 10.0.0.0/8→A, 10.4.0.0/16→B, 10.4.8.0/21→C, /0→D. Choose outputs for 10.4.9.7, 10.4.20.1, 10.8.1.2, and 192.0.2.8. Explain why a lower-cost /8 would not replace a matching /21 during ordinary lookup.",
+"a": "Outputs C,B,A,D respectively. The matching /21 is more specific than /8; route-selection cost does not override installed prefix specificity in ordinary forwarding. Four points for outputs and one for the distinction. Longest Prefix Matching.",
+"concepts": [
+"Longest Prefix Matching"
+],
+"dishes": [
+"8.2"
+],
+"points": 5
+},
+{
+"id": "PM.6",
+"kind": "midterm",
+"n": 6,
+"lecture": "L08",
+"title": "Queues",
+"q": "Input FIFO X holds [to output 1, to output 2]. Another input wins output 1 while output 2 is idle. Name and explain the problem. Then explain whether a faster fabric fixes sustained 20 Mb/s demand on a 10 Mb/s output.",
+"a": "Head-of-line blocking: X's first packet cannot use output 1 this slot, so a later packet for idle output 2 cannot bypass it in the assumed FIFO. Sustained 20 Mb/s into 10 Mb/s grows backlog at 10 Mb/s; a faster fabric does not increase the output link rate. Award three points for HOL mechanism and two for overload reasoning. Input Queuing and HOL Blocking · Output Queuing and Scheduling.",
+"concepts": [
+"Input Queuing and HOL Blocking",
+"Output Queuing and Scheduling"
+],
+"dishes": [
+"8.3"
+],
+"points": 5
+},
+{
+"id": "PM.7",
+"kind": "midterm",
+"n": 7,
+"lecture": "L09",
+"title": "Bootstrap trace",
+"q": "DHCP confirms client 192.0.2.10/24, gateway 192.0.2.1, DNS 198.51.100.53. The client wants www.example.test and caches are empty. Outline the DHCP message order, which IP is ARPed before the DNS query leaves, and the Ethernet/IP destinations of that query. Explain why “DNS always happens before ARP” is misleading.",
+"a": "Discover→Offer→Request→ACK. The DNS IP is off-link, so ARP resolves gateway 192.0.2.1. Ethernet destination is gateway MAC; IP destination is DNS 198.51.100.53. The DNS query cannot leave before its local delivery dependency is satisfied, so conceptual request order is not the same as packet-transmission order. One point per statement. Examples/01 - From Joining a LAN to Sending a Packet.",
+"concepts": [
+"DHCP",
+"ARP"
+],
+"dishes": [
+"9.1",
+"9.3"
+],
+"points": 5
+},
+{
+"id": "PM.8",
+"kind": "midterm",
+"n": 8,
+"lecture": "L09",
+"title": "Directory roles",
+"q": "A resolver receives an NS referral, then a CNAME, then an A record. Explain each value's role. Distinguish the client's recursive request from the resolver's iterative queries and give one cache-freshness tradeoff.",
+"a": "NS identifies an authoritative server hostname/delegation; CNAME identifies an alias target hostname; A supplies an IPv4 address. Recursive means “obtain it for me”; iterative means “answer or tell me whom to ask.” Long TTL reduces work/latency but delays observing changes. Award one point for each of the three record roles, one for query distinction, one for tradeoff. DNS Resource Records · DNS Caching.",
+"concepts": [
+"DNS Resource Records",
+"DNS Caching"
+],
+"dishes": [
+"9.3",
+"9.2"
+],
+"points": 5
+},
+{
+"id": "PM.9",
+"kind": "midterm",
+"n": 9,
+"lecture": "L10",
+"title": "Dijkstra",
+"q": "Undirected edges: A–B=2,A–C=6,B–C=1,B–D=5,C–D=2. Compute distances from A to B,C,D; give D's predecessor and A's first hop toward D. State the ordinary edge-weight condition.",
+"a": "After A: B2,C6,D infinity. After B: C3,D7. After C: D5. Final B2,C3,D5; D predecessor C; A's first hop to D is B. Ordinary Dijkstra assumes nonnegative weights. Award two points for final distances, one for predecessor, one for first hop, one for condition. Dijkstra Algorithm.",
+"concepts": [
+"Dijkstra Algorithm"
+],
+"dishes": [
+"10.1"
+],
+"points": 5
+},
+{
+"id": "PM.10",
+"kind": "midterm",
+"n": 10,
+"lecture": "L10",
+"title": "Bellman-Ford",
+"q": "X reaches neighbor V with cost 2 and neighbor W with cost 4. V advertises distance 7 to Z; W advertises 2. Compute X's distance and next hop. If W later advertises 9 instead, recompute. State what X trusts from the neighbors.",
+"a": "First min(2+7,4+2)=min(9,6)=6 via W. After W advertises 9, min(9,13)=9 via V. X trusts neighbors' currently advertised remaining distances, which may be stale. Award two points per correct update/next hop and one for the information distinction. Bellman-Ford Updates.",
+"concepts": [
+"Bellman-Ford Updates"
+],
+"dishes": [
+"10.2"
+],
+"points": 5
+},
+{
+"id": "PM.11",
+"kind": "midterm",
+"n": 11,
+"lecture": "L11",
+"title": "Bad news",
+"q": "X–Y=1,Y–Z=1, no other path to X. Initially Y reaches X directly and Z uses Y. After X–Y fails, show one circular stale-distance sequence. Explain exactly what Z advertises to Y under poison reverse and one limit of that technique.",
+"a": "Z's old 2 leads Y to claim 3 via Z; Y's 3 leads Z to claim 4 via Y; then Y can claim 5, and so on. Under poison reverse, because Z uses Y for X, Z tells Y its X distance is infinity. This is neighbor-specific and does not eliminate every longer dependency cycle. Award two points for the circular trace, two for the exact poisoned direction/value, one for a limitation. Count to Infinity · Poison Reverse.",
+"concepts": [
+"Count to Infinity",
+"Poison Reverse"
+],
+"dishes": [
+"11.2"
+],
+"points": 5
+},
+{
+"id": "PM.12",
+"kind": "midterm",
+"n": 12,
+"lecture": "L11",
+"title": "Stability",
+"q": "Name the four convergence stages. Explain why path-vector own-AS rejection does not guarantee rapid convergence or a stable result under arbitrary policies. Distinguish exploration from persistent policy oscillation.",
+"a": "Stages: detect, disseminate, compute, install. AS-path loop rejection still permits successive loop-free candidate paths and does not force compatible arbitrary rankings. Exploration responds to incomplete withdrawal/change information; oscillation can persist because policy choices have no compatible stable assignment. Award two points for all stages, one for exploration, one for policy conflict, one for the distinction. Routing Convergence · Stable Paths Problem.",
+"concepts": [
+"Routing Convergence",
+"Stable Paths Problem"
+],
+"dishes": [
+"11.1",
+"11.3"
+],
+"points": 5
+},
+{
+"id": "PM.13",
+"kind": "midterm",
+"n": 13,
+"lecture": "L12",
+"title": "Selection",
+"q": "Route A has local preference 150, AS length 5, egress cost 20. B has preference 100, length 2, cost 1. Which wins? If their local preference becomes equal, which wins? Explain how the chosen BGP next hop becomes a usable local forwarding action.",
+"a": "A wins initially by local preference. With equal preference, B wins by shorter AS path before egress cost matters. The chosen BGP NEXT_HOP must resolve through internal reachability to a usable output/adjacent next hop. Award two points for initial choice/reason, one for second choice, two for resolution. Local Preference · BGP Next-Hop Resolution.",
+"concepts": [
+"Local Preference",
+"BGP Next-Hop Resolution"
+],
+"dishes": [
+"12.3",
+"12.2"
+],
+"points": 5
+},
+{
+"id": "PM.14",
+"kind": "midterm",
+"n": 14,
+"lecture": "L12",
+"title": "Commercial policy",
+"q": "Under the lecture model, decide whether a provider-learned route may be exported to (a) a customer and (b) a peer. Classify data paths up→peer→down and down→up as valid or invalid. State the preference and topology conditions accompanying the export restriction in Gao-Rexford.",
+"a": "Provider-learned route: export to customer yes, to peer no under this model. Up→peer→down is valley-free; down→up is a valley. Also prefer customer routes over peer/provider routes and keep the customer-provider hierarchy acyclic. Award one point for each export answer, one for both path classifications, one each for preference/topology. Gao-Rexford Conditions.",
+"concepts": [
+"Gao-Rexford Conditions"
+],
+"dishes": [
+"12.4"
+],
+"points": 5
+},
+{
+"id": "PM.15",
+"kind": "midterm",
+"n": 15,
+"lecture": "L13",
+"title": "Audience and bandwidth",
+"q": "Distinguish anycast and multicast. A 10 Mb/s stream has three recipients sharing the first link: compare first-link traffic for iterated unicast and network multicast before branching. Give one anycast failover limitation.",
+"a": "Anycast selects one service instance for a shared address; multicast targets the interested group. Iterated unicast puts 30 Mb/s on the shared first link; multicast puts 10 Mb/s before branching. Anycast can be limited by convergence, application health not reflected in routes, or connection state lost on replica changes. Award two points for audience distinction, two for rates, one for a valid limitation. IP Anycast · IP Multicast.",
+"concepts": [
+"IP Anycast",
+"IP Multicast"
+],
+"dishes": [
+"13.1",
+"13.2"
+],
+"points": 5
+},
+{
+"id": "PM.16",
+"kind": "midterm",
+"n": 16,
+"lecture": "L13",
+"title": "Membership and tree",
+"q": "Explain the roles of IGMP, a receiver DR's (*,G) PIM join, and a source DR's Register. Compare dense/sparse defaults and describe the purpose of an (S,G) SPT switch.",
+"a": "IGMP expresses LAN receiver interest. (*,G) join builds receiver-side state toward RP. Register brings source startup traffic from source DR to RP. Dense mode forwards unless pruned; sparse mode needs joins. An (S,G) switch creates a source-rooted path that can avoid the RP detour. One point per role/distinction. PIM Sparse Mode.",
+"concepts": [
+"PIM Sparse Mode"
+],
+"dishes": [
+"13.4"
+],
+"points": 5
+},
+{
+"id": "PM.17",
+"kind": "midterm",
+"n": 17,
+"lecture": "L14",
+"title": "Hidden terminals",
+"q": "A and C cannot hear each other but both can transmit to B. Explain why carrier sensing can fail and how CTS can help. State why no ACK is not proof of collision and name one cost of RTS/CTS.",
+"a": "A and C each see local silence while both interfere at B. B's CTS can be heard by C even when A cannot, causing deferral. Missing ACK can also mean data corruption or ACK loss. RTS/CTS costs control airtime and its control packets can collide. Award two points for geometry/sensing, one for CTS, one for loss interpretation, one for cost. Hidden Terminals · RTS and CTS.",
+"concepts": [
+"Hidden Terminals",
+"RTS and CTS"
+],
+"dishes": [
+"14.4"
+],
+"points": 5
+},
+{
+"id": "PM.18",
+"kind": "midterm",
+"n": 18,
+"lecture": "L14",
+"title": "CDMA",
+"q": "Let c1=(1,1,−1,−1),c2=(1,−1,1,−1),d1=−1,d2=+1. Compute summed chip vector z and recover both bits by correlation. State one ideal-model assumption.",
+"a": "z=−c1+c2=(0,−2,2,0). z·c1/4=(−2−2)/4=−1. z·c2/4=(2+2)/4=+1. An appropriate ideal assumption is synchronized orthogonal codes with suitable power/noise conditions. Award two points for z, one per decoded bit, one for assumption. CDMA.",
+"concepts": [
+"CDMA"
+],
+"dishes": [
+"14.2"
+],
+"points": 5
+},
+{
+"id": "PM.19",
+"kind": "midterm",
+"n": 19,
+"lecture": "L15",
+"title": "LTE roles",
+"q": "Match HSS, MME, S-GW, P-GW to their roles. Draw the normal UE-to-Internet user-data path and explain why MME need not appear as a payload hop.",
+"a": "HSS: subscriber/home information. MME: authentication/mobility/control setup. S-GW: serving user-data/tunnel forwarding. P-GW: external packet-network gateway. User path UE→eNodeB→S-GW→P-GW→Internet; MME coordinates it without being a payload hop. One point per component, plus one for path/control distinction. LTE All-IP Core.",
+"concepts": [
+"LTE All-IP Core"
+],
+"dishes": [
+"15.1"
+],
+"points": 5
+},
+{
+"id": "PM.20",
+"kind": "midterm",
+"n": 20,
+"lecture": "L15",
+"title": "Locator and handover",
+"q": "A Mobile IP packet's home destination is H and care-of locator is C. Name the inner and outer destinations during forwarding through the home agent. Then state the before/during/after S-GW/base-station data paths in the handover with old A and target B.",
+"a": "Inner destination remains H; outer tunnel destination is C. Before: S-GW→A→UE. During: S-GW→A→B→UE through temporary forwarding. After: S-GW→B→UE after core endpoint change. Award one point per inner/outer destination and one per path phase. IP Tunneling · Cellular Handover.",
+"concepts": [
+"IP Tunneling",
+"Cellular Handover"
+],
+"dishes": [
+"15.3",
+"15.4"
+],
+"points": 5
+},
+{
+"id": "x.1.1.a",
+"dishes": [
+"1.1"
+],
+"q": "Why is the gateway's MAC address used while the server's IP address stays in the packet?",
+"a": "The frame only crosses one link, so it names the next device on that link. The packet crosses the whole network, so its IP header keeps the final destination.",
+"kind": "extra"
+},
+{
+"id": "x.1.1.b",
+"dishes": [
+"1.1"
+],
+"q": "What does a router change in a packet it forwards, and what does it keep?",
+"a": "It replaces the Ethernet frame and decrements TTL, which also changes the checksum. The source and destination IP addresses stay the same.",
+"kind": "extra"
+},
+{
+"id": "x.1.1.c",
+"dishes": [
+"1.1"
+],
+"q": "A host sends to another host on its own subnet. Whose MAC address goes on the frame?",
+"a": "The destination host's own MAC address. Only remote destinations go through the router's MAC address.",
+"kind": "extra"
+},
+{
+"id": "x.1.2.a",
+"dishes": [
+"1.2"
+],
+"q": "Which layer delivers across one link, and which delivers across the whole network?",
+"a": "The link layer delivers locally across one link. The network layer, IP, delivers globally from source host to destination host.",
+"kind": "extra"
+},
+{
+"id": "x.1.2.b",
+"dishes": [
+"1.2"
+],
+"q": "Why can ARP come before the actual DNS query?",
+"a": "The DNS query is itself a packet. If the resolver is remote, the host needs the gateway's MAC address before it can frame the query, so it may ARP for the gateway first.",
+"kind": "extra"
+},
+{
+"id": "x.1.2.c",
+"dishes": [
+"1.2"
+],
+"q": "Does a switch look at the IP header to forward a frame?",
+"a": "No. An ordinary Ethernet switch forwards using the destination MAC address and its learned table. IP forwarding is the router's job.",
+"kind": "extra"
+},
+{
+"id": "x.12.1.a",
+"dishes": [
+"12.1"
+],
+"q": "Name the missing fact that each of these supplies - DHCP, ARP, DNS, and longest prefix match.",
+"a": "DHCP supplies address, mask, gateway, and resolver. ARP supplies the next hop's MAC address. DNS supplies the server's IP address. Longest prefix match supplies the output for a destination.",
+"kind": "extra"
+},
+{
+"id": "x.12.1.b",
+"dishes": [
+"12.1"
+],
+"q": "A tunnel carries a phone's packet after a handover. What changes, and what stays the same?",
+"a": "The outer destination changes to the new base station. The inner packet, including the phone's stable address, stays the same.",
+"kind": "extra"
+},
+{
+"id": "x.12.1.c",
+"dishes": [
+"12.1"
+],
+"q": "What four questions can you ask of any new network mechanism?",
+"a": "What's missing, who knows it, what state is kept, and what happens when that state goes stale.",
+"kind": "extra"
+}
+]

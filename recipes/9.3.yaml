@@ -1,0 +1,442 @@
+dish: '9.3'
+title: Records and the whole journey
+deck: lec09-discovery.pdf
+target_min: 6.5
+concepts:
+- DNS Resource Records
+- DNS A Records
+- DNS NS Records
+- DNS CNAME Records
+- DNS MX Records
+- DNS Reliability
+pad: 2.2
+beats:
+- id: 9.3.question
+  stage: question
+  narration: 9.3.question
+  pdf:
+  - lec09-discovery.pdf
+  - 41
+  concepts:
+  - DNS Resource Records
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 9: records and the whole journey'
+  - q:
+      text: What else does DNS store, and what if a query is lost?
+  adjust: {}
+- id: 9.3.records
+  stage: animation
+  narration: 9.3.records
+  pdf:
+  - lec09-discovery.pdf
+  - 41
+  concepts:
+  - DNS Resource Records
+  - DNS A Records
+  - DNS NS Records
+  - DNS CNAME Records
+  - DNS MX Records
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: rr
+      zone: top
+      cols:
+      - Type
+      - Name
+      - Value
+      rows:
+      - - A
+        - www.example.test
+        - 203.0.113.80
+      - - NS
+        - example.test
+        - ns1.example.test
+      - - CNAME
+        - web.example.test
+        - www.example.test
+      - - MX
+        - example.test
+        - 10 mail.example.test
+      show: 0
+  - table.reveal:
+      name: rr
+      when: An A record
+  - table.reveal:
+      name: rr
+      when: An NS record
+  - table.reveal:
+      name: rr
+      when: A CNAME maps
+  - table.reveal:
+      name: rr
+      when: An MX record
+  - rule:
+      text: NS, CNAME and MX values are hostnames. They may need another lookup.
+      when: Notice that
+  adjust: {}
+- id: 9.3.reliability
+  stage: state
+  narration: 9.3.reliability
+  pdf:
+  - lec09-discovery.pdf
+  - 43
+  concepts:
+  - DNS Reliability
+  clarifications: []
+  moves:
+  - bullets:
+      name: rel
+      zone: bottom
+      show: 4
+      items:
+      - Replicated servers
+      - Timeouts and retries
+      - An ID matches replies to queries
+      - UDP is common; TCP also works
+  adjust: {}
+- id: 9.3.reliability-more
+  stage: state
+  narration: 9.3.reliability-more
+  pdf:
+  - lec09-discovery.pdf
+  - 43
+  concepts:
+  - DNS Reliability
+  clarifications: []
+  moves:
+  - net.show:
+      name: rr
+      zone: top
+      nodes:
+        R:
+          k: server
+          at:
+          - 0
+          - 0.6
+          l: Resolver
+        A:
+          k: server
+          at:
+          - 6
+          - 1.6
+          l: Server A
+          lp: right
+        B:
+          k: server
+          at:
+          - 6
+          - -0.4
+          l: Replica B
+          lp: right
+      links:
+      - - R
+        - A
+      - - R
+        - B
+  - msg.send:
+      name: rr
+      a: R
+      b: A
+      text: query
+      when: A resolver queries
+      t: 1.1
+  - fx.burst:
+      net: rr
+      node: A
+  - msg.send:
+      name: rr
+      a: R
+      b: B
+      text: retry
+      when: After its timer
+      t: 1.1
+  - msg.send:
+      name: rr
+      a: B
+      b: R
+      text: reply, same ID
+      when: and it accepts
+      t: 1.1
+  adjust: {}
+- id: 9.3.journey
+  stage: animation
+  narration: 9.3.journey
+  pdf:
+  - lec09-discovery.pdf
+  - 49
+  concepts: []
+  clarifications:
+  - tcp-recap
+  moves:
+  - clear: {}
+  - bullets:
+      name: j
+      zone: full
+      show: 0
+      items:
+      - 'DHCP: learn address, gateway, resolver'
+      - 'Mask: the resolver is remote, use the gateway'
+      - 'ARP: learn the gateway''s MAC'
+      - 'DNS: query goes through R1, answer returns'
+      - 'Mask: server is remote too, reuse gateway MAC'
+      - Packet crosses R1 and R2; TCP begins
+  - reveal:
+      name: j
+      when: To reach the name
+  - reveal:
+      name: j
+      when: But the resolver
+  - reveal:
+      name: j
+      when: So before the DNS
+  - reveal:
+      name: j
+      when: Then the frame
+  - reveal:
+      name: j
+      when: Only then
+  - reveal:
+      name: j
+      when: a TCP connection
+  adjust: {}
+- id: 9.3.insert
+  stage: state
+  narration: 9.3.insert
+  pdf:
+  - lec09-discovery.pdf
+  - 44
+  concepts:
+  - DNS NS Records
+  - DNS A Records
+  - DNS MX Records
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: ins
+      zone: top
+      cols:
+      - Stored at
+      - Record
+      - Type
+      rows:
+      - - .com
+        - foobar.com → dns1.foobar.com
+        - NS
+      - - .com
+        - dns1.foobar.com → 212.212.212.1
+        - A
+      - - dns1
+        - www.foobar.com → an address
+        - A
+      - - dns1
+        - foobar.com → a mail server
+        - MX
+      show: 0
+  - table.reveal:
+      name: ins
+      n: 2
+      when: The registrar inserts
+  - table.reveal:
+      name: ins
+      n: 2
+      when: On its own server
+  adjust: {}
+- id: 9.3.dig
+  stage: state
+  narration: 9.3.dig
+  pdf:
+  - lec09-discovery.pdf
+  - 45
+  concepts:
+  - DNS Resource Records
+  - Iterative DNS Queries
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: dg
+      zone: top
+      cols:
+      - dig section
+      - Holds
+      rows:
+      - - ANSWER
+        - the record you asked for
+      - - AUTHORITY
+        - the zone's name servers
+      - - ADDITIONAL
+        - those servers' addresses
+  - rule:
+      text: dig +trace shows the walk from root to TLD to authoritative.
+      when: Running dig
+  adjust: {}
+- id: 9.3.arb
+  stage: animation
+  narration: 9.3.arb
+  pdf:
+  - lec09-discovery.pdf
+  - 55
+  concepts: &id001
+  - ARP
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: ab
+      zone: top
+      nodes:
+        A:
+          k: host
+          at:
+          - 0
+          - 0
+          l: A
+        R:
+          k: router
+          at:
+          - 5
+          - 0
+          l: R
+        B:
+          k: host
+          at:
+          - 10
+          - 0
+          l: B
+      links:
+      - - A
+        - R
+      - - R
+        - B
+  - stack.show:
+      name: fr
+      zone: bottom
+      width: 7.4
+      layers:
+      - t: 'Ethernet: A''s MAC → R''s near MAC'
+        k: eth
+      - t: 'IP: 111.111.111.111 → 222.222.222.222'
+        k: ip
+    when: The frame runs
+  - packet.spawn:
+      name: p
+      net: ab
+      at: A
+      layers:
+      - eth
+      - ip
+  - packet.hop:
+      name: p
+      to: R
+  adjust: {}
+- id: 9.3.arb-2
+  stage: animation
+  narration: 9.3.arb-2
+  pdf:
+  - lec09-discovery.pdf
+  - 55
+  concepts: *id001
+  clarifications: []
+  moves:
+  - packet.swap_link_header:
+      name: p
+      when: R removes
+  - stack.set:
+      name: fr
+      layer: 0
+      text: 'Ethernet: R''s far MAC → B''s MAC'
+      kind: eth
+  - packet.hop:
+      name: p
+      to: B
+      when: There it is
+  adjust: {}
+- id: 9.3.rule
+  stage: rule
+  narration: 9.3.rule
+  pdf:
+  - lec09-discovery.pdf
+  - 58
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: What is missing right now decides the next step. Discovery traffic needs delivery too.
+  adjust: {}
+- id: 9.3.pitfall
+  stage: rule
+  narration: 9.3.pitfall
+  pdf:
+  - lec09-discovery.pdf
+  - 58
+  concepts: []
+  clarifications: []
+  moves:
+  - trap:
+      wrong: A CNAME redirects your browser
+      right: 'A CNAME is a DNS alias: no HTTP redirect happens'
+  adjust: {}
+- id: 9.3.changed
+  stage: changed_example
+  narration: 9.3.changed
+  pdf:
+  - lec09-discovery.pdf
+  - 58
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: ch
+      zone: top
+      show: 3
+      items:
+      - 'The resolver is local: 192.0.2.53'
+      - The answer is already cached
+      - The R1 to R2 link is cut
+  adjust: {}
+- id: 9.3.predict
+  stage: prediction
+  narration: 9.3.predict
+  pdf:
+  - lec09-discovery.pdf
+  - 58
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: which steps disappear, and which remain?
+  adjust: {}
+  hold: 6
+- id: 9.3.answer
+  stage: explanation
+  narration: 9.3.answer
+  pdf:
+  - lec09-discovery.pdf
+  - 58
+  concepts: []
+  clarifications: []
+  moves:
+  - table.show:
+      name: a3
+      zone: bottom
+      cols:
+      - Change
+      - Effect
+      rows:
+      - - Local resolver
+        - ARP for the resolver itself
+      - - Cached answer
+        - no hierarchy queries
+      - - Cut link
+        - correct caches; delivery still fails
+  - rule:
+      text: 'Next: who fills in the router''s table?'
+      when: Who fills it
+  - keep: {}
+  adjust: {}

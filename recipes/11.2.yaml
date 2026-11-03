@@ -1,0 +1,768 @@
+dish: '11.2'
+title: Counting to infinity
+deck: lec11-convergence.pdf
+target_min: 7
+concepts:
+- Count to Infinity
+- Poison Reverse
+pad: 2.2
+beats:
+- id: 11.2.question
+  stage: question
+  narration: 11.2.question
+  pdf:
+  - lec11-convergence.pdf
+  - 12
+  concepts:
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 11: counting to infinity'
+  - q:
+      text: Why does good news travel fast, and bad news crawl?
+  - keep: {}
+  adjust: {}
+- id: 11.2.goodnews
+  stage: animation
+  narration: 11.2.goodnews
+  pdf:
+  - lec11-convergence.pdf
+  - 14
+  concepts:
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: g
+      zone: top
+      nodes:
+        X:
+          k: node
+          at:
+          - 0
+          - 0
+          l: X
+        Y:
+          k: node
+          at:
+          - 5
+          - 0
+          l: Y
+        Z:
+          k: node
+          at:
+          - 10
+          - 0
+          l: Z
+      links:
+      - - X
+        - Y
+        - c: 1
+      - - Y
+        - Z
+        - c: 1
+  - net.state:
+      name: g
+      nodes:
+        Y: now
+      when: The router attached
+  - net.badge:
+      name: g
+      node: Y
+      text: 1 to X
+      side: up
+  - msg.send:
+      name: g
+      a: Y
+      b: Z
+      text: 1 to X
+      when: tells its neighbor
+  - net.badge:
+      name: g
+      node: Z
+      text: 2 to X, via Y
+      side: up
+      when: who sees
+  - net.state:
+      name: g
+      nodes:
+        Y: done
+        Z: done
+      when: A real, better
+  adjust: {}
+- id: 11.2.setup
+  stage: state
+  narration: 11.2.setup
+  pdf:
+  - lec11-convergence.pdf
+  - 16
+  concepts:
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - net.state:
+      name: g
+      nodes:
+        Y: null
+        Z: null
+  - net.walk:
+      name: g
+      path:
+      - Y
+      - X
+      when: Y reaches X
+  - net.walk:
+      name: g
+      path:
+      - Z
+      - Y
+      - X
+      when: Z reaches X
+  - net.unwalk:
+      name: g
+      when: Now cut
+  - net.state:
+      name: g
+      links:
+      - - X
+        - Y
+        - failed
+  - table.show:
+      name: t
+      zone: bottom
+      data: $convergence.cti_table
+      show: 1
+      row_h: 0.44
+  - net.state:
+      name: g
+      nodes:
+        Y: now
+      when: Y knows
+  - msg.send:
+      name: g
+      a: Z
+      b: Y
+      text: 2 to X
+      when: it sees Z
+  - net.badge:
+      name: g
+      node: Y
+      text: X? Z says 2
+      side: up
+      state: now
+  adjust: {}
+- id: 11.2.trap
+  stage: state
+  narration: 11.2.trap
+  pdf:
+  - lec11-convergence.pdf
+  - 17
+  concepts:
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - net.state:
+      name: g
+      nodes:
+        Y: null
+  - table.reveal:
+      name: t
+      when: So Y believes
+  - net.badge:
+      name: g
+      node: Y
+      text: 3, via Z
+      side: up
+      state: error
+  - net.walk:
+      name: g
+      path:
+      - Y
+      - Z
+      state: error
+      when: Y now routes
+  - msg.send:
+      name: g
+      a: Y
+      b: Z
+      text: I'm at 3
+      when: Y tells Z
+      t: 1.1
+  - table.reveal:
+      name: t
+  - net.badge:
+      name: g
+      node: Z
+      text: 4, via Y
+      side: up
+      state: error
+  - msg.send:
+      name: g
+      a: Z
+      b: Y
+      text: '4'
+      when: Z tells Y
+      t: 0.7
+  - table.reveal:
+      name: t
+  - net.badge:
+      name: g
+      node: Y
+      text: 5, via Z
+      side: up
+      state: error
+  - msg.send:
+      name: g
+      a: Y
+      b: Z
+      text: '5'
+      when: Then Z
+      t: 0.6
+  - table.reveal:
+      name: t
+  - net.badge:
+      name: g
+      node: Z
+      text: 6, via Y
+      side: up
+      state: error
+  adjust: {}
+- id: 11.2.meaning
+  stage: rule
+  narration: 11.2.meaning
+  pdf:
+  - lec11-convergence.pdf
+  - 17
+  concepts:
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - net.badge:
+      name: g
+      node: X
+      text: no path at all
+      side: down
+      state: error
+      when: There is no path
+  - packet.spawn:
+      name: lp
+      net: g
+      at: Y
+      layers:
+      - ip
+      when: They point
+  - packet.hop:
+      name: lp
+      to:
+      - Z
+      - Y
+      - Z
+      - Y
+      - Z
+      - Y
+      t: 5
+      when: their traffic
+  - net.badge:
+      name: g
+      node: Y
+      text: 7, 9, 11 ...
+      side: up
+      state: error
+      when:
+        phrase: until they reach
+        frame_offset: 34
+  - net.badge:
+      name: g
+      node: Z
+      text: 8, 10, 12 ...
+      side: up
+      state: error
+  - packet.fade:
+      name: lp
+      when: No new links
+  - fx.burst:
+      net: g
+      between:
+      - Y
+      - Z
+      when: The routers are slowly
+  - rule:
+      text: 'Count to infinity: a scalar distance hides a circular dependency.'
+      when: This is called
+  - net.pulse:
+      name: g
+      path:
+      - Y
+      - Z
+      - Y
+      state: error
+      when: They just count
+  adjust: {}
+- id: 11.2.rip
+  stage: state
+  narration: 11.2.rip
+  pdf:
+  - lec11-convergence.pdf
+  - 19
+  concepts:
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - clear:
+      keep:
+      - g
+  - table.show:
+      name: rip
+      zone: bottom
+      cols:
+      - RIP metric
+      - Meaning
+      rows:
+      - - 1 to 15
+        - usable path
+      - - 16
+        - unreachable
+      show: 0
+  - table.reveal:
+      name: rip
+      when: RIP treats
+  - table.reveal:
+      name: rip
+  - net.badge:
+      name: g
+      node: Y
+      text: stops at 16
+      side: up
+      state: done
+      when: Now the counting
+  - table.mark:
+      name: rip
+      r: 0
+      state: error
+      when: But any network
+  adjust: {}
+- id: 11.2.poison
+  stage: state
+  narration: 11.2.poison
+  pdf:
+  - lec11-convergence.pdf
+  - 18
+  concepts:
+  - Poison Reverse
+  clarifications: []
+  moves:
+  - net.state:
+      name: g
+      links:
+      - - X
+        - Y
+        - solid
+      when: Go back
+  - net.badge:
+      name: g
+      node: Y
+      text: 1 to X
+      side: up
+  - net.unbadge:
+      name: g
+      node: X
+  - net.walk:
+      name: g
+      path:
+      - Z
+      - Y
+      when: Z's route to X
+  - net.badge:
+      name: g
+      node: Z
+      text: 'tells Y: ∞'
+      side: up
+      state: now
+      when: Poison reverse says
+  - msg.send:
+      name: g
+      a: Z
+      b: Y
+      text: ∞
+      kind: error
+      when: tell that neighbor
+      t: 1.1
+  - rule:
+      text: If you route through a neighbor, tell that neighbor your distance is infinite.
+      when: Z keeps its true
+  adjust: {}
+- id: 11.2.poisoned
+  stage: state
+  narration: 11.2.poisoned
+  pdf:
+  - lec11-convergence.pdf
+  - 18
+  concepts:
+  - Poison Reverse
+  clarifications: []
+  moves:
+  - clear:
+      keep:
+      - g
+  - net.unwalk:
+      name: g
+  - net.state:
+      name: g
+      links:
+      - - X
+        - Y
+        - failed
+      when: X and Y lose
+  - table.show:
+      name: pt
+      zone: bottom
+      data: $convergence.poison_table
+      show: 1
+  - table.reveal:
+      name: pt
+      when: Z says infinity
+  - net.badge:
+      name: g
+      node: Y
+      text: ∞
+      side: up
+      state: done
+      when: So Y knows
+  - msg.send:
+      name: g
+      a: Y
+      b: Z
+      text: ∞
+      kind: error
+      when: it tells Z
+      t: 1.0
+  - table.reveal:
+      name: pt
+      when: Z's only route
+  - net.badge:
+      name: g
+      node: Z
+      text: ∞
+      side: up
+      state: done
+  adjust: {}
+- id: 11.2.slide-good
+  stage: state
+  narration: 11.2.slide-good
+  pdf:
+  - lec11-convergence.pdf
+  - 15
+  concepts:
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: tri
+      zone: left
+      nodes:
+        Y:
+          k: node
+          at:
+          - 0
+          - 0
+          l: Y
+        X:
+          k: node
+          at:
+          - 3
+          - 2.4
+          l: X
+        Z:
+          k: node
+          at:
+          - 6
+          - 0
+          l: Z
+      links:
+      - - Y
+        - X
+        - c: 4
+      - - Y
+        - Z
+        - c: 1
+      - - X
+        - Z
+        - c: 50
+  - table.show:
+      name: gn
+      zone: right_top
+      cols:
+      - Step
+      - Y to X
+      - Z to X
+      rows:
+      - - Before
+        - 4
+        - 5
+      - - Y notices
+        - 1
+        - 5
+      - - Z hears
+        - 1
+        - 2
+      show: 1
+  - net.cost:
+      name: tri
+      a: Y
+      b: X
+      cost: 1
+      when: Now suppose
+  - table.reveal:
+      name: gn
+      when: Y's distance falls
+  - msg.send:
+      name: tri
+      a: Y
+      b: Z
+      text: '1'
+      when: and it tells Z
+      t: 1.0
+  - table.reveal:
+      name: gn
+      when: Z computes
+  - msg.send:
+      name: tri
+      a: Z
+      b: Y
+      text: '2'
+      when: Z tells Y
+      t: 1.0
+  adjust: {}
+- id: 11.2.slide-bad
+  stage: state
+  narration: 11.2.slide-bad
+  pdf:
+  - lec11-convergence.pdf
+  - 17
+  concepts: &id001
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - net.cost:
+      name: tri
+      a: Y
+      b: X
+      cost: 60
+      when: raising X to Y
+  - table.show:
+      name: bn
+      zone: right_bottom
+      cols:
+      - Step
+      - Y to X
+      - Z to X
+      rows:
+      - - Before
+        - $convergence.bad_news_start.0.Y
+        - $convergence.bad_news_start.0.Z
+      - - Y updates
+        - $convergence.bad_news_start.1.Y
+        - $convergence.bad_news_start.1.Z
+      - - Z updates
+        - $convergence.bad_news_start.2.Y
+        - $convergence.bad_news_start.2.Z
+      - - Finally
+        - $convergence.bad_news_final.final_y
+        - $convergence.bad_news_final.final_z
+      show: 1
+      size: 28
+  - table.reveal:
+      name: bn
+      when: It picks 6
+  - msg.send:
+      name: tri
+      a: Y
+      b: Z
+      text: '6'
+      when: Z hears 6
+      t: 0.8
+  - table.reveal:
+      name: bn
+  - msg.send:
+      name: tri
+      a: Z
+      b: Y
+      text: '7'
+      when: Y hears 7
+      t: 0.8
+  adjust: {}
+- id: 11.2.slide-bad-2
+  stage: state
+  narration: 11.2.slide-bad-2
+  pdf:
+  - lec11-convergence.pdf
+  - 17
+  concepts: *id001
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: lp
+      net: tri
+      at: Y
+      layers:
+      - ip
+      when: They climb
+  - packet.hop:
+      name: lp
+      to:
+      - Z
+      - Y
+      - Z
+      - Y
+      t: 3
+  - packet.fade:
+      name: lp
+  - net.walk:
+      name: tri
+      path:
+      - Z
+      - X
+      state: done
+      when: It only ends
+  - table.reveal:
+      name: bn
+      when: Then Z settles
+  - table.mark:
+      name: bn
+      r: 3
+      state: done
+      when: That took
+  adjust: {}
+- id: 11.2.pitfall
+  stage: rule
+  narration: 11.2.pitfall
+  pdf:
+  - lec11-convergence.pdf
+  - 17
+  concepts:
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - trap:
+      wrong: A smaller infinity fixes count to infinity
+      right: It only bounds the counting, and limits the network's width
+  adjust: {}
+- id: 11.2.changed
+  stage: changed_example
+  narration: 11.2.changed
+  pdf:
+  - lec11-convergence.pdf
+  - 18
+  concepts:
+  - Poison Reverse
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: t3
+      zone: top
+      nodes:
+        X:
+          k: node
+          at:
+          - 0
+          - 0
+          l: X
+        Y:
+          k: node
+          at:
+          - 3
+          - 0
+          l: Y
+        Z:
+          k: node
+          at:
+          - 6
+          - 1
+          l: Z
+        W:
+          k: node
+          at:
+          - 6
+          - -1
+          l: W
+      links:
+      - - X
+        - Y
+        - s: failed
+      - - Y
+        - Z
+      - - Y
+        - W
+      - - Z
+        - W
+  adjust: {}
+- id: 11.2.predict
+  stage: prediction
+  narration: 11.2.predict
+  pdf:
+  - lec11-convergence.pdf
+  - 18
+  concepts:
+  - Poison Reverse
+  clarifications: []
+  moves:
+  - pause:
+      text: what does Z tell W? can a longer cycle still count up?
+  adjust: {}
+  hold: 6
+- id: 11.2.answer
+  stage: explanation
+  narration: 11.2.answer
+  pdf:
+  - lec11-convergence.pdf
+  - 18
+  concepts:
+  - Poison Reverse
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - msg.send:
+      name: t3
+      a: Z
+      b: W
+      text: '2'
+      when: Z tells W
+  - msg.send:
+      name: t3
+      a: W
+      b: Y
+      text: '3'
+      when: and it can tell Y
+  - packet.spawn:
+      name: lp
+      net: t3
+      at: Y
+      layers:
+      - ip
+      when: So a loop
+  - packet.hop:
+      name: lp
+      to:
+      - Z
+      - W
+      - Y
+      - Z
+      - W
+      - Y
+      t: 3.5
+  - packet.fade:
+      name: lp
+  - rule:
+      text: 'Poison reverse handles two nodes, not larger cycles. Next: send the whole path.'
+      when: not every cycle
+  - clear:
+      when: So what if
+  - q:
+      text: What if routers just sent the path?
+  - keep: {}
+  adjust: {}

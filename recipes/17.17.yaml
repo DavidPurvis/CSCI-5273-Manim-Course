@@ -1,0 +1,170 @@
+dish: '17.17'
+title: 'Practice question 17: hidden terminals'
+deck: lec14-wireless.pdf
+target_min: 1.5
+concepts: []
+pad: 2.2
+beats:
+- id: 17.17.question
+  stage: question
+  narration: 17.17.question
+  pdf:
+  - lec14-wireless.pdf
+  - 23
+  concepts:
+  - Hidden Terminals
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 17: hidden terminals'
+  - net.show:
+      name: h
+      zone: full
+      spread:
+      - 0.6
+      - 1
+      nodes:
+        A:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: laptop
+          at:
+          - 4
+          - 0
+          l: B
+        C:
+          k: laptop
+          at:
+          - 8
+          - 0
+          l: C
+      links:
+      - - A
+        - B
+        - s: radio
+      - - B
+        - C
+        - s: radio
+      when: A and C
+  adjust: {}
+- id: 17.17.predict
+  stage: prediction
+  narration: 17.17.predict
+  pdf:
+  - lec14-wireless.pdf
+  - 23
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: why sensing fails, how CTS helps, no ACK, and a cost
+  adjust: {}
+  hold: 12
+- id: 17.17.sensing
+  stage: state
+  narration: 17.17.sensing
+  pdf:
+  - lec14-wireless.pdf
+  - 23
+  concepts:
+  - Hidden Terminals
+  clarifications: []
+  moves:
+  - radio.zone:
+      net: h
+      node: A
+      radius: 2.6
+      kind: ip
+      name: za
+      t: 0.5
+  - radio.zone:
+      net: h
+      node: C
+      radius: 2.6
+      kind: eth
+      name: zc
+      t: 0.5
+  - fx.burst:
+      net: h
+      node: B
+      when: yet their
+  - keep: {}
+  adjust: {}
+- id: 17.17.cts
+  stage: state
+  narration: 17.17.cts
+  pdf:
+  - lec14-wireless.pdf
+  - 24
+  concepts:
+  - RTS and CTS
+  clarifications: []
+  moves:
+  - radio.pulse:
+      net: h
+      node: B
+      radius: 3
+      kind: label
+      when: B's CTS
+  - net.state:
+      name: h
+      nodes:
+        C: candidate
+      when: So C defers
+  - net.badge:
+      name: h
+      node: C
+      text: defers
+      side: up
+      state: now
+  - keep: {}
+  adjust: {}
+- id: 17.17.noack
+  stage: explanation
+  narration: 17.17.noack
+  pdf:
+  - lec14-wireless.pdf
+  - 30
+  concepts:
+  - RTS and CTS
+  clarifications: []
+  moves:
+  - rule:
+      text: No ACK could also mean corruption or a lost ACK. RTS/CTS costs airtime and can collide.
+      when: A missing
+  - keep: {}
+  adjust: {}
+- id: 17.17.trap
+  stage: rule
+  narration: 17.17.trap
+  pdf:
+  - lec14-wireless.pdf
+  - 26
+  concepts:
+  - Hidden Terminals
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Silence at the sender means the channel is safe
+      right: What matters is interference at the receiver
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.17.marks
+  stage: explanation
+  narration: 17.17.marks
+  pdf:
+  - lec14-wireless.pdf
+  - 26
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '2 points: geometry and sensing. 1 each: CTS, loss interpretation, cost.'
+      when: On marks
+  - keep: {}
+  adjust: {}

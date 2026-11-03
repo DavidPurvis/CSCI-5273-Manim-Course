@@ -1,0 +1,383 @@
+dish: '12.1'
+title: What BGP carries
+deck: lec12-bgp.pdf
+target_min: 5.5
+concepts:
+- Autonomous Systems
+- BGP
+- AS Path
+pad: 2.2
+beats:
+- id: 12.1.question
+  stage: question
+  narration: 12.1.question
+  pdf:
+  - lec12-bgp.pdf
+  - 3
+  concepts:
+  - Autonomous Systems
+  - BGP
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 12: what BGP carries'
+  - spine:
+      current: Policy
+      zone: top
+  - q:
+      text: How do rival networks cooperate to deliver one packet?
+      zone: bottom
+  adjust: {}
+- id: 12.1.laptop
+  stage: animation
+  narration: 12.1.laptop
+  pdf:
+  - lec12-bgp.pdf
+  - 3
+  concepts:
+  - Autonomous Systems
+  - BGP
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: lp
+      zone: top
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        A:
+          k: router
+          at:
+          - 3.4
+          - 0
+          l: R1
+        B:
+          k: router
+          at:
+          - 6.8
+          - 0
+          l: R2
+        W:
+          k: server
+          at:
+          - 10.2
+          - 0
+          l: Web server
+      links:
+      - - L
+        - A
+      - - A
+        - B
+      - - B
+        - W
+  - net.state:
+      name: lp
+      nodes:
+        W: now
+      when: Our laptop's server
+  - net.state:
+      name: lp
+      nodes:
+        W: null
+        B: now
+      when: So who tells
+  adjust: {}
+  pre_roll: 2.0
+- id: 12.1.history
+  stage: animation
+  narration: 12.1.history
+  pdf:
+  - lec12-bgp.pdf
+  - 3
+  concepts:
+  - BGP
+  clarifications: []
+  moves:
+  - clear: {}
+  - text:
+      name: hist
+      zone: top
+      lines:
+      - 'BGP: the Internet''s interdomain routing protocol'
+      - A path-vector protocol, as in chapter 6
+  adjust: {}
+- id: 12.1.as
+  stage: animation
+  narration: 12.1.as
+  pdf:
+  - lec12-bgp.pdf
+  - 4
+  concepts:
+  - Autonomous Systems
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: w
+      zone: top
+      nodes:
+        A:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: AS 100
+        B:
+          k: cloud
+          at:
+          - 4
+          - 0
+          l: AS 200
+        C:
+          k: cloud
+          at:
+          - 8
+          - 0
+          l: AS 300
+      links:
+      - - A
+        - B
+      - - B
+        - C
+  - text:
+      name: as
+      zone: bottom
+      lines:
+      - One routing administration, one AS number
+      - 'Internals stay private: outsiders see a cloud'
+      when: Inside, it may
+  adjust: {}
+- id: 12.1.session
+  stage: animation
+  narration: 12.1.session
+  pdf:
+  - lec12-bgp.pdf
+  - 5
+  concepts:
+  - BGP
+  clarifications: []
+  moves:
+  - clear: {}
+  - seq.show:
+      name: s
+      zone: left
+      lanes:
+      - Router X
+      - Router Y
+      steps: 4
+  - seq.msg:
+      name: s
+      a: Router X
+      b: Router Y
+      text: TCP port 179
+      kind: transport
+      when: Two routers open
+  - seq.msg:
+      name: s
+      a: Router X
+      b: Router Y
+      text: all active routes
+      kind: ip
+      when: First they exchange
+  - seq.msg:
+      name: s
+      a: Router Y
+      b: Router X
+      text: announce
+      kind: ip
+      when: announcements of
+  - seq.msg:
+      name: s
+      a: Router Y
+      b: Router X
+      text: withdraw
+      kind: ip
+      state: error
+      when: withdrawals of
+  - text:
+      name: t
+      zone: right
+      lines:
+      - 'Reachability is per prefix:'
+      - 203.0.113.0/24
+      when: It's also prefix
+  adjust: {}
+- id: 12.1.route
+  stage: state
+  narration: 12.1.route
+  pdf:
+  - lec12-bgp.pdf
+  - 7
+  concepts:
+  - AS Path
+  - BGP
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: w
+      zone: top
+      nodes:
+        A:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: AS 100
+        B:
+          k: cloud
+          at:
+          - 4
+          - 0
+          l: AS 200
+        C:
+          k: cloud
+          at:
+          - 8
+          - 0
+          l: AS 300
+      links:
+      - - A
+        - B
+      - - B
+        - C
+  - table.show:
+      name: r
+      zone: bottom
+      cols:
+      - Attribute
+      - Value at AS 100
+      rows:
+      - - Prefix
+        - 203.0.113.0/24
+      - - AS_PATH
+        - 200, 300
+      - - NEXT_HOP
+        - AS 200's border router
+  - net.badge:
+      name: w
+      node: B
+      text: 'path: 300'
+      side: up
+      when: AS 300 owns
+  - net.badge:
+      name: w
+      node: A
+      text: 'path: 200, 300'
+      side: up
+      when: AS 200 adds
+  adjust: {}
+- id: 12.1.loopcheck
+  stage: rule
+  narration: 12.1.loopcheck
+  pdf:
+  - lec12-bgp.pdf
+  - 8
+  concepts:
+  - AS Path
+  clarifications: []
+  moves:
+  - rule:
+      text: See your own AS number in the path? Reject the route.
+  adjust: {}
+- id: 12.1.abstraction
+  stage: state
+  narration: 12.1.abstraction
+  pdf:
+  - lec12-bgp.pdf
+  - 10
+  concepts:
+  - AS Path
+  - Autonomous Systems
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: cmp
+      zone: top
+      cols:
+      - Path
+      - AS hops
+      - Router hops
+      rows:
+      - - Via two big clouds
+        - 2
+        - 9
+      - - Via three small clouds
+        - 3
+        - 5
+  - rule:
+      text: AS path length counts organizations, not routers and not delay.
+  adjust: {}
+- id: 12.1.pitfall
+  stage: rule
+  narration: 12.1.pitfall
+  pdf:
+  - lec12-bgp.pdf
+  - 10
+  concepts:
+  - AS Path
+  - Autonomous Systems
+  clarifications: []
+  moves:
+  - trap:
+      wrong: A shorter AS path means fewer routers or lower delay
+      right: AS length counts networks, not routers, latency, or capacity
+  adjust: {}
+- id: 12.1.changed
+  stage: changed_example
+  narration: 12.1.changed
+  pdf:
+  - lec12-bgp.pdf
+  - 8
+  concepts:
+  - AS Path
+  clarifications: []
+  moves:
+  - text:
+      name: q
+      zone: bottom
+      lines:
+      - 'AS 200 received: 300, 500'
+      - AS 100 will advertise to AS 500
+  adjust: {}
+- id: 12.1.predict
+  stage: prediction
+  narration: 12.1.predict
+  pdf:
+  - lec12-bgp.pdf
+  - 8
+  concepts:
+  - AS Path
+  clarifications: []
+  moves:
+  - pause:
+      text: what path does AS 500 receive, and what does it do?
+  adjust: {}
+  hold: 6
+- id: 12.1.answer
+  stage: explanation
+  narration: 12.1.answer
+  pdf:
+  - lec12-bgp.pdf
+  - 8
+  concepts:
+  - AS Path
+  - BGP
+  clarifications: []
+  moves:
+  - text:
+      name: q
+      zone: bottom
+      lines:
+      - 'AS 500 receives: 100, 200, 300, 500'
+      - It sees 500 and rejects the route
+  - rule:
+      text: 'Next: how does an AS choose, and whom does it tell?'
+  - keep: {}
+  adjust: {}

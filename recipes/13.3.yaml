@@ -1,0 +1,377 @@
+dish: '13.3'
+title: Choosing a tree
+deck: lec13-multicast.pdf
+target_min: 4
+concepts:
+- Shared Multicast Trees
+- Source-Based Multicast Trees
+- Minimum Spanning Trees
+- Prim Algorithm
+- Kruskal Algorithm
+- Core-Based Trees
+pad: 2.2
+beats:
+- id: 13.3.question
+  stage: question
+  narration: 13.3.question
+  pdf:
+  - lec13-multicast.pdf
+  - 36
+  concepts:
+  - Shared Multicast Trees
+  - Source-Based Multicast Trees
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 13: choosing a tree'
+  - q:
+      text: What does 'best' even mean for a tree?
+  - keep: {}
+  adjust: {}
+- id: 13.3.kinds
+  stage: animation
+  narration: 13.3.kinds
+  pdf:
+  - lec13-multicast.pdf
+  - 36
+  concepts:
+  - Shared Multicast Trees
+  - Source-Based Multicast Trees
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: k
+      zone: top
+      cols:
+      - Tree
+      - State
+      - Strength
+      rows:
+      - - Source-based
+        - (S,G)
+        - shorter paths
+      - - Shared
+        - (*,G)
+        - less state
+  adjust: {}
+- id: 13.3.mst
+  stage: state
+  narration: 13.3.mst
+  pdf:
+  - lec13-multicast.pdf
+  - 37
+  concepts:
+  - Minimum Spanning Trees
+  - Prim Algorithm
+  - Kruskal Algorithm
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: t
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.4
+          l: B
+        C:
+          k: node
+          at:
+          - 6
+          - 0
+          l: C
+      links:
+      - - A
+        - B
+        - c: 1
+      - - B
+        - C
+        - c: 1
+      - - A
+        - C
+        - c: '1.5'
+  - bullets:
+      name: pk
+      zone: right_top
+      show: 0
+      items:
+      - 'Prim: cheapest edge crossing out of the tree'
+      - 'Kruskal: cheapest edge that makes no cycle'
+  - reveal:
+      name: pk
+      when: Prim's algorithm
+  - reveal:
+      name: pk
+      when: Kruskal's algorithm
+  - net.path:
+      name: t
+      path:
+      - A
+      - B
+      - C
+      style: tree
+      when: Both algorithms
+  adjust: {}
+- id: 13.3.objectives
+  stage: rule
+  narration: 13.3.objectives
+  pdf:
+  - lec13-multicast.pdf
+  - 37
+  concepts:
+  - Minimum Spanning Trees
+  clarifications:
+  - tree-objectives
+  moves:
+  - table.show:
+      name: obj
+      zone: right_bottom
+      cols:
+      - Tree
+      - Objective
+      rows:
+      - - STP
+        - no layer 2 loops
+      - - MST
+        - least total cost
+      - - Shortest path
+        - least distance from source
+  adjust: {}
+- id: 13.3.core
+  stage: state
+  narration: 13.3.core
+  pdf:
+  - lec13-multicast.pdf
+  - 38
+  concepts:
+  - Core-Based Trees
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: cb
+      zone: top
+      nodes:
+        C:
+          k: router
+          at:
+          - 5
+          - 2
+          l: Core
+          lp: up
+        M:
+          k: router
+          at:
+          - 2.5
+          - 1
+          l: M
+        A:
+          k: router
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: router
+          at:
+          - 5
+          - 0
+          l: B
+        D:
+          k: router
+          at:
+          - 8.5
+          - 1
+          l: D
+      links:
+      - - A
+        - M
+      - - M
+        - C
+      - - B
+        - M
+      - - D
+        - C
+  - packet.spawn:
+      name: j
+      net: cb
+      at: A
+      layers:
+      - label
+      when: Each receiver's
+  - packet.hop:
+      name: j
+      to:
+      - M
+      - C
+  - net.path:
+      name: cb
+      path:
+      - A
+      - M
+      - C
+      style: tree
+  - packet.spawn:
+      name: j2
+      net: cb
+      at: B
+      layers:
+      - label
+      when: that request stops
+  - packet.hop:
+      name: j2
+      to: M
+  - net.path:
+      name: cb
+      path:
+      - B
+      - M
+      style: tree
+  - packet.fade:
+      name: j2
+  adjust: {}
+- id: 13.3.core-more
+  stage: state
+  narration: 13.3.core-more
+  pdf:
+  - lec13-multicast.pdf
+  - 38
+  concepts:
+  - Core-Based Trees
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: d
+      net: cb
+      at: C
+      layers:
+      - ip
+      when: So the branch
+  - packet.hop:
+      name: d
+      to: M
+  - packet.flood:
+      name: d
+      to:
+      - A
+      - B
+      when: and M replicates
+  - packet.fade:
+      name: d
+  adjust: {}
+- id: 13.3.pitfall
+  stage: rule
+  narration: 13.3.pitfall
+  pdf:
+  - lec13-multicast.pdf
+  - 38
+  concepts:
+  - Core-Based Trees
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Prim relaxes accumulated distances, like Dijkstra
+      right: Prim adds the cheapest edge reaching the tree
+  adjust: {}
+- id: 13.3.changed
+  stage: changed_example
+  narration: 13.3.changed
+  pdf:
+  - lec13-multicast.pdf
+  - 37
+  concepts:
+  - Minimum Spanning Trees
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: t2
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.4
+          l: B
+        C:
+          k: node
+          at:
+          - 6
+          - 0
+          l: C
+      links:
+      - - A
+        - B
+        - c: 1
+      - - B
+        - C
+        - c: 1
+      - - A
+        - C
+        - c: '0.5'
+  adjust: {}
+- id: 13.3.predict
+  stage: prediction
+  narration: 13.3.predict
+  pdf:
+  - lec13-multicast.pdf
+  - 37
+  concepts:
+  - Minimum Spanning Trees
+  clarifications: []
+  moves:
+  - pause:
+      text: the new MST, and the shortest path tree from A?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 13.3.answer
+  stage: explanation
+  narration: 13.3.answer
+  pdf:
+  - lec13-multicast.pdf
+  - 37
+  concepts:
+  - Minimum Spanning Trees
+  - Prim Algorithm
+  - Kruskal Algorithm
+  clarifications: []
+  moves:
+  - net.path:
+      name: t2
+      path:
+      - A
+      - C
+      style: tree
+  - net.path:
+      name: t2
+      path:
+      - A
+      - B
+      style: tree
+  - text:
+      name: tx
+      zone: right
+      lines:
+      - 'MST total: 0.5 + 1 = 1.5'
+      - 'Tie: A–B or B–C'
+      - 'Next: reuse the unicast table'
+  - keep: {}
+  adjust: {}

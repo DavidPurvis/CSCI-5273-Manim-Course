@@ -1,0 +1,136 @@
+{
+ "coa": "198.51.100.44",
+ "coa2": "203.0.113.44",
+ "corr": "203.0.113.10",
+ "example": {
+  "direct": 10,
+  "indirect": 90,
+  "saving": 80
+ },
+ "gtp_stack": [
+  "Outer IP",
+  "UDP",
+  "GTP-U",
+  "Inner IP",
+  "Payload"
+ ],
+ "guide": {
+  "direct": 5,
+  "indirect": 130,
+  "saving": 125
+ },
+ "handover": [
+  {
+   "outer_dst": "A",
+   "path": [
+    "S-GW",
+    "A",
+    "UE"
+   ],
+   "phase": "before"
+  },
+  {
+   "outer_dst": "A",
+   "path": [
+    "S-GW",
+    "A",
+    "B",
+    "UE"
+   ],
+   "phase": "during"
+  },
+  {
+   "outer_dst": "B",
+   "path": [
+    "S-GW",
+    "B",
+    "UE"
+   ],
+   "phase": "after"
+  }
+ ],
+ "headers": [
+  {
+   "inner": "203.0.113.10 → 192.0.2.20",
+   "outer": null,
+   "position": "Correspondent sends"
+  },
+  {
+   "inner": "203.0.113.10 → 192.0.2.20",
+   "outer": "192.0.2.1 → 198.51.100.44",
+   "position": "Home agent encapsulates"
+  },
+  {
+   "inner": "203.0.113.10 → 192.0.2.20",
+   "outer": "192.0.2.1 → 198.51.100.44",
+   "position": "Inside the tunnel"
+  },
+  {
+   "inner": "203.0.113.10 → 192.0.2.20",
+   "outer": null,
+   "position": "Endpoint decapsulates"
+  }
+ ],
+ "headers2": [
+  {
+   "inner": "203.0.113.10 → 192.0.2.20",
+   "outer": null,
+   "position": "Correspondent sends"
+  },
+  {
+   "inner": "203.0.113.10 → 192.0.2.20",
+   "outer": "192.0.2.1 → 203.0.113.44",
+   "position": "Home agent encapsulates"
+  },
+  {
+   "inner": "203.0.113.10 → 192.0.2.20",
+   "outer": "192.0.2.1 → 203.0.113.44",
+   "position": "Inside the tunnel"
+  },
+  {
+   "inner": "203.0.113.10 → 192.0.2.20",
+   "outer": null,
+   "position": "Endpoint decapsulates"
+  }
+ ],
+ "headers_table": {
+  "cols": [
+   "Position",
+   "Outer header",
+   "Inner header"
+  ],
+  "rows": [
+   [
+    "Correspondent sends",
+    "none",
+    "203.0.113.10 → 192.0.2.20"
+   ],
+   [
+    "Home agent encapsulates",
+    "192.0.2.1 → 198.51.100.44",
+    "203.0.113.10 → 192.0.2.20"
+   ],
+   [
+    "Inside the tunnel",
+    "192.0.2.1 → 198.51.100.44",
+    "203.0.113.10 → 192.0.2.20"
+   ],
+   [
+    "Endpoint decapsulates",
+    "none",
+    "203.0.113.10 → 192.0.2.20"
+   ]
+  ]
+ },
+ "home": "192.0.2.20",
+ "size_1480": 1500,
+ "size_1500": 1520,
+ "steps": [
+  "A selects target B and requests resources",
+  "B reserves resources and acknowledges",
+  "A tells the UE to switch; the UE starts using B",
+  "Packets reaching A are forwarded to B",
+  "B reports completion; MME tells S-GW to change the endpoint",
+  "S-GW sends directly to B; old resources released"
+ ]
+}

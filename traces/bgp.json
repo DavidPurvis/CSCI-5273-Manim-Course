@@ -1,0 +1,223 @@
+{
+ "a_withdrawn": {
+  "log": [
+   {
+    "kept": [
+     "B",
+     "C"
+    ],
+    "step": "local preference",
+    "value": 100
+   },
+   {
+    "kept": [
+     "B",
+     "C"
+    ],
+    "step": "AS path length",
+    "value": 2
+   },
+   {
+    "kept": [
+     "C"
+    ],
+    "step": "internal cost",
+    "value": 1
+   }
+  ],
+  "winner": "C"
+ },
+ "all": {
+  "log": [
+   {
+    "kept": [
+     "A"
+    ],
+    "step": "local preference",
+    "value": 140
+   }
+  ],
+  "winner": "A"
+ },
+ "b_shorter": {
+  "log": [
+   {
+    "kept": [
+     "B",
+     "C"
+    ],
+    "step": "local preference",
+    "value": 100
+   },
+   {
+    "kept": [
+     "B"
+    ],
+    "step": "AS path length",
+    "value": 1
+   }
+  ],
+  "winner": "B"
+ },
+ "candidates": {
+  "cols": [
+   "Route",
+   "Local pref",
+   "AS length",
+   "Exit cost"
+  ],
+  "rows": [
+   [
+    "A",
+    140,
+    4,
+    50
+   ],
+   [
+    "B",
+    100,
+    2,
+    5
+   ],
+   [
+    "C",
+    100,
+    2,
+    1
+   ]
+  ]
+ },
+ "export": {
+  "cols": [
+   "Learned from",
+   "To customer",
+   "To peer",
+   "To provider"
+  ],
+  "rows": [
+   [
+    "own",
+    "yes",
+    "yes",
+    "yes"
+   ],
+   [
+    "customer",
+    "yes",
+    "yes",
+    "yes"
+   ],
+   [
+    "peer",
+    "yes",
+    "no",
+    "no"
+   ],
+   [
+    "provider",
+    "yes",
+    "no",
+    "no"
+   ]
+  ]
+ },
+ "guide_lp": {
+  "log": [
+   {
+    "kept": [
+     "customer"
+    ],
+    "step": "local preference",
+    "value": 100
+   }
+  ],
+  "winner": "customer"
+ },
+ "hot_east": "east",
+ "hot_west": "west",
+ "next_hop": {
+  "neighbor": "198.51.100.2",
+  "port": 3
+ },
+ "valley": [
+  {
+   "path": "1 → 2 → d",
+   "seq": "down, down",
+   "valid": true
+  },
+  {
+   "path": "7 → d",
+   "seq": "up",
+   "valid": true
+  },
+  {
+   "path": "5 → 8 → d",
+   "seq": "down, up",
+   "valid": false
+  },
+  {
+   "path": "6 → 4 → 3 → d",
+   "seq": "up, peer, down",
+   "valid": true
+  },
+  {
+   "path": "8 → 5 → d",
+   "seq": "up, peer",
+   "valid": true
+  },
+  {
+   "path": "6 → 5 → d",
+   "seq": "peer, peer",
+   "valid": false
+  },
+  {
+   "path": "1 → 4 → 3 → d",
+   "seq": "down, peer, down",
+   "valid": false
+  }
+ ],
+ "valley_table": {
+  "cols": [
+   "Path",
+   "Sequence",
+   "Result"
+  ],
+  "rows": [
+   [
+    "1 → 2 → d",
+    "down, down",
+    "valid"
+   ],
+   [
+    "7 → d",
+    "up",
+    "valid"
+   ],
+   [
+    "5 → 8 → d",
+    "down, up",
+    "invalid"
+   ],
+   [
+    "6 → 4 → 3 → d",
+    "up, peer, down",
+    "valid"
+   ],
+   [
+    "8 → 5 → d",
+    "up, peer",
+    "valid"
+   ],
+   [
+    "6 → 5 → d",
+    "peer, peer",
+    "invalid"
+   ],
+   [
+    "1 → 4 → 3 → d",
+    "down, peer, down",
+    "invalid"
+   ]
+  ]
+ }
+}

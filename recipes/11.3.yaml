@@ -1,0 +1,625 @@
+dish: '11.3'
+title: BGP that won't settle
+deck: lec11-convergence.pdf
+target_min: 7.5
+concepts:
+- BGP Session Liveness
+- BGP Path Exploration
+- Stable Paths Problem
+- Policy Oscillation
+pad: 2.2
+beats:
+- id: 11.3.question
+  stage: question
+  narration: 11.3.question
+  pdf:
+  - lec11-convergence.pdf
+  - 25
+  concepts:
+  - BGP Path Exploration
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 11: BGP that won''t settle'
+  - q:
+      text: Paths prevent counting. Does that solve convergence?
+  adjust: {}
+- id: 11.3.liveness
+  stage: animation
+  narration: 11.3.liveness
+  pdf:
+  - lec11-convergence.pdf
+  - 24
+  concepts:
+  - BGP Session Liveness
+  clarifications: []
+  moves:
+  - clear: {}
+  - tl.show:
+      name: k
+      zone: top
+      tracks:
+      - Keepalives
+      span:
+      - 0
+      - 300
+      ticks:
+      - 0
+      - 60
+      - 120
+      - 180
+      - 240
+      - 300
+  - tl.block:
+      name: k
+      track: Keepalives
+      start: 0
+      end: 6
+      kind: ip
+  - tl.block:
+      name: k
+      track: Keepalives
+      start: 60
+      end: 66
+      kind: ip
+  - tl.block:
+      name: k
+      track: Keepalives
+      start: 66
+      end: 246
+      text: 'silent: 180 s hold timer'
+      state: error
+      when: If nothing arrives
+  - rule:
+      text: 'Example timers: keepalive 60 s, hold 180 s. Then every route from that peer is invalid.'
+  adjust: {}
+- id: 11.3.explore
+  stage: state
+  narration: 11.3.explore
+  pdf:
+  - lec11-convergence.pdf
+  - 27
+  concepts:
+  - BGP Path Exploration
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: x
+      zone: left
+      nodes:
+        n0:
+          k: cloud
+          at:
+          - 3
+          - 0
+          l: '0'
+        n1:
+          k: cloud
+          at:
+          - 0
+          - 2
+          l: '1'
+        n2:
+          k: cloud
+          at:
+          - 3
+          - 4
+          l: '2'
+        n3:
+          k: cloud
+          at:
+          - 6
+          - 2
+          l: '3'
+      links:
+      - - n0
+        - n1
+      - - n0
+        - n2
+      - - n0
+        - n3
+      - - n1
+        - n2
+      - - n2
+        - n3
+      - - n1
+        - n3
+  - table.show:
+      name: seq
+      zone: right
+      cols:
+      - AS 2's choice
+      rows:
+      - - $convergence.exploration.0
+      - - $convergence.exploration.1
+      - - $convergence.exploration.2
+      - - $convergence.exploration.3
+      - - no route
+      show: 1
+  - net.state:
+      name: x
+      nodes:
+        n0: error
+      links:
+      - - n0
+        - n1
+        - failed
+      - - n0
+        - n2
+        - failed
+      - - n0
+        - n3
+        - failed
+      when: It's been using
+  - table.reveal:
+      name: seq
+      when: But it remembers
+  - table.reveal:
+      name: seq
+      when: So it tries
+  - table.reveal:
+      name: seq
+      when: Next 2, 1, 3
+  - table.reveal:
+      name: seq
+      when: Only after all
+  adjust: {}
+- id: 11.3.exploration-cost
+  stage: state
+  narration: 11.3.exploration-cost
+  pdf:
+  - lec11-convergence.pdf
+  - 28
+  concepts:
+  - BGP Path Exploration
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: why
+      zone: top
+      show: 3
+      items:
+      - Hear about the failure of the path in use
+      - Choose and advertise the next candidate
+      - Repeat until the news has reached everyone
+  - rule:
+      text: 'Not all route changes are failures: policy changes and session resets count too.'
+  adjust: {}
+- id: 11.3.spp
+  stage: rule
+  narration: 11.3.spp
+  pdf:
+  - lec11-convergence.pdf
+  - 30
+  concepts:
+  - Stable Paths Problem
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: s
+      zone: left
+      nodes:
+        n0:
+          k: node
+          at:
+          - 3
+          - 1.2
+          l: '0'
+        n1:
+          k: node
+          at:
+          - 0
+          - 0
+          l: '1'
+        n2:
+          k: node
+          at:
+          - 2.6
+          - 3.2
+          l: '2'
+        n3:
+          k: node
+          at:
+          - 5.2
+          - 0
+          l: '3'
+        n4:
+          k: node
+          at:
+          - 5.4
+          - 2
+          l: '4'
+        n5:
+          k: node
+          at:
+          - 5.6
+          - 4
+          l: '5'
+      links:
+      - - n1
+        - n2
+      - - n2
+        - n5
+      - - n2
+        - n4
+      - - n2
+        - n0
+      - - n1
+        - n0
+      - - n1
+        - n3
+      - - n0
+        - n3
+      - - n4
+        - n3
+  - table.show:
+      name: ranks
+      zone: right
+      cols:
+      - Node
+      - Most preferred
+      - Then
+      rows:
+      - - 1
+        - 130
+        - 10
+      - - 2
+        - 210
+        - 20
+      - - 3
+        - 30
+        - ''
+      - - 4
+        - 420
+        - 430
+      - - 5
+        - 5210
+        - ''
+  - rule:
+      text: A path is available only if the next hop is using exactly its remainder.
+  adjust: {}
+- id: 11.3.solve
+  stage: state
+  narration: 11.3.solve
+  pdf:
+  - lec11-convergence.pdf
+  - 31
+  concepts: &id001
+  - Stable Paths Problem
+  clarifications: []
+  moves:
+  - table.mark:
+      name: ranks
+      r: 2
+      state: done
+      when: Node 3 has
+  - net.badge:
+      name: s
+      node: n3
+      text: '30'
+      side: right
+      state: done
+  - table.mark:
+      name: ranks
+      r: 0
+      state: done
+      when: Node 1 prefers
+  - net.badge:
+      name: s
+      node: n1
+      text: '130'
+      side: down
+      state: done
+  - table.mark:
+      name: ranks
+      r: 1
+      state: now
+      when: Node 2 prefers
+  - net.badge:
+      name: s
+      node: n2
+      text: '20'
+      side: left
+      state: done
+      when: node 2 falls back
+  adjust: {}
+- id: 11.3.solve-2
+  stage: state
+  narration: 11.3.solve-2
+  pdf:
+  - lec11-convergence.pdf
+  - 31
+  concepts: *id001
+  clarifications: []
+  moves:
+  - table.mark:
+      name: ranks
+      r: 3
+      state: done
+      when: Node 4 prefers
+  - net.badge:
+      name: s
+      node: n4
+      text: '420'
+      side: right
+      state: done
+  - table.mark:
+      name: ranks
+      r: 4
+      state: error
+      when: Node 5 allows
+  - net.badge:
+      name: s
+      node: n5
+      text: none
+      side: right
+      state: error
+      when: So node 5
+  adjust: {}
+- id: 11.3.multi
+  stage: state
+  narration: 11.3.multi
+  pdf:
+  - lec11-convergence.pdf
+  - 32
+  concepts:
+  - Stable Paths Problem
+  - Policy Oscillation
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: d
+      zone: left
+      nodes:
+        n0:
+          k: node
+          at:
+          - 3
+          - 0
+          l: '0'
+        n1:
+          k: node
+          at:
+          - 0
+          - 2
+          l: '1'
+        n2:
+          k: node
+          at:
+          - 6
+          - 2
+          l: '2'
+      links:
+      - - n0
+        - n1
+      - - n0
+        - n2
+      - - n1
+        - n2
+  - table.show:
+      name: dd
+      zone: right
+      cols:
+      - Solution
+      - Node 1
+      - Node 2
+      rows:
+      - - First
+        - $convergence.disagree_solutions.0.1
+        - $convergence.disagree_solutions.0.2
+      - - Second
+        - $convergence.disagree_solutions.1.1
+        - $convergence.disagree_solutions.1.2
+    when: There are two
+  adjust: {}
+- id: 11.3.gadget
+  stage: state
+  narration: 11.3.gadget
+  pdf:
+  - lec11-convergence.pdf
+  - 34
+  concepts:
+  - Policy Oscillation
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: b
+      zone: left
+      nodes:
+        n0:
+          k: node
+          at:
+          - 3
+          - 1.2
+          l: '0'
+        n1:
+          k: node
+          at:
+          - 0
+          - 0
+          l: '1'
+        n2:
+          k: node
+          at:
+          - 3
+          - 3.6
+          l: '2'
+        n3:
+          k: node
+          at:
+          - 6
+          - 0
+          l: '3'
+      links:
+      - - n0
+        - n1
+      - - n0
+        - n2
+      - - n0
+        - n3
+      - - n1
+        - n2
+      - - n2
+        - n3
+      - - n3
+        - n1
+  - table.show:
+      name: bg
+      zone: right_top
+      cols:
+      - Node
+      - Prefers
+      - Else
+      rows:
+      - - 1
+        - 130
+        - 10
+      - - 2
+        - 210
+        - 20
+      - - 3
+        - 320
+        - 30
+  - net.badge:
+      name: b
+      node: n1
+      text: '10'
+      side: down
+      when: If node 1 goes
+  - net.badge:
+      name: b
+      node: n2
+      text: '210'
+      side: up
+      when: node 2 can use
+  - net.badge:
+      name: b
+      node: n3
+      text: '30'
+      side: down
+      when: Then node 3
+  - net.badge:
+      name: b
+      node: n1
+      text: '130'
+      side: down
+      state: now
+      when: But then node 1
+  - net.badge:
+      name: b
+      node: n2
+      text: '20'
+      side: up
+      state: error
+      when: That undoes
+  - card:
+      kind: note
+      text: 'Solutions found by checking every assignment: none.'
+      zone: right_bottom
+      when: An exhaustive check
+  adjust: {}
+- id: 11.3.laptop
+  stage: rule
+  narration: 11.3.laptop
+  pdf:
+  - lec11-convergence.pdf
+  - 34
+  concepts:
+  - Policy Oscillation
+  clarifications: []
+  moves:
+  - rule:
+      text: To the laptop, this is just a stall. The network was changing its mind.
+      when: For our laptop
+  adjust: {}
+- id: 11.3.pitfall
+  stage: rule
+  narration: 11.3.pitfall
+  pdf:
+  - lec11-convergence.pdf
+  - 34
+  concepts:
+  - Policy Oscillation
+  clarifications: []
+  moves:
+  - trap:
+      wrong: No AS loop means the path still works
+      right: A loop-free path may already be gone
+  adjust: {}
+- id: 11.3.changed
+  stage: changed_example
+  narration: 11.3.changed
+  pdf:
+  - lec11-convergence.pdf
+  - 34
+  concepts:
+  - Policy Oscillation
+  clarifications: []
+  moves:
+  - table.set:
+      name: bg
+      r: 2
+      c: 1
+      v: 30
+      state: now
+  - table.set:
+      name: bg
+      r: 2
+      c: 2
+      v: 320
+      state: now
+  adjust: {}
+- id: 11.3.predict
+  stage: prediction
+  narration: 11.3.predict
+  pdf:
+  - lec11-convergence.pdf
+  - 34
+  concepts:
+  - Stable Paths Problem
+  clarifications: []
+  moves:
+  - pause:
+      text: is there now a stable solution? start from node 3.
+      long: true
+  adjust: {}
+  hold: 12
+- id: 11.3.answer
+  stage: explanation
+  narration: 11.3.answer
+  pdf:
+  - lec11-convergence.pdf
+  - 36
+  concepts:
+  - Stable Paths Problem
+  - Policy Oscillation
+  clarifications: []
+  moves:
+  - net.badge:
+      name: b
+      node: n3
+      text: '30'
+      side: down
+      state: done
+  - net.badge:
+      name: b
+      node: n1
+      text: '130'
+      side: down
+      state: done
+  - net.badge:
+      name: b
+      node: n2
+      text: '20'
+      side: up
+      state: done
+  - rule:
+      text: 'Stability depends on how rankings combine. Next: what shapes real rankings?'
+      when: So the trouble
+  - keep: {}
+  adjust: {}

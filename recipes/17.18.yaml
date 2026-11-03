@@ -1,0 +1,150 @@
+dish: '17.18'
+title: 'Practice question 18: CDMA'
+deck: lec14-wireless.pdf
+target_min: 2
+concepts: []
+pad: 2.2
+beats:
+- id: 17.18.question
+  stage: question
+  narration: 17.18.question
+  pdf:
+  - lec14-wireless.pdf
+  - 15
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 18: CDMA'
+  - chips.show:
+      name: c
+      zone: top
+      rows:
+      - label: c1
+        values: $practice.q18.c1
+      - label: c2
+        values: $practice.q18.c2
+      when: Let c 1
+  adjust: {}
+- id: 17.18.predict
+  stage: prediction
+  narration: 17.18.predict
+  pdf:
+  - lec14-wireless.pdf
+  - 15
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: the chip vector z, both recovered bits, and an assumption
+  adjust: {}
+  hold: 20
+- id: 17.18.sum
+  stage: state
+  narration: 17.18.sum
+  pdf:
+  - lec14-wireless.pdf
+  - 15
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - clear: {}
+  - chips.show:
+      name: w
+      zone: left
+      rows:
+      - label: z
+        values: $practice.q18.z
+      - label: c1
+        values: $practice.q18.c1
+      - label: c2
+        values: $practice.q18.c2
+      show: 0
+  - chips.reveal:
+      name: w
+      when: z is minus
+  - chips.reveal:
+      name: w
+      t: 0.5
+  - chips.reveal:
+      name: w
+      t: 0.5
+  adjust: {}
+  pre_roll: 1.8
+- id: 17.18.decode
+  stage: state
+  narration: 17.18.decode
+  pdf:
+  - lec14-wireless.pdf
+  - 16
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - chips.dot:
+      name: w
+      a: 0
+      b: 1
+      products: $practice.q18.corr1
+      total: -4
+      result: '-1'
+      when: Correlate with c 1
+      t: 4.5
+  - chips.dot:
+      name: w
+      a: 0
+      b: 2
+      products: $practice.q18.corr2
+      total: 4
+      result: '+1'
+      when: Correlate with c 2
+      t: 4.5
+  - keep: {}
+  adjust: {}
+- id: 17.18.assumption
+  stage: explanation
+  narration: 17.18.assumption
+  pdf:
+  - lec14-wireless.pdf
+  - 16
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - rule:
+      text: 'Ideal assumption: synchronized orthogonal codes, with suitable power and noise.'
+      when: One ideal
+  - keep: {}
+  adjust: {}
+- id: 17.18.trap
+  stage: rule
+  narration: 17.18.trap
+  pdf:
+  - lec14-wireless.pdf
+  - 16
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Divide by 2, or leave c1 unflipped
+      right: A bit of −1 flips the whole code. Divide by the code length, 4.
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.18.marks
+  stage: explanation
+  narration: 17.18.marks
+  pdf:
+  - lec14-wireless.pdf
+  - 16
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '2 points: z. 1 point per decoded bit. 1 point: the assumption.'
+      when: On marks
+  - keep: {}
+  adjust: {}

@@ -1,0 +1,208 @@
+dish: '17.1'
+title: 'Practice question 1: switch learning'
+deck: lec06-lan.pdf
+target_min: 2
+concepts: []
+pad: 2.2
+beats:
+- id: 17.1.question
+  stage: question
+  narration: 17.1.question
+  pdf:
+  - lec06-lan.pdf
+  - 31
+  concepts:
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 1: switch learning'
+  - net.show:
+      name: sw
+      zone: left
+      nodes:
+        X:
+          k: switch
+          at:
+          - 0
+          - 0
+          l: Switch
+          lp: up
+        A:
+          k: host
+          at:
+          - -3
+          - -1
+          l: A (port 1)
+        B:
+          k: host
+          at:
+          - 0
+          - -1.6
+          l: B (port 2)
+        C:
+          k: host
+          at:
+          - 3
+          - -1
+          l: C (port 3)
+      links:
+      - - A
+        - X
+      - - B
+        - X
+      - - C
+        - X
+      when: This walkthrough follows
+  - table.show:
+      name: mac
+      zone: right_top
+      cols:
+      - MAC
+      - Port
+      rows: []
+  adjust: {}
+- id: 17.1.predict
+  stage: prediction
+  narration: 17.1.predict
+  pdf:
+  - lec06-lan.pdf
+  - 31
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: the table change and output ports for all three frames
+  adjust: {}
+  hold: 15
+- id: 17.1.first
+  stage: state
+  narration: 17.1.first
+  pdf:
+  - lec06-lan.pdf
+  - 31
+  concepts:
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: f
+      net: sw
+      at: A
+      layers:
+      - eth
+      when: First frame
+  - packet.hop:
+      name: f
+      to: X
+  - switch.learn_source:
+      table: mac
+      mac: A
+      port: '1'
+      when: so it learns
+  - packet.flood:
+      name: f
+      to:
+      - B
+      - C
+      when: so it floods
+  - packet.fade:
+      name: f
+  - keep: {}
+  adjust: {}
+- id: 17.1.second
+  stage: state
+  narration: 17.1.second
+  pdf:
+  - lec06-lan.pdf
+  - 32
+  concepts:
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: g
+      net: sw
+      at: B
+      layers:
+      - eth
+      when: Second frame
+  - packet.hop:
+      name: g
+      to: X
+  - switch.learn_source:
+      table: mac
+      mac: B
+      port: '2'
+      when: Source first
+  - packet.hop:
+      name: g
+      to: A
+      when: so the frame goes
+  - packet.fade:
+      name: g
+  - keep: {}
+  adjust: {}
+- id: 17.1.third
+  stage: state
+  narration: 17.1.third
+  pdf:
+  - lec06-lan.pdf
+  - 34
+  concepts:
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: h
+      net: sw
+      at: C
+      layers:
+      - eth
+      when: Third frame
+  - packet.hop:
+      name: h
+      to: X
+  - switch.learn_source:
+      table: mac
+      mac: C
+      port: '3'
+      when: The source teaches
+  - packet.hop:
+      name: h
+      to: B
+      when: B is known
+  - packet.fade:
+      name: h
+  - keep: {}
+  adjust: {}
+- id: 17.1.trap
+  stage: rule
+  narration: 17.1.trap
+  pdf:
+  - lec06-lan.pdf
+  - 34
+  concepts:
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - trap:
+      wrong: A's frame teaches the switch where B is
+      right: 'Only the source address teaches: B is learned when B sends'
+      when: many people
+  - keep: {}
+  adjust: {}
+- id: 17.1.marks
+  stage: explanation
+  narration: 17.1.marks
+  pdf:
+  - lec06-lan.pdf
+  - 34
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '3 points: the three actions. 2 points: source learning and the final table.'
+      when: On marks
+  - keep: {}
+  adjust: {}

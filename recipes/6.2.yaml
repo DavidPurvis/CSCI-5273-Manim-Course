@@ -1,0 +1,387 @@
+dish: '6.2'
+title: From hub to switch
+deck: lec06-lan.pdf
+target_min: 3.5
+concepts:
+- Repeaters and Hubs
+- Ethernet Switching
+- Full-Duplex Links
+- Store-and-Forward Switching
+- Cut-Through Switching
+pad: 2.2
+beats:
+- id: 6.2.question
+  stage: question
+  narration: 6.2.question
+  pdf:
+  - lec06-lan.pdf
+  - 15
+  concepts:
+  - Repeaters and Hubs
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 6: from hub to switch'
+  - q:
+      text: 'Eight machines in one box: eight conversations, or one?'
+  adjust: {}
+- id: 6.2.hub
+  stage: animation
+  narration: 6.2.hub
+  pdf:
+  - lec06-lan.pdf
+  - 16
+  concepts:
+  - Repeaters and Hubs
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: hubnet
+      zone: left
+      nodes:
+        H:
+          k: hub
+          at:
+          - 0
+          - 0
+          l: Hub
+          lp: right
+        A:
+          k: host
+          at:
+          - -2
+          - 1.4
+          l: A
+        B:
+          k: host
+          at:
+          - 2
+          - 1.4
+          l: B
+        C:
+          k: host
+          at:
+          - -2
+          - -1.4
+          l: C
+        D:
+          k: host
+          at:
+          - 2
+          - -1.4
+          l: D
+      links:
+      - - A
+        - H
+      - - B
+        - H
+      - - C
+        - H
+      - - D
+        - H
+  - packet.spawn:
+      name: f1
+      net: hubnet
+      at: A
+      layers:
+      - eth
+      when: Every bit
+  - packet.hop:
+      name: f1
+      to: H
+  - packet.flood:
+      name: f1
+      to:
+      - B
+      - C
+      - D
+  - packet.fade:
+      name: f1
+  - fx.burst:
+      net: hubnet
+      node: H
+      when: If A sends
+  adjust: {}
+- id: 6.2.switch
+  stage: animation
+  narration: 6.2.switch
+  pdf:
+  - lec06-lan.pdf
+  - 20
+  concepts:
+  - Ethernet Switching
+  clarifications: []
+  moves:
+  - net.show:
+      name: swnet
+      zone: right
+      nodes:
+        H:
+          k: switch
+          at:
+          - 0
+          - 0
+          l: Switch
+          lp: right
+        A:
+          k: host
+          at:
+          - -2
+          - 1.4
+          l: A
+        B:
+          k: host
+          at:
+          - 2
+          - 1.4
+          l: B
+        C:
+          k: host
+          at:
+          - -2
+          - -1.4
+          l: C
+        D:
+          k: host
+          at:
+          - 2
+          - -1.4
+          l: D
+      links:
+      - - A
+        - H
+      - - B
+        - H
+      - - C
+        - H
+      - - D
+        - H
+  - packet.spawn:
+      name: f2
+      net: swnet
+      at: A
+      layers:
+      - eth
+      when: It receives
+  - packet.spawn:
+      name: f3
+      net: swnet
+      at: C
+      layers:
+      - eth
+      when: Now A to B
+  - packet.hop:
+      name: f2
+      to:
+      - H
+      - B
+  - packet.hop:
+      name: f3
+      to:
+      - H
+      - D
+  adjust: {}
+- id: 6.2.duplex
+  stage: state
+  narration: 6.2.duplex
+  pdf:
+  - lec06-lan.pdf
+  - 22
+  concepts:
+  - Full-Duplex Links
+  clarifications: []
+  moves:
+  - packet.fade:
+      name: f2
+  - packet.fade:
+      name: f3
+  - rule:
+      text: 'Full duplex removes collisions, not contention: a shared output still queues.'
+  - packet.spawn:
+      name: f4
+      net: swnet
+      at: A
+      layers:
+      - eth
+      when: If A and C
+  - packet.spawn:
+      name: f5
+      net: swnet
+      at: C
+      layers:
+      - eth
+  - packet.hop:
+      name: f4
+      to: H
+  - packet.hop:
+      name: f5
+      to: H
+  adjust: {}
+- id: 6.2.modes
+  stage: state
+  narration: 6.2.modes
+  pdf:
+  - lec06-lan.pdf
+  - 26
+  concepts:
+  - Store-and-Forward Switching
+  - Cut-Through Switching
+  clarifications: []
+  moves:
+  - clear: {}
+  - tl.show:
+      name: sf
+      zone: top
+      tracks:
+      - Store-and-forward
+      - Cut-through
+      span:
+      - 0
+      - 10
+  - tl.block:
+      name: sf
+      track: Store-and-forward
+      start: 0
+      end: 5
+      text: receive all
+      kind: eth
+      when: Store-and-forward switching
+  - tl.block:
+      name: sf
+      track: Store-and-forward
+      start: 5
+      end: 10
+      text: send
+      kind: ip
+  - tl.block:
+      name: sf
+      track: Cut-through
+      start: 0
+      end: 0.8
+      kind: eth
+      when: Cut-through switching
+  - tl.block:
+      name: sf
+      track: Cut-through
+      start: 0.8
+      end: 5.8
+      text: send while receiving
+      kind: ip
+  adjust: {}
+- id: 6.2.rule
+  stage: rule
+  narration: 6.2.rule
+  pdf:
+  - lec06-lan.pdf
+  - 26
+  concepts:
+  - Store-and-Forward Switching
+  clarifications: []
+  moves:
+  - tex:
+      name: rx
+      zone: bottom
+      tex: \frac{1500 \times 8 \text{ bits}}{100\,\text{Mb/s}} = 120\,\mu s
+      size: 44
+  - rule:
+      text: Store-and-forward pays the full reception time at each switch, but checks the CRC first.
+  adjust: {}
+- id: 6.2.pitfall
+  stage: rule
+  narration: 6.2.pitfall
+  pdf:
+  - lec06-lan.pdf
+  - 26
+  concepts:
+  - Store-and-Forward Switching
+  clarifications: []
+  moves:
+  - trap:
+      wrong: A switch stops broadcasts and ends all congestion
+      right: A switch isolates unicast. Broadcasts still spread, and outputs still queue.
+  adjust: {}
+- id: 6.2.changed
+  stage: changed_example
+  narration: 6.2.changed
+  pdf:
+  - lec06-lan.pdf
+  - 26
+  concepts:
+  - Cut-Through Switching
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: pair
+      zone: top
+      nodes:
+        A:
+          k: host
+          at:
+          - 0
+          - 0
+          l: A
+        H:
+          k: switch
+          at:
+          - 4
+          - 0
+          l: Switch
+        B:
+          k: host
+          at:
+          - 8
+          - 0
+          l: B
+      links:
+      - - A
+        - H
+      - - H
+        - B
+  - packet.spawn:
+      name: bad
+      net: pair
+      at: A
+      layers:
+      - eth
+  - packet.hop:
+      name: bad
+      to: H
+  adjust: {}
+- id: 6.2.predict
+  stage: prediction
+  narration: 6.2.predict
+  pdf:
+  - lec06-lan.pdf
+  - 26
+  concepts:
+  - Cut-Through Switching
+  clarifications: []
+  moves:
+  - pause:
+      text: does the corrupt frame reach B? what was saved?
+  adjust: {}
+  hold: 6
+- id: 6.2.answer
+  stage: explanation
+  narration: 6.2.answer
+  pdf:
+  - lec06-lan.pdf
+  - 26
+  concepts:
+  - Cut-Through Switching
+  - Ethernet Switching
+  clarifications: []
+  moves:
+  - packet.hop:
+      name: bad
+      to: B
+  - packet.drop:
+      name: bad
+      when: Store-and-forward would
+  - rule:
+      text: How does a brand new switch know which port is right?
+      when: There is still
+  - keep: {}
+  adjust: {}

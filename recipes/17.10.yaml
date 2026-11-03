@@ -1,0 +1,226 @@
+dish: '17.10'
+title: 'Practice question 10: Bellman-Ford'
+deck: lec10-routing.pdf
+target_min: 1.5
+concepts: []
+pad: 2.2
+beats:
+- id: 17.10.question
+  stage: question
+  narration: 17.10.question
+  pdf:
+  - lec10-routing.pdf
+  - 40
+  concepts:
+  - Bellman-Ford Updates
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 10: Bellman-Ford'
+  - net.show:
+      name: a
+      zone: left
+      nodes:
+        X:
+          k: node
+          at:
+          - 0
+          - 0
+          l: X
+        V:
+          k: node
+          at:
+          - 3
+          - 1.1
+          l: V
+        W:
+          k: node
+          at:
+          - 3
+          - -1.1
+          l: W
+        Z:
+          k: node
+          at:
+          - 6
+          - 0
+          l: Z
+      links:
+      - - X
+        - V
+        - c: 2
+      - - X
+        - W
+        - c: 4
+      - - V
+        - Z
+        - s: dim
+      - - W
+        - Z
+        - s: dim
+      when: X reaches neighbor
+  adjust: {}
+- id: 17.10.predict
+  stage: prediction
+  narration: 17.10.predict
+  pdf:
+  - lec10-routing.pdf
+  - 40
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: distance and next hop, before and after W's change
+  adjust: {}
+  hold: 15
+- id: 17.10.first
+  stage: state
+  narration: 17.10.first
+  pdf:
+  - lec10-routing.pdf
+  - 41
+  concepts:
+  - Bellman-Ford Updates
+  clarifications: []
+  moves:
+  - table.show:
+      name: u
+      zone: right
+      cols:
+      - Via
+      - Link
+      - Says
+      - Total
+      rows:
+      - - V
+        - 2
+        - 7
+        - $practice.q10_first.totals.V
+      - - W
+        - 4
+        - 2
+        - $practice.q10_first.totals.W
+      show: 0
+  - msg.send:
+      name: a
+      a: V
+      b: X
+      text: 7 to Z
+      when: Through V
+      t: 0.8
+  - table.reveal:
+      name: u
+  - msg.send:
+      name: a
+      a: W
+      b: X
+      text: 2 to Z
+      when: Through W
+      t: 0.8
+  - table.reveal:
+      name: u
+  - table.mark:
+      name: u
+      r: 1
+      state: done
+      when: The minimum
+  - net.walk:
+      name: a
+      path:
+      - X
+      - W
+      state: done
+  - keep: {}
+  adjust: {}
+  pre_roll: 1.0
+- id: 17.10.second
+  stage: state
+  narration: 17.10.second
+  pdf:
+  - lec10-routing.pdf
+  - 41
+  concepts:
+  - Bellman-Ford Updates
+  clarifications: []
+  moves:
+  - msg.send:
+      name: a
+      a: W
+      b: X
+      text: now 9
+      kind: error
+      when: W says
+      t: 0.9
+  - table.set:
+      name: u
+      r: 1
+      c: 2
+      v: 9
+  - table.set:
+      name: u
+      r: 1
+      c: 3
+      v: $practice.q10_second.totals.W
+      when: Through W, 4
+  - table.mark:
+      name: u
+      r: 1
+      state: null
+  - table.mark:
+      name: u
+      r: 0
+      state: done
+      when: So X's distance
+  - net.walk:
+      name: a
+      path:
+      - X
+      - V
+      state: done
+  - keep: {}
+  adjust: {}
+- id: 17.10.trust
+  stage: explanation
+  narration: 17.10.trust
+  pdf:
+  - lec10-routing.pdf
+  - 39
+  concepts:
+  - Bellman-Ford Updates
+  clarifications: []
+  moves:
+  - rule:
+      text: X trusts advertised distances, which may be stale. It can't see the paths behind them.
+      when: X trusts
+  - keep: {}
+  adjust: {}
+- id: 17.10.trap
+  stage: rule
+  narration: 17.10.trap
+  pdf:
+  - lec10-routing.pdf
+  - 39
+  concepts:
+  - Bellman-Ford Updates
+  clarifications: []
+  moves:
+  - trap:
+      wrong: V's link is cheaper, so V always wins
+      right: Compare link cost plus advertised distance
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.10.marks
+  stage: explanation
+  narration: 17.10.marks
+  pdf:
+  - lec10-routing.pdf
+  - 39
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '2 points per update and next hop. 1 point: what X trusts.'
+      when: On marks
+  - keep: {}
+  adjust: {}

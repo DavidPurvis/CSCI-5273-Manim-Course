@@ -1,0 +1,128 @@
+{
+ "client": {
+  "dns": "198.51.100.53",
+  "gateway": "192.0.2.1",
+  "ip": "192.0.2.10",
+  "prefix": 24
+ },
+ "dhcp": [
+  {
+   "from": "client",
+   "means": "is any server here?",
+   "msg": "Discover",
+   "to": "broadcast"
+  },
+  {
+   "from": "server",
+   "means": "you could use 192.0.2.10",
+   "msg": "Offer",
+   "to": "client"
+  },
+  {
+   "from": "client",
+   "means": "I choose that offer",
+   "msg": "Request",
+   "to": "broadcast"
+  },
+  {
+   "from": "server",
+   "means": "confirmed, with a lease",
+   "msg": "ACK",
+   "to": "client"
+  }
+ ],
+ "dns_cached": {
+  "answer": "203.0.113.80",
+  "queries_out": 0,
+  "steps": [
+   {
+    "from": "resolver",
+    "gets": "203.0.113.80",
+    "to": "cache"
+   }
+  ]
+ },
+ "dns_cold": {
+  "answer": "203.0.113.80",
+  "queries_out": 3,
+  "steps": [
+   {
+    "from": "resolver",
+    "gets": "referral to .test",
+    "to": "root"
+   },
+   {
+    "from": "resolver",
+    "gets": "referral to example.test",
+    "to": ".test"
+   },
+   {
+    "from": "resolver",
+    "gets": "A 203.0.113.80",
+    "to": "example.test"
+   }
+  ]
+ },
+ "dns_is_remote": true,
+ "dns_next_hop": "192.0.2.1",
+ "journey": [
+  {
+   "arp_for": "192.0.2.1",
+   "eth_dst": "R1-near",
+   "eth_src": "A",
+   "ip_dst": "203.0.113.80",
+   "ip_src": "192.0.2.10",
+   "stage": "A emits to R1",
+   "ttl": 64
+  },
+  {
+   "arp_for": "198.51.100.2",
+   "eth_dst": "R2-middle",
+   "eth_src": "R1-middle",
+   "ip_dst": "203.0.113.80",
+   "ip_src": "192.0.2.10",
+   "stage": "R1 emits",
+   "ttl": 63
+  },
+  {
+   "arp_for": "203.0.113.80",
+   "eth_dst": "server",
+   "eth_src": "R2-far",
+   "ip_dst": "203.0.113.80",
+   "ip_src": "192.0.2.10",
+   "stage": "R2 emits",
+   "ttl": 62
+  }
+ ],
+ "journey_table": {
+  "cols": [
+   "Stage",
+   "Ethernet",
+   "IP",
+   "TTL"
+  ],
+  "rows": [
+   [
+    "A emits to R1",
+    "A → R1-near",
+    "A → server",
+    64
+   ],
+   [
+    "R1 emits",
+    "R1-middle → R2-middle",
+    "A → server",
+    63
+   ],
+   [
+    "R2 emits",
+    "R2-far → server",
+    "A → server",
+    62
+   ]
+  ]
+ },
+ "local_dns_next_hop": "192.0.2.53",
+ "ttl_300_at_240": true,
+ "ttl_300_at_300": false
+}

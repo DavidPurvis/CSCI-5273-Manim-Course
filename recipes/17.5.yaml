@@ -1,0 +1,182 @@
+dish: '17.5'
+title: 'Practice question 5: longest match'
+deck: lec08-network2.pdf
+target_min: 2.5
+concepts: []
+pad: 2.2
+beats:
+- id: 17.5.question
+  stage: question
+  narration: 17.5.question
+  pdf:
+  - lec08-network2.pdf
+  - 28
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 5: longest match'
+  - table.show:
+      name: rt
+      zone: left_top
+      data: $practice.q5_routes
+      when: Installed routes are
+  - bullets:
+      name: d
+      zone: right_top
+      show: 4
+      items:
+      - 10.4.9.7
+      - 10.4.20.1
+      - 10.8.1.2
+      - 192.0.2.8
+  adjust: {}
+- id: 17.5.predict
+  stage: prediction
+  narration: 17.5.predict
+  pdf:
+  - lec08-network2.pdf
+  - 28
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: the output for each of the four destinations
+  adjust: {}
+  hold: 20
+- id: 17.5.first
+  stage: state
+  narration: 17.5.first
+  pdf:
+  - lec08-network2.pdf
+  - 29
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - table.show:
+      name: lk
+      zone: bottom
+      data: $practice.q5_table
+      show: 0
+  - table.flash:
+      name: rt
+      rows:
+      - 0
+      - 1
+      state: candidate
+      when: It's inside
+  - table.mark:
+      name: rt
+      r: 2
+      state: candidate
+      when: For the slash 21
+  - table.flash:
+      name: rt
+      rows:
+      - 0
+      - 1
+      state: null
+      when: So it matches
+  - table.mark:
+      name: rt
+      r: 2
+      state: done
+  - table.reveal:
+      name: lk
+  - keep: {}
+  adjust: {}
+- id: 17.5.rest
+  stage: state
+  narration: 17.5.rest
+  pdf:
+  - lec08-network2.pdf
+  - 29
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - table.mark:
+      name: rt
+      r: 2
+      state: error
+      when: Its third byte
+  - table.mark:
+      name: rt
+      r: 1
+      state: done
+      when: Output B
+  - table.reveal:
+      name: lk
+  - table.flash:
+      name: rt
+      rows:
+      - 1
+      - 2
+      state: null
+      when: matches only the slash 8
+  - table.mark:
+      name: rt
+      r: 0
+      state: done
+  - table.reveal:
+      name: lk
+  - table.mark:
+      name: rt
+      r: 0
+      state: null
+      when: And 192.0.2.8
+  - table.mark:
+      name: rt
+      r: 3
+      state: done
+  - table.reveal:
+      name: lk
+  - keep: {}
+  adjust: {}
+- id: 17.5.why
+  stage: explanation
+  narration: 17.5.why
+  pdf:
+  - lec08-network2.pdf
+  - 29
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - rule:
+      text: Cost belongs to route selection. Forwarding among installed matches uses prefix length.
+      when: Cost belongs
+  - keep: {}
+  adjust: {}
+- id: 17.5.trap
+  stage: rule
+  narration: 17.5.trap
+  pdf:
+  - lec08-network2.pdf
+  - 29
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - trap:
+      wrong: The cheaper /8 wins, or the first route listed
+      right: The longest matching prefix wins
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.5.marks
+  stage: explanation
+  narration: 17.5.marks
+  pdf:
+  - lec08-network2.pdf
+  - 29
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '4 points: the outputs. 1 point: prefix length versus route selection cost.'
+      when: On marks
+  - keep: {}
+  adjust: {}

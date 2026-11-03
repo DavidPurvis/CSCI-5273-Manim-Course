@@ -1,0 +1,552 @@
+dish: '8.2'
+title: The longest match
+deck: lec08-network2.pdf
+target_min: 7
+concepts:
+- Longest Prefix Matching
+- Patricia Tries
+- Content-Addressable Memory
+- TCAM
+- Generalized Forwarding
+pad: 2.2
+beats:
+- id: 8.2.question
+  stage: question
+  narration: 8.2.question
+  pdf:
+  - lec08-network2.pdf
+  - 13
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 8: the longest match'
+  - q:
+      text: One destination matches several routes. Which one wins?
+  adjust: {}
+- id: 8.2.table
+  stage: animation
+  narration: 8.2.table
+  pdf:
+  - lec08-network2.pdf
+  - 29
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: rt
+      zone: left_top
+      data: $lpm.routes
+      show: 0
+  - table.reveal:
+      name: rt
+      when: 201.10.0.0/21 goes
+  - table.reveal:
+      name: rt
+      when: Inside that block
+  - table.reveal:
+      name: rt
+      when: And 0.0.0.0/0
+  - bullets:
+      name: note
+      zone: right_top
+      show: 0
+      items:
+      - /21 is an aggregate
+      - /23 is an exception inside it
+      - /0 is the fallback
+  - reveal:
+      name: note
+      when: The slash 21 is
+  - reveal:
+      name: note
+      when: the slash 23 is
+  - reveal:
+      name: note
+      when: and the slash 0
+  adjust: {}
+- id: 8.2.match
+  stage: state
+  narration: 8.2.match
+  pdf:
+  - lec08-network2.pdf
+  - 29
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - table.mark:
+      name: rt
+      r: 0
+      state: candidate
+      when: Under the slash 21
+  - table.mark:
+      name: rt
+      r: 1
+      state: candidate
+      when: Under the slash 23
+  - table.mark:
+      name: rt
+      r: 2
+      state: candidate
+      when: And slash 0
+  - rule:
+      text: 'Longest prefix match: the most network bits is the most specific claim.'
+      when: The rule is
+  - table.flash:
+      name: rt
+      rows:
+      - 0
+      - 2
+      state: null
+      when: So the slash 23
+  - table.mark:
+      name: rt
+      r: 1
+      state: done
+  - table.show:
+      name: lk
+      zone: bottom
+      data: $lpm.lookup_table
+      show: 1
+  adjust: {}
+- id: 8.2.more
+  stage: state
+  narration: 8.2.more
+  pdf:
+  - lec08-network2.pdf
+  - 29
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - table.mark:
+      name: rt
+      r: 1
+      state: null
+  - fade:
+      names: _rule
+  - table.reveal:
+      name: lk
+      when: 201.10.4.8
+  - table.mark:
+      name: rt
+      r: 0
+      state: done
+      when: So output A
+  - table.reveal:
+      name: lk
+      when: And 203.0.113.8
+  - table.flash:
+      name: rt
+      rows:
+      - 0
+      state: null
+  - table.mark:
+      name: rt
+      r: 2
+      state: done
+  - rule:
+      text: Only prefix length decides among installed matches.
+      when: A route's position
+  adjust: {}
+  pre_roll: 1.1
+- id: 8.2.bitlevel
+  stage: state
+  narration: 8.2.bitlevel
+  pdf:
+  - lec08-network2.pdf
+  - 15
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - clear: {}
+  - bits.show:
+      name: lb
+      zone: full
+      rows:
+      - label: Destination 201.10.6.17
+        value: 201.10.6.17
+      - label: Route 201.10.6.0/23
+        value: 201.10.6.0
+  - bits.draw_mask:
+      name: lb
+      prefix: 23
+      when: Under a slash 23
+  - bits.mark:
+      name: lb
+      row: 0
+      start: 0
+      end: 23
+      state: done
+      when: Every one matches
+  - bits.mark:
+      name: lb
+      row: 0
+      start: 23
+      end: 32
+      state: candidate
+      when: Whatever's to the right
+  - bits.add:
+      name: lb
+      label: Destination 201.10.4.8
+      value: 201.10.4.8
+      when: Now compare
+  - bits.mark:
+      name: lb
+      row: 2
+      start: 16
+      end: 24
+      state: now
+      when: Look at the third
+  - bits.mark:
+      name: lb
+      row: 2
+      start: 22
+      end: 23
+      state: error
+      when: They differ
+  adjust: {}
+- id: 8.2.budget
+  stage: animation
+  narration: 8.2.budget
+  pdf:
+  - lec08-network2.pdf
+  - 30
+  concepts:
+  - Longest Prefix Matching
+  clarifications:
+  - budget-51
+  moves:
+  - clear: {}
+  - tex:
+      name: bud
+      zone: top
+      tex: \frac{10^{10}\text{ b/s}}{8\times 64\text{ bits}}=19{,}531{,}250\text{ packets/s}\ \Rightarrow\ 51.2\text{ ns}
+      size: 40
+      when: On a 10 gigabit
+  - card:
+      kind: note
+      text: 'This leaves out Ethernet''s physical overhead: a budget illustration.'
+      zone: bottom
+      when: That calculation
+  - rule:
+      text: No time for a linear scan.
+      when: But the conclusion
+  adjust: {}
+- id: 8.2.trie
+  stage: state
+  narration: 8.2.trie
+  pdf:
+  - lec08-network2.pdf
+  - 31
+  concepts:
+  - Patricia Tries
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: tr
+      zone: full
+      nodes:
+        r:
+          k: node
+          at:
+          - 0
+          - 2
+          l: /0
+        a:
+          k: node
+          at:
+          - -2.4
+          - 1
+          l: /21
+        n:
+          k: node
+          at:
+          - 4
+          - 1
+          l: ·
+        b:
+          k: node
+          at:
+          - -3.8
+          - 0
+          l: /23
+        m:
+          k: node
+          at:
+          - -1
+          - 0
+          l: ·
+      links:
+      - - r
+        - a
+        - c: …
+      - - r
+        - n
+      - - a
+        - b
+        - c: '11'
+      - - a
+        - m
+  - net.state:
+      name: tr
+      nodes:
+        r: now
+      when: Follow the destination
+  - net.badge:
+      name: tr
+      node: r
+      text: remember /0
+      side: right
+      state: now
+      when: Whenever you pass
+  - net.walk:
+      name: tr
+      path:
+      - r
+      - a
+      state: now
+  - net.state:
+      name: tr
+      nodes:
+        r: null
+        a: candidate
+  - net.badge:
+      name: tr
+      node: a
+      text: remember /21
+      side: left
+      state: now
+  - net.walk:
+      name: tr
+      path:
+      - r
+      - a
+      - m
+      state: error
+      when: If the path
+  - net.state:
+      name: tr
+      nodes:
+        m: error
+  - net.state:
+      name: tr
+      nodes:
+        a: done
+        m: null
+      when: That is why
+  - net.unwalk:
+      name: tr
+      when: A Patricia
+  - rule:
+      text: A Patricia trie compresses long chains with no branching.
+      when: compresses long chains
+  adjust: {}
+- id: 8.2.cam
+  stage: state
+  narration: 8.2.cam
+  pdf:
+  - lec08-network2.pdf
+  - 32
+  concepts:
+  - Content-Addressable Memory
+  - TCAM
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: tc
+      zone: top
+      cols:
+      - TCAM entry (third byte)
+      - Length
+      - Output
+      rows:
+      - - 0000011*
+        - /23
+        - B
+      - - 00000***
+        - /21
+        - A
+      - - '********'
+        - /0
+        - C
+  - text:
+      name: key
+      zone: bottom
+      lines:
+      - 'Key, third byte of 201.10.6.17: 00000110'
+      when: Give it a key
+  - table.flash:
+      name: tc
+      rows:
+      - 0
+      - 1
+      - 2
+      state: now
+      when: at the same time
+  - table.flash:
+      name: tc
+      rows:
+      - 0
+      - 1
+      - 2
+      state: null
+      when: A plain CAM
+  - table.flash:
+      name: tc
+      rows:
+      - 0
+      - 1
+      - 2
+      state: candidate
+      when: Several entries
+  - table.mark:
+      name: tc
+      r: 0
+      state: done
+      when: so hardware priority
+  - rule:
+      text: TCAM compares every entry at once. Priority must still favor the longest prefix.
+  adjust: {}
+- id: 8.2.general
+  stage: rule
+  narration: 8.2.general
+  pdf:
+  - lec08-network2.pdf
+  - 11
+  concepts:
+  - Generalized Forwarding
+  clarifications: []
+  moves:
+  - fade:
+      names:
+      - key
+      - _rule
+  - table.show:
+      name: gf
+      zone: bottom
+      cols:
+      - Match
+      - Action
+      rows:
+      - - destination prefix
+        - forward
+      - - source and port
+        - drop
+      - - any selected fields
+        - rewrite
+      show: 0
+  - table.reveal:
+      name: gf
+      n: 3
+      when: Generalized forwarding
+  - rule:
+      text: Control installs the rules. The data plane applies them, one packet at a time.
+      when: Control installs
+  adjust: {}
+- id: 8.2.pitfall
+  stage: rule
+  narration: 8.2.pitfall
+  pdf:
+  - lec08-network2.pdf
+  - 11
+  concepts:
+  - Generalized Forwarding
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Stop at the first matching route
+      right: 'Keep looking: the longest match wins, wherever it''s listed'
+  adjust: {}
+- id: 8.2.changed
+  stage: changed_example
+  narration: 8.2.changed
+  pdf:
+  - lec08-network2.pdf
+  - 29
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: rt2
+      zone: top
+      cols:
+      - Prefix
+      - Output
+      rows:
+      - - 201.10.0.0/21
+        - A
+      - - 201.10.6.0/23
+        - B
+      - - 201.10.6.16/28
+        - D
+      - - 0.0.0.0/0
+        - C
+  - table.mark:
+      name: rt2
+      r: 2
+      state: now
+      when: An operator installs
+  adjust: {}
+- id: 8.2.predict
+  stage: prediction
+  narration: 8.2.predict
+  pdf:
+  - lec08-network2.pdf
+  - 29
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - pause:
+      text: the output for 201.10.6.17, and for 201.10.6.33?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 8.2.answer
+  stage: explanation
+  narration: 8.2.answer
+  pdf:
+  - lec08-network2.pdf
+  - 29
+  concepts:
+  - Longest Prefix Matching
+  clarifications: []
+  moves:
+  - table.mark:
+      name: rt2
+      r: 2
+      state: done
+      when: The slash 28 covers
+  - bullets:
+      name: an
+      zone: bottom
+      show: 0
+      items:
+      - 201.10.6.17 → /28 → D
+      - 201.10.6.33 → /23 → B
+  - reveal:
+      name: an
+      when: so 201.10.6.17
+  - reveal:
+      name: an
+      when: And 201.10.6.33
+  - table.mark:
+      name: rt2
+      r: 1
+      state: done
+  - clear:
+      when: Finding the output
+  - q:
+      text: The packet still has to physically cross the router.
+  - keep: {}
+  adjust: {}

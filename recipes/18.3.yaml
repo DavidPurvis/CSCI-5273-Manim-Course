@@ -1,0 +1,244 @@
+dish: '18.3'
+title: Say it out loud
+deck: lec12-bgp.pdf
+target_min: 2.5
+concepts: []
+pad: 2.2
+beats:
+- id: 18.3.open
+  stage: question
+  narration: 18.3.open
+  pdf:
+  - lec12-bgp.pdf
+  - 24
+  concepts:
+  - Local Preference
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Wednesday warm-up: say it out loud'
+  - q:
+      text: Say the BGP selection order out loud.
+  adjust: {}
+- id: 18.3.p1
+  stage: prediction
+  narration: 18.3.p1
+  pdf:
+  - lec12-bgp.pdf
+  - 24
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: the BGP selection order
+  adjust: {}
+  hold: 8
+- id: 18.3.a1
+  stage: explanation
+  narration: 18.3.a1
+  pdf:
+  - lec12-bgp.pdf
+  - 24
+  concepts:
+  - Local Preference
+  - Hot-Potato Routing
+  clarifications: []
+  moves:
+  - clear: {}
+  - stack.show:
+      name: o
+      zone: top
+      width: 8
+      layers:
+      - t: 1. Highest local preference
+        k: ip
+      - t: 2. Shortest AS path
+        k: eth
+      - t: 3. Lowest internal exit cost
+        k: transport
+      - t: 4. Tie break
+        k: data
+  - stack.mark:
+      name: o
+      layer: 0
+      when: Highest local
+  - stack.mark:
+      name: o
+      layer: 0
+      state: null
+      when: Then shortest
+  - stack.mark:
+      name: o
+      layer: 1
+  - stack.mark:
+      name: o
+      layer: 1
+      state: null
+      when: Then lowest
+  - stack.mark:
+      name: o
+      layer: 2
+  - stack.mark:
+      name: o
+      layer: 2
+      state: null
+      when: Then a tie
+  - stack.mark:
+      name: o
+      layer: 3
+  adjust: {}
+  pre_roll: 1.6
+- id: 18.3.p2
+  stage: prediction
+  narration: 18.3.p2
+  pdf:
+  - lec12-bgp.pdf
+  - 41
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: the export rule
+  adjust: {}
+  hold: 8
+- id: 18.3.a2
+  stage: explanation
+  narration: 18.3.a2
+  pdf:
+  - lec12-bgp.pdf
+  - 41
+  concepts:
+  - BGP Export Policy
+  - Valley-Free Paths
+  clarifications: []
+  moves:
+  - stack.mark:
+      name: o
+      layer: 3
+      state: null
+  - table.show:
+      name: x
+      zone: bottom
+      cols:
+      - Learned from
+      - Told to
+      rows:
+      - - Own or customer
+        - everyone
+      - - Peer or provider
+        - customers only
+      show: 0
+  - table.reveal:
+      name: x
+      when: Own and customer
+  - table.reveal:
+      name: x
+      when: Peer and provider
+  - rule:
+      text: 'Valley free: up, at most one peer link, then down.'
+      when: That gives
+  adjust: {}
+  pre_roll: 1.5
+- id: 18.3.p3
+  stage: prediction
+  narration: 18.3.p3
+  pdf:
+  - lec13-multicast.pdf
+  - 45
+  concepts: []
+  clarifications: []
+  moves:
+  - clear: {}
+  - pause:
+      text: dense and sparse defaults
+  adjust: {}
+  hold: 8
+- id: 18.3.a3
+  stage: explanation
+  narration: 18.3.a3
+  pdf:
+  - lec13-multicast.pdf
+  - 45
+  concepts:
+  - PIM Dense Mode
+  - PIM Sparse Mode
+  clarifications: []
+  moves:
+  - table.show:
+      name: m
+      zone: top
+      cols:
+      - Mode
+      - Default
+      - Tree
+      rows:
+      - - Dense
+        - forward unless pruned
+        - flood and prune
+      - - Sparse
+        - nothing until joined
+        - (*,G), may switch to (S,G)
+      show: 0
+  - table.reveal:
+      name: m
+      when: Dense mode
+  - table.reveal:
+      name: m
+      when: Sparse mode
+  - rule:
+      text: IGMP learns local interest. PIM connects the routers.
+      when: IGMP learns
+  adjust: {}
+  pre_roll: 1.0
+- id: 18.3.p4
+  stage: prediction
+  narration: 18.3.p4
+  pdf:
+  - lec15-mobile.pdf
+  - 39
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: 'the handover paths: before, during, after'
+  adjust: {}
+  hold: 8
+- id: 18.3.a4
+  stage: explanation
+  narration: 18.3.a4
+  pdf:
+  - lec15-mobile.pdf
+  - 40
+  concepts:
+  - Cellular Handover
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: h
+      zone: top
+      cols:
+      - Phase
+      - Path
+      rows:
+      - - before
+        - S-GW, A, UE
+      - - during
+        - S-GW, A, B, UE
+      - - after
+        - S-GW, B, UE
+      show: 0
+  - table.reveal:
+      name: h
+      when: Before
+  - table.reveal:
+      name: h
+      when: During
+  - table.reveal:
+      name: h
+      when: After
+  - rule:
+      text: Prepare, move the radio, forward, switch the core path, release.
+      when: Prepare
+  adjust: {}
+  pre_roll: 1.6

@@ -1,0 +1,557 @@
+dish: '15.3'
+title: Finding a moving phone
+deck: lec15-mobile.pdf
+target_min: 6.5
+concepts:
+- Mobile Identity and Location
+- Home and Visited Networks
+- Mobile IP Registration
+- IP Tunneling
+- Indirect Mobile Routing
+- Triangle Routing
+- Direct Mobile Routing
+pad: 2.2
+beats:
+- id: 15.3.question
+  stage: question
+  narration: 15.3.question
+  pdf:
+  - lec15-mobile.pdf
+  - 25
+  concepts:
+  - Mobile Identity and Location
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 15: finding a moving phone'
+  - q:
+      text: An address says where you are. What happens when you move?
+  - keep: {}
+  adjust: {}
+- id: 15.3.naive
+  stage: animation
+  narration: 15.3.naive
+  pdf:
+  - lec15-mobile.pdf
+  - 26
+  concepts:
+  - Mobile Identity and Location
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: n
+      zone: top
+      show: 0
+      items:
+      - Advertise a /32 for every phone, on every move?
+      - Billions of devices, constant updates, no aggregation
+  - reveal:
+      name: n
+      when: Have the phone
+  - reveal:
+      name: n
+      when: But think
+  - rule:
+      text: Separate the identity from the current location, and keep the binding at the edge.
+      when: So we push
+  adjust: {}
+- id: 15.3.homevisited
+  stage: state
+  narration: 15.3.homevisited
+  pdf:
+  - lec15-mobile.pdf
+  - 29
+  concepts:
+  - Home and Visited Networks
+  clarifications: []
+  moves:
+  - net.show:
+      name: h
+      zone: bottom
+      nodes:
+        H:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: Home network
+        V:
+          k: cloud
+          at:
+          - 7
+          - 0
+          l: Visited network
+        P:
+          k: phone
+          at:
+          - 10.4
+          - 0
+          l: Phone
+      links:
+      - - H
+        - V
+        - s: control
+      - - V
+        - P
+        - s: radio
+  - net.state:
+      name: h
+      nodes:
+        H: now
+      when: The home network
+  - net.state:
+      name: h
+      nodes:
+        H: null
+        V: now
+      when: The visited network
+  - msg.send:
+      name: h
+      a: V
+      b: H
+      text: they're here
+      when: and tells your home
+  - net.badge:
+      name: h
+      node: H
+      text: HSS, in cellular
+      side: up
+      when: In cellular
+  adjust: {}
+- id: 15.3.register
+  stage: state
+  narration: 15.3.register
+  pdf:
+  - lec15-mobile.pdf
+  - 31
+  concepts:
+  - Mobile IP Registration
+  clarifications:
+  - fa-coa
+  moves:
+  - clear: {}
+  - net.show:
+      name: m
+      zone: top
+      nodes:
+        X:
+          k: server
+          at:
+          - 0
+          - 0
+          l: Correspondent
+        HA:
+          k: router
+          at:
+          - 4
+          - 1.8
+          l: Home agent
+        F:
+          k: router
+          at:
+          - 8
+          - 0
+          l: Visited network
+        P:
+          k: phone
+          at:
+          - 11.6
+          - 0
+          l: Mobile
+      links:
+      - - X
+        - HA
+      - - HA
+        - F
+      - - F
+        - P
+        - s: radio
+      - - X
+        - F
+        - s: dim
+  - net.badge:
+      name: m
+      node: P
+      text: $mobile.coa
+      side: up
+      state: now
+      when: On arriving
+  - msg.send:
+      name: m
+      a: P
+      b: F
+      text: register
+      when: It registers
+      t: 0.9
+  - msg.send:
+      name: m
+      a: F
+      b: HA
+      text: register
+      t: 0.9
+  - table.show:
+      name: bd
+      zone: left_bottom
+      cols:
+      - Home address
+      - Care-of
+      rows:
+      - - $mobile.home
+        - $mobile.coa
+      when: which records
+  - card:
+      kind: clarification
+      text: A foreign agent is one arrangement. A co-located care-of address is another.
+      zone: right_bottom
+      when: The drawing has
+  adjust: {}
+- id: 15.3.tunnel
+  stage: animation
+  narration: 15.3.tunnel
+  pdf:
+  - lec15-mobile.pdf
+  - 34
+  concepts:
+  - IP Tunneling
+  - Indirect Mobile Routing
+  clarifications: []
+  moves:
+  - clear:
+      keep:
+      - m
+  - stack.show:
+      name: e
+      zone: left_bottom
+      width: 6
+      reserve: 1
+      layers:
+      - t: 'Inner: correspondent → 192.0.2.20'
+        k: ip
+  - packet.spawn:
+      name: d
+      net: m
+      at: X
+      layers:
+      - ip
+      when: It uses the home
+  - packet.hop:
+      name: d
+      to: HA
+  - packet.wrap:
+      name: d
+      kind: tunnel
+      when: The home agent intercepts
+  - stack.push:
+      name: e
+      text: 'Outer: home agent → 198.51.100.44'
+      kind: tunnel
+  - packet.hop:
+      name: d
+      to: F
+      when: Routers in the middle
+  - packet.peel:
+      name: d
+      when: At the far end
+  - stack.pop:
+      name: e
+  - packet.hop:
+      name: d
+      to: P
+  adjust: {}
+- id: 15.3.size
+  stage: state
+  narration: 15.3.size
+  pdf:
+  - lec15-mobile.pdf
+  - 34
+  concepts:
+  - IP Tunneling
+  clarifications: []
+  moves:
+  - table.show:
+      name: sz
+      zone: right_bottom
+      cols:
+      - Inner
+      - With 20-byte outer
+      rows:
+      - - '1480'
+        - $mobile.size_1480
+      - - '1500'
+        - $mobile.size_1500
+      show: 0
+  - table.reveal:
+      name: sz
+      when: A 1,480 byte
+  - table.mark:
+      name: sz
+      r: 0
+      state: done
+      when: which just fits
+  - table.reveal:
+      name: sz
+      when: A 1,500 byte
+  - table.mark:
+      name: sz
+      r: 1
+      state: error
+      when: and that needs
+  - rule:
+      text: NAT rewrites addresses. A tunnel adds an envelope.
+      when: And don't confuse
+  adjust: {}
+- id: 15.3.move
+  stage: state
+  narration: 15.3.move
+  pdf:
+  - lec15-mobile.pdf
+  - 34
+  concepts:
+  - IP Tunneling
+  - Mobile IP Registration
+  clarifications: []
+  moves:
+  - clear:
+      keep:
+      - m
+  - table.show:
+      name: hd
+      zone: bottom
+      cols:
+      - Move
+      - Outer destination
+      - Inner destination
+      rows:
+      - - First
+        - $mobile.coa
+        - $mobile.home
+      - - Second
+        - $mobile.coa2
+        - $mobile.home
+      show: 1
+  - net.badge:
+      name: m
+      node: P
+      text: $mobile.coa2
+      side: up
+      state: now
+      when: to a new locator
+  - msg.send:
+      name: m
+      a: P
+      b: HA
+      text: new care-of
+      when: It re-registers
+      t: 1.1
+  - table.reveal:
+      name: hd
+      when: The outer destination
+  - table.mark:
+      name: hd
+      r: 1
+      state: now
+  - rule:
+      text: Identity in blue stays the same. Location, in the outer header, changes.
+      when: That's the visual
+  adjust: {}
+- id: 15.3.triangle
+  stage: state
+  narration: 15.3.triangle
+  pdf:
+  - lec15-mobile.pdf
+  - 35
+  concepts:
+  - Triangle Routing
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: m
+      zone: top
+      nodes:
+        X:
+          k: server
+          at:
+          - 0
+          - 0
+          l: Correspondent
+        HA:
+          k: router
+          at:
+          - 4
+          - 1.8
+          l: Home agent
+        F:
+          k: router
+          at:
+          - 8
+          - 0
+          l: Visited network
+        P:
+          k: phone
+          at:
+          - 11.6
+          - 0
+          l: Mobile
+      links:
+      - - X
+        - HA
+      - - HA
+        - F
+      - - F
+        - P
+        - s: radio
+      - - X
+        - F
+        - s: dim
+  - net.walk:
+      name: m
+      path:
+      - X
+      - HA
+      - F
+      state: error
+      when: Traffic goes through
+  - net.cost:
+      name: m
+      a: X
+      b: HA
+      cost: 40
+      when: takes 40
+  - net.cost:
+      name: m
+      a: HA
+      b: F
+      cost: 50
+      when: Then 50
+  - tex:
+      name: tr
+      zone: bottom
+      tex: 40+50=90\text{ ms}\quad\text{vs}\quad 10\text{ ms}
+      size: 46
+      when: That's 90
+  - net.state:
+      name: m
+      links:
+      - - X
+        - F
+        - active
+      when: a direct path
+  adjust: {}
+- id: 15.3.direct
+  stage: rule
+  narration: 15.3.direct
+  pdf:
+  - lec15-mobile.pdf
+  - 36
+  concepts:
+  - Direct Mobile Routing
+  clarifications: []
+  moves:
+  - fade:
+      names: tr
+  - net.unwalk:
+      name: m
+  - msg.send:
+      name: m
+      a: HA
+      b: X
+      text: locator
+      when: The correspondent obtains
+  - net.walk:
+      name: m
+      path:
+      - X
+      - F
+      - P
+      state: done
+      when: then tunnels
+  - rule:
+      text: Indirect hides moves from the correspondent. Direct avoids the detour but adds binding work.
+      when: But the price
+  - net.state:
+      name: m
+      nodes:
+        X: now
+      when: The correspondent must
+  - net.state:
+      name: m
+      nodes:
+        X: null
+        F: now
+      when: And when the mobile
+  adjust: {}
+- id: 15.3.pitfall
+  stage: rule
+  narration: 15.3.pitfall
+  pdf:
+  - lec15-mobile.pdf
+  - 36
+  concepts:
+  - Direct Mobile Routing
+  clarifications: []
+  moves:
+  - trap:
+      wrong: A tunnel changes the packet's source and destination
+      right: 'Always say inner or outer: the inner header stays put'
+  adjust: {}
+- id: 15.3.changed
+  stage: changed_example
+  narration: 15.3.changed
+  pdf:
+  - lec15-mobile.pdf
+  - 35
+  concepts:
+  - Triangle Routing
+  - Direct Mobile Routing
+  clarifications: []
+  moves:
+  - tex:
+      name: tr
+      zone: bottom
+      tex: 60,\ 70,\ \text{direct }5
+      size: 46
+  adjust: {}
+- id: 15.3.predict
+  stage: prediction
+  narration: 15.3.predict
+  pdf:
+  - lec15-mobile.pdf
+  - 35
+  concepts:
+  - Triangle Routing
+  clarifications: []
+  moves:
+  - pause:
+      text: the delay both ways? when does the triangle hurt?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 15.3.answer
+  stage: explanation
+  narration: 15.3.answer
+  pdf:
+  - lec15-mobile.pdf
+  - 35
+  concepts:
+  - Triangle Routing
+  - Indirect Mobile Routing
+  clarifications: []
+  moves:
+  - tex:
+      name: tr
+      zone: bottom
+      tex: 60+70=130\text{ ms}\quad\text{vs}\quad 5\text{ ms}
+      size: 46
+      when: Indirect is 130
+  - net.state:
+      name: m
+      nodes:
+        F: null
+      when: But if the home
+  - rule:
+      text: 'Next: the moment of moving itself.'
+      when: What about the moment
+  - keep: {}
+  adjust: {}

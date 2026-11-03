@@ -1,0 +1,87 @@
+[
+  {
+    "example_id": "L10-p26",
+    "adapter": "shortest",
+    "inputs": {},
+    "expected": [
+      "t",
+      "s",
+      "w",
+      "x",
+      "z",
+      "y",
+      "v"
+    ],
+    "source_refs": [
+      "Examples/08 - Instructor Diagram Exercises.md"
+    ]
+  },
+  {
+    "example_id": "L11-p30",
+    "adapter": "stable",
+    "inputs": {},
+    "expected": [
+      {
+        "1": "130",
+        "2": "20",
+        "3": "30",
+        "4": "420",
+        "5": "none"
+      }
+    ],
+    "source_refs": [
+      "Examples/08 - Instructor Diagram Exercises.md"
+    ]
+  },
+  {
+    "example_id": "L12-p45",
+    "adapter": "valleys",
+    "inputs": {},
+    "expected": [
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false
+    ],
+    "source_refs": [
+      "Examples/08 - Instructor Diagram Exercises.md"
+    ]
+  },
+  {
+    "example_id": "L06-p41",
+    "adapter": "stp",
+    "inputs": {},
+    "expected": [
+      [
+        "S1",
+        "S2"
+      ],
+      [
+        "S1",
+        "S4"
+      ],
+      [
+        "S1",
+        "S5"
+      ],
+      [
+        "S1",
+        "S6"
+      ],
+      [
+        "S1",
+        "S7"
+      ],
+      [
+        "S2",
+        "S3"
+      ]
+    ],
+    "source_refs": [
+      "Examples/08 - Instructor Diagram Exercises.md"
+    ]
+  }
+]

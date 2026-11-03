@@ -1,0 +1,495 @@
+dish: '7.2'
+title: Addresses and prefixes
+deck: lec07-network1.pdf
+target_min: 6.5
+concepts:
+- IPv4 Addresses
+- Classful Addressing
+- CIDR and Aggregation
+- Subnet Masks
+- Network and Broadcast Addresses
+pad: 2.2
+beats:
+- id: 7.2.question
+  stage: question
+  narration: 7.2.question
+  pdf:
+  - lec07-network1.pdf
+  - 17
+  concepts:
+  - IPv4 Addresses
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 7: addresses and prefixes'
+  - q:
+      text: How can a router forward toward a machine it has never heard of?
+  - keep: {}
+  adjust: {}
+- id: 7.2.address
+  stage: animation
+  narration: 7.2.address
+  pdf:
+  - lec07-network1.pdf
+  - 17
+  concepts:
+  - IPv4 Addresses
+  clarifications: []
+  moves:
+  - clear: {}
+  - bits.show:
+      name: a
+      zone: top
+      rows:
+      - label: Address 10.10.1.97
+        value: $ipv4.decode_97.address
+  - bits.mark:
+      name: a
+      row: 0
+      start: 0
+      end: 8
+      when: four decimal bytes
+  - bits.mark:
+      name: a
+      row: 0
+      start: 24
+      end: 32
+      when: Here is our
+  - bits.mark:
+      name: a
+      row: 0
+      start: 0
+      end: 32
+      state: null
+      when: It identifies
+  adjust: {}
+- id: 7.2.prefix
+  stage: state
+  narration: 7.2.prefix
+  pdf:
+  - lec07-network1.pdf
+  - 21
+  concepts:
+  - CIDR and Aggregation
+  clarifications: []
+  moves:
+  - bits.mark:
+      name: a
+      row: 0
+      start: 0
+      end: 23
+      when: The leading bits
+  - bits.mark:
+      name: a
+      row: 0
+      start: 23
+      end: 32
+      state: candidate
+      when: the trailing bits
+  - bits.draw_mask:
+      name: a
+      prefix: 23
+      when: In 10.10.1.97/23
+  - bits.mark:
+      name: a
+      row: 0
+      start: 0
+      end: 23
+      when: the first 23
+  - bits.mark:
+      name: a
+      row: 0
+      start: 23
+      end: 32
+      state: candidate
+      when: leaving 9
+  - rule:
+      text: 'Prefix: the network part. The rest: the host part. One entry covers the whole block.'
+      when: A router far away
+  adjust: {}
+- id: 7.2.classful
+  stage: animation
+  narration: 7.2.classful
+  pdf:
+  - lec07-network1.pdf
+  - 27
+  concepts:
+  - Classful Addressing
+  clarifications: []
+  moves:
+  - bits.mark:
+      name: a
+      row: 0
+      start: 0
+      end: 32
+      state: null
+  - table.show:
+      name: cl
+      zone: bottom
+      cols:
+      - Class
+      - Prefix
+      - Addresses
+      rows:
+      - - A
+        - /8
+        - 16,777,216
+      - - B
+        - /16
+        - 65,536
+      - - C
+        - /24
+        - '256'
+      show: 0
+      when: only three unicast
+  - table.reveal:
+      name: cl
+      t: 0.4
+  - table.reveal:
+      name: cl
+      t: 0.4
+  - table.reveal:
+      name: cl
+      t: 0.4
+  - table.mark:
+      name: cl
+      r: 2
+      state: error
+      when: was too big
+  - table.mark:
+      name: cl
+      r: 1
+      state: now
+      when: so it received
+  adjust: {}
+- id: 7.2.classful-more
+  stage: state
+  narration: 7.2.classful-more
+  pdf:
+  - lec07-network1.pdf
+  - 27
+  concepts:
+  - Classful Addressing
+  clarifications: []
+  moves:
+  - table.show:
+      name: cl
+      zone: bottom
+      cols:
+      - Class
+      - Starts with
+      - Use
+      rows:
+      - - A
+        - '0'
+        - /8
+      - - B
+        - '10'
+        - /16
+      - - C
+        - '110'
+        - /24
+      - - D
+        - '1110'
+        - multicast
+      show: 0
+  - table.reveal:
+      name: cl
+      when: An initial zero
+  - table.reveal:
+      name: cl
+      when: one zero meant class B
+  - table.reveal:
+      name: cl
+      when: one one zero meant
+  - table.reveal:
+      name: cl
+      when: Class D
+  adjust: {}
+- id: 7.2.cidr
+  stage: state
+  narration: 7.2.cidr
+  pdf:
+  - lec07-network1.pdf
+  - 29
+  concepts:
+  - CIDR and Aggregation
+  clarifications: []
+  moves:
+  - table.flash:
+      name: cl
+      rows:
+      - 1
+      - 2
+      state: null
+  - tex:
+      name: size
+      zone: bottom
+      tex: \text{addresses} = 2^{\,32-p}\qquad /24 \to 256\qquad /23 \to 512
+      size: 42
+      when: Each bit you
+  - rule:
+      text: Aggregation needs aligned, adjacent blocks with the same reachability.
+      when: CIDR also allows
+  adjust: {}
+- id: 7.2.allocation
+  stage: state
+  narration: 7.2.allocation
+  pdf:
+  - lec07-network1.pdf
+  - 30
+  concepts:
+  - CIDR and Aggregation
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: alloc
+      zone: top
+      nodes:
+        I:
+          k: box
+          at:
+          - 0
+          - 0
+          l: ICANN
+        R:
+          k: box
+          at:
+          - 3.4
+          - 0
+          l: Regional registry
+        P:
+          k: box
+          at:
+          - 7.4
+          - 0
+          l: 'Provider: /16'
+        C:
+          k: box
+          at:
+          - 11
+          - 0
+          l: 'Customer: /24'
+      links:
+      - - I
+        - R
+      - - R
+        - P
+      - - P
+        - C
+  - net.pulse:
+      name: alloc
+      path:
+      - I
+      - R
+      when: ICANN allocates
+  - net.pulse:
+      name: alloc
+      path:
+      - R
+      - P
+      when: Those allocate
+  - net.pulse:
+      name: alloc
+      path:
+      - P
+      - C
+      when: who pass smaller
+  - bullets:
+      name: nest
+      zone: bottom
+      show: 0
+      items:
+      - 12.0.0.0/8
+      - 12.3.0.0/16
+      - 12.3.1.0/24
+  - reveal:
+      name: nest
+      when: So 12.0.0.0/8
+  - reveal:
+      name: nest
+      when: 12.3.0.0/16
+      t: 0.5
+  - reveal:
+      name: nest
+      when: 12.3.1.0/24
+      t: 0.5
+  - rule:
+      text: One short prefix can cover every customer of a provider. That keeps tables small.
+      when: A provider can
+  adjust: {}
+- id: 7.2.mask
+  stage: state
+  narration: 7.2.mask
+  pdf:
+  - lec07-network1.pdf
+  - 23
+  concepts:
+  - Subnet Masks
+  clarifications: []
+  moves:
+  - clear: {}
+  - bits.show:
+      name: d
+      zone: full
+      rows:
+      - label: Address 10.10.1.97
+        value: $ipv4.decode_97.address
+      - label: Mask 255.255.254.0
+        value: $ipv4.decode_97.mask
+      reserve: 4
+  - bits.draw_mask:
+      name: d
+      prefix: 23
+      when: A slash 23
+  - bits.scan:
+      name: d
+      label: AND gives network 10.10.0.0
+      value: $ipv4.decode_97.network
+      when: A bitwise AND
+  - bits.mark:
+      name: d
+      row: 2
+      start: 23
+      end: 24
+      when: Notice what happened
+  adjust: {}
+- id: 7.2.broadcast
+  stage: state
+  narration: 7.2.broadcast
+  pdf:
+  - lec07-network1.pdf
+  - 23
+  concepts:
+  - Network and Broadcast Addresses
+  clarifications: []
+  moves:
+  - bits.mark:
+      name: d
+      row: 2
+      start: 23
+      end: 24
+      state: null
+  - bits.scan:
+      name: d
+      label: 'Host bits all one: broadcast 10.10.1.255'
+      value: $ipv4.decode_97.broadcast
+      when: Set every host
+  - rule:
+      text: 'Network: host bits zero. Broadcast: host bits one. Usable: 2^h − 2.'
+      when: So this block
+  adjust: {}
+- id: 7.2.rule
+  stage: rule
+  narration: 7.2.rule
+  pdf:
+  - lec07-network1.pdf
+  - 23
+  concepts:
+  - Subnet Masks
+  - Network and Broadcast Addresses
+  clarifications: []
+  moves:
+  - rule:
+      text: A /31 link and a /32 host route need their own interpretation.
+      when: A slash 31
+  - bits.mark:
+      name: d
+      row: 1
+      start: 0
+      end: 23
+      when: An address alone
+  - rule:
+      text: An address alone says nothing about its subnet. You need the mask.
+  adjust: {}
+- id: 7.2.pitfall
+  stage: rule
+  narration: 7.2.pitfall
+  pdf:
+  - lec07-network1.pdf
+  - 23
+  concepts:
+  - Subnet Masks
+  - Network and Broadcast Addresses
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Compare the first three bytes to find the subnet
+      right: Only a /24 works that way. Always apply the actual mask.
+  adjust: {}
+- id: 7.2.changed
+  stage: changed_example
+  narration: 7.2.changed
+  pdf:
+  - lec07-network1.pdf
+  - 24
+  concepts:
+  - Network and Broadcast Addresses
+  clarifications: []
+  moves:
+  - clear: {}
+  - bits.show:
+      name: t
+      zone: top
+      rows:
+      - label: 10.10.0.255
+        value: 10.10.0.255
+      - label: Mask 255.255.254.0
+        value: 255.255.254.0
+  - bits.draw_mask:
+      name: t
+      prefix: 23
+  adjust: {}
+- id: 7.2.predict
+  stage: prediction
+  narration: 7.2.predict
+  pdf:
+  - lec07-network1.pdf
+  - 24
+  concepts:
+  - Network and Broadcast Addresses
+  clarifications: []
+  moves:
+  - pause:
+      text: is 10.10.0.255 a broadcast address in this /23?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 7.2.answer
+  stage: explanation
+  narration: 7.2.answer
+  pdf:
+  - lec07-network1.pdf
+  - 24
+  concepts:
+  - Network and Broadcast Addresses
+  - Subnet Masks
+  clarifications: []
+  moves:
+  - bits.mark:
+      name: t
+      row: 0
+      start: 23
+      end: 32
+      state: candidate
+      when: Its host part
+  - bits.mark:
+      name: t
+      row: 0
+      start: 23
+      end: 24
+      state: error
+      when: that first zero
+  - text:
+      name: ans
+      zone: bottom
+      lines:
+      - 'Host part: 0 11111111, not all ones'
+      - So it is an ordinary host address
+      when: It is an ordinary
+  - rule:
+      text: 255 only means broadcast when the mask says so.
+      when: The ending 255
+  - keep: {}
+  adjust: {}

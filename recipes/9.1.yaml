@@ -1,0 +1,462 @@
+dish: '9.1'
+title: Getting an address and a neighbor
+deck: lec09-discovery.pdf
+target_min: 6
+concepts:
+- Names Addresses and Indirection
+- Soft State
+- DHCP
+- DHCP Leases and Reservations
+- ARP
+pad: 2.2
+beats:
+- id: 9.1.question
+  stage: question
+  narration: 9.1.question
+  pdf:
+  - lec09-discovery.pdf
+  - 4
+  concepts:
+  - Names Addresses and Indirection
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 9: getting an address and a neighbor'
+  - spine:
+      current: Discover
+      zone: top
+  - q:
+      text: The laptop wakes up knowing nothing. How does it begin?
+      zone: bottom
+  adjust: {}
+- id: 9.1.identifiers
+  stage: animation
+  narration: 9.1.identifiers
+  pdf:
+  - lec09-discovery.pdf
+  - 5
+  concepts:
+  - Names Addresses and Indirection
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: ids
+      zone: top
+      cols:
+      - Identifier
+      - Example
+      - Purpose
+      rows:
+      - - Name
+        - www.example.test
+        - for people
+      - - IP address
+        - 203.0.113.80
+        - topological location
+      - - MAC address
+        - a local interface
+        - one link
+  adjust: {}
+- id: 9.1.habit
+  stage: rule
+  narration: 9.1.habit
+  pdf:
+  - lec09-discovery.pdf
+  - 6
+  concepts:
+  - Names Addresses and Indirection
+  clarifications: []
+  moves:
+  - table.show:
+      name: miss
+      zone: bottom
+      cols:
+      - Missing fact
+      - Protocol
+      rows:
+      - - my address and gateway
+        - DHCP
+      - - next hop's MAC
+        - ARP
+      - - IP behind a name
+        - DNS
+  adjust: {}
+- id: 9.1.bootstrap
+  stage: animation
+  narration: 9.1.bootstrap
+  pdf:
+  - lec09-discovery.pdf
+  - 14
+  concepts:
+  - DHCP
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: lan
+      zone: left
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        S:
+          k: switch
+          at:
+          - 3
+          - 0
+          l: Switch
+        R:
+          k: router
+          at:
+          - 6
+          - 1
+          l: R1
+        D:
+          k: server
+          at:
+          - 6
+          - -1
+          l: DHCP server
+      links:
+      - - L
+        - S
+      - - S
+        - R
+      - - S
+        - D
+  - packet.spawn:
+      name: dis
+      net: lan
+      at: L
+      layers:
+      - eth
+      when: So DHCP begins
+  - packet.hop:
+      name: dis
+      to: S
+  - packet.flood:
+      name: dis
+      to:
+      - R
+      - D
+  - packet.fade:
+      name: dis
+  adjust: {}
+- id: 9.1.dora
+  stage: state
+  narration: 9.1.dora
+  pdf:
+  - lec09-discovery.pdf
+  - 17
+  concepts:
+  - DHCP
+  clarifications: []
+  moves:
+  - seq.show:
+      name: d
+      zone: right
+      lanes:
+      - Laptop
+      - Server
+      steps: 4
+  - seq.msg:
+      name: d
+      a: Laptop
+      b: Server
+      text: Discover
+      kind: eth
+      when: 'Discover: is any'
+  - seq.msg:
+      name: d
+      a: Server
+      b: Laptop
+      text: Offer
+      kind: ip
+      when: 'Offer: a server'
+  - seq.msg:
+      name: d
+      a: Laptop
+      b: Server
+      text: Request
+      kind: eth
+      when: 'Request: the client'
+  - seq.msg:
+      name: d
+      a: Server
+      b: Laptop
+      text: ACK
+      kind: ip
+      state: done
+      when: 'ACK: that server'
+  adjust: {}
+- id: 9.1.config
+  stage: state
+  narration: 9.1.config
+  pdf:
+  - lec09-discovery.pdf
+  - 17
+  concepts:
+  - DHCP
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: cfg
+      zone: left
+      cols:
+      - Setting
+      - Value
+      rows:
+      - - Address
+        - 192.0.2.10/24
+      - - Gateway
+        - 192.0.2.1
+      - - DNS resolver
+        - 198.51.100.53
+      - - Lease
+        - limited time
+  adjust: {}
+- id: 9.1.lease
+  stage: state
+  narration: 9.1.lease
+  pdf:
+  - lec09-discovery.pdf
+  - 18
+  concepts:
+  - DHCP Leases and Reservations
+  - Soft State
+  clarifications: []
+  moves:
+  - tl.show:
+      name: ls
+      zone: right
+      tracks:
+      - Renewing
+      - Crashed
+      span:
+      - 0
+      - 10
+  - tl.block:
+      name: ls
+      track: Renewing
+      start: 0
+      end: 4
+      text: lease
+      kind: ip
+  - tl.block:
+      name: ls
+      track: Renewing
+      start: 4
+      end: 8
+      text: renewed
+      kind: ip
+  - tl.block:
+      name: ls
+      track: Crashed
+      start: 0
+      end: 4
+      text: lease
+      kind: ip
+      when: Suppose a laptop
+  - tl.block:
+      name: ls
+      track: Crashed
+      start: 4
+      end: 8
+      text: back in pool
+      state: done
+      when: With a lease
+  adjust: {}
+- id: 9.1.arp
+  stage: animation
+  narration: 9.1.arp
+  pdf:
+  - lec09-discovery.pdf
+  - 24
+  concepts:
+  - ARP
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: a
+      zone: left
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        S:
+          k: switch
+          at:
+          - 3
+          - 0
+          l: Switch
+        R:
+          k: router
+          at:
+          - 6
+          - 1
+          l: R1
+        H:
+          k: host
+          at:
+          - 6
+          - -1
+          l: Host H
+      links:
+      - - L
+        - S
+      - - S
+        - R
+      - - S
+        - H
+  - table.show:
+      name: ac
+      zone: right_top
+      cols:
+      - IP
+      - MAC
+      rows: []
+      ghost:
+      - - 192.0.2.1
+        - R1's MAC
+  - packet.spawn:
+      name: q
+      net: a
+      at: L
+      layers:
+      - eth
+      when: It broadcasts
+  - packet.hop:
+      name: q
+      to: S
+  - packet.flood:
+      name: q
+      to:
+      - R
+      - H
+  - packet.fade:
+      name: q
+  - packet.spawn:
+      name: r
+      net: a
+      at: R
+      layers:
+      - eth
+      when: Only R1 replies
+  - packet.hop:
+      name: r
+      to:
+      - S
+      - L
+  - packet.fade:
+      name: r
+  - table.add:
+      name: ac
+      row:
+      - 192.0.2.1
+      - R1's MAC
+      state: changed
+      when: The laptop caches
+  adjust: {}
+- id: 9.1.two-tables
+  stage: rule
+  narration: 9.1.two-tables
+  pdf:
+  - lec09-discovery.pdf
+  - 25
+  concepts:
+  - ARP
+  clarifications: []
+  moves:
+  - rule:
+      text: Route first. Resolve the next hop's MAC second. Transmit third.
+  - table.show:
+      name: two
+      zone: right_bottom
+      cols:
+      - Table
+      - Maps
+      rows:
+      - - Host ARP
+        - IP to MAC
+      - - Switch
+        - MAC to port
+  adjust: {}
+- id: 9.1.pitfall
+  stage: rule
+  narration: 9.1.pitfall
+  pdf:
+  - lec09-discovery.pdf
+  - 25
+  concepts:
+  - ARP
+  clarifications: []
+  moves:
+  - trap:
+      wrong: ARP finds a host's address from its name
+      right: DNS maps names to IPs. ARP maps IPs to MACs.
+  adjust: {}
+- id: 9.1.changed
+  stage: changed_example
+  narration: 9.1.changed
+  pdf:
+  - lec09-discovery.pdf
+  - 25
+  concepts:
+  - ARP
+  clarifications: []
+  moves:
+  - clear: {}
+  - text:
+      name: t
+      zone: top
+      lines:
+      - Laptop 192.0.2.10/24 → resolver 198.51.100.53
+      - 192.0.2.0 is not 198.51.100.0
+  adjust: {}
+- id: 9.1.predict
+  stage: prediction
+  narration: 9.1.predict
+  pdf:
+  - lec09-discovery.pdf
+  - 25
+  concepts:
+  - ARP
+  clarifications: []
+  moves:
+  - pause:
+      text: which IP address does the laptop ARP for?
+  adjust: {}
+  hold: 6
+- id: 9.1.answer
+  stage: explanation
+  narration: 9.1.answer
+  pdf:
+  - lec09-discovery.pdf
+  - 25
+  concepts:
+  - ARP
+  - DHCP
+  clarifications: []
+  moves:
+  - table.show:
+      name: ans
+      zone: bottom
+      cols:
+      - Destination
+      - ARP target
+      rows:
+      - - 198.51.100.53 (remote)
+        - 192.0.2.1
+      - - 192.0.2.53 (local)
+        - 192.0.2.53
+  - keep: {}
+  adjust: {}

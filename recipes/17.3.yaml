@@ -1,0 +1,157 @@
+dish: '17.3'
+title: 'Practice question 3: prefix arithmetic'
+deck: lec07-network1.pdf
+target_min: 2.5
+concepts: []
+pad: 2.2
+beats:
+- id: 17.3.question
+  stage: question
+  narration: 17.3.question
+  pdf:
+  - lec07-network1.pdf
+  - 23
+  concepts:
+  - Network and Broadcast Addresses
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 3: prefix arithmetic'
+  - bullets:
+      name: q
+      zone: top
+      show: 2
+      items:
+      - '172.16.5.130/22: mask, network, broadcast, usable count'
+      - Is 172.16.7.12 on the same subnet?
+      when: For 172.16.5.130/22, give
+  adjust: {}
+- id: 17.3.predict
+  stage: prediction
+  narration: 17.3.predict
+  pdf:
+  - lec07-network1.pdf
+  - 23
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: mask, network, broadcast, usable count, and same subnet?
+  adjust: {}
+  hold: 20
+- id: 17.3.mask
+  stage: state
+  narration: 17.3.mask
+  pdf:
+  - lec07-network1.pdf
+  - 22
+  concepts:
+  - Subnet Masks
+  clarifications: []
+  moves:
+  - clear: {}
+  - bits.show:
+      name: d
+      zone: full
+      rows:
+      - label: Address 172.16.5.130
+        value: $practice.q3.address
+      - label: Mask 255.255.252.0
+        value: $practice.q3.mask
+      reserve: 4
+  - bits.draw_mask:
+      name: d
+      prefix: 22
+      when: A slash 22
+  - bits.mark:
+      name: d
+      row: 1
+      start: 16
+      end: 24
+      when: inside the third
+  - bits.mark:
+      name: d
+      row: 1
+      start: 22
+      end: 24
+      state: candidate
+      when: two are host
+  - keep: {}
+  adjust: {}
+  pre_roll: 1.7000000000000002
+- id: 17.3.network
+  stage: state
+  narration: 17.3.network
+  pdf:
+  - lec07-network1.pdf
+  - 23
+  concepts:
+  - Network and Broadcast Addresses
+  clarifications: []
+  moves:
+  - bits.mark:
+      name: d
+      row: 1
+      start: 22
+      end: 24
+      state: null
+  - bits.scan:
+      name: d
+      label: Network 172.16.4.0
+      value: $practice.q3.network
+      when: So the network
+  - bits.scan:
+      name: d
+      label: Broadcast 172.16.7.255
+      value: $practice.q3.broadcast
+      when: and the broadcast
+  - rule:
+      text: 2^10 − 2 = 1022 usable addresses
+      when: That leaves
+  - keep: {}
+  adjust: {}
+- id: 17.3.same
+  stage: explanation
+  narration: 17.3.same
+  pdf:
+  - lec07-network1.pdf
+  - 23
+  concepts:
+  - Subnet Masks
+  clarifications: []
+  moves:
+  - rule:
+      text: '172.16.7.12: third byte 7 lies in 4 to 7. Same subnet.'
+      when: Its third byte
+  - keep: {}
+  adjust: {}
+- id: 17.3.trap
+  stage: rule
+  narration: 17.3.trap
+  pdf:
+  - lec07-network1.pdf
+  - 23
+  concepts:
+  - Network and Broadcast Addresses
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Network 172.16.5.0, broadcast 172.16.5.255
+      right: 'Network 172.16.4.0, broadcast 172.16.7.255: the boundary is inside byte three'
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.3.marks
+  stage: explanation
+  narration: 17.3.marks
+  pdf:
+  - lec07-network1.pdf
+  - 23
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: 1 point for each requested result.
+      when: On marks
+  - keep: {}
+  adjust: {}

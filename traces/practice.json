@@ -1,0 +1,643 @@
+{
+ "q1": [
+  {
+   "action": "flood",
+   "dst": "B",
+   "in_port": 1,
+   "learned": true,
+   "out_ports": [
+    2,
+    3
+   ],
+   "src": "A",
+   "table": {
+    "A": 1
+   }
+  },
+  {
+   "action": "forward",
+   "dst": "A",
+   "in_port": 2,
+   "learned": true,
+   "out_ports": [
+    1
+   ],
+   "src": "B",
+   "table": {
+    "A": 1,
+    "B": 2
+   }
+  },
+  {
+   "action": "forward",
+   "dst": "B",
+   "in_port": 3,
+   "learned": true,
+   "out_ports": [
+    2
+   ],
+   "src": "C",
+   "table": {
+    "A": 1,
+    "B": 2,
+    "C": 3
+   }
+  }
+ ],
+ "q10_first": {
+  "total": 6,
+  "totals": {
+   "V": 9,
+   "W": 6
+  },
+  "via": "W"
+ },
+ "q10_second": {
+  "total": 9,
+  "totals": {
+   "V": 9,
+   "W": 13
+  },
+  "via": "V"
+ },
+ "q11": [
+  {
+   "Y": 1,
+   "Z": 2,
+   "depends": "Z on Y",
+   "event": "before cut"
+  },
+  {
+   "Y": 3,
+   "Z": 2,
+   "depends": "Y on Z",
+   "event": "Y hears Z=2"
+  },
+  {
+   "Y": 3,
+   "Z": 4,
+   "depends": "Z on Y",
+   "event": "Z hears Y=3"
+  },
+  {
+   "Y": 5,
+   "Z": 4,
+   "depends": "Y on Z",
+   "event": "Y hears Z=4"
+  }
+ ],
+ "q11_table": {
+  "cols": [
+   "Event",
+   "Y to X",
+   "Z to X"
+  ],
+  "rows": [
+   [
+    "before cut",
+    1,
+    2
+   ],
+   [
+    "Y hears Z=2",
+    3,
+    2
+   ],
+   [
+    "Z hears Y=3",
+    3,
+    4
+   ],
+   [
+    "Y hears Z=4",
+    5,
+    4
+   ]
+  ]
+ },
+ "q13_first": {
+  "log": [
+   {
+    "kept": [
+     "A"
+    ],
+    "step": "local preference",
+    "value": 150
+   }
+  ],
+  "winner": "A"
+ },
+ "q13_second": {
+  "log": [
+   {
+    "kept": [
+     "A",
+     "B"
+    ],
+    "step": "local preference",
+    "value": 100
+   },
+   {
+    "kept": [
+     "B"
+    ],
+    "step": "AS path length",
+    "value": 2
+   }
+  ],
+  "winner": "B"
+ },
+ "q14": {
+  "to_customer": true,
+  "to_peer": false
+ },
+ "q15": {
+  "multicast": 10,
+  "unicast": 30
+ },
+ "q18": {
+  "c1": [
+   1,
+   1,
+   -1,
+   -1
+  ],
+  "c2": [
+   1,
+   -1,
+   1,
+   -1
+  ],
+  "corr1": [
+   0,
+   -2,
+   -2,
+   0
+  ],
+  "corr2": [
+   0,
+   2,
+   2,
+   0
+  ],
+  "d1": -1.0,
+  "d2": 1.0,
+  "minus_c1": [
+   -1,
+   -1,
+   1,
+   1
+  ],
+  "z": [
+   0,
+   -2,
+   2,
+   0
+  ]
+ },
+ "q3": {
+  "address": "172.16.5.130",
+  "address_bits": "10101100.00010000.00000101.10000010",
+  "broadcast": "172.16.7.255",
+  "first": "172.16.4.1",
+  "last": "172.16.7.254",
+  "mask": "255.255.252.0",
+  "mask_bits": "11111111.11111111.11111100.00000000",
+  "network": "172.16.4.0",
+  "network_bits": "10101100.00010000.00000100.00000000",
+  "prefix": 22,
+  "same_subnet": true,
+  "total": 1024,
+  "usable": 1022
+ },
+ "q4": [
+  {
+   "mf": 1,
+   "offset_bytes": 0,
+   "offset_units": 0,
+   "payload": 976,
+   "total": 996
+  },
+  {
+   "mf": 1,
+   "offset_bytes": 976,
+   "offset_units": 122,
+   "payload": 976,
+   "total": 996
+  },
+  {
+   "mf": 0,
+   "offset_bytes": 1952,
+   "offset_units": 244,
+   "payload": 628,
+   "total": 648
+  }
+ ],
+ "q4_table": {
+  "cols": [
+   "Fragment",
+   "Payload",
+   "Total",
+   "Offset",
+   "MF"
+  ],
+  "rows": [
+   [
+    1,
+    976,
+    996,
+    0,
+    1
+   ],
+   [
+    2,
+    976,
+    996,
+    122,
+    1
+   ],
+   [
+    3,
+    628,
+    648,
+    244,
+    0
+   ]
+  ]
+ },
+ "q5": [
+  {
+   "dest": "10.4.9.7",
+   "matches": [
+    "10.0.0.0/8",
+    "10.4.0.0/16",
+    "10.4.8.0/21",
+    "0.0.0.0/0"
+   ],
+   "output": "C",
+   "winner": "10.4.8.0/21"
+  },
+  {
+   "dest": "10.4.20.1",
+   "matches": [
+    "10.0.0.0/8",
+    "10.4.0.0/16",
+    "0.0.0.0/0"
+   ],
+   "output": "B",
+   "winner": "10.4.0.0/16"
+  },
+  {
+   "dest": "10.8.1.2",
+   "matches": [
+    "10.0.0.0/8",
+    "0.0.0.0/0"
+   ],
+   "output": "A",
+   "winner": "10.0.0.0/8"
+  },
+  {
+   "dest": "192.0.2.8",
+   "matches": [
+    "0.0.0.0/0"
+   ],
+   "output": "D",
+   "winner": "0.0.0.0/0"
+  }
+ ],
+ "q5_routes": {
+  "cols": [
+   "Prefix",
+   "Output"
+  ],
+  "rows": [
+   [
+    "10.0.0.0/8",
+    "A"
+   ],
+   [
+    "10.4.0.0/16",
+    "B"
+   ],
+   [
+    "10.4.8.0/21",
+    "C"
+   ],
+   [
+    "0.0.0.0/0",
+    "D"
+   ]
+  ]
+ },
+ "q5_table": {
+  "cols": [
+   "Destination",
+   "Matches",
+   "Output"
+  ],
+  "rows": [
+   [
+    "10.4.9.7",
+    "/8, /16, /21, /0",
+    "C"
+   ],
+   [
+    "10.4.20.1",
+    "/8, /16, /0",
+    "B"
+   ],
+   [
+    "10.8.1.2",
+    "/8, /0",
+    "A"
+   ],
+   [
+    "192.0.2.8",
+    "/0",
+    "D"
+   ]
+  ]
+ },
+ "q6_growth": 10,
+ "q9": {
+  "dist": {
+   "A": 0,
+   "B": 2,
+   "C": 3,
+   "D": 5
+  },
+  "first_hop": {
+   "B": "B",
+   "C": "B",
+   "D": "B"
+  },
+  "pred": {
+   "B": "A",
+   "C": "B",
+   "D": "C"
+  },
+  "steps": [
+   {
+    "dist": {
+     "A": 0,
+     "B": 2,
+     "C": 6,
+     "D": "∞"
+    },
+    "pred": {
+     "B": "A",
+     "C": "A"
+    },
+    "relaxed": [
+     {
+      "new": 2,
+      "node": "B",
+      "old": "∞",
+      "via": "A"
+     },
+     {
+      "new": 6,
+      "node": "C",
+      "old": "∞",
+      "via": "A"
+     }
+    ],
+    "settle": "A",
+    "settled": [
+     "A"
+    ]
+   },
+   {
+    "dist": {
+     "A": 0,
+     "B": 2,
+     "C": 3,
+     "D": 7
+    },
+    "pred": {
+     "B": "A",
+     "C": "B",
+     "D": "B"
+    },
+    "relaxed": [
+     {
+      "new": 3,
+      "node": "C",
+      "old": 6,
+      "via": "B"
+     },
+     {
+      "new": 7,
+      "node": "D",
+      "old": "∞",
+      "via": "B"
+     }
+    ],
+    "settle": "B",
+    "settled": [
+     "A",
+     "B"
+    ]
+   },
+   {
+    "dist": {
+     "A": 0,
+     "B": 2,
+     "C": 3,
+     "D": 5
+    },
+    "pred": {
+     "B": "A",
+     "C": "B",
+     "D": "C"
+    },
+    "relaxed": [
+     {
+      "new": 5,
+      "node": "D",
+      "old": 7,
+      "via": "C"
+     }
+    ],
+    "settle": "C",
+    "settled": [
+     "A",
+     "B",
+     "C"
+    ]
+   },
+   {
+    "dist": {
+     "A": 0,
+     "B": 2,
+     "C": 3,
+     "D": 5
+    },
+    "pred": {
+     "B": "A",
+     "C": "B",
+     "D": "C"
+    },
+    "relaxed": [],
+    "settle": "D",
+    "settled": [
+     "A",
+     "B",
+     "C",
+     "D"
+    ]
+   }
+  ],
+  "table": {
+   "cols": [
+    "Settled",
+    "D(B)",
+    "D(C)",
+    "D(D)"
+   ],
+   "rows": [
+    [
+     "A",
+     2,
+     6,
+     "∞"
+    ],
+    [
+     "B",
+     2,
+     3,
+     7
+    ],
+    [
+     "C",
+     2,
+     3,
+     5
+    ],
+    [
+     "D",
+     2,
+     3,
+     5
+    ]
+   ]
+  }
+ },
+ "warm": {
+  "address": "192.168.37.200",
+  "address_bits": "11000000.10101000.00100101.11001000",
+  "broadcast": "192.168.39.255",
+  "first": "192.168.32.1",
+  "last": "192.168.39.254",
+  "mask": "255.255.248.0",
+  "mask_bits": "11111111.11111111.11111000.00000000",
+  "network": "192.168.32.0",
+  "network_bits": "11000000.10101000.00100000.00000000",
+  "prefix": 21,
+  "total": 2048,
+  "usable": 2046
+ },
+ "warm_frag_table": {
+  "cols": [
+   "Fragment",
+   "Payload",
+   "Total",
+   "Offset",
+   "MF"
+  ],
+  "rows": [
+   [
+    1,
+    576,
+    596,
+    0,
+    1
+   ],
+   [
+    2,
+    576,
+    596,
+    72,
+    1
+   ],
+   [
+    3,
+    576,
+    596,
+    144,
+    1
+   ],
+   [
+    4,
+    52,
+    72,
+    216,
+    0
+   ]
+  ]
+ },
+ "warm_frags": [
+  {
+   "mf": 1,
+   "offset_bytes": 0,
+   "offset_units": 0,
+   "payload": 576,
+   "total": 596
+  },
+  {
+   "mf": 1,
+   "offset_bytes": 576,
+   "offset_units": 72,
+   "payload": 576,
+   "total": 596
+  },
+  {
+   "mf": 1,
+   "offset_bytes": 1152,
+   "offset_units": 144,
+   "payload": 576,
+   "total": 596
+  },
+  {
+   "mf": 0,
+   "offset_bytes": 1728,
+   "offset_units": 216,
+   "payload": 52,
+   "total": 72
+  }
+ ],
+ "warm_lookup": {
+  "dest": "192.168.37.200",
+  "matches": [
+   "192.168.0.0/16",
+   "192.168.32.0/21",
+   "0.0.0.0/0"
+  ],
+  "output": "B",
+  "winner": "192.168.32.0/21"
+ },
+ "warm_routes": {
+  "cols": [
+   "Prefix",
+   "Output"
+  ],
+  "rows": [
+   [
+    "192.168.0.0/16",
+    "A"
+   ],
+   [
+    "192.168.32.0/21",
+    "B"
+   ],
+   [
+    "192.168.36.0/24",
+    "C"
+   ],
+   [
+    "0.0.0.0/0",
+    "D"
+   ]
+  ]
+ }
+}

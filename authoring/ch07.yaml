@@ -1,0 +1,1713 @@
+dish: '7.1'
+title: What the network promises
+deck: lec07-network1.pdf
+target_min: 6
+concepts:
+- Packet Switching
+- Circuit Switching
+- Statistical Multiplexing
+- Best-Effort Service
+- Network Planes
+- Software-Defined Networking
+- QoS Service Models
+- ATM Constant Bit Rate
+- ATM Available Bit Rate
+- Integrated Services
+- Differentiated Services
+beats:
+- id: question
+  stage: question
+  pdf: 4
+  c:
+  - Packet Switching
+  say: 'Our laptop''s frame has reached the edge of its LAN. Beyond that lie thousands
+    of networks, built by different owners, from different hardware. What should the
+    network as a whole promise to deliver? A guaranteed rate? Guaranteed order? Or
+    almost nothing at all? The surprising answer that built the Internet is: almost
+    nothing.'
+  moves:
+  - heading:
+      text: 'Lecture 7: what the network promises'
+  - spine:
+      current: IP
+      zone: top
+  - q:
+      text: What should a network of networks actually promise?
+      zone: bottom
+- id: circuit
+  stage: animation
+  pdf: 8
+  c:
+  - Circuit Switching
+  say: 'One design comes from the telephone network: circuit switching. Before any
+    data moves, set up a path, and reserve capacity at each hop. Once it is established,
+    the bandwidth is yours. Quality is predictable. But if you pause, nobody else
+    may use your reserved share, and every switch has to remember your call.'
+  moves:
+  - clear: {}
+  - tl.show:
+      name: link
+      zone: top
+      tracks:
+      - Circuit
+      - Packet
+      span:
+      - 0
+      - 12
+  - tl.block:
+      name: link
+      track: Circuit
+      start: 0
+      end: 1
+      text: setup
+      kind: data
+  - tl.block:
+      name: link
+      track: Circuit
+      start: 1
+      end: 3
+      text: A
+      kind: ip
+  - tl.block:
+      name: link
+      track: Circuit
+      start: 3
+      end: 6
+      text: idle, reserved
+      state: idle
+      when: But if you pause
+  - tl.block:
+      name: link
+      track: Circuit
+      start: 6
+      end: 8
+      text: A
+      kind: ip
+- id: circuit-more
+  stage: state
+  pdf: 8
+  c:
+  - Circuit Switching
+  say: Put numbers on the waste. A 1 megabit per second circuit reserved for ten seconds
+    allocates up to 10 megabits. If the application sends only 2, the rest of that
+    opportunity can't necessarily be used by anyone else.
+  moves:
+  - tex:
+      name: wa
+      zone: bottom
+      tex: 1\ \text{Mb/s}\times 10\ \text{s}=10\ \text{Mb reserved, 2 Mb used}
+      size: 42
+      when: A 1 megabit
+- id: packet
+  stage: animation
+  pdf: 4
+  c:
+  - Packet Switching
+  say: The other design is packet switching. Chop data into packets. Give each one
+    its own destination address, and let each hop forward it when capacity becomes
+    available. No setup, and no reservation. No router has to remember that you exist.
+  moves:
+  - tl.block:
+      name: link
+      track: Packet
+      start: 0
+      end: 1.4
+      text: A
+      kind: ip
+  - tl.block:
+      name: link
+      track: Packet
+      start: 1.4
+      end: 2.6
+      text: B
+      kind: eth
+  - tl.block:
+      name: link
+      track: Packet
+      start: 2.6
+      end: 4
+      text: A
+      kind: ip
+  - tl.block:
+      name: link
+      track: Packet
+      start: 4
+      end: 7
+      text: B
+      kind: eth
+  - tl.block:
+      name: link
+      track: Packet
+      start: 7
+      end: 8
+      text: A
+      kind: ip
+- id: statmux
+  stage: state
+  pdf: 5
+  c:
+  - Statistical Multiplexing
+  say: Why does this suit computers? Their traffic is bursty. A web page arrives in
+    a rush, and then the link goes silent. Sharing capacity according to actual arrivals
+    is called statistical multiplexing, and it lets many bursty users share a link
+    that could never hold all their peaks. The price comes when bursts overlap. If
+    8 megabits per second arrive at a 4 megabit link for 10 milliseconds, a backlog
+    of 5,000 bytes builds in a queue.
+  moves:
+  - queue.show:
+      name: q1
+      zone: left_bottom
+      items:
+      - A
+      - B
+      - A
+      - B
+      kind: ip
+      title: Queue during a burst
+  - tex:
+      name: bl
+      zone: right_bottom
+      tex: (8-4)\,\text{Mb/s}\times 10\,\text{ms}=5000\text{ bytes}
+      size: 38
+      when: If 8 megabits
+- id: best
+  stage: state
+  pdf: 6
+  c:
+  - Best-Effort Service
+  say: IP makes a modest deal called best-effort service. It will try. It may lose
+    your packet, reorder it, delay it, or even duplicate it, and none of that breaks
+    the contract. That sounds terrible, until you see what it buys. A network that
+    promises so little can run over nearly any link, and needs no per-flow memory
+    inside. Reliability can then be added at the end machines, by the programs that
+    actually need it.
+  moves:
+  - clear: {}
+  - bullets:
+      name: be
+      zone: left
+      show: 0
+      items:
+      - May lose packets
+      - May reorder packets
+      - May delay packets
+  - reveal:
+      name: be
+      n: 3
+      when: It may lose
+  - text:
+      name: buys
+      zone: right
+      lines:
+      - 'Buys simplicity:'
+      - runs over nearly any link
+      - no per-flow memory inside
+      - end machines add reliability
+      when: That sounds terrible
+- id: services
+  stage: state
+  pdf: 14
+  c:
+  - QoS Service Models
+  - ATM Constant Bit Rate
+  - ATM Available Bit Rate
+  - Integrated Services
+  - Differentiated Services
+  say: Best effort is not the only possible deal. A QoS service model is a list of
+    promises about bandwidth, loss, order, and timing. ATM's constant bit rate service
+    reserves a fixed rate, with order and timing protected. ATM's available bit rate
+    promises only a minimum rate. Integrated Services aims at explicit guarantees
+    per flow. Differentiated Services treats classes of packets differently, without
+    per-flow guarantees. Keep these promises separate. A minimum rate is not a delay
+    bound, and priority is not an end to end guarantee.
+  moves:
+  - clear: {}
+  - table.show:
+      name: svc
+      zone: full
+      cols:
+      - Service
+      - Promise
+      rows:
+      - - Internet best effort
+        - none
+      - - ATM constant bit rate
+        - fixed reserved rate
+      - - ATM available bit rate
+        - minimum rate
+      - - Integrated Services
+        - per-flow guarantees
+      - - Differentiated Services
+        - class-based treatment
+      show: 1
+  - table.reveal:
+      name: svc
+      when: ATM's constant
+  - table.reveal:
+      name: svc
+      when: ATM's available
+  - table.reveal:
+      name: svc
+      when: Integrated Services aims
+  - table.reveal:
+      name: svc
+      when: Differentiated Services treats
+- id: planes
+  stage: animation
+  pdf: 9
+  c:
+  - Network Planes
+  say: If routers remember nothing about flows, what do they keep? A forwarding table.
+    And that exposes the most useful split in this course. The data plane handles
+    every packet, using the installed table, in nanoseconds. The control plane exchanges
+    information, and decides what belongs in that table, over seconds. The management
+    plane is where people configure intent. Say an operator changes a link weight.
+    A protocol recomputes. The router installs a new entry. Later packets follow it.
+    Those are separate events, and that separation will matter when failures strike.
+  moves:
+  - clear: {}
+  - stack.show:
+      name: pl
+      zone: left
+      width: 6
+      layers:
+      - t: 'Management: people set intent'
+        k: data
+      - t: 'Control: decide the table'
+        k: transport
+      - t: 'Data: forward every packet'
+        k: ip
+  - stack.mark:
+      name: pl
+      layer: 2
+      when: The data plane
+  - stack.mark:
+      name: pl
+      layer: 2
+      state: null
+      when: The control plane
+  - stack.mark:
+      name: pl
+      layer: 1
+  - stack.mark:
+      name: pl
+      layer: 1
+      state: null
+      when: The management plane
+  - stack.mark:
+      name: pl
+      layer: 0
+  - bullets:
+      name: ev
+      zone: right
+      show: 4
+      items:
+      - Operator changes a weight
+      - Protocol recomputes
+      - Router installs an entry
+      - Later packets follow it
+      when: Say an operator
+- id: rule
+  stage: rule
+  pdf: 13
+  c:
+  - Software-Defined Networking
+  - Network Planes
+  say: Traditionally, each router runs its own control software, and they cooperate.
+    Software-defined networking moves that logic into a controller, which programs
+    the forwarding devices. Does every packet then have to visit the controller? No.
+    The controller installs rules, and the device applies them locally. Either way,
+    the rule stays the same. Control decides. Data executes.
+  moves:
+  - clear: {}
+  - net.show:
+      name: sdn
+      zone: top
+      nodes:
+        C:
+          k: box
+          at:
+          - 5
+          - 1
+          l: Controller
+        A:
+          k: switch
+          at:
+          - 1
+          - 0
+          l: Switch 1
+        B:
+          k: switch
+          at:
+          - 5
+          - 0
+          l: Switch 2
+        D:
+          k: switch
+          at:
+          - 9
+          - 0
+          l: Switch 3
+      links:
+      - - C
+        - A
+        - s: control
+      - - C
+        - B
+        - s: control
+      - - C
+        - D
+        - s: control
+      - - A
+        - B
+      - - B
+        - D
+  - packet.spawn:
+      name: dp
+      net: sdn
+      at: A
+      layers:
+      - ip
+      when: Does every packet
+  - packet.hop:
+      name: dp
+      to:
+      - B
+      - D
+      when: The controller installs
+  - rule:
+      text: Control decides what goes in the table. Data executes the table.
+- id: pitfall
+  stage: rule
+  pdf: 13
+  c:
+  - Software-Defined Networking
+  - Network Planes
+  say: 'An easy mistake: if average load is below capacity, nothing should ever wait.
+    But traffic comes in bursts, so queues still build for short moments.'
+  moves:
+  - trap:
+      wrong: Average load below capacity means no queues
+      right: Bursts still queue, even when the average fits
+- id: changed
+  stage: changed_example
+  pdf: 15
+  c:
+  - Best-Effort Service
+  say: Test yourself on the contract. A packet has a valid address. Its checksum is
+    perfect, and a route exists. It still never arrives.
+  moves:
+  - clear: {}
+  - q:
+      text: Valid address, good checksum, a route exists. It never arrives.
+      zone: top
+- id: predict
+  stage: prediction
+  pdf: 15
+  hold: 6
+  c:
+  - Best-Effort Service
+  say: Did the network break its promise? Name two ways this could happen.
+  moves:
+  - pause:
+      text: was the contract broken? how could this happen?
+- id: answer
+  stage: explanation
+  pdf: 15
+  c:
+  - Best-Effort Service
+  say: No promise was broken. A full queue may drop it. Its TTL may expire. A failure
+    or a policy may stop it. Best effort means exactly that. So what does the network
+    truly require from each packet? An address that can guide it across thousands
+    of networks, without each router knowing every host. That is our next problem.
+  moves:
+  - bullets:
+      name: why
+      zone: bottom
+      show: 3
+      items:
+      - A full queue drops it
+      - Its TTL expires
+      - A failure or policy stops it
+  - rule:
+      text: 'No promise was broken. Next: addresses that scale.'
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 7.1.predict
+  answer_beat: 7.1.answer
+  answer_events:
+  - 7.1.answer:move:0
+  - 7.1.answer:move:1
+  answer_objects:
+  - object: why
+    after: 7.1.answer:move:0
+    effect: bullets
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 7.1.answer:move:1
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '7.2'
+title: Addresses and prefixes
+deck: lec07-network1.pdf
+target_min: 6.5
+concepts:
+- IPv4 Addresses
+- Classful Addressing
+- CIDR and Aggregation
+- Subnet Masks
+- Network and Broadcast Addresses
+beats:
+- id: question
+  stage: question
+  pdf: 17
+  c:
+  - IPv4 Addresses
+  say: A switch can keep one table entry per machine, because a LAN is small. The
+    Internet holds billions of interfaces. If every router needed an entry for every
+    one, no router could cope. So how can a router in another country forward a packet
+    toward your laptop without ever having heard of it?
+  moves:
+  - heading:
+      text: 'Lecture 7: addresses and prefixes'
+  - q:
+      text: How can a router forward toward a machine it has never heard of?
+  - keep: {}
+- id: address
+  stage: animation
+  pdf: 17
+  c:
+  - IPv4 Addresses
+  say: An IPv4 address is simply a 32 bit number, written as four decimal bytes. Here
+    is our example, 10.10.1.97. It identifies an interface, not a computer, so a router
+    with three links has three addresses. And unlike a MAC address, this one has structure.
+  moves:
+  - clear: {}
+  - bits.show:
+      name: a
+      zone: top
+      rows:
+      - label: Address 10.10.1.97
+        value: $ipv4.decode_97.address
+  - bits.mark:
+      name: a
+      row: 0
+      start: 0
+      end: 8
+      when: four decimal bytes
+  - bits.mark:
+      name: a
+      row: 0
+      start: 24
+      end: 32
+      when: Here is our
+  - bits.mark:
+      name: a
+      row: 0
+      start: 0
+      end: 32
+      state: null
+      when: It identifies
+- id: prefix
+  stage: state
+  pdf: 21
+  c:
+  - CIDR and Aggregation
+  say: The structure is this. The leading bits name a network, and the trailing bits
+    name a host within that network. The boundary is written after a slash. In 10.10.1.97/23,
+    the first 23 bits are the network part, leaving 9 bits for hosts. A router far
+    away only needs to know which way to send that whole block. Every host inside
+    is covered by one entry. That is how the Internet scales.
+  moves:
+  - bits.mark:
+      name: a
+      row: 0
+      start: 0
+      end: 23
+      when: The leading bits
+  - bits.mark:
+      name: a
+      row: 0
+      start: 23
+      end: 32
+      state: candidate
+      when: the trailing bits
+  - bits.draw_mask:
+      name: a
+      prefix: 23
+      when: In 10.10.1.97/23
+  - bits.mark:
+      name: a
+      row: 0
+      start: 0
+      end: 23
+      when: the first 23
+  - bits.mark:
+      name: a
+      row: 0
+      start: 23
+      end: 32
+      state: candidate
+      when: leaving 9
+  - rule:
+      text: 'Prefix: the network part. The rest: the host part. One entry covers the
+        whole block.'
+      when: A router far away
+- id: classful
+  stage: animation
+  pdf: 27
+  c:
+  - Classful Addressing
+  say: 'Originally that boundary was forced. Classful addressing offered only three
+    unicast sizes: slash 8, slash 16, and slash 24. An organization needing 300 addresses
+    was too big for a slash 24, so it received a slash 16, with 65 thousand addresses,
+    and wasted nearly all of them.'
+  moves:
+  - bits.mark:
+      name: a
+      row: 0
+      start: 0
+      end: 32
+      state: null
+  - table.show:
+      name: cl
+      zone: bottom
+      cols:
+      - Class
+      - Prefix
+      - Addresses
+      rows:
+      - - A
+        - /8
+        - 16,777,216
+      - - B
+        - /16
+        - 65,536
+      - - C
+        - /24
+        - '256'
+      show: 0
+      when: only three unicast
+  - table.reveal:
+      name: cl
+      t: 0.4
+  - table.reveal:
+      name: cl
+      t: 0.4
+  - table.reveal:
+      name: cl
+      t: 0.4
+  - table.mark:
+      name: cl
+      r: 2
+      state: error
+      when: was too big
+  - table.mark:
+      name: cl
+      r: 1
+      state: now
+      when: so it received
+- id: classful-more
+  stage: state
+  pdf: 27
+  c:
+  - Classful Addressing
+  say: The class was even written into the address's first bits. An initial zero meant
+    class A, one zero meant class B, and one one zero meant class C. Class D, beginning
+    one one one zero, is multicast. Today the prefix is stated explicitly, so a first
+    byte no longer implies a mask.
+  moves:
+  - table.show:
+      name: cl
+      zone: bottom
+      cols:
+      - Class
+      - Starts with
+      - Use
+      rows:
+      - - A
+        - '0'
+        - /8
+      - - B
+        - '10'
+        - /16
+      - - C
+        - '110'
+        - /24
+      - - D
+        - '1110'
+        - multicast
+      show: 0
+  - table.reveal:
+      name: cl
+      when: An initial zero
+  - table.reveal:
+      name: cl
+      when: one zero meant class B
+  - table.reveal:
+      name: cl
+      when: one one zero meant
+  - table.reveal:
+      name: cl
+      when: Class D
+- id: cidr
+  stage: state
+  pdf: 29
+  c:
+  - CIDR and Aggregation
+  say: CIDR, classless inter-domain routing, lets the boundary fall anywhere. Now
+    the 300 address organization takes a slash 23, with 512 addresses. Each bit you
+    add to the prefix halves the block. A slash 24 has 2 to the 8th, which is 256.
+    A slash 23 has twice that. CIDR also allows aggregation. Two halves of one slash
+    24 can be announced as that single slash 24. But two ranges that merely look close
+    may not combine, because a block must be aligned on its own size.
+  moves:
+  - table.flash:
+      name: cl
+      rows:
+      - 1
+      - 2
+      state: null
+  - tex:
+      name: size
+      zone: bottom
+      tex: \text{addresses} = 2^{\,32-p}\qquad /24 \to 256\qquad /23 \to 512
+      size: 42
+      when: Each bit you
+  - rule:
+      text: Aggregation needs aligned, adjacent blocks with the same reachability.
+      when: CIDR also allows
+- id: allocation
+  stage: state
+  pdf: 30
+  c:
+  - CIDR and Aggregation
+  say: Who hands out these blocks? Allocation is hierarchical too. ICANN allocates
+    to regional registries. Those allocate to Internet providers and large institutions,
+    who pass smaller blocks on to their customers. So 12.0.0.0/8 might contain 12.3.0.0/16,
+    which contains 12.3.1.0/24. A provider can then announce one short prefix for
+    all of its customers together. The address hierarchy mirrors the business hierarchy,
+    and it's what keeps routing tables manageable. Compare that to a switch, whose
+    table lists individual machines.
+  moves:
+  - clear: {}
+  - net.show:
+      name: alloc
+      zone: top
+      nodes:
+        I:
+          k: box
+          at:
+          - 0
+          - 0
+          l: ICANN
+        R:
+          k: box
+          at:
+          - 3.4
+          - 0
+          l: Regional registry
+        P:
+          k: box
+          at:
+          - 7.4
+          - 0
+          l: 'Provider: /16'
+        C:
+          k: box
+          at:
+          - 11
+          - 0
+          l: 'Customer: /24'
+      links:
+      - - I
+        - R
+      - - R
+        - P
+      - - P
+        - C
+  - net.pulse:
+      name: alloc
+      path:
+      - I
+      - R
+      when: ICANN allocates
+  - net.pulse:
+      name: alloc
+      path:
+      - R
+      - P
+      when: Those allocate
+  - net.pulse:
+      name: alloc
+      path:
+      - P
+      - C
+      when: who pass smaller
+  - bullets:
+      name: nest
+      zone: bottom
+      show: 0
+      items:
+      - 12.0.0.0/8
+      - 12.3.0.0/16
+      - 12.3.1.0/24
+  - reveal:
+      name: nest
+      when: So 12.0.0.0/8
+  - reveal:
+      name: nest
+      when: 12.3.0.0/16
+      t: 0.5
+  - reveal:
+      name: nest
+      when: 12.3.1.0/24
+      t: 0.5
+  - rule:
+      text: One short prefix can cover every customer of a provider. That keeps tables
+        small.
+      when: A provider can
+- id: mask
+  stage: state
+  pdf: 23
+  c:
+  - Subnet Masks
+  say: To compute with a prefix, write it as a subnet mask. That is 32 bits with ones
+    over the network part, and zeros over the host part. A slash 23 is 255.255.254.0.
+    Now apply it. A bitwise AND of address and mask keeps the network bits, and clears
+    the host bits. The result is the network address, 10.10.0.0. Notice what happened
+    in the third byte. The 1 was cleared, because that last bit belongs to the host
+    part.
+  moves:
+  - clear: {}
+  - bits.show:
+      name: d
+      zone: full
+      rows:
+      - label: Address 10.10.1.97
+        value: $ipv4.decode_97.address
+      - label: Mask 255.255.254.0
+        value: $ipv4.decode_97.mask
+      reserve: 4
+  - bits.draw_mask:
+      name: d
+      prefix: 23
+      when: A slash 23
+  - bits.scan:
+      name: d
+      label: AND gives network 10.10.0.0
+      value: $ipv4.decode_97.network
+      when: A bitwise AND
+  - bits.mark:
+      name: d
+      row: 2
+      start: 23
+      end: 24
+      when: Notice what happened
+- id: broadcast
+  stage: state
+  pdf: 23
+  c:
+  - Network and Broadcast Addresses
+  say: Do the opposite. Set every host bit to one, and you get the broadcast address
+    of this subnet, 10.10.1.255. The all zeros and all ones host patterns are reserved.
+    So this block has 512 addresses in total, and 510 usable ones, from 10.10.0.1
+    through 10.10.1.254.
+  moves:
+  - bits.mark:
+      name: d
+      row: 2
+      start: 23
+      end: 24
+      state: null
+  - bits.scan:
+      name: d
+      label: 'Host bits all one: broadcast 10.10.1.255'
+      value: $ipv4.decode_97.broadcast
+      when: Set every host
+  - rule:
+      text: "Network: host bits zero. Broadcast: host bits one. Usable: 2^h \u2212\
+        \ 2."
+      when: So this block
+- id: rule
+  stage: rule
+  pdf: 23
+  c:
+  - Subnet Masks
+  - Network and Broadcast Addresses
+  say: That subtraction of two applies to ordinary subnets. A slash 31 point to point
+    link and a slash 32 host route need their own interpretation, so do not apply
+    it blindly. The real rule is this. An address alone tells you nothing about its
+    subnet. You need the mask.
+  moves:
+  - rule:
+      text: A /31 link and a /32 host route need their own interpretation.
+      when: A slash 31
+  - bits.mark:
+      name: d
+      row: 1
+      start: 0
+      end: 23
+      when: An address alone
+  - rule:
+      text: An address alone says nothing about its subnet. You need the mask.
+- id: pitfall
+  stage: rule
+  pdf: 23
+  c:
+  - Subnet Masks
+  - Network and Broadcast Addresses
+  say: A tempting shortcut is to compare the first three bytes of two addresses. That
+    only works for a slash 24. For any other prefix, apply the actual mask.
+  moves:
+  - trap:
+      wrong: Compare the first three bytes to find the subnet
+      right: Only a /24 works that way. Always apply the actual mask.
+- id: changed
+  stage: changed_example
+  pdf: 24
+  c:
+  - Network and Broadcast Addresses
+  say: A trap on purpose. In this same slash 23, consider the address 10.10.0.255.
+    It ends in 255.
+  moves:
+  - clear: {}
+  - bits.show:
+      name: t
+      zone: top
+      rows:
+      - label: 10.10.0.255
+        value: 10.10.0.255
+      - label: Mask 255.255.254.0
+        value: 255.255.254.0
+  - bits.draw_mask:
+      name: t
+      prefix: 23
+- id: predict
+  stage: prediction
+  pdf: 24
+  hold: 12
+  c:
+  - Network and Broadcast Addresses
+  say: Is it a broadcast address? Look at the host bits, not at the decimal number.
+  moves:
+  - pause:
+      text: is 10.10.0.255 a broadcast address in this /23?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 24
+  c:
+  - Network and Broadcast Addresses
+  - Subnet Masks
+  say: No. Its host part is 0 11111111, and that first zero means the bits are not
+    all ones. It is an ordinary host address, sitting in the middle of the block.
+    The ending 255 only signals broadcast when the mask says the last byte alone is
+    the host part. So the numbers are only half of the picture, and the other half
+    is the header that carries them. Let us open that up.
+  moves:
+  - bits.mark:
+      name: t
+      row: 0
+      start: 23
+      end: 32
+      state: candidate
+      when: Its host part
+  - bits.mark:
+      name: t
+      row: 0
+      start: 23
+      end: 24
+      state: error
+      when: that first zero
+  - text:
+      name: ans
+      zone: bottom
+      lines:
+      - 'Host part: 0 11111111, not all ones'
+      - So it is an ordinary host address
+      when: It is an ordinary
+  - rule:
+      text: 255 only means broadcast when the mask says so.
+      when: The ending 255
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 7.2.predict
+  answer_beat: 7.2.answer
+  answer_events:
+  - 7.2.answer:move:0
+  - 7.2.answer:move:1
+  - 7.2.answer:move:2
+  - 7.2.answer:move:3
+  answer_objects:
+  - object: t
+    after: 7.2.answer:move:0
+    effect: bits.mark
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: t
+    after: 7.2.answer:move:1
+    effect: bits.mark
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: ans
+    after: 7.2.answer:move:2
+    effect: text
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 7.2.answer:move:3
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '7.3'
+title: The IPv4 header
+deck: lec07-network1.pdf
+target_min: 4.5
+concepts:
+- IPv4 Header
+- IPv4 Header Checksum
+- IP TTL and Traceroute
+beats:
+- id: question
+  stage: question
+  pdf: 33
+  c:
+  - IPv4 Header
+  say: What does a router actually need to read? The IPv4 header has only about a
+    dozen fields, and each exists to solve one bounded problem. Read them by purpose
+    and by unit, because the units are where the traps are.
+  moves:
+  - heading:
+      text: 'Lecture 7: the IPv4 header'
+  - q:
+      text: What does a router actually need to read?
+- id: fields
+  stage: animation
+  pdf: 33
+  c:
+  - IPv4 Header
+  say: The header. Version says 4. IHL, the header length, counts 32 bit words, not
+    bytes. So a value of 5 means 20 bytes. A packet with IHL 6 and total length 1024
+    therefore has 24 header bytes, and 1000 bytes of payload.
+  moves:
+  - clear: {}
+  - fields.show:
+      name: h
+      zone: top
+      unit: 0.38
+      rows:
+      - - - Version
+          - 4
+        - - IHL
+          - 4
+        - - Type of service
+          - 8
+        - - Total length
+          - 16
+      - - - Identification
+          - 16
+        - - Flags
+          - 3
+        - - Fragment offset
+          - 13
+      - - - TTL
+          - 8
+        - - Protocol
+          - 8
+        - - Header checksum
+          - 16
+      - - - Source address
+          - 32
+      - - - Destination address
+          - 32
+  - fields.mark:
+      name: h
+      label: IHL
+      when: IHL, the header
+  - tex:
+      name: ihl
+      zone: bottom
+      tex: \text{IHL}=6:\ 6\times 4=24\text{ header bytes},\quad 1024-24=1000\text{
+        payload bytes}
+      size: 36
+      when: A packet with
+- id: length
+  stage: state
+  pdf: 35
+  c:
+  - IPv4 Header
+  clar:
+  - ipv4-max
+  say: Total length counts the whole datagram in bytes, and it is a 16 bit field.
+    So the largest value is 2 to the 16th, minus one, which is 65,535 bytes. The slide
+    prints 63,535. That is a typo, and the arithmetic settles it.
+  moves:
+  - fields.mark:
+      name: h
+      label: IHL
+      state: null
+  - fields.mark:
+      name: h
+      label: Total length
+  - card:
+      kind: correction
+      text: Slide says 63,535. A 16-bit field holds up to 65,535 bytes.
+      zone: bottom
+      when: The slide prints
+- id: protocol
+  stage: state
+  pdf: 39
+  c:
+  - IPv4 Header
+  say: The protocol field names what comes next, such as TCP, 6, or UDP, 17. It is
+    not a port number. Follow the chain of hand-offs. Ethernet's type says this payload
+    is IPv4. IPv4's protocol says this payload is UDP. UDP's destination port selects
+    the program.
+  moves:
+  - fields.mark:
+      name: h
+      label: Total length
+      state: null
+  - fields.mark:
+      name: h
+      label: Protocol
+  - stack.show:
+      name: chain
+      zone: bottom
+      width: 8
+      layers:
+      - t: 'Ethernet type: this payload is IPv4'
+        k: eth
+      - t: 'IPv4 protocol: this payload is UDP'
+        k: ip
+      - t: 'UDP port: this program'
+        k: transport
+- id: ttl
+  stage: animation
+  pdf: 38
+  c:
+  - IP TTL and Traceroute
+  say: TTL limits the damage from routing loops. Every router lowers it by one, and
+    at zero the packet dies, and the router normally sends back an ICMP time exceeded
+    message. A clever tool turns this into a map. Traceroute sends a probe with TTL
+    1. The first router replies. Then TTL 2, and the second router replies. Each reply
+    reveals one more hop. A missing reply may just mean a router declines to answer.
+  moves:
+  - clear: {}
+  - net.show:
+      name: tr
+      zone: top
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        R1:
+          k: router
+          at:
+          - 3.5
+          - 0
+          l: R1
+        R2:
+          k: router
+          at:
+          - 7
+          - 0
+          l: R2
+        W:
+          k: server
+          at:
+          - 10.5
+          - 0
+          l: Server
+      links:
+      - - L
+        - R1
+      - - R1
+        - R2
+      - - R2
+        - W
+  - packet.spawn:
+      name: p1
+      net: tr
+      at: L
+      layers:
+      - ip
+      when: Traceroute sends
+  - packet.hop:
+      name: p1
+      to: R1
+  - packet.drop:
+      name: p1
+  - table.show:
+      name: tt
+      zone: bottom
+      cols:
+      - Probe TTL
+      - Reply from
+      rows:
+      - - 1
+        - R1
+      - - 2
+        - R2
+      - - 3
+        - Server
+      show: 1
+  - packet.spawn:
+      name: p2
+      net: tr
+      at: L
+      layers:
+      - ip
+      when: Then TTL 2
+  - packet.hop:
+      name: p2
+      to:
+      - R1
+      - R2
+  - packet.drop:
+      name: p2
+  - table.reveal:
+      name: tt
+- id: checksum
+  stage: state
+  pdf: 41
+  c:
+  - IPv4 Header Checksum
+  say: One more field is linked to TTL. The header checksum is a one's complement
+    sum over the header only. It does not cover the payload, it does not authenticate
+    anybody, and it cannot repair errors. And here is the consequence. Each router
+    lowers the TTL, which changes the header. So each router must also update the
+    checksum. With TTL 64, our example header's checksum works out to one value. With
+    TTL 63, it is a different one.
+  moves:
+  - table.show:
+      name: ck
+      zone: bottom
+      cols:
+      - TTL
+      - Header checksum
+      rows:
+      - - $ipv4.checksum_ttl64.ttl
+        - $ipv4.checksum_ttl64.checksum
+      - - $ipv4.checksum_ttl63.ttl
+        - $ipv4.checksum_ttl63.checksum
+    when: With TTL 64
+- id: rule
+  stage: rule
+  pdf: 42
+  c:
+  - IPv4 Header
+  say: Read each field with its unit. IHL is in 32 bit words. Total length is in bytes.
+    Fragment offset is in 8 byte units. TTL is in router hops. Mixing these up is
+    how most header questions are lost.
+  moves:
+  - clear: {}
+  - table.show:
+      name: units
+      zone: full
+      cols:
+      - Field
+      - Unit
+      rows:
+      - - IHL
+        - 32-bit words
+      - - Total length
+        - bytes
+      - - Fragment offset
+        - 8-byte units
+      - - TTL
+        - router hops
+  - rule:
+      text: Every field has a unit. Read the unit first.
+- id: pitfall
+  stage: rule
+  pdf: 42
+  c:
+  - IPv4 Header
+  say: A common overclaim. The IPv4 checksum doesn't protect the payload, doesn't
+    correct anything, and doesn't authenticate a sender. It only detects errors in
+    the header.
+  moves:
+  - trap:
+      wrong: The IP checksum protects the whole packet
+      right: It covers the header only, and it can't correct errors
+- id: changed
+  stage: changed_example
+  pdf: 38
+  c:
+  - IP TTL and Traceroute
+  say: A new situation. A forwarding loop forms between R1 and R2, and a packet enters
+    it with TTL 64. Meanwhile a DNS answer has a TTL of 300, and our switch table
+    has a timer too.
+  moves:
+  - clear: {}
+  - net.show:
+      name: lp
+      zone: top
+      nodes:
+        R1:
+          k: router
+          at:
+          - 0
+          - 0
+          l: R1
+        R2:
+          k: router
+          at:
+          - 6
+          - 0
+          l: R2
+      links:
+      - - R1
+        - R2
+        - s: failed
+  - packet.spawn:
+      name: c
+      net: lp
+      at: R1
+      layers:
+      - ip
+  - packet.hop:
+      name: c
+      to:
+      - R2
+      - R1
+      - R2
+- id: predict
+  stage: prediction
+  pdf: 38
+  hold: 6
+  c:
+  - IP TTL and Traceroute
+  say: Does TTL rescue this packet? And do those three things called TTL all count
+    the same thing?
+  moves:
+  - pause:
+      text: does TTL rescue it? what does each TTL count?
+- id: answer
+  stage: explanation
+  pdf: 38
+  c:
+  - IP TTL and Traceroute
+  say: TTL does not rescue it. It only ends it, after using up link capacity, so the
+    damage is bounded rather than prevented. And the three are different. IP's TTL
+    counts router hops. A DNS TTL counts seconds of cache life. A switch table timer
+    ages an entry locally. Same acronym, different arithmetic. One field group remains,
+    those fragmentation fields, so let us use them.
+  moves:
+  - packet.drop:
+      name: c
+  - table.show:
+      name: ttls
+      zone: bottom
+      cols:
+      - Name
+      - Counts
+      rows: &id001
+      - - IP TTL
+        - router hops
+      - - DNS TTL
+        - seconds of cache
+      - - Switch timer
+        - seconds of aging
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 7.3.predict
+  answer_beat: 7.3.answer
+  answer_events:
+  - 7.3.answer:move:0
+  - 7.3.answer:move:1
+  answer_objects:
+  - object: c
+    after: 7.3.answer:move:0
+    effect: packet.drop
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: ttls
+    after: 7.3.answer:move:1
+    effect: table.show
+    selector:
+      rows: *id001
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '7.4'
+title: Fragmentation
+deck: lec07-network1.pdf
+target_min: 4.5
+concepts:
+- IPv4 Fragmentation
+beats:
+- id: question
+  stage: question
+  pdf: 35
+  c:
+  - IPv4 Fragmentation
+  say: IP runs over any link, and links limit how big a packet they will carry. That
+    limit is the MTU. What happens when a 4,000 byte datagram reaches a link with
+    an MTU of only 1,500 bytes?
+  moves:
+  - heading:
+      text: 'Lecture 7: fragmentation'
+  - q:
+      text: A 4000-byte datagram meets a 1500-byte link. Now what?
+  - keep: {}
+- id: idea
+  stage: animation
+  pdf: 36
+  c:
+  - IPv4 Fragmentation
+  say: If fragmentation is allowed, the router splits it into smaller datagrams. Each
+    fragment gets its own full IP header, so each travels independently. They all
+    keep the original's identification number, so the destination can tell which ones
+    belong together. Reassembly normally happens only at the destination.
+  moves:
+  - clear: {}
+  - net.show:
+      name: f
+      zone: top
+      nodes:
+        A:
+          k: host
+          at:
+          - 0
+          - 0
+          l: Source
+        R:
+          k: router
+          at:
+          - 4
+          - 0
+          l: Router
+        B:
+          k: host
+          at:
+          - 8
+          - 0
+          l: Destination
+      links:
+      - - A
+        - R
+        - c: MTU 4000
+      - - R
+        - B
+        - c: MTU 1500
+  - packet.spawn:
+      name: big
+      net: f
+      at: A
+      layers:
+      - ip
+  - packet.hop:
+      name: big
+      to: R
+  - packet.flood:
+      name: big
+      to:
+      - B
+      when: Each fragment
+- id: payload
+  stage: state
+  pdf: 37
+  c:
+  - IPv4 Fragmentation
+  say: The arithmetic, carefully. Total length is 4,000, and 20 bytes of that is header.
+    So the data to carry is 3,980 bytes. Each fragment on the small link can hold
+    1,500 minus 20, which is 1,480 bytes of data. And nonfinal fragments must carry
+    a multiple of 8 bytes, because the offset field counts in 8 byte units. 1,480
+    divides evenly by 8. So 1,480 it is.
+  moves:
+  - bar.show:
+      name: b
+      zone: full
+      total: 4000
+      header: 20
+      rows: 3
+  - bar.cut:
+      name: b
+      at: 1480
+      when: Each fragment on
+  - bar.ruler:
+      name: b
+      when: And nonfinal
+  - bar.zoom:
+      name: b
+      at: 1480
+      when: 1,480 divides
+- id: table
+  stage: state
+  pdf: 37
+  c:
+  - IPv4 Fragmentation
+  say: The first fragment carries bytes 0 through 1,479, offset 0, more fragments
+    flag set. The second carries the next 1,480. Its offset is 1,480 divided by 8,
+    which is 185. The flag is still set. The third carries what remains, 1,020 bytes.
+    Its offset is 2,960 divided by 8, which is 370, and its more fragments flag is
+    0, marking the end.
+  moves:
+  - bar.slice:
+      name: b
+      i: 0
+      frag: $ipv4.frag_4000.0
+      when: The first fragment
+  - bar.slice:
+      name: b
+      i: 1
+      frag: $ipv4.frag_4000.1
+      when: The second carries
+  - bar.slice:
+      name: b
+      i: 2
+      frag: $ipv4.frag_4000.2
+      when: The third carries
+- id: check
+  stage: state
+  pdf: 37
+  c:
+  - IPv4 Fragmentation
+  say: Check it. The payloads sum to 3,980, which is the original data, restored exactly.
+    But the total bytes sent are 4,040, not 4,000, because there are now three headers
+    instead of one. Fragmentation costs overhead, and if any one fragment is lost,
+    the whole datagram is lost.
+  moves:
+  - bar.join:
+      name: b
+      when: The payloads sum
+  - bar.note:
+      name: b
+      tex: 1480+1480+1020=3980
+      side: left
+  - bar.note:
+      name: b
+      tex: 1500+1500+1040=4040
+      side: right
+      when: But the total
+  - bar.mark:
+      name: b
+      what: chips
+      when: three headers
+  - bar.mark:
+      name: b
+      what: whole
+      state: error
+      when: the whole datagram
+- id: rule
+  stage: rule
+  pdf: 37
+  c:
+  - IPv4 Fragmentation
+  say: Keep the rule short. Offset is the data position in the original, divided by
+    8. It is not the fragment's length, and it does not count headers. Fragmentation
+    exists to fit a link, and it has nothing to do with repairing congestion loss.
+  moves:
+  - bar.mark:
+      name: b
+      what: whole
+      state: done
+  - bar.span:
+      name: b
+      to: 1480
+      text: "offset 185 \xD7 8 = 1480"
+      when: Offset is the data
+  - bar.mark:
+      name: b
+      what: chips
+      state: error
+      when: does not count headers
+  - rule:
+      text: "Offset = position in the original data \xF7 8. Only the last fragment\
+        \ has MF = 0."
+      when: Fragmentation exists
+- id: pitfall
+  stage: rule
+  pdf: 37
+  c:
+  - IPv4 Fragmentation
+  say: One more trap. A router can't always fragment. If the Don't Fragment flag is
+    set, it isn't allowed to. And losing any one fragment loses the whole datagram.
+  moves:
+  - trap:
+      wrong: A router always fragments a packet that's too big
+      right: If Don't Fragment is set, the router can't fragment it
+- id: changed
+  stage: changed_example
+  pdf: 37
+  c:
+  - IPv4 Fragmentation
+  say: New numbers. Total length 3,200, header 20, MTU 1,000. This time 1,000 minus
+    20 is 980, and 980 is not a multiple of 8.
+  moves:
+  - clear: {}
+  - bar.show:
+      name: c
+      zone: full
+      total: 3200
+      header: 20
+      rows: 4
+  - bar.ruler:
+      name: c
+  - bar.zoom:
+      name: c
+      at: 980
+      state: error
+      when: and 980 is not
+- id: predict
+  stage: prediction
+  pdf: 37
+  hold: 12
+  c:
+  - IPv4 Fragmentation
+  say: What is the largest nonfinal payload? How many fragments will there be, and
+    what are their offsets?
+  moves:
+  - pause:
+      text: the largest payload, the fragment count, and the offsets?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 37
+  c:
+  - IPv4 Fragmentation
+  say: 'Round 980 down to a multiple of 8, and you get 976. The data is 3,180 bytes,
+    giving payloads of 976, 976, 976, and a final 252. The offsets go up in steps
+    of 122: 0, 122, 244, 366. Those four unused bytes per fragment are the price of
+    8 byte alignment. We now know what a packet looks like. Next question: how does
+    an organization carve up its address space, and how does a router pick among overlapping
+    routes?'
+  moves:
+  - bar.snap:
+      name: c
+      at: 976
+      when: Round 980
+  - bar.slice:
+      name: c
+      i: 0
+      frag: $ipv4.frag_3200.0
+      info: false
+      t: 0.8
+      when: The data is
+  - bar.slice:
+      name: c
+      i: 1
+      frag: $ipv4.frag_3200.1
+      info: false
+      t: 0.8
+  - bar.slice:
+      name: c
+      i: 2
+      frag: $ipv4.frag_3200.2
+      info: false
+      t: 0.8
+  - bar.slice:
+      name: c
+      i: 3
+      frag: $ipv4.frag_3200.3
+      info: false
+      t: 0.8
+      when: and a final 252
+  - bar.info:
+      name: c
+      i: 0
+      frag: $ipv4.frag_3200.0
+      when: The offsets go
+  - bar.info:
+      name: c
+      i: 1
+      frag: $ipv4.frag_3200.1
+  - bar.info:
+      name: c
+      i: 2
+      frag: $ipv4.frag_3200.2
+  - bar.info:
+      name: c
+      i: 3
+      frag: $ipv4.frag_3200.3
+      when: '366'
+  - rule:
+      text: '4 unused bytes per fragment: the price of 8-byte alignment.'
+      when: Those four unused
+  - clear:
+      when: Next question
+  - q:
+      text: How do you carve up an address space, and pick among overlapping routes?
+prediction_contracts:
+- prediction_beat: 7.4.predict
+  answer_beat: 7.4.answer
+  answer_events:
+  - 7.4.answer:move:0
+  - 7.4.answer:move:1
+  - 7.4.answer:move:2
+  - 7.4.answer:move:3
+  - 7.4.answer:move:4
+  - 7.4.answer:move:5
+  - 7.4.answer:move:6
+  - 7.4.answer:move:7
+  - 7.4.answer:move:8
+  - 7.4.answer:move:9
+  - 7.4.answer:move:10
+  answer_objects:
+  - object: c
+    after: 7.4.answer:move:0
+    effect: bar.snap
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: c
+    after: 7.4.answer:move:1
+    effect: bar.slice
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: c
+    after: 7.4.answer:move:2
+    effect: bar.slice
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: c
+    after: 7.4.answer:move:3
+    effect: bar.slice
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: c
+    after: 7.4.answer:move:4
+    effect: bar.slice
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: c
+    after: 7.4.answer:move:5
+    effect: bar.info
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: c
+    after: 7.4.answer:move:6
+    effect: bar.info
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: c
+    after: 7.4.answer:move:7
+    effect: bar.info
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: c
+    after: 7.4.answer:move:8
+    effect: bar.info
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 7.4.answer:move:9
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.

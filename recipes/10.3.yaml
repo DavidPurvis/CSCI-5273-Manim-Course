@@ -1,0 +1,315 @@
+dish: '10.3'
+title: Path vector
+deck: lec10-routing.pdf
+target_min: 3.5
+concepts:
+- Path-Vector Routing
+pad: 2.2
+beats:
+- id: 10.3.question
+  stage: question
+  narration: 10.3.question
+  pdf:
+  - lec10-routing.pdf
+  - 47
+  concepts:
+  - Path-Vector Routing
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 10: path vector'
+  - q:
+      text: Would a network share its map, or trust a rival's number?
+  adjust: {}
+- id: 10.3.limits
+  stage: animation
+  narration: 10.3.limits
+  pdf:
+  - lec10-routing.pdf
+  - 48
+  concepts:
+  - Path-Vector Routing
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: lim
+      zone: top
+      cols:
+      - Method
+      - Problem between organizations
+      rows:
+      - - Link state
+        - reveals topology; needs a shared metric
+      - - Distance vector
+        - one number hides the path
+  - rule:
+      text: Link state reveals topology and needs a common metric
+      when: Link state floods
+  - rule:
+      text: Distance vector hides the structure
+      when: Distance vector hides
+  - rule:
+      text: Costs aren't comparable across networks
+      when: Different networks
+  - rule:
+      text: The number hides the route, so no preferences
+      when: And the number hides
+  adjust: {}
+- id: 10.3.fix
+  stage: state
+  narration: 10.3.fix
+  pdf:
+  - lec10-routing.pdf
+  - 50
+  concepts:
+  - Path-Vector Routing
+  clarifications: []
+  moves:
+  - net.show:
+      name: pv
+      zone: bottom
+      nodes:
+        n1:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: AS 1
+        n2:
+          k: cloud
+          at:
+          - 3.5
+          - 0
+          l: AS 2
+        n3:
+          k: cloud
+          at:
+          - 7
+          - 0
+          l: AS 3
+        n4:
+          k: cloud
+          at:
+          - 10.5
+          - 0
+          l: AS 4
+      links:
+      - - n1
+        - n2
+      - - n2
+        - n3
+      - - n3
+        - n4
+  - rule:
+      text: 'The fix: advertise the whole path'
+      when:
+        phrase: The fix is
+        frame_offset: 41
+  - msg.send:
+      name: pv
+      a: n1
+      b: n2
+      text: '1'
+      when: I can reach it through
+  - net.badge:
+      name: pv
+      node: n2
+      text: 2, 1
+      side: up
+      when: Each network
+  - rule:
+      text: Each network adds its own number at the front
+      when:
+        phrase: Each network that passes
+        frame_offset: 17
+  - msg.send:
+      name: pv
+      a: n2
+      b: n3
+      text: 2, 1
+      when: adds its own identifier
+  - net.badge:
+      name: pv
+      node: n3
+      text: 3, 2, 1
+      side: up
+      when:
+        phrase: adds its own identifier at the front
+        frame_offset: 40
+  - msg.send:
+      name: pv
+      a: n3
+      b: n4
+      text: 3, 2, 1
+      when: This is path-vector routing
+  - net.badge:
+      name: pv
+      node: n4
+      text: 4, 3, 2, 1
+      side: up
+      when: it's the basis of BGP
+  - net.walk:
+      name: pv
+      path:
+      - n1
+      - n2
+      - n3
+      - n4
+  adjust: {}
+- id: 10.3.loop
+  stage: state
+  narration: 10.3.loop
+  pdf:
+  - lec10-routing.pdf
+  - 51
+  concepts:
+  - Path-Vector Routing
+  clarifications: []
+  moves:
+  - fade:
+      names: _rule
+  - packet.spawn:
+      name: false
+      net: pv
+      at: n3
+      layers:
+      - label
+  - packet.hop:
+      name: false
+      to:
+      - n2
+      - n1
+  - packet.drop:
+      name: false
+      when: sees itself
+  - rule:
+      text: A router rejects any path containing itself.
+  adjust: {}
+- id: 10.3.policy
+  stage: rule
+  narration: 10.3.policy
+  pdf:
+  - lec10-routing.pdf
+  - 52
+  concepts:
+  - Path-Vector Routing
+  clarifications: []
+  moves:
+  - rule:
+      text: Seeing the whole path lets each network apply its own policy.
+  - rule:
+      text: Prefer a longer path, for business reasons
+      when: A network may prefer
+  - rule:
+      text: No shared definition of best anymore
+      when: There's no shared
+  - rule:
+      text: Loop-free doesn't mean the choices fit together
+      when: But it also means
+  adjust: {}
+- id: 10.3.pitfall
+  stage: rule
+  narration: 10.3.pitfall
+  pdf:
+  - lec10-routing.pdf
+  - 52
+  concepts:
+  - Path-Vector Routing
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Path vector guarantees quick, stable routing
+      right: It rejects loops. Convergence and stability are separate.
+  adjust: {}
+- id: 10.3.changed
+  stage: changed_example
+  narration: 10.3.changed
+  pdf:
+  - lec10-routing.pdf
+  - 51
+  concepts:
+  - Path-Vector Routing
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: c
+      zone: top
+      cols:
+      - Receiver
+      - Offered path
+      - Accept?
+      rows:
+      - - AS 4
+        - 3, 2, 1
+        - '?'
+      - - AS 2
+        - 3, 4, 2, 1
+        - '?'
+      - - AS 5
+        - 4, 1 or 3, 2, 6, 7, 1
+        - '?'
+  adjust: {}
+- id: 10.3.predict
+  stage: prediction
+  narration: 10.3.predict
+  pdf:
+  - lec10-routing.pdf
+  - 51
+  concepts:
+  - Path-Vector Routing
+  clarifications: []
+  moves:
+  - pause:
+      text: which are loops? must AS 5 pick the short path?
+  adjust: {}
+  hold: 6
+- id: 10.3.answer
+  stage: explanation
+  narration: 10.3.answer
+  pdf:
+  - lec10-routing.pdf
+  - 52
+  concepts:
+  - Path-Vector Routing
+  clarifications: []
+  moves:
+  - table.set:
+      name: c
+      r: 0
+      c: 2
+      v: accept
+      state: done
+  - table.set:
+      name: c
+      r: 1
+      c: 2
+      v: reject
+      state: error
+  - table.set:
+      name: c
+      r: 2
+      c: 2
+      v: either
+      state: now
+  - table.mark:
+      name: c
+      r: 2
+      state: now
+      when: Its local policy
+  - rule:
+      text: Path vector shows what's possible; AS 5 decides what's best
+      when: Path vector tells
+  - table.mark:
+      name: c
+      r: 2
+      state: done
+      when: decides what's best
+  - rule:
+      text: One routing idea remains
+      when: One routing idea
+  - rule:
+      text: Must every router look up the address again?
+      when: Once a path
+  adjust: {}

@@ -1,0 +1,269 @@
+dish: '17.14'
+title: 'Practice question 14: commercial policy'
+deck: lec12-bgp.pdf
+target_min: 1.5
+concepts: []
+pad: 2.2
+beats:
+- id: 17.14.question
+  stage: question
+  narration: 17.14.question
+  pdf:
+  - lec12-bgp.pdf
+  - 41
+  concepts:
+  - BGP Export Policy
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 14: commercial policy'
+  - bullets:
+      name: q
+      zone: top
+      show: 3
+      items:
+      - 'Provider-learned route: to a customer? to a peer?'
+      - Up, peer, down. Down, up. Valid?
+      - Gao-Rexford's preference and topology conditions?
+      when: Under the lecture
+  adjust: {}
+- id: 17.14.predict
+  stage: prediction
+  narration: 17.14.predict
+  pdf:
+  - lec12-bgp.pdf
+  - 41
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: both exports, both paths, and the two conditions
+  adjust: {}
+  hold: 12
+- id: 17.14.export
+  stage: state
+  narration: 17.14.export
+  pdf:
+  - lec12-bgp.pdf
+  - 41
+  concepts:
+  - BGP Export Policy
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: a
+      zone: left
+      nodes:
+        U:
+          k: cloud
+          at:
+          - 2
+          - 2
+          l: Provider
+        A:
+          k: cloud
+          at:
+          - 2
+          - 1
+          l: You
+        P:
+          k: cloud
+          at:
+          - 5
+          - 1
+          l: Peer
+        C:
+          k: cloud
+          at:
+          - 2
+          - 0
+          l: Customer
+      links:
+      - - A
+        - U
+        - s: up
+      - - A
+        - P
+      - - C
+        - A
+        - s: up
+  - msg.send:
+      name: a
+      a: U
+      b: A
+      text: route
+      t: 0.8
+  - msg.send:
+      name: a
+      a: A
+      b: C
+      text: route
+      kind: done
+      when: to a customer
+      t: 0.9
+  - net.state:
+      name: a
+      links:
+      - - A
+        - P
+        - blocked
+      when: To a peer
+  - text:
+      name: why
+      zone: right
+      lines:
+      - 'To a customer: yes'
+      - 'To a peer: no'
+  adjust: {}
+  pre_roll: 1.7000000000000002
+- id: 17.14.paths
+  stage: state
+  narration: 17.14.paths
+  pdf:
+  - lec12-bgp.pdf
+  - 43
+  concepts:
+  - Valley-Free Paths
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: v
+      zone: left
+      nodes:
+        T:
+          k: node
+          at:
+          - 2
+          - 3
+          l: P1
+        Q:
+          k: node
+          at:
+          - 6
+          - 3
+          l: P2
+        L:
+          k: node
+          at:
+          - 0.5
+          - 1
+          l: L
+        M:
+          k: node
+          at:
+          - 4
+          - 1
+          l: M
+        R:
+          k: node
+          at:
+          - 7.5
+          - 1
+          l: R
+      links:
+      - - L
+        - T
+        - s: up
+      - - M
+        - T
+        - s: up
+      - - M
+        - Q
+        - s: up
+      - - R
+        - Q
+        - s: up
+      - - T
+        - Q
+  - table.show:
+      name: t
+      zone: right_top
+      cols:
+      - Path
+      - Result
+      rows:
+      - - up, peer, down
+        - valid
+      - - down, up
+        - invalid
+      show: 0
+  - net.walk:
+      name: v
+      path:
+      - L
+      - T
+      - Q
+      - R
+      state: done
+      when: Up, peer, down
+  - table.reveal:
+      name: t
+  - net.walk:
+      name: v
+      path:
+      - T
+      - M
+      - Q
+      state: error
+      when: Down, then up
+  - table.reveal:
+      name: t
+  - keep: {}
+  adjust: {}
+  pre_roll: 2.9
+- id: 17.14.conditions
+  stage: explanation
+  narration: 17.14.conditions
+  pdf:
+  - lec12-bgp.pdf
+  - 39
+  concepts:
+  - Gao-Rexford Conditions
+  clarifications: []
+  moves:
+  - bullets:
+      name: gr
+      zone: right_bottom
+      show: 0
+      items:
+      - Prefer customer routes
+      - No customer-provider cycles
+  - reveal:
+      name: gr
+      when: Prefer customer
+  - reveal:
+      name: gr
+      when: And keep
+  - keep: {}
+  adjust: {}
+- id: 17.14.trap
+  stage: rule
+  narration: 17.14.trap
+  pdf:
+  - lec12-bgp.pdf
+  - 41
+  concepts:
+  - BGP Export Policy
+  clarifications: []
+  moves:
+  - trap:
+      wrong: A peer hears every route you know
+      right: A peer hears only your own and your customers' routes
+      when: The tempting
+  adjust: {}
+- id: 17.14.marks
+  stage: explanation
+  narration: 17.14.marks
+  pdf:
+  - lec12-bgp.pdf
+  - 41
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '2 points: exports. 1 point: both paths. 2 points: preference and topology.'
+      when: On marks
+  - keep: {}
+  adjust: {}

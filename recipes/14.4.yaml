@@ -1,0 +1,966 @@
+dish: '14.4'
+title: Contention and reservations
+deck: lec14-wireless.pdf
+target_min: 8.5
+concepts:
+- CSMA-CA
+- Hidden Terminals
+- Exposed Terminals
+- RTS and CTS
+- Network Allocation Vector
+- Wireless Power Management
+- Bluetooth Piconets
+- Wireless Error Recovery
+pad: 2.2
+beats:
+- id: 14.4.question
+  stage: question
+  narration: 14.4.question
+  pdf:
+  - lec14-wireless.pdf
+  - 21
+  concepts:
+  - CSMA-CA
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 14: contention and reservations'
+  - q:
+      text: Why can't Wi-Fi simply detect collisions like Ethernet?
+  - keep: {}
+  adjust: {}
+- id: 14.4.why
+  stage: animation
+  narration: 14.4.why
+  pdf:
+  - lec14-wireless.pdf
+  - 22
+  concepts:
+  - CSMA-CA
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: y
+      zone: top
+      show: 0
+      items:
+      - Its own signal drowns out what it would hear
+      - The collision happens at the receiver, not at the sender
+  - reveal:
+      name: y
+      when: First, while
+  - reveal:
+      name: y
+      when: Second, and more
+  adjust: {}
+- id: 14.4.hidden
+  stage: animation
+  narration: 14.4.hidden
+  pdf:
+  - lec14-wireless.pdf
+  - 13
+  concepts:
+  - Hidden Terminals
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: h
+      zone: full
+      spread:
+      - 0.6
+      - 1
+      nodes:
+        A:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: laptop
+          at:
+          - 4
+          - 0
+          l: B
+        C:
+          k: laptop
+          at:
+          - 8
+          - 0
+          l: C
+      links:
+      - - A
+        - B
+        - s: radio
+      - - B
+        - C
+        - s: radio
+  - radio.zone:
+      net: h
+      node: A
+      radius: 2.6
+      kind: ip
+      name: za
+      when: Each one's radio
+  - radio.zone:
+      net: h
+      node: C
+      radius: 2.6
+      kind: eth
+      name: zc
+  - net.badge:
+      name: h
+      node: A
+      text: silence
+      side: up
+      state: done
+      when: A senses
+  - radio.pulse:
+      net: h
+      node: A
+      radius: 2.6
+      kind: ip
+      when: It starts sending
+  - net.badge:
+      name: h
+      node: C
+      text: silence
+      side: up
+      state: done
+      when: C senses
+  - radio.pulse:
+      net: h
+      node: C
+      radius: 2.6
+      kind: eth
+      when: It also starts
+  - fx.burst:
+      net: h
+      node: B
+      when: both frames
+  - net.state:
+      name: h
+      nodes:
+        B: error
+  - rule:
+      text: 'Hidden terminals: inaudible to each other, yet they collide at the receiver.'
+      when: This is the hidden
+  adjust: {}
+- id: 14.4.exposed
+  stage: animation
+  narration: 14.4.exposed
+  pdf:
+  - lec14-wireless.pdf
+  - 27
+  concepts:
+  - Exposed Terminals
+  clarifications:
+  - exposed-ideal
+  moves:
+  - clear: {}
+  - net.show:
+      name: e
+      zone: top
+      nodes:
+        A:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: laptop
+          at:
+          - 3.4
+          - 0
+          l: B
+        C:
+          k: laptop
+          at:
+          - 6.8
+          - 0
+          l: C
+        D:
+          k: laptop
+          at:
+          - 10.2
+          - 0
+          l: D
+      links:
+      - - A
+        - B
+        - s: radio
+      - - B
+        - C
+        - s: dim
+      - - C
+        - D
+        - s: dim
+  - radio.pulse:
+      net: e
+      node: B
+      radius: 3.9
+      kind: ip
+      when: Now B sends
+  - net.state:
+      name: e
+      nodes:
+        C: candidate
+      when: C hears B
+  - net.badge:
+      name: e
+      node: C
+      text: waits
+      side: up
+      state: now
+  - radio.pulse:
+      net: e
+      node: C
+      radius: 3.9
+      kind: eth
+      when: But C's signal
+  - net.state:
+      name: e
+      links:
+      - - C
+        - D
+        - radio
+      when: These two transmissions
+  - rule:
+      text: 'Exposed terminals: sensing can block a transmission that would have been safe.'
+      when: That's the exposed
+  - card:
+      kind: clarification
+      text: The exposed-terminal shortcut is idealized. Real timing and ACK rules still apply.
+      zone: bottom
+      when: A note of care
+  adjust: {}
+- id: 14.4.csmaca
+  stage: state
+  narration: 14.4.csmaca
+  pdf:
+  - lec14-wireless.pdf
+  - 28
+  concepts:
+  - CSMA-CA
+  clarifications: []
+  moves:
+  - clear: {}
+  - tl.show:
+      name: c
+      zone: top
+      tracks:
+      - Sender
+      - Receiver
+      span:
+      - 0
+      - 12
+  - tl.block:
+      name: c
+      track: Sender
+      start: 0
+      end: 2
+      text: DIFS
+      kind: data
+      when: Wait until
+  - tl.block:
+      name: c
+      track: Sender
+      start: 2
+      end: 4
+      text: backoff
+      kind: label
+      when: Then count down
+  - tl.block:
+      name: c
+      track: Sender
+      start: 4
+      end: 9
+      text: DATA
+      kind: radio
+      when: Transmit when
+  - tl.block:
+      name: c
+      track: Receiver
+      start: 9
+      end: 10
+      text: SIFS
+      kind: data
+      when: after a shorter
+  - tl.block:
+      name: c
+      track: Receiver
+      start: 10
+      end: 12
+      text: ACK
+      kind: ip
+      when: returns an ACK
+  - rule:
+      text: CSMA/CA avoids collisions. A shorter gap lets the ACK go first.
+      when: So the ACK goes
+  adjust: {}
+- id: 14.4.counter
+  stage: state
+  narration: 14.4.counter
+  pdf:
+  - lec14-wireless.pdf
+  - 28
+  concepts:
+  - CSMA-CA
+  clarifications: []
+  moves:
+  - tl.show:
+      name: ct
+      zone: bottom
+      tracks:
+      - Channel
+      - Counter
+      span:
+      - 0
+      - 12
+      ticks: []
+  - tl.block:
+      name: ct
+      track: Counter
+      start: 0
+      end: 1
+      text: 4
+      kind: label
+      when: It starts at 4
+  - tl.block:
+      name: ct
+      track: Channel
+      start: 1
+      end: 2
+      text: idle
+      kind: data
+      when: Two idle slots
+  - tl.block:
+      name: ct
+      track: Counter
+      start: 1
+      end: 2
+      text: $wireless.backoff.0.counter
+      kind: label
+      t: 0.4
+  - tl.block:
+      name: ct
+      track: Channel
+      start: 2
+      end: 3
+      text: idle
+      kind: data
+      t: 0.4
+  - tl.block:
+      name: ct
+      track: Counter
+      start: 2
+      end: 3
+      text: $wireless.backoff.1.counter
+      kind: label
+      t: 0.4
+  - tl.block:
+      name: ct
+      track: Channel
+      start: 3
+      end: 9
+      text: 'busy: another station'
+      state: error
+      when: Another station
+  - tl.block:
+      name: ct
+      track: Counter
+      start: 3
+      end: 9
+      text: frozen at 2
+      state: now
+      when: the counter stays
+  - tl.block:
+      name: ct
+      track: Channel
+      start: 9
+      end: 10
+      text: idle
+      kind: data
+      when: two more slots
+  - tl.block:
+      name: ct
+      track: Counter
+      start: 9
+      end: 10
+      text: $wireless.backoff.3.counter
+      kind: label
+      t: 0.4
+  - tl.block:
+      name: ct
+      track: Channel
+      start: 10
+      end: 11
+      text: idle
+      kind: data
+      t: 0.4
+  - tl.block:
+      name: ct
+      track: Counter
+      start: 10
+      end: 11
+      text: $wireless.backoff.4.counter
+      state: done
+      t: 0.4
+  - tl.block:
+      name: ct
+      track: Channel
+      start: 11
+      end: 12
+      text: send
+      kind: radio
+      when: and we can send
+  adjust: {}
+- id: 14.4.noack
+  stage: rule
+  narration: 14.4.noack
+  pdf:
+  - lec14-wireless.pdf
+  - 40
+  concepts:
+  - Wireless Error Recovery
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: na
+      zone: top
+      show: 0
+      items:
+      - Noise may have corrupted the data
+      - The ACK itself may have been lost
+      - A link-layer ACK repairs one radio hop, not TCP's job
+  - reveal:
+      name: na
+      when: The data might
+  - reveal:
+      name: na
+      when: or the ACK
+  - reveal:
+      name: na
+      when: Note too
+  - rule:
+      text: No ACK does not prove a collision. Local recovery repairs one hop, not the whole path.
+      when: Local repair
+  adjust: {}
+- id: 14.4.rts
+  stage: state
+  narration: 14.4.rts
+  pdf:
+  - lec14-wireless.pdf
+  - 24
+  concepts:
+  - RTS and CTS
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: h
+      zone: top
+      nodes:
+        A:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: laptop
+          at:
+          - 4
+          - 0
+          l: B
+        C:
+          k: laptop
+          at:
+          - 8
+          - 0
+          l: C
+      links:
+      - - A
+        - B
+        - s: radio
+      - - B
+        - C
+        - s: radio
+      spread:
+      - 0.6
+      - 1
+  - seq.show:
+      name: s
+      zone: bottom
+      lanes:
+      - A
+      - B
+      - C
+      steps: 4
+  - seq.msg:
+      name: s
+      a: A
+      b: B
+      text: RTS
+      kind: label
+      when: Before sending
+  - seq.msg:
+      name: s
+      a: B
+      b: A
+      text: CTS to A; C overhears
+      kind: ip
+      when: B answers
+  - radio.pulse:
+      net: h
+      node: B
+      radius: 2.6
+      kind: ip
+      when: CTS comes from
+  - net.state:
+      name: h
+      nodes:
+        C: candidate
+      when: Now C knows
+  - seq.msg:
+      name: s
+      a: A
+      b: B
+      text: DATA
+      kind: radio
+      when: Then A sends
+  - seq.msg:
+      name: s
+      a: B
+      b: A
+      text: ACK
+      kind: ip
+      when: and B acknowledges
+  adjust: {}
+- id: 14.4.nav
+  stage: state
+  narration: 14.4.nav
+  pdf:
+  - lec14-wireless.pdf
+  - 25
+  concepts:
+  - Network Allocation Vector
+  clarifications: []
+  moves:
+  - clear:
+      keep:
+      - h
+  - tl.show:
+      name: nv
+      zone: bottom
+      tracks:
+      - A sends
+      - B sends
+      - C's NAV
+      span:
+      - 0
+      - 12
+  - tl.block:
+      name: nv
+      track: A sends
+      start: 0
+      end: 1
+      text: RTS
+      kind: label
+      t: 0.4
+  - tl.block:
+      name: nv
+      track: B sends
+      start: 1.3
+      end: 2.3
+      text: CTS
+      kind: ip
+      when: The CTS carries
+  - tl.block:
+      name: nv
+      track: C's NAV
+      start: 2.3
+      end: 10.5
+      text: 'defer: NAV counts down'
+      state: now
+      when: and C sets
+  - net.badge:
+      name: h
+      node: C
+      text: NAV set
+      side: up
+      state: now
+  - tl.block:
+      name: nv
+      track: A sends
+      start: 2.6
+      end: 9
+      text: DATA
+      kind: radio
+      when: This acts
+  - tl.block:
+      name: nv
+      track: B sends
+      start: 9.3
+      end: 10.5
+      text: ACK
+      kind: ip
+      when: Even during
+  adjust: {}
+- id: 14.4.tradeoff
+  stage: rule
+  narration: 14.4.tradeoff
+  pdf:
+  - lec14-wireless.pdf
+  - 26
+  concepts:
+  - RTS and CTS
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: tr
+      zone: top
+      show: 0
+      items:
+      - An RTS collision is short, so it costs little
+      - The four-frame exchange adds overhead
+      - Short frames on a quiet channel may lose more than they save
+  - reveal:
+      name: tr
+      when: RTS frames can
+  - reveal:
+      name: tr
+      when: And the four-frame
+  - reveal:
+      name: tr
+      when: For short frames
+  - rule:
+      text: RTS/CTS trades overhead for cheaper collisions. Good for long frames under contention.
+      when: So choose
+  adjust: {}
+- id: 14.4.power
+  stage: state
+  narration: 14.4.power
+  pdf:
+  - lec14-wireless.pdf
+  - 37
+  concepts:
+  - Wireless Power Management
+  clarifications: []
+  moves:
+  - clear: {}
+  - tl.show:
+      name: pw
+      zone: top
+      tracks:
+      - AP beacons
+      - Station
+      span:
+      - 0
+      - 12
+  - tl.block:
+      name: pw
+      track: Station
+      start: 0.6
+      end: 5
+      text: asleep
+      state: idle
+      when: tells its AP
+  - tl.block:
+      name: pw
+      track: AP beacons
+      start: 0
+      end: 0.6
+      kind: radio
+      when: Each beacon
+  - tl.block:
+      name: pw
+      track: AP beacons
+      start: 5
+      end: 5.6
+      kind: radio
+      t: 0.3
+  - tl.block:
+      name: pw
+      track: AP beacons
+      start: 10
+      end: 10.6
+      kind: radio
+      t: 0.3
+  - tl.block:
+      name: pw
+      track: Station
+      start: 5
+      end: 7
+      text: awake
+      kind: ip
+      when: So the station
+  - tl.block:
+      name: pw
+      track: Station
+      start: 7
+      end: 12
+      text: asleep
+      state: idle
+      when: Otherwise it
+  adjust: {}
+- id: 14.4.idlelisten
+  stage: rule
+  narration: 14.4.idlelisten
+  pdf:
+  - lec14-wireless.pdf
+  - 39
+  concepts:
+  - Wireless Power Management
+  clarifications: []
+  moves:
+  - rule:
+      text: 'Sleep trades delay for battery: the AP buffers, and beacons announce what''s waiting.'
+      when: The AP holds
+  adjust: {}
+- id: 14.4.bluetooth
+  stage: state
+  narration: 14.4.bluetooth
+  pdf:
+  - lec14-wireless.pdf
+  - 38
+  concepts:
+  - Bluetooth Piconets
+  clarifications: []
+  moves:
+  - fade:
+      names: _rule
+  - net.show:
+      name: bt
+      zone: bottom
+      nodes:
+        M:
+          k: box
+          at:
+          - 4
+          - 1
+          l: Controller
+          lp: up
+        A:
+          k: node
+          at:
+          - 0
+          - 1
+          l: a
+        B:
+          k: node
+          at:
+          - 4
+          - -0.4
+          l: b
+        C:
+          k: node
+          at:
+          - 8
+          - 1
+          l: c
+      links:
+      - - M
+        - A
+        - s: radio
+      - - M
+        - B
+        - s: radio
+      - - M
+        - C
+        - s: radio
+  - net.pulse:
+      name: bt
+      path:
+      - M
+      - A
+      when: which schedules
+  - net.pulse:
+      name: bt
+      path:
+      - M
+      - B
+  - net.pulse:
+      name: bt
+      path:
+      - M
+      - C
+  - net.badge:
+      name: bt
+      node: A
+      text: 79 channels
+      side: down
+      when: The slide's classic
+  - net.badge:
+      name: bt
+      node: C
+      text: 625 µs slot
+      side: down
+  adjust: {}
+- id: 14.4.bluetooth-more
+  stage: state
+  narration: 14.4.bluetooth-more
+  pdf:
+  - lec14-wireless.pdf
+  - 38
+  concepts:
+  - Bluetooth Piconets
+  clarifications: []
+  moves:
+  - tex:
+      name: sl
+      zone: top
+      tex: 1\ \text{s}\div 625\ \mu\text{s}=1600\ \text{slots}
+      size: 46
+      when: With 625
+  - net.pulse:
+      name: bt
+      path:
+      - M
+      - B
+      when: The controller grants
+  adjust: {}
+- id: 14.4.pitfall
+  stage: rule
+  narration: 14.4.pitfall
+  pdf:
+  - lec14-wireless.pdf
+  - 38
+  concepts:
+  - Bluetooth Piconets
+  clarifications: []
+  moves:
+  - trap:
+      wrong: A hidden terminal just has a weak signal
+      right: Two senders can't hear each other, yet interfere at the receiver
+  adjust: {}
+- id: 14.4.changed
+  stage: changed_example
+  narration: 14.4.changed
+  pdf:
+  - lec14-wireless.pdf
+  - 26
+  concepts:
+  - Hidden Terminals
+  - RTS and CTS
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: g
+      zone: top
+      nodes:
+        E:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: E
+        A:
+          k: laptop
+          at:
+          - 3
+          - 0
+          l: A
+        B:
+          k: laptop
+          at:
+          - 6
+          - 0
+          l: B
+        C:
+          k: laptop
+          at:
+          - 9
+          - 0
+          l: C
+      links:
+      - - E
+        - A
+        - s: radio
+      - - A
+        - B
+        - s: radio
+      - - B
+        - C
+        - s: radio
+      spread:
+      - 0.8
+      - 1
+  - radio.pulse:
+      net: g
+      node: A
+      radius: 2.6
+      kind: ip
+      when: A sends RTS
+  - radio.pulse:
+      net: g
+      node: B
+      radius: 2.6
+      kind: eth
+      when: B's CTS
+  - net.state:
+      name: g
+      nodes:
+        E: candidate
+        C: candidate
+      when: Separately
+  adjust: {}
+  pre_roll: 0.30000000000000004
+- id: 14.4.predict
+  stage: prediction
+  narration: 14.4.predict
+  pdf:
+  - lec14-wireless.pdf
+  - 26
+  concepts:
+  - Network Allocation Vector
+  clarifications: []
+  moves:
+  - pause:
+      text: who defers on the CTS? who hears only the RTS?
+  adjust: {}
+  hold: 7
+- id: 14.4.answer
+  stage: explanation
+  narration: 14.4.answer
+  pdf:
+  - lec14-wireless.pdf
+  - 27
+  concepts:
+  - Network Allocation Vector
+  - Exposed Terminals
+  clarifications: []
+  moves:
+  - table.show:
+      name: g2
+      zone: bottom
+      cols:
+      - Station
+      - Hears
+      - Result
+      rows:
+      - - C
+        - CTS from B
+        - defers; protects B
+      - - E
+        - RTS from A
+        - sets NAV; exposed
+      show: 0
+  - table.reveal:
+      name: g2
+      when: C hears the CTS
+  - table.reveal:
+      name: g2
+      when: E hears only
+  - rule:
+      text: 'Next: a moving phone, and how anyone finds it.'
+      when: So the radio link
+  - keep: {}
+  adjust: {}
+  pre_roll: 1.0

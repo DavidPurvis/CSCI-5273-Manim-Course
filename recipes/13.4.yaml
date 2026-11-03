@@ -1,0 +1,737 @@
+dish: '13.4'
+title: RPF and PIM
+deck: lec13-multicast.pdf
+target_min: 7
+concepts:
+- Reverse Path Forwarding
+- Truncated Reverse Path Broadcasting
+- Reverse Path Multicasting
+- PIM Dense Mode
+- PIM Sparse Mode
+- PIM Rendezvous Point
+- PIM Register
+- PIM SPT Switchover
+pad: 2.2
+beats:
+- id: 13.4.question
+  stage: question
+  narration: 13.4.question
+  pdf:
+  - lec13-multicast.pdf
+  - 40
+  concepts:
+  - Reverse Path Forwarding
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 13: RPF and PIM'
+  - q:
+      text: How can a router reject duplicates without a computed tree?
+  adjust: {}
+- id: 13.4.rpf
+  stage: animation
+  narration: 13.4.rpf
+  pdf:
+  - lec13-multicast.pdf
+  - 40
+  concepts:
+  - Reverse Path Forwarding
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: r
+      zone: top
+      nodes:
+        S:
+          k: server
+          at:
+          - 0
+          - 0.8
+          l: Source S
+        A:
+          k: router
+          at:
+          - 3.4
+          - 1.8
+          l: A
+        B:
+          k: router
+          at:
+          - 3.4
+          - -0.2
+          l: B
+        X:
+          k: router
+          at:
+          - 7
+          - 0.8
+          l: X
+        Z:
+          k: host
+          at:
+          - 10.4
+          - 0.8
+          l: Downstream
+      links:
+      - - S
+        - A
+      - - S
+        - B
+      - - A
+        - X
+        - c: port 1
+      - - B
+        - X
+        - c: port 3
+      - - X
+        - Z
+  - net.walk:
+      name: r
+      path:
+      - X
+      - A
+      - S
+      when: if I were sending
+  - net.state:
+      name: r
+      nodes:
+        X: done
+      when: If the packet arrived
+  - net.state:
+      name: r
+      nodes:
+        X: error
+      when: If it arrived anywhere
+  - rule:
+      text: 'RPF: accept only if it arrived on the port you''d use to reach the source.'
+      when: That's reverse
+  - net.unwalk:
+      name: r
+      when: Say router X
+  - net.state:
+      name: r
+      nodes:
+        X: null
+  - packet.spawn:
+      name: g1
+      net: r
+      at: S
+      layers:
+      - ip
+  - packet.hop:
+      name: g1
+      to:
+      - A
+      - X
+      when: A packet from S
+  - net.badge:
+      name: r
+      node: X
+      text: 'port 1: pass'
+      side: up
+      state: done
+  - packet.hop:
+      name: g1
+      to: Z
+  - packet.fade:
+      name: g1
+      when: A copy arriving
+  - packet.spawn:
+      name: g2
+      net: r
+      at: B
+      layers:
+      - ip
+  - packet.hop:
+      name: g2
+      to: X
+  - net.badge:
+      name: r
+      node: X
+      text: 'port 3: drop'
+      side: up
+      state: error
+  - packet.drop:
+      name: g2
+  adjust: {}
+- id: 13.4.prune
+  stage: state
+  narration: 13.4.prune
+  pdf:
+  - lec13-multicast.pdf
+  - 41
+  concepts:
+  - Truncated Reverse Path Broadcasting
+  - Reverse Path Multicasting
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: pr
+      zone: top
+      nodes:
+        S:
+          k: router
+          at:
+          - 5
+          - 2
+          l: Source side
+          lp: up
+        X:
+          k: router
+          at:
+          - 2.5
+          - 1
+          l: X
+        Y:
+          k: router
+          at:
+          - 7.5
+          - 1
+          l: Y
+        L1:
+          k: host
+          at:
+          - 1
+          - 0
+          l: No members
+        L2:
+          k: host
+          at:
+          - 4
+          - 0
+          l: No members
+        L3:
+          k: host
+          at:
+          - 7.5
+          - 0
+          l: Members
+      links:
+      - - S
+        - X
+      - - S
+        - Y
+      - - X
+        - L1
+      - - X
+        - L2
+      - - Y
+        - L3
+  - net.pulse:
+      name: pr
+      path:
+      - S
+      - X
+      - L1
+      when: RPF alone
+  - net.state:
+      name: pr
+      links:
+      - - X
+        - L1
+        - dim
+      when: Truncated reverse
+  - net.state:
+      name: pr
+      links:
+      - - X
+        - L2
+        - dim
+      when: Reverse path multicasting
+  - msg.send:
+      name: pr
+      a: X
+      b: S
+      text: prune
+      kind: error
+      when: it sends a prune
+      t: 1.1
+  - net.state:
+      name: pr
+      links:
+      - - S
+        - X
+        - blocked
+  - net.state:
+      name: pr
+      links:
+      - - S
+        - Y
+        - tree
+      - - Y
+        - L3
+        - tree
+      when: so entire uninterested
+  adjust: {}
+  pre_roll: 2.0
+- id: 13.4.dense
+  stage: state
+  narration: 13.4.dense
+  pdf:
+  - lec13-multicast.pdf
+  - 44
+  concepts:
+  - PIM Dense Mode
+  clarifications: []
+  moves:
+  - net.pulse:
+      name: pr
+      path:
+      - S
+      - Y
+      - L3
+      when: It's called independent
+  - net.state:
+      name: pr
+      links:
+      - - S
+        - X
+        - solid
+      - - X
+        - L1
+        - solid
+      - - X
+        - L2
+        - solid
+      when: Flood, then prune
+  - net.pulse:
+      name: pr
+      path:
+      - S
+      - X
+      - L2
+  - msg.send:
+      name: pr
+      a: X
+      b: S
+      text: prune
+      kind: error
+      when: Everything is forwarded
+      t: 1.1
+  - rule:
+      text: 'Dense mode: forward unless pruned. Sensible only when most networks are interested.'
+      when: That's sensible
+  - net.pulse:
+      name: pr
+      path:
+      - S
+      - X
+      - L1
+      when: Prunes also expire
+  adjust: {}
+- id: 13.4.sparse
+  stage: state
+  narration: 13.4.sparse
+  pdf:
+  - lec13-multicast.pdf
+  - 46
+  concepts:
+  - PIM Sparse Mode
+  - PIM Rendezvous Point
+  clarifications:
+  - pim-shared
+  moves:
+  - clear: {}
+  - net.show:
+      name: s
+      zone: top
+      nodes:
+        S:
+          k: server
+          at:
+          - 0
+          - 0
+          l: Source
+        DS:
+          k: router
+          at:
+          - 2.6
+          - 0
+          l: Source DR
+        RP:
+          k: router
+          at:
+          - 5.8
+          - 1.6
+          l: RP
+          lp: up
+        DR:
+          k: router
+          at:
+          - 9
+          - 0
+          l: Receiver DR
+        H:
+          k: host
+          at:
+          - 11.6
+          - 0
+          l: Receiver
+      links:
+      - - S
+        - DS
+      - - DS
+        - RP
+      - - RP
+        - DR
+      - - DS
+        - DR
+        - s: dim
+      - - DR
+        - H
+  - net.state:
+      name: s
+      nodes:
+        RP: now
+      when: Everyone agrees
+  - msg.send:
+      name: s
+      a: DR
+      b: RP
+      text: (*,G) join
+      when: A receiver's designated
+  - net.path:
+      name: s
+      path:
+      - RP
+      - DR
+      style: tree
+      when: creating a shared
+  - net.pulse:
+      name: s
+      path:
+      - RP
+      - DR
+      - H
+      when: Data then flows
+  - card:
+      kind: clarification
+      text: Sparse mode begins with a shared (*,G) tree, then may switch to (S,G).
+      zone: bottom
+      when: The slide's phrase
+  adjust: {}
+- id: 13.4.register
+  stage: state
+  narration: 13.4.register
+  pdf:
+  - lec13-multicast.pdf
+  - 47
+  concepts:
+  - PIM Register
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: rg
+      net: s
+      at: S
+      layers:
+      - ip
+  - packet.hop:
+      name: rg
+      to: DS
+  - packet.wrap:
+      name: rg
+      kind: tunnel
+      when: So it wraps
+  - packet.hop:
+      name: rg
+      to: RP
+      when: and unicasts
+  - packet.peel:
+      name: rg
+      when: The RP unwraps
+  - packet.hop:
+      name: rg
+      to:
+      - DR
+      - H
+  - packet.fade:
+      name: rg
+  - net.path:
+      name: s
+      path:
+      - DS
+      - RP
+      style: tree
+      when: Then the RP
+  adjust: {}
+- id: 13.4.register-more
+  stage: state
+  narration: 13.4.register-more
+  pdf:
+  - lec13-multicast.pdf
+  - 47
+  concepts:
+  - PIM Register
+  clarifications: []
+  moves:
+  - net.state:
+      name: s
+      nodes:
+        DS: now
+      when: The source's router
+  - net.state:
+      name: s
+      nodes:
+        DS: null
+        RP: now
+      when: So Register
+  - net.pulse:
+      name: s
+      path:
+      - RP
+      - DR
+      - H
+      when: The RP can
+  - rule:
+      text: 'Register is a bootstrap: not a join, and not an IGMP report.'
+      when: A Register is
+  adjust: {}
+- id: 13.4.spt
+  stage: state
+  narration: 13.4.spt
+  pdf:
+  - lec13-multicast.pdf
+  - 49
+  concepts:
+  - PIM SPT Switchover
+  clarifications: []
+  moves:
+  - fade:
+      names: _card
+  - net.cost:
+      name: s
+      a: DS
+      b: RP
+      cost: 8
+      when: source to RP
+  - net.cost:
+      name: s
+      a: RP
+      b: DR
+      cost: 7
+      when: RP to receiver
+  - net.cost:
+      name: s
+      a: DS
+      b: DR
+      cost: 4
+      when: the direct path
+  - msg.send:
+      name: s
+      a: DR
+      b: DS
+      text: (S,G) join
+      when: The receiver's router
+  - net.state:
+      name: s
+      links:
+      - - DS
+        - DR
+        - tree
+  - msg.send:
+      name: s
+      a: DR
+      b: RP
+      text: prune
+      kind: error
+      when: it prunes
+  - net.state:
+      name: s
+      links:
+      - - DS
+        - RP
+        - dim
+      - - RP
+        - DR
+        - dim
+  - tex:
+      name: sw
+      zone: bottom
+      tex: (8+7)-4=11\ \text{saved}
+      size: 46
+      when: The cost drops
+  - net.pulse:
+      name: s
+      path:
+      - DS
+      - DR
+      - H
+      when: The group address
+  adjust: {}
+- id: 13.4.rule
+  stage: rule
+  narration: 13.4.rule
+  pdf:
+  - lec13-multicast.pdf
+  - 50
+  concepts:
+  - PIM Sparse Mode
+  clarifications: []
+  moves:
+  - bullets:
+      name: ax
+      zone: bottom
+      show: 0
+      items:
+      - 'Dense: forward by default, then prune'
+      - 'Sparse: send nothing until joined'
+      - RPF checks upstream; pruning trims downstream
+  - reveal:
+      name: ax
+      when: Dense mode says
+  - reveal:
+      name: ax
+      when: Sparse mode says
+  - reveal:
+      name: ax
+      when: And on any tree
+  - rule:
+      text: IGMP learns local interest. PIM connects routers. RPF checks upstream; pruning trims downstream.
+      when: IGMP tells
+  adjust: {}
+- id: 13.4.compare
+  stage: rule
+  narration: 13.4.compare
+  pdf:
+  - lec13-multicast.pdf
+  - 50
+  concepts:
+  - PIM Sparse Mode
+  - PIM Rendezvous Point
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: dm
+      zone: top
+      cols:
+      - ''
+      - Dense
+      - Sparse
+      rows:
+      - - Default
+        - forward unless pruned
+        - drop unless joined
+      - - Starts with
+        - flooding
+        - joins to the RP
+      - - Suits
+        - widespread interest
+        - rare interest
+      show: 0
+  - table.reveal:
+      name: dm
+      when: Dense mode starts
+  - table.reveal:
+      name: dm
+      when: Sparse mode starts
+  - table.reveal:
+      name: dm
+      when: but quiet parts
+  - rule:
+      text: Multicast stays best effort in both modes.
+      when: IP multicast is
+  adjust: {}
+- id: 13.4.laptop
+  stage: rule
+  narration: 13.4.laptop
+  pdf:
+  - lec13-multicast.pdf
+  - 50
+  concepts:
+  - PIM Sparse Mode
+  - PIM Rendezvous Point
+  clarifications: []
+  moves:
+  - rule:
+      text: The laptop sends one IGMP report. Routers do the rest.
+      when: For our laptop
+  adjust: {}
+- id: 13.4.pitfall
+  stage: rule
+  narration: 13.4.pitfall
+  pdf:
+  - lec13-multicast.pdf
+  - 50
+  concepts:
+  - PIM Sparse Mode
+  - PIM Rendezvous Point
+  clarifications: []
+  moves:
+  - trap:
+      wrong: RPF checks the path toward the group
+      right: RPF checks the path back toward the source
+  adjust: {}
+- id: 13.4.changed
+  stage: changed_example
+  narration: 13.4.changed
+  pdf:
+  - lec13-multicast.pdf
+  - 49
+  concepts:
+  - PIM SPT Switchover
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: c
+      zone: top
+      show: 0
+      items:
+      - 'Source to RP: 2'
+      - 'RP to receiver: 3'
+      - 'Direct: 5'
+  - reveal:
+      name: c
+      when: Source to RP
+  - reveal:
+      name: c
+      when: RP to receiver
+  - reveal:
+      name: c
+      when: and the direct
+  adjust: {}
+- id: 13.4.predict
+  stage: prediction
+  narration: 13.4.predict
+  pdf:
+  - lec13-multicast.pdf
+  - 49
+  concepts:
+  - PIM SPT Switchover
+  clarifications: []
+  moves:
+  - pause:
+      text: what does switching to the source tree save here?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 13.4.answer
+  stage: explanation
+  narration: 13.4.answer
+  pdf:
+  - lec13-multicast.pdf
+  - 49
+  concepts:
+  - PIM SPT Switchover
+  - PIM Rendezvous Point
+  clarifications: []
+  moves:
+  - tex:
+      name: z
+      zone: bottom
+      tex: (2+3)-5=0\ \text{saved}
+      size: 48
+      when: 2 plus 3
+  - rule:
+      text: 'A detour''s cost depends on where the RP sits. Next: radio.'
+      when: The cost of the detour
+  - clear:
+      when: But now the laptop
+  - q:
+      text: Unplug the laptop. Who can hear whom now?
+  - keep: {}
+  adjust: {}

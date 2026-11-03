@@ -1,0 +1,460 @@
+dish: '16.1'
+title: The whole story, then mixed problems
+deck: lec10-routing.pdf
+target_min: 8.5
+beats:
+- id: question
+  stage: question
+  pdf: 3
+  say: We began with one question. How does a packet reach the right place, when no
+    device knows the whole path? Now we can answer it. Every mechanism in this course
+    supplies one missing fact, keeps some state, picks one action, or contains one
+    failure. Let's retell the entire journey, and then test it on problems that cross
+    chapters.
+  moves:
+  - heading:
+      text: 'Synthesis: the whole story'
+  - spine:
+      current: Move
+      zone: top
+  - q:
+      text: How does a packet arrive when no device knows the whole path?
+      zone: bottom
+- id: story1
+  stage: animation
+  deck: lec09-discovery.pdf
+  pdf: 9
+  say: A laptop wakes up. Wi-Fi association attaches it to an access point, and a
+    broadcast to DHCP gives it an address, mask, gateway, and resolver. Its mask says
+    the resolver is remote, so ARP finds the gateway's MAC address. A frame carries
+    the DNS query to R1. The resolver walks the hierarchy, using caches when it can,
+    and returns an A record. Now the laptop can send to the server.
+  moves:
+  - clear: {}
+  - table.show:
+      name: s
+      zone: full
+      cols:
+      - Missing fact
+      - Mechanism
+      - State kept
+      rows:
+      - - Attachment
+        - Wi-Fi association
+        - AP relationship
+      - - Address and gateway
+        - DHCP
+        - lease
+      - - Next hop's MAC
+        - ARP
+        - IP to MAC cache
+      - - Server's address
+        - DNS
+        - cached record with TTL
+      - - Which port for a MAC
+        - Switch learning
+        - MAC to port table
+      - - Which output for a prefix
+        - Longest prefix match
+        - forwarding table
+      - - Path inside an AS
+        - Dijkstra or Bellman-Ford
+        - link map or distances
+      - - Exit from the AS
+        - BGP with policy
+        - routes and preferences
+      show: 0
+  - table.reveal:
+      name: s
+      when: Wi-Fi association
+  - table.reveal:
+      name: s
+      when: a broadcast to DHCP
+  - table.reveal:
+      name: s
+      when: so ARP finds
+  - table.reveal:
+      name: s
+      when: The resolver walks
+  pre_roll: 0.2
+- id: story2
+  stage: animation
+  deck: lec06-lan.pdf
+  pdf: 30
+  say: 'The frame crosses switches, which learned their tables from source addresses.
+    At R1 the frame is replaced, while the packet''s endpoints stay fixed, and TTL
+    drops by one. Longest prefix match selects the output. The packet crosses the
+    fabric, waits in a queue, and leaves. Those tables came from the control plane:
+    link state or distance vector inside an AS, and BGP between ASes, shaped by contracts,
+    with the next hop resolved through internal routing.'
+  moves:
+  - table.reveal:
+      name: s
+      when: The frame crosses
+  - table.reveal:
+      name: s
+      when: Longest prefix match
+  - table.reveal:
+      name: s
+      when: link state or
+  - table.reveal:
+      name: s
+      when: and BGP between
+- id: story3
+  stage: animation
+  deck: lec11-convergence.pdf
+  pdf: 10
+  say: When something breaks, detection, propagation, computation, and installation
+    all take time, and in between come blackholes and loops. If the destination is
+    a group, IGMP learns local interest, and PIM connects the routers. If it's one
+    of many, routing picks an instance. And when the receiver moves, a tunnel carries
+    the same inner packet to a changing outer destination, while control messages
+    move the endpoints. The envelope is local, and the packet is global. At each layer,
+    the question is who knows what.
+  moves:
+  - clear: {}
+  - bullets:
+      name: rest
+      zone: top
+      show: 0
+      items:
+      - 'Failure: detect, tell, compute, install'
+      - 'Group: IGMP locally, PIM between routers'
+      - 'One of many: routing selects an instance'
+      - 'Moving: same inner packet, new outer destination'
+  - reveal:
+      name: rest
+      when: When something breaks
+  - reveal:
+      name: rest
+      when: If the destination
+  - reveal:
+      name: rest
+      when: If it's one
+  - reveal:
+      name: rest
+      when: And when the receiver
+  - rule:
+      text: 'Problem, scope, knowledge, state, action, output, failure: ask these
+        of any mechanism.'
+  pre_roll: 1.5
+- id: pitfall
+  stage: rule
+  deck: lec10-routing.pdf
+  pdf: 15
+  say: Before the problems, one last trap. Exam answers go wrong when mechanisms blur
+    together. Each one supplies one missing fact. Name the fact first, and then the
+    mechanism.
+  moves:
+  - trap:
+      wrong: Discovery, routing, and forwarding are one big step
+      right: Each mechanism supplies one missing fact
+- id: p1
+  stage: rule
+  deck: lec08-network2.pdf
+  pdf: 5
+  say: Mixed problems. Problem one. A host at 10.10.1.97/23 sends to 10.10.0.200.
+    Then to 10.10.2.5. Its gateway is 10.10.0.1. Which IP address does it ARP for,
+    each time? Think in terms of the mask.
+  moves:
+  - clear: {}
+  - text:
+      name: q1
+      zone: top
+      lines:
+      - Host 10.10.1.97/23, gateway 10.10.0.1
+      - Sends to 10.10.0.200, then to 10.10.2.5
+      - ARP for what?
+- id: a1
+  stage: explanation
+  deck: lec08-network2.pdf
+  pdf: 5
+  hold: 5
+  say: The block covers third byte values 0 and 1. So 10.10.0.200 is local, and the
+    host ARPs for 10.10.0.200 itself. 10.10.2.5 is outside the block, so it ARPs for
+    its gateway, 10.10.0.1. The mask decides, not how the numbers look.
+  moves:
+  - table.show:
+      name: a1
+      zone: bottom
+      cols:
+      - Destination
+      - Local?
+      - ARP for
+      rows:
+      - - 10.10.0.200
+        - 'yes'
+        - 10.10.0.200
+      - - 10.10.2.5
+        - 'no'
+        - 10.10.0.1
+- id: p2
+  stage: rule
+  deck: lec11-convergence.pdf
+  pdf: 16
+  say: Problem two. A router uses distance vector. Its link to neighbor A costs 2,
+    and A says 7. Its link to neighbor B costs 5, and B says 1. Which route wins?
+    Then the destination fails, and B had been routing through this very router. What
+    goes wrong, and which fix applies?
+  moves:
+  - clear: {}
+  - table.show:
+      name: q2
+      zone: top
+      cols:
+      - Via
+      - Link
+      - Says
+      - Total
+      rows:
+      - - A
+        - 2
+        - 7
+        - '?'
+      - - B
+        - 5
+        - 1
+        - '?'
+- id: a2
+  stage: explanation
+  deck: lec11-convergence.pdf
+  pdf: 16
+  hold: 5
+  say: Through A costs 9, and through B costs 6, so B wins. But wait. If B reaches
+    the destination through this router, then B's advertised 1 could be stale, with
+    no real path behind it. The result is count to infinity, on a two-node dependency.
+    Poison reverse would have had B advertise infinity back to us, so that the false
+    route would never have been considered at all.
+  moves:
+  - table.set:
+      name: q2
+      r: 0
+      c: 3
+      v: 9
+  - table.set:
+      name: q2
+      r: 1
+      c: 3
+      v: 6
+      state: done
+  - rule:
+      text: A stale advertisement causes counting. Poison reverse breaks this two-router
+        feedback.
+- id: p3
+  stage: rule
+  deck: lec12-bgp.pdf
+  pdf: 14
+  say: Problem three. Your AS has a route from a provider with local preference 80
+    and an AS path of length 2, and a route from a customer with local preference
+    100 and length 5. You pick one. Which do you use? And would you advertise the
+    other to your peer?
+  moves:
+  - clear: {}
+  - table.show:
+      name: q3
+      zone: top
+      cols:
+      - From
+      - Local pref
+      - Length
+      rows:
+      - - Provider
+        - 80
+        - 2
+      - - Customer
+        - 100
+        - 5
+- id: a3
+  stage: explanation
+  deck: lec12-bgp.pdf
+  pdf: 14
+  hold: 5
+  say: You use the customer route, because preference comes first, so path length
+    never comes into it here. You'd advertise that customer route to your peer, since
+    customer routes go everywhere. The provider route you would not offer to a peer,
+    even if it were your only route, because that would make you carry traffic between
+    two non-customers.
+  moves:
+  - table.mark:
+      name: q3
+      r: 1
+      state: done
+  - rule:
+      text: Preference before length. Provider routes go only to customers.
+- id: p5
+  stage: rule
+  deck: lec07-network1.pdf
+  pdf: 37
+  say: Problem four. A 2,000 byte datagram, with a 20 byte header, must cross a link
+    with an MTU of 1,500. Which bytes go in the first fragment? What offset does the
+    second one carry? Then its destination, 201.10.6.200, meets the same three-entry
+    table as before. Which output?
+  moves:
+  - clear: {}
+  - text:
+      name: q5
+      zone: top
+      lines:
+      - Total 2000, header 20, MTU 1500
+      - Fragment payloads and offsets?
+      - 'Destination 201.10.6.200: which output?'
+- id: a5
+  stage: explanation
+  deck: lec07-network1.pdf
+  pdf: 37
+  hold: 5
+  say: 'The data is 1,980 bytes. The first fragment carries 1,480, at offset 0, with
+    the more fragments flag set. The second carries 500, at offset 185, with the flag
+    cleared. For lookup, 201.10.6.200 matches the slash 21, the slash 23, and the
+    slash 0, so the slash 23 wins: output B. Each fragment gets the same lookup, since
+    every fragment has the same destination.'
+  moves:
+  - table.show:
+      name: a5
+      zone: bottom
+      cols:
+      - Fragment
+      - Payload
+      - Offset
+      - MF
+      rows:
+      - - 1
+        - 1480
+        - 0
+        - 1
+      - - 2
+        - 500
+        - 185
+        - 0
+- id: p6
+  stage: rule
+  deck: lec13-multicast.pdf
+  pdf: 32
+  say: Problem five. A multicast router reaches source S through port 2. A packet
+    from S to group G arrives on port 4, and later on port 2. Its LAN has one member,
+    and that member sends a leave. What happens at each step?
+  moves:
+  - clear: {}
+  - text:
+      name: q6
+      zone: top
+      lines:
+      - Route to S uses port 2
+      - Packet arrives on port 4, then on port 2
+      - The LAN's only member leaves
+- id: a6
+  stage: explanation
+  deck: lec13-multicast.pdf
+  pdf: 32
+  hold: 5
+  say: On port 4, the reverse path test fails, so it's dropped as a likely duplicate.
+    On port 2, it passes, and the packet is forwarded onto interested outputs. When
+    the member leaves, the router doesn't prune right away. It sends a group-specific
+    query, since others might remain. When no one answers, it stops forwarding there,
+    and if no other branches want the data, it prunes upstream. IGMP handled the LAN,
+    and PIM handled the routers.
+  moves:
+  - table.show:
+      name: a6
+      zone: bottom
+      cols:
+      - Event
+      - Action
+      rows:
+      - - Arrives on port 4
+        - RPF fails; drop
+      - - Arrives on port 2
+        - RPF passes; forward
+      - - Leave
+        - group query; prune if silent
+- id: p4
+  stage: changed_example
+  deck: lec15-mobile.pdf
+  pdf: 7
+  say: Last one. A phone's tunnel runs through S-GW to base station A, and a correspondent
+    reaches the phone's stable address. The phone hands over to base station B. Which
+    fields change in the packet that the S-GW sends afterward?
+  moves:
+  - clear: {}
+  - stack.show:
+      name: q4
+      zone: top
+      width: 7.5
+      layers:
+      - t: "Outer IP: S-GW \u2192 base station A"
+        k: tunnel
+      - t: UDP and GTP-U
+        k: transport
+      - t: "Inner IP: correspondent \u2192 phone"
+        k: ip
+- id: predict
+  stage: prediction
+  deck: lec15-mobile.pdf
+  pdf: 7
+  hold: 6
+  say: Name exactly what changes, and what stays the same.
+  moves:
+  - pause:
+      text: which fields change after the handover?
+- id: a4
+  stage: explanation
+  deck: lec15-mobile.pdf
+  pdf: 7
+  say: The outer destination changes, from A to B. The inner packet stays the same.
+    That's the picture you started this course with, one final time. The blue address
+    persists, while an outer envelope changes around it. At the very beginning it
+    was yellow, on one Ethernet link. Now it's a tunnel across a cellular core. It's
+    the same idea at a new scale. When you face a new mechanism, ask what's missing,
+    who knows it, what state is kept, and what happens when that state goes stale.
+    If you can trace one packet through it with real addresses, you understand it.
+    Next, try the practice midterm walkthrough in chapter 13, and use the study player
+    to answer before each explanation.
+  moves:
+  - tunnel.reencapsulate:
+      stack: q4
+      outer: "Outer IP: S-GW \u2192 base station B"
+  - stack.mark:
+      name: q4
+      layer: 0
+      state: now
+  - stack.mark:
+      name: q4
+      layer: 2
+      state: done
+  - rule:
+      text: Ask what's missing, who knows it, what state is kept, and what happens
+        when it goes stale.
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 16.1.predict
+  answer_beat: 16.1.a4
+  answer_events:
+  - 16.1.a4:move:0
+  - 16.1.a4:move:1
+  - 16.1.a4:move:2
+  - 16.1.a4:move:3
+  answer_objects:
+  - object: q4
+    after: 16.1.a4:move:0
+    effect: tunnel.reencapsulate
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: q4
+    after: 16.1.a4:move:1
+    effect: stack.mark
+    selector:
+      layer: 0
+    before_answer: hidden_or_neutral
+  - object: q4
+    after: 16.1.a4:move:2
+    effect: stack.mark
+    selector:
+      layer: 2
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 16.1.a4:move:3
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.

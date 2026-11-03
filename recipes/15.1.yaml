@@ -1,0 +1,519 @@
+dish: '15.1'
+title: The cellular core
+deck: lec15-mobile.pdf
+target_min: 6.5
+concepts:
+- 2G Circuit-Switched Core
+- 3G Parallel Voice and Data
+- LTE All-IP Core
+- UE and Subscriber Identity
+- LTE eNodeB
+- LTE Home Subscriber Server
+- LTE Mobility Management Entity
+- LTE Serving Gateway
+- LTE Packet Gateway
+pad: 2.2
+beats:
+- id: 15.1.question
+  stage: question
+  narration: 15.1.question
+  pdf:
+  - lec15-mobile.pdf
+  - 2
+  concepts:
+  - 2G Circuit-Switched Core
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 15: the cellular core'
+  - spine:
+      current: Move
+      zone: top
+  - q:
+      text: What network can follow a phone across a whole country?
+      zone: bottom
+  adjust: {}
+- id: 15.1.g2
+  stage: animation
+  narration: 15.1.g2
+  pdf:
+  - lec15-mobile.pdf
+  - 3
+  concepts:
+  - 2G Circuit-Switched Core
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: n
+      zone: top
+      nodes:
+        P:
+          k: phone
+          at:
+          - 0
+          - 0
+          l: Phone
+        T:
+          k: tower
+          at:
+          - 2.4
+          - 0
+          l: BTS
+        B:
+          k: box
+          at:
+          - 5
+          - 0
+          l: BSC
+        M:
+          k: box
+          at:
+          - 7.6
+          - 0
+          l: MSC
+        G:
+          k: cloud
+          at:
+          - 10.8
+          - 0
+          l: Telephone
+      links:
+      - - P
+        - T
+        - s: radio
+      - - T
+        - B
+      - - B
+        - M
+      - - M
+        - G
+  adjust: {}
+- id: 15.1.g3
+  stage: state
+  narration: 15.1.g3
+  pdf:
+  - lec15-mobile.pdf
+  - 4
+  concepts:
+  - 3G Parallel Voice and Data
+  clarifications: []
+  moves:
+  - net.add:
+      name: n
+      nodes:
+        SG:
+          k: box
+          at:
+          - 7.6
+          - -1.6
+          l: SGSN
+        GG:
+          k: box
+          at:
+          - 10.8
+          - -1.6
+          l: GGSN
+      links:
+      - - B
+        - SG
+      - - SG
+        - GG
+        - s: active
+  - rule:
+      text: '3G: a packet-data core running beside the old voice core.'
+  adjust: {}
+- id: 15.1.g3-more
+  stage: state
+  narration: 15.1.g3-more
+  pdf:
+  - lec15-mobile.pdf
+  - 4
+  concepts:
+  - 3G Parallel Voice and Data
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: vc
+      net: n
+      at: P
+      layers:
+      - eth
+      when: Its voice
+  - packet.hop:
+      name: vc
+      to:
+      - T
+      - B
+      - M
+      t: 1.6
+  - packet.fade:
+      name: vc
+  - packet.spawn:
+      name: dt
+      net: n
+      at: P
+      layers:
+      - ip
+      when: Its packet
+  - packet.hop:
+      name: dt
+      to:
+      - T
+      - B
+      - SG
+      - GG
+      t: 1.8
+  - packet.fade:
+      name: dt
+  adjust: {}
+- id: 15.1.g4
+  stage: state
+  narration: 15.1.g4
+  pdf:
+  - lec15-mobile.pdf
+  - 5
+  concepts:
+  - LTE All-IP Core
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: l
+      zone: top
+      nodes:
+        U:
+          k: phone
+          at:
+          - 0
+          - 0
+          l: UE
+        E:
+          k: tower
+          at:
+          - 2.8
+          - 0
+          l: eNodeB
+        S:
+          k: box
+          at:
+          - 6
+          - 0
+          l: S-GW
+        G:
+          k: box
+          at:
+          - 9
+          - 0
+          l: P-GW
+        I:
+          k: cloud
+          at:
+          - 12
+          - 0
+          l: Internet
+        M:
+          k: box
+          at:
+          - 6
+          - 2
+          l: MME
+        H:
+          k: box
+          at:
+          - 9
+          - 2
+          l: HSS
+      links:
+      - - U
+        - E
+        - s: radio
+      - - E
+        - S
+        - s: active
+      - - S
+        - G
+        - s: active
+      - - G
+        - I
+        - s: active
+      - - M
+        - E
+        - s: control
+      - - M
+        - S
+        - s: control
+      - - H
+        - M
+        - s: control
+  adjust: {}
+- id: 15.1.ue
+  stage: state
+  narration: 15.1.ue
+  pdf:
+  - lec15-mobile.pdf
+  - 10
+  concepts:
+  - UE and Subscriber Identity
+  clarifications:
+  - imsi
+  moves:
+  - net.state:
+      name: l
+      nodes:
+        U: now
+  - card:
+      kind: clarification
+      text: 'IMSI: a subscriber identity of up to 15 digits, not a MAC address.'
+      zone: left_bottom
+      when: The slide calls
+  adjust: {}
+- id: 15.1.enb
+  stage: state
+  narration: 15.1.enb
+  pdf:
+  - lec15-mobile.pdf
+  - 11
+  concepts:
+  - LTE eNodeB
+  clarifications: []
+  moves:
+  - fade:
+      names: _card
+  - net.state:
+      name: l
+      nodes:
+        U: null
+        E: now
+  adjust: {}
+- id: 15.1.enb-more
+  stage: state
+  narration: 15.1.enb-more
+  pdf:
+  - lec15-mobile.pdf
+  - 11
+  concepts:
+  - LTE eNodeB
+  clarifications: []
+  moves:
+  - msg.send:
+      name: l
+      a: U
+      b: E
+      text: radio report
+      when: For example
+      t: 1.1
+  - net.pulse:
+      name: l
+      path:
+      - E
+      - S
+      when: The core's tunnel
+  adjust: {}
+- id: 15.1.hss
+  stage: state
+  narration: 15.1.hss
+  pdf:
+  - lec15-mobile.pdf
+  - 12
+  concepts:
+  - LTE Home Subscriber Server
+  clarifications: []
+  moves:
+  - net.state:
+      name: l
+      nodes:
+        E: null
+        H: now
+  adjust: {}
+- id: 15.1.hss-more
+  stage: state
+  narration: 15.1.hss-more
+  pdf:
+  - lec15-mobile.pdf
+  - 12
+  concepts:
+  - LTE Home Subscriber Server
+  clarifications: []
+  moves:
+  - msg.send:
+      name: l
+      a: M
+      b: H
+      text: who is this?
+      kind: control
+      when: Its mobility
+      t: 1.1
+  - msg.send:
+      name: l
+      a: H
+      b: M
+      text: subscription
+      kind: control
+      t: 1.1
+  - rule:
+      text: The HSS is a database and control role, not a packet hop.
+      when: That's a database
+  adjust: {}
+- id: 15.1.mme
+  stage: state
+  narration: 15.1.mme
+  pdf:
+  - lec15-mobile.pdf
+  - 14
+  concepts:
+  - LTE Mobility Management Entity
+  clarifications: []
+  moves:
+  - net.state:
+      name: l
+      nodes:
+        H: null
+        M: now
+  adjust: {}
+- id: 15.1.gw
+  stage: state
+  narration: 15.1.gw
+  pdf:
+  - lec15-mobile.pdf
+  - 13
+  concepts:
+  - LTE Serving Gateway
+  - LTE Packet Gateway
+  clarifications: []
+  moves:
+  - net.state:
+      name: l
+      nodes:
+        M: null
+        S: now
+        G: now
+  - packet.spawn:
+      name: p
+      net: l
+      at: U
+      layers:
+      - ip
+      when: To see the point
+  - packet.hop:
+      name: p
+      to:
+      - E
+      - S
+      - G
+      - I
+      t: 2.5
+  adjust: {}
+- id: 15.1.pgw-more
+  stage: state
+  narration: 15.1.pgw-more
+  pdf:
+  - lec15-mobile.pdf
+  - 13
+  concepts:
+  - LTE Packet Gateway
+  clarifications: []
+  moves:
+  - packet.fade:
+      name: p
+  - net.state:
+      name: l
+      nodes:
+        S: null
+        G: now
+      when: The P-GW is
+  - net.pulse:
+      name: l
+      path:
+      - G
+      - I
+      when: The radio cell
+  - rule:
+      text: NAT translates addresses. A tunnel adds an envelope.
+      when: But NAT
+  adjust: {}
+  pre_roll: 0.5
+- id: 15.1.rule
+  stage: rule
+  narration: 15.1.rule
+  pdf:
+  - lec15-mobile.pdf
+  - 15
+  concepts:
+  - LTE All-IP Core
+  clarifications: []
+  moves:
+  - packet.fade:
+      name: p
+  - net.state:
+      name: l
+      nodes:
+        S: null
+        G: null
+  - rule:
+      text: HSS and MME are in the control story. S-GW and P-GW are in the payload story.
+  adjust: {}
+- id: 15.1.pitfall
+  stage: rule
+  narration: 15.1.pitfall
+  pdf:
+  - lec15-mobile.pdf
+  - 15
+  concepts:
+  - LTE All-IP Core
+  clarifications: []
+  moves:
+  - trap:
+      wrong: User data flows through the HSS or MME
+      right: HSS and MME handle control. The gateways carry the data.
+  adjust: {}
+- id: 15.1.changed
+  stage: changed_example
+  narration: 15.1.changed
+  pdf:
+  - lec15-mobile.pdf
+  - 14
+  concepts:
+  - LTE Mobility Management Entity
+  clarifications: []
+  moves:
+  - net.state:
+      name: l
+      nodes:
+        M: error
+  adjust: {}
+- id: 15.1.predict
+  stage: prediction
+  narration: 15.1.predict
+  pdf:
+  - lec15-mobile.pdf
+  - 14
+  concepts:
+  - LTE Mobility Management Entity
+  - LTE Serving Gateway
+  clarifications: []
+  moves:
+  - pause:
+      text: which failure stops the packets right away?
+  adjust: {}
+  hold: 6
+- id: 15.1.answer
+  stage: explanation
+  narration: 15.1.answer
+  pdf:
+  - lec15-mobile.pdf
+  - 13
+  concepts:
+  - LTE Serving Gateway
+  - LTE Mobility Management Entity
+  clarifications: []
+  moves:
+  - net.state:
+      name: l
+      nodes:
+        M: null
+        S: error
+  - rule:
+      text: Data-path failure stops packets. Control failure stops changes.
+  - keep: {}
+  adjust: {}

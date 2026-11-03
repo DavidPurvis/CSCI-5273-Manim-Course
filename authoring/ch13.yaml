@@ -1,0 +1,2171 @@
+dish: '13.1'
+title: One address, many servers
+deck: lec13-multicast.pdf
+target_min: 4.5
+concepts:
+- IP Anycast
+beats:
+- id: question
+  stage: question
+  pdf: 5
+  c:
+  - IP Anycast
+  say: Our laptop has been talking to one server. But a popular service runs in many
+    locations. DNS could return different addresses, but what happens if one of those
+    servers fails? The laptop's cache keeps handing out the dead address until the
+    TTL runs out. Could one single address lead to several servers, so a failure needs
+    no new DNS answer at all?
+  moves:
+  - heading:
+      text: 'Lecture 13: one address, many servers'
+  - spine:
+      current: Groups
+      zone: top
+  - q:
+      text: Could one address lead to several servers?
+      zone: bottom
+- id: laptop
+  stage: animation
+  pdf: 5
+  c:
+  - IP Anycast
+  say: So far, our laptop has sent to exactly one server. But when it looks up a popular
+    name, which of a thousand servers should answer? And when it joins a live stream,
+    what if a million other laptops want the same bits? The destination is about to
+    stop meaning one machine.
+  moves:
+  - clear: {}
+  - net.show:
+      name: lp
+      zone: top
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        A:
+          k: router
+          at:
+          - 3.4
+          - 0
+          l: R1
+        B:
+          k: router
+          at:
+          - 6.8
+          - 0
+          l: R2
+        W:
+          k: server
+          at:
+          - 10.2
+          - 0
+          l: Web server
+      links:
+      - - L
+        - A
+      - - A
+        - B
+      - - B
+        - W
+  - packet.spawn:
+      name: p
+      net: lp
+      at: L
+      layers:
+      - ip
+      when: So far, our
+  - packet.hop:
+      name: p
+      to:
+      - A
+      - B
+      - W
+      t: 2.2
+  - packet.fade:
+      name: p
+  - rule:
+      text: The destination is about to stop meaning one machine.
+      when: The destination
+  pre_roll: 2.0
+- id: dnslimits
+  stage: animation
+  pdf: 4
+  c:
+  - IP Anycast
+  say: See the limit first. A DNS answer may hold several A records, for load balancing
+    and failover, each one valid for 300 seconds. If a server fails, clients can hold
+    on to its address for that long. A very low TTL puts extra load on DNS, and browsers
+    may cache addresses regardless. And what if the DNS server itself is the thing
+    that fails? We can't use DNS to fail over DNS.
+  moves:
+  - clear: {}
+  - table.show:
+      name: dl
+      zone: top
+      cols:
+      - Name
+      - TTL
+      - Address
+      rows:
+      - - www.example.test
+        - 300
+        - 192.0.2.19
+      - - www.example.test
+        - 300
+        - 192.0.2.25
+      - - www.example.test
+        - 300
+        - 192.0.2.26
+  - table.mark:
+      name: dl
+      r: 0
+      state: error
+      when: If a server fails
+- id: announce
+  stage: animation
+  pdf: 7
+  c:
+  - IP Anycast
+  say: It can, and it takes no new protocol. Give two server instances the same address,
+    10.0.0.1, and let both locations announce it into routing. Routers simply see
+    two routes to one destination. Router 1's table lists 10.0.0.1 through router
+    2 at distance 1, and through router 3 at distance 2. It chooses the closer one,
+    just as it would for any route. That's IP anycast. One destination, delivered
+    to one selected instance.
+  moves:
+  - clear: {}
+  - net.show: &id001
+      name: a
+      zone: left
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0.8
+          l: Client
+        R1:
+          k: router
+          at:
+          - 3
+          - 0.8
+          l: R1
+        R2:
+          k: router
+          at:
+          - 6
+          - 1.6
+          l: R2
+          lp: up
+        R3:
+          k: router
+          at:
+          - 6
+          - 0
+          l: R3
+        A:
+          k: server
+          at:
+          - 10
+          - 1.6
+          l: 'A: 10.0.0.1'
+          lp: up
+        B:
+          k: server
+          at:
+          - 10
+          - 0
+          l: 'B: 10.0.0.1'
+      links:
+      - - L
+        - R1
+      - - R1
+        - R2
+      - - R1
+        - R3
+      - - R2
+        - A
+      - - R3
+        - B
+  - table.show:
+      name: rt
+      zone: right
+      cols:
+      - Destination
+      - Via
+      - Cost
+      - Site
+      rows:
+      - - 10.0.0.1/32
+        - R2
+        - 1
+        - A
+      - - 10.0.0.1/32
+        - R3
+        - 2
+        - B
+    when: Router 1's table
+  - table.mark:
+      name: rt
+      r: 0
+      state: done
+      when: It chooses
+  - packet.spawn:
+      name: p
+      net: a
+      at: L
+      layers:
+      - ip
+      when: That's IP anycast
+  - packet.hop:
+      name: p
+      to:
+      - R1
+      - R2
+      - A
+  - packet.fade:
+      name: p
+- id: failover
+  stage: state
+  pdf: 11
+  c:
+  - IP Anycast
+  say: Instance A fails, and its route is withdrawn. The client does nothing. It keeps
+    sending to the same address. Router 1 falls back to the remaining route, and packets
+    now reach instance B. There's no new DNS answer, and no client change. But failover
+    isn't instant. It still waits for health detection, and routing convergence. And
+    ordinary routing knows nothing about server load, or whether the program behind
+    a live route is actually healthy.
+  moves:
+  - net.state:
+      name: a
+      nodes:
+        A: error
+      links:
+      - - R2
+        - A
+        - failed
+      when: Instance A
+  - table.mark:
+      name: rt
+      r: 0
+      state: error
+  - table.mark:
+      name: rt
+      r: 1
+      state: done
+      when: Router 1 falls
+  - packet.spawn:
+      name: p2
+      net: a
+      at: L
+      layers:
+      - ip
+  - packet.hop:
+      name: p2
+      to:
+      - R1
+      - R3
+      - B
+  - packet.fade:
+      name: p2
+- id: rule
+  stage: rule
+  pdf: 9
+  c:
+  - IP Anycast
+  say: Here's the rule. Anycast means one of many, and routing picks which one. DNS
+    still says just one thing, www.server.com is 10.0.0.1, and that answer stays true.
+    Be aware that the slide's slash 32 is an internal toy example. Whether the wider
+    Internet accepts a prefix that specific depends on routing policy.
+  moves:
+  - rule:
+      text: 'Anycast: one address, many instances. Routing selects exactly one.'
+- id: pitfall
+  stage: rule
+  pdf: 9
+  c:
+  - IP Anycast
+  say: The slide's warning is easy to overread. Anycast isn't banned for TCP. The
+    real issue is that a flow might shift to an instance without its connection state.
+  moves:
+  - trap:
+      wrong: Anycast can never work with TCP
+      right: The risk is a flow moving to an instance without its state
+- id: changed
+  stage: changed_example
+  pdf: 14
+  c:
+  - IP Anycast
+  clar:
+  - anycast-tcp
+  say: Use anycast for something long-lived. A client has an open TCP connection to
+    instance A. Routes shift, though nothing failed, and the next packet is delivered
+    to instance B.
+  moves:
+  - clear: {}
+  - net.show: *id001
+  - packet.spawn:
+      name: t
+      net: a
+      at: L
+      layers:
+      - transport
+      - ip
+  - packet.hop:
+      name: t
+      to:
+      - R1
+      - R3
+      - B
+- id: predict
+  stage: prediction
+  pdf: 14
+  hold: 6
+  c:
+  - IP Anycast
+  say: What does instance B do with that packet, and why?
+  moves:
+  - pause:
+      text: what does B do with a packet from A's connection?
+- id: answer
+  stage: explanation
+  pdf: 14
+  c:
+  - IP Anycast
+  clar:
+  - anycast-tcp
+  - dns-roots
+  say: 'B has never heard of this connection. It has no state for it, so the connection
+    can break. That''s the real meaning of the slide''s warning. The problem is lost
+    connection state, and anycast isn''t flatly incompatible with TCP. Stable routing
+    and careful service design make it workable. In fact, the DNS root servers we
+    met earlier are deployed this way: 13 identities, with many anycast instances.
+    Anycast picked one receiver out of many. Next, what if we want all of them?'
+  moves:
+  - card:
+      kind: clarification
+      text: The issue is lost connection state, not a blanket ban on anycast with
+        TCP.
+      zone: bottom
+  - rule:
+      text: 'Next: delivery to every interested receiver.'
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 13.1.predict
+  answer_beat: 13.1.answer
+  answer_events:
+  - 13.1.answer:move:0
+  - 13.1.answer:move:1
+  answer_objects:
+  - object: _card
+    after: 13.1.answer:move:0
+    effect: card
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 13.1.answer:move:1
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '13.2'
+title: Who wants the stream?
+deck: lec13-multicast.pdf
+target_min: 7.5
+concepts:
+- IP Multicast
+- Multicast Group Addresses
+- Iterated Unicast
+- Overlay Multicast
+- IGMPv1
+- IGMPv2
+- IGMPv3
+- IGMP Snooping
+beats:
+- id: question
+  stage: question
+  pdf: 16
+  c:
+  - IP Multicast
+  say: A source wants to send one 10 megabit per second stream to three receivers.
+    All three sit behind the same first link. Must that link really carry three identical
+    copies? And how would the network even know who wants the stream?
+  moves:
+  - heading:
+      text: 'Lecture 13: who wants the stream?'
+  - q:
+      text: Three receivers, one first link. Must it carry three copies?
+  - keep: {}
+- id: unicast
+  stage: animation
+  pdf: 22
+  c:
+  - Iterated Unicast
+  say: The simple answer is iterated unicast. Just send a separate copy to each receiver.
+    It needs no network support at all. But on the shared link, that's 3 times 10,
+    or 30 megabits per second, all carrying the same bits.
+  moves:
+  - clear: {}
+  - net.show:
+      name: m
+      zone: left
+      nodes:
+        S:
+          k: server
+          at:
+          - 0
+          - 1.5
+          l: Source
+        R:
+          k: router
+          at:
+          - 3
+          - 1.5
+          l: R
+        X:
+          k: router
+          at:
+          - 6
+          - 1.5
+          l: X
+        H1:
+          k: host
+          at:
+          - 9
+          - 3
+          l: H1
+        H2:
+          k: host
+          at:
+          - 9
+          - 1.5
+          l: H2
+        H3:
+          k: host
+          at:
+          - 9
+          - 0
+          l: H3
+      links:
+      - - S
+        - R
+      - - R
+        - X
+      - - X
+        - H1
+      - - X
+        - H2
+      - - X
+        - H3
+  - packet.spawn:
+      name: c1
+      net: m
+      at: S
+      layers:
+      - ip
+  - packet.flood:
+      name: c1
+      to:
+      - X
+      - X
+      - X
+  - tex:
+      name: u
+      zone: right_top
+      tex: 3\times 10\ \text{Mb/s}=30\ \text{Mb/s}
+      size: 44
+- id: unicast-more
+  stage: state
+  pdf: 22
+  c:
+  - Iterated Unicast
+  say: Scale it up. A one megabyte file sent separately to 100 receivers makes the
+    sender transmit 100 megabytes. If every copy crosses the same upstream link, that
+    link carries all 100.
+  moves:
+  - tex:
+      name: u2
+      zone: right_bottom
+      tex: 100\times 1\ \text{MB}=100\ \text{MB}
+      size: 44
+      when: A one megabyte
+  - net.pulse:
+      name: m
+      path:
+      - S
+      - R
+      - X
+      when: If every copy
+- id: multicast
+  stage: state
+  pdf: 18
+  c:
+  - IP Multicast
+  say: IP multicast does better. The source sends one copy, addressed to a group,
+    and routers replicate it only where paths diverge. The shared link carries just
+    10 megabits per second. The saving is on the shared edges. There's still forwarding
+    work at each branch. And notice the difference from anycast. Anycast reaches one
+    of many. Multicast reaches all who are interested.
+  moves:
+  - packet.fade:
+      name: c1
+  - packet.spawn:
+      name: c2
+      net: m
+      at: S
+      layers:
+      - ip
+  - packet.hop:
+      name: c2
+      to:
+      - R
+      - X
+  - packet.flood:
+      name: c2
+      to:
+      - H1
+      - H2
+      - H3
+  - tex:
+      name: v
+      zone: right_bottom
+      tex: 1\times 10\ \text{Mb/s}=10\ \text{Mb/s}
+      size: 44
+- id: address
+  stage: state
+  pdf: 19
+  c:
+  - Multicast Group Addresses
+  say: What goes in the packet? The sender keeps its ordinary source address. The
+    destination is a group address, drawn from 224.0.0.0/4. That address names no
+    single machine, only an audience. A sender doesn't have to be a member. And the
+    group's membership can change at any time.
+  moves:
+  - clear: {}
+  - stack.show:
+      name: g
+      zone: left_top
+      width: 5.6
+      layers:
+      - t: 'Source: the sender''s own address'
+        k: ip
+      - t: 'Destination: group in 224.0.0.0/4'
+        k: ip
+  - bullets:
+      name: gg
+      zone: right_top
+      show: 2
+      items:
+      - Names an audience, not a machine
+      - A sender need not be a member
+- id: address-more
+  stage: state
+  pdf: 19
+  c:
+  - Multicast Group Addresses
+  say: A concrete example. A sender at 192.0.2.10 sends to group 239.1.1.1, and two
+    receivers join that group. The packet's source stays 192.0.2.10, and its destination
+    is 239.1.1.1. The source never becomes the group address.
+  moves:
+  - table.show:
+      name: ex
+      zone: bottom
+      cols:
+      - Field
+      - Value
+      rows:
+      - - Source
+        - 192.0.2.10
+      - - Destination
+        - 239.1.1.1
+      show: 0
+      when: A concrete
+  - table.reveal:
+      name: ex
+      when: The packet's source
+  - table.reveal:
+      name: ex
+      when: and its destination
+  - table.mark:
+      name: ex
+      r: 0
+      state: done
+      when: The source never
+- id: overlay
+  stage: state
+  pdf: 22
+  c:
+  - Overlay Multicast
+  say: What if routers don't support multicast? Overlay multicast builds the distribution
+    tree among the end hosts themselves, using ordinary unicast. Each host receives
+    the stream, and forwards it to a few others. It needs no router support. But overlay
+    paths can cross the same physical link repeatedly, and forwarding uses up the
+    hosts' upload capacity.
+  moves:
+  - table.show:
+      name: ov
+      zone: bottom
+      cols:
+      - Method
+      - Replicates at
+      - Downside
+      rows:
+      - - Iterated unicast
+        - source
+        - many copies on shared links
+      - - IP multicast
+        - routers
+        - needs router support
+      - - Overlay
+        - end hosts
+        - repeated links and host upload
+- id: overlay-more
+  stage: state
+  pdf: 22
+  c:
+  - Overlay Multicast
+  say: Picture it as a tree of hosts. The source sends to two peers, and each of them
+    sends to two more. Seven recipients fit in three levels, and no router needs to
+    know anything about the group.
+  moves:
+  - net.show:
+      name: ot
+      zone: top
+      nodes:
+        S:
+          k: node
+          at:
+          - 4
+          - 2
+          l: S
+        A:
+          k: node
+          at:
+          - 2
+          - 1
+          l: a
+        B:
+          k: node
+          at:
+          - 6
+          - 1
+          l: b
+        C:
+          k: node
+          at:
+          - 1
+          - 0
+          l: c
+        D:
+          k: node
+          at:
+          - 3
+          - 0
+          l: d
+        E:
+          k: node
+          at:
+          - 5
+          - 0
+          l: e
+        F:
+          k: node
+          at:
+          - 7
+          - 0
+          l: f
+        G:
+          k: node
+          at:
+          - 8.4
+          - 0
+          l: g
+      links:
+      - - S
+        - A
+      - - S
+        - B
+      - - A
+        - C
+      - - A
+        - D
+      - - B
+        - E
+      - - B
+        - F
+      - - F
+        - G
+  - net.pulse:
+      name: ot
+      path:
+      - S
+      - A
+      - C
+      when: The source sends
+  - net.pulse:
+      name: ot
+      path:
+      - S
+      - B
+      - F
+      - G
+      when: Seven recipients
+- id: igmp1
+  stage: animation
+  pdf: 28
+  c:
+  - IGMPv1
+  say: 'Who''s interested? IGMP handles this on the local network, between hosts and
+    their directly attached router. The router sends a query: any members out there?
+    Hosts reply with reports. Here''s a clever trick. H1 and H2 both want group G.
+    Each picks a random delay, say 2 seconds and 6 seconds. H1''s timer fires first,
+    and it sends its report to the group itself. H2 hears the report, and cancels
+    its own. Why? Because the router only needs to know that someone on this LAN wants
+    G, not who, or how many. In version 1 there''s no leave message. Membership simply
+    expires when reports stop.'
+  moves:
+  - clear: {}
+  - seq.show:
+      name: q
+      zone: left
+      lanes:
+      - Router
+      - H1
+      - H2
+      steps: 4
+  - seq.msg:
+      name: q
+      a: Router
+      b: H2
+      text: query to all hosts
+      kind: ip
+      when: The router sends
+  - table.show:
+      name: sup
+      zone: right_top
+      cols:
+      - Host
+      - Delay
+      - Action
+      rows:
+      - - H1
+        - 2 s
+        - reports
+      - - H2
+        - 6 s
+        - suppressed
+    when: Each picks
+  - seq.msg:
+      name: q
+      a: H1
+      b: Router
+      text: report at 2 s
+      kind: eth
+      when: H1's timer
+  - rule:
+      text: The router needs to know whether anyone wants the group, not who.
+      when: Because the router
+- id: dest
+  stage: rule
+  pdf: 27
+  c:
+  - IGMPv1
+  clar:
+  - igmp-dest
+  say: The slides speak loosely here, so let's be exact. In version 1, queries go
+    to the all-hosts group, and a report goes to the group being reported. That's
+    how H2 hears H1's report. Both are limited to the local network with a TTL of
+    1.
+  moves:
+  - card:
+      kind: clarification
+      text: Queries go to all hosts. A report goes to the group being reported, with
+        TTL 1.
+      zone: right_bottom
+- id: igmp23
+  stage: state
+  pdf: 32
+  c:
+  - IGMPv2
+  - IGMPv3
+  say: 'Version 2 adds an explicit leave. When a host leaves, can the router stop
+    forwarding at once? No. Another host on the LAN may still want the group. So the
+    router sends a group-specific query to check. If H2 still cares, its report keeps
+    the branch alive. Version 2 also adds querier election. Version 3 adds source
+    filtering, so a host can say: I want group G, but only from source S.'
+  moves:
+  - clear: {}
+  - seq.show:
+      name: q2
+      zone: left
+      lanes:
+      - Router
+      - H1
+      - H2
+      steps: 3
+  - seq.msg:
+      name: q2
+      a: H1
+      b: Router
+      text: leave
+      kind: eth
+      when: When a host leaves
+  - seq.msg:
+      name: q2
+      a: Router
+      b: H2
+      text: anyone still?
+      kind: ip
+      when: So the router
+  - seq.msg:
+      name: q2
+      a: H2
+      b: Router
+      text: report
+      kind: eth
+      state: done
+      when: If H2 still
+  - table.show:
+      name: vers
+      zone: right_top
+      cols:
+      - Version
+      - Adds
+      rows:
+      - - v1
+        - query, report, suppression
+      - - v2
+        - leave, group query, election
+      - - v3
+        - source filters
+- id: timer
+  stage: state
+  pdf: 33
+  c:
+  - IGMPv2
+  clar:
+  - igmp-timer
+  say: A timer detail, with a clarification. The slide computes a timeout as 2 times
+    the sum of 125 and 10, which gives 270 seconds. The standard's default formula,
+    in RFC 2236, is 2 times 125, plus 10, which gives 260 seconds. If a question supplies
+    the slide's formula, use it, and say so. Just don't quietly swap one for the other.
+  moves:
+  - table.show:
+      name: tmr
+      zone: right_bottom
+      cols:
+      - Source
+      - Formula
+      - Seconds
+      rows:
+      - - Slide
+        - "2 \xD7 (125 + 10)"
+        - $multicast.timers.slide_formula
+      - - RFC 2236
+        - "2 \xD7 125 + 10"
+        - $multicast.timers.rfc2236
+- id: snoop
+  stage: rule
+  pdf: 33
+  c:
+  - IGMP Snooping
+  say: Finally, what about the switch? An ordinary switch floods multicast out every
+    port. IGMP snooping lets it listen in on these membership messages, and deliver
+    only to ports with interested hosts. So keep the scope clear. IGMP is about one
+    local network. It doesn't build the tree between routers.
+  moves:
+  - clear: {}
+  - net.show:
+      name: sn
+      zone: top
+      nodes:
+        X:
+          k: switch
+          at:
+          - 3
+          - 1
+          l: Switch
+          lp: up
+        A:
+          k: host
+          at:
+          - 0
+          - 0
+          l: Member
+        B:
+          k: host
+          at:
+          - 3
+          - 0
+          l: Not a member
+        C:
+          k: host
+          at:
+          - 6
+          - 0
+          l: Member
+      links:
+      - - X
+        - A
+        - s: active
+      - - X
+        - B
+        - s: dim
+      - - X
+        - C
+        - s: active
+  - rule:
+      text: IGMP covers one local network. It does not build the tree between routers.
+- id: snoop-more
+  stage: state
+  pdf: 33
+  c:
+  - IGMP Snooping
+  say: Say only one port has a receiver for a group. A snooping switch sends that
+    group's traffic toward that port, and toward its router ports, rather than every
+    access port. This is separate from unicast MAC learning, because it comes from
+    reading membership messages.
+  moves:
+  - net.pulse:
+      name: sn
+      path:
+      - X
+      - A
+      when: A snooping switch
+  - net.state:
+      name: sn
+      nodes:
+        A: done
+  - rule:
+      text: Snooping reads membership messages. It isn't unicast MAC learning.
+      when: This is separate
+- id: pitfall
+  stage: rule
+  pdf: 33
+  c:
+  - IGMP Snooping
+  say: Keep the scope straight. IGMP tells the last router which groups are wanted
+    on its LAN. It doesn't compute the tree between routers. That's a multicast routing
+    protocol's job.
+  moves:
+  - trap:
+      wrong: IGMP connects the multicast routers
+      right: IGMP is the LAN's membership. Routing protocols build the tree.
+- id: changed
+  stage: changed_example
+  pdf: 30
+  c:
+  - IGMPv1
+  - IP Multicast
+  say: Change the numbers. A 5 megabit stream, three receivers behind one shared link,
+    with report delays of 2, 5, and 8 seconds.
+  moves:
+  - clear: {}
+  - text:
+      name: c
+      zone: top
+      lines:
+      - Stream 5 Mb/s, three receivers on a shared link
+      - 'Report delays: 2 s, 5 s, 8 s'
+- id: predict
+  stage: prediction
+  pdf: 30
+  hold: 12
+  c:
+  - IGMPv1
+  say: What's the load on the shared link, with unicast versus multicast? And how
+    many reports does the router actually hear?
+  moves:
+  - pause:
+      text: the link load both ways? how many reports are heard?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 30
+  c:
+  - IGMPv1
+  - IP Multicast
+  say: Unicast loads the link with 15 megabits per second. Multicast with 5. And the
+    router hears only one report, at 2 seconds, because the others suppress theirs.
+    So local interest is known. But how does the data cross many routers, to reach
+    all those interested networks? We need a tree. And it turns out the word tree
+    can mean several different things.
+  moves:
+  - table.show:
+      name: a
+      zone: bottom
+      cols:
+      - Question
+      - Answer
+      rows: &id001
+      - - Unicast load
+        - 15 Mb/s
+      - - Multicast load
+        - 5 Mb/s
+      - - Reports heard
+        - 1, at 2 s
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 13.2.predict
+  answer_beat: 13.2.answer
+  answer_events:
+  - 13.2.answer:move:0
+  answer_objects:
+  - object: a
+    after: 13.2.answer:move:0
+    effect: table.show
+    selector:
+      rows: *id001
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '13.3'
+title: Choosing a tree
+deck: lec13-multicast.pdf
+target_min: 4
+concepts:
+- Shared Multicast Trees
+- Source-Based Multicast Trees
+- Minimum Spanning Trees
+- Prim Algorithm
+- Kruskal Algorithm
+- Core-Based Trees
+beats:
+- id: question
+  stage: question
+  pdf: 36
+  c:
+  - Shared Multicast Trees
+  - Source-Based Multicast Trees
+  say: To deliver to many networks, routers need a tree. But we've already met one
+    tree in spanning tree, and another in Dijkstra's. Are they the same? What does
+    best even mean for a tree? And should every sender get its own tree, or should
+    they all share one?
+  moves:
+  - heading:
+      text: 'Lecture 13: choosing a tree'
+  - q:
+      text: What does 'best' even mean for a tree?
+  - keep: {}
+- id: kinds
+  stage: animation
+  pdf: 36
+  c:
+  - Shared Multicast Trees
+  - Source-Based Multicast Trees
+  say: First, a split. A source-based tree is rooted at one sender, so state is kept
+    per source and group, written S comma G. A shared tree is used by all senders
+    in the group, written star comma G. A shared tree needs less state. Source trees
+    can give shorter paths. So we're trading memory against path quality.
+  moves:
+  - clear: {}
+  - table.show:
+      name: k
+      zone: top
+      cols:
+      - Tree
+      - State
+      - Strength
+      rows:
+      - - Source-based
+        - (S,G)
+        - shorter paths
+      - - Shared
+        - (*,G)
+        - less state
+- id: mst
+  stage: state
+  pdf: 37
+  c:
+  - Minimum Spanning Trees
+  - Prim Algorithm
+  - Kruskal Algorithm
+  say: 'Next, objectives. A minimum spanning tree connects all nodes with the smallest
+    total edge cost. There are two classic ways to find one. Prim''s algorithm grows
+    one tree outward, always adding the cheapest edge that crosses from the tree to
+    a node outside. Kruskal''s algorithm sorts all edges, and adds each one unless
+    it would create a cycle. Try this triangle: A to B is 1, B to C is 1, and A to
+    C is 1 point 5. Both algorithms choose A B and B C, for a total of 2.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: t
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.4
+          l: B
+        C:
+          k: node
+          at:
+          - 6
+          - 0
+          l: C
+      links:
+      - - A
+        - B
+        - c: 1
+      - - B
+        - C
+        - c: 1
+      - - A
+        - C
+        - c: '1.5'
+  - bullets:
+      name: pk
+      zone: right_top
+      show: 0
+      items:
+      - 'Prim: cheapest edge crossing out of the tree'
+      - 'Kruskal: cheapest edge that makes no cycle'
+  - reveal:
+      name: pk
+      when: Prim's algorithm
+  - reveal:
+      name: pk
+      when: Kruskal's algorithm
+  - net.path:
+      name: t
+      path:
+      - A
+      - B
+      - C
+      style: tree
+      when: Both algorithms
+- id: objectives
+  stage: rule
+  pdf: 37
+  c:
+  - Minimum Spanning Trees
+  clar:
+  - tree-objectives
+  say: Ask a different question. What's the shortest way from A to C? It's the direct
+    edge, at 1 point 5, which isn't even in that tree. Dijkstra's tree from A would
+    use it. So three things share the word tree. STP makes layer 2 forwarding loop-free.
+    An MST minimizes total edge cost. A shortest path tree minimizes distance from
+    one source. Same word, different objectives.
+  moves:
+  - table.show:
+      name: obj
+      zone: right_bottom
+      cols:
+      - Tree
+      - Objective
+      rows:
+      - - STP
+        - no layer 2 loops
+      - - MST
+        - least total cost
+      - - Shortest path
+        - least distance from source
+- id: core
+  stage: state
+  pdf: 38
+  c:
+  - Core-Based Trees
+  say: 'One more design: core-based trees. Pick one router as the meeting point, called
+    the core. Each receiver''s router sends a join toward the core, and that request
+    stops as soon as it hits a router already on the tree. Traffic then flows along
+    those branches. It''s simple and uses little state. But the core could become
+    a hot spot, and paths may take a detour through it.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: cb
+      zone: top
+      nodes:
+        C:
+          k: router
+          at:
+          - 5
+          - 2
+          l: Core
+          lp: up
+        M:
+          k: router
+          at:
+          - 2.5
+          - 1
+          l: M
+        A:
+          k: router
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: router
+          at:
+          - 5
+          - 0
+          l: B
+        D:
+          k: router
+          at:
+          - 8.5
+          - 1
+          l: D
+      links:
+      - - A
+        - M
+      - - M
+        - C
+      - - B
+        - M
+      - - D
+        - C
+  - packet.spawn:
+      name: j
+      net: cb
+      at: A
+      layers:
+      - label
+      when: Each receiver's
+  - packet.hop:
+      name: j
+      to:
+      - M
+      - C
+  - net.path:
+      name: cb
+      path:
+      - A
+      - M
+      - C
+      style: tree
+  - packet.spawn:
+      name: j2
+      net: cb
+      at: B
+      layers:
+      - label
+      when: that request stops
+  - packet.hop:
+      name: j2
+      to: M
+  - net.path:
+      name: cb
+      path:
+      - B
+      - M
+      style: tree
+  - packet.fade:
+      name: j2
+- id: core-more
+  stage: state
+  pdf: 38
+  c:
+  - Core-Based Trees
+  say: The sharing. Receiver routers A and B both join toward the core, and their
+    paths merge at M. So the branch from the core to M carries one copy, and M replicates
+    it toward the two receivers.
+  moves:
+  - packet.spawn:
+      name: d
+      net: cb
+      at: C
+      layers:
+      - ip
+      when: So the branch
+  - packet.hop:
+      name: d
+      to: M
+  - packet.flood:
+      name: d
+      to:
+      - A
+      - B
+      when: and M replicates
+  - packet.fade:
+      name: d
+- id: pitfall
+  stage: rule
+  pdf: 38
+  c:
+  - Core-Based Trees
+  say: These algorithms look alike, and they aren't. Dijkstra accumulates distance
+    from a source. Prim just picks the cheapest edge reaching the growing tree. The
+    resulting trees can differ.
+  moves:
+  - trap:
+      wrong: Prim relaxes accumulated distances, like Dijkstra
+      right: Prim adds the cheapest edge reaching the tree
+- id: changed
+  stage: changed_example
+  pdf: 37
+  c:
+  - Minimum Spanning Trees
+  say: Change one cost. Make the direct A to C edge cost 0 point 5.
+  moves:
+  - clear: {}
+  - net.show:
+      name: t2
+      zone: left
+      nodes:
+        A:
+          k: node
+          at:
+          - 0
+          - 0
+          l: A
+        B:
+          k: node
+          at:
+          - 3
+          - 2.4
+          l: B
+        C:
+          k: node
+          at:
+          - 6
+          - 0
+          l: C
+      links:
+      - - A
+        - B
+        - c: 1
+      - - B
+        - C
+        - c: 1
+      - - A
+        - C
+        - c: '0.5'
+- id: predict
+  stage: prediction
+  pdf: 37
+  hold: 12
+  c:
+  - Minimum Spanning Trees
+  say: What's the minimum spanning tree now, and its total cost? And what's the shortest
+    path tree from A?
+  moves:
+  - pause:
+      text: the new MST, and the shortest path tree from A?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 37
+  c:
+  - Minimum Spanning Trees
+  - Prim Algorithm
+  - Kruskal Algorithm
+  say: 'The MST takes A C at 0 point 5, plus one of the edges of cost 1, for a total
+    of 1 point 5. There''s a tie, so either A B or B C works. From A, the shortest
+    path tree uses A C and A B. So this time the two objectives can coincide, on one
+    of the valid MSTs. They just don''t have to. Real multicast protocols don''t compute
+    a global MST. They use something cheaper, already sitting in every router: the
+    unicast routing table.'
+  moves:
+  - net.path:
+      name: t2
+      path:
+      - A
+      - C
+      style: tree
+  - net.path:
+      name: t2
+      path:
+      - A
+      - B
+      style: tree
+  - text:
+      name: tx
+      zone: right
+      lines:
+      - 'MST total: 0.5 + 1 = 1.5'
+      - "Tie: A\u2013B or B\u2013C"
+      - 'Next: reuse the unicast table'
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 13.3.predict
+  answer_beat: 13.3.answer
+  answer_events:
+  - 13.3.answer:move:0
+  - 13.3.answer:move:1
+  - 13.3.answer:move:2
+  answer_objects:
+  - object: t2
+    after: 13.3.answer:move:0
+    effect: net.path
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: t2
+    after: 13.3.answer:move:1
+    effect: net.path
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: tx
+    after: 13.3.answer:move:2
+    effect: text
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '13.4'
+title: RPF and PIM
+deck: lec13-multicast.pdf
+target_min: 7
+concepts:
+- Reverse Path Forwarding
+- Truncated Reverse Path Broadcasting
+- Reverse Path Multicasting
+- PIM Dense Mode
+- PIM Sparse Mode
+- PIM Rendezvous Point
+- PIM Register
+- PIM SPT Switchover
+beats:
+- id: question
+  stage: question
+  pdf: 40
+  c:
+  - Reverse Path Forwarding
+  say: A router receives a multicast packet. If it floods the packet out every port,
+    loops and duplicates will multiply, and we saw how badly that ends on Ethernet.
+    How can a router decide whether to accept a packet, without any tree having been
+    computed?
+  moves:
+  - heading:
+      text: 'Lecture 13: RPF and PIM'
+  - q:
+      text: How can a router reject duplicates without a computed tree?
+- id: rpf
+  stage: animation
+  pdf: 40
+  c:
+  - Reverse Path Forwarding
+  say: 'An elegant trick. Look at where the packet came from, and ask: if I were sending
+    a packet back to this source, which port would I use? If the packet arrived on
+    that port, it probably came along the shortest path. Accept it, and forward it
+    out the other ports. If it arrived anywhere else, it''s a duplicate that wandered
+    around another branch. Drop it. That''s reverse path forwarding. Say router X
+    reaches source S through port 1. A packet from S arriving on port 1 passes. A
+    copy arriving on port 3 fails.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: r
+      zone: top
+      nodes:
+        S:
+          k: server
+          at:
+          - 0
+          - 0.8
+          l: Source S
+        A:
+          k: router
+          at:
+          - 3.4
+          - 1.8
+          l: A
+        B:
+          k: router
+          at:
+          - 3.4
+          - -0.2
+          l: B
+        X:
+          k: router
+          at:
+          - 7
+          - 0.8
+          l: X
+        Z:
+          k: host
+          at:
+          - 10.4
+          - 0.8
+          l: Downstream
+      links:
+      - - S
+        - A
+      - - S
+        - B
+      - - A
+        - X
+        - c: port 1
+      - - B
+        - X
+        - c: port 3
+      - - X
+        - Z
+  - net.walk:
+      name: r
+      path:
+      - X
+      - A
+      - S
+      when: if I were sending
+  - net.state:
+      name: r
+      nodes:
+        X: done
+      when: If the packet arrived
+  - net.state:
+      name: r
+      nodes:
+        X: error
+      when: If it arrived anywhere
+  - rule:
+      text: 'RPF: accept only if it arrived on the port you''d use to reach the source.'
+      when: That's reverse
+  - net.unwalk:
+      name: r
+      when: Say router X
+  - net.state:
+      name: r
+      nodes:
+        X: null
+  - packet.spawn:
+      name: g1
+      net: r
+      at: S
+      layers:
+      - ip
+  - packet.hop:
+      name: g1
+      to:
+      - A
+      - X
+      when: A packet from S
+  - net.badge:
+      name: r
+      node: X
+      text: 'port 1: pass'
+      side: up
+      state: done
+  - packet.hop:
+      name: g1
+      to: Z
+  - packet.fade:
+      name: g1
+      when: A copy arriving
+  - packet.spawn:
+      name: g2
+      net: r
+      at: B
+      layers:
+      - ip
+  - packet.hop:
+      name: g2
+      to: X
+  - net.badge:
+      name: r
+      node: X
+      text: 'port 3: drop'
+      side: up
+      state: error
+  - packet.drop:
+      name: g2
+- id: prune
+  stage: state
+  pdf: 41
+  c:
+  - Truncated Reverse Path Broadcasting
+  - Reverse Path Multicasting
+  say: RPF alone still sends data everywhere, as a broadcast with no duplicates. Let's
+    narrow it. Truncated reverse path broadcasting skips a leaf LAN when IGMP says
+    no members exist there. That removes only the last hop. Reverse path multicasting
+    goes further. If a router has no local members, and none of its downstream routers
+    want the data, it sends a prune upstream. Prunes propagate, so entire uninterested
+    subtrees drop out.
+  moves:
+  - clear: {}
+  - net.show:
+      name: pr
+      zone: top
+      nodes:
+        S:
+          k: router
+          at:
+          - 5
+          - 2
+          l: Source side
+          lp: up
+        X:
+          k: router
+          at:
+          - 2.5
+          - 1
+          l: X
+        Y:
+          k: router
+          at:
+          - 7.5
+          - 1
+          l: Y
+        L1:
+          k: host
+          at:
+          - 1
+          - 0
+          l: No members
+        L2:
+          k: host
+          at:
+          - 4
+          - 0
+          l: No members
+        L3:
+          k: host
+          at:
+          - 7.5
+          - 0
+          l: Members
+      links:
+      - - S
+        - X
+      - - S
+        - Y
+      - - X
+        - L1
+      - - X
+        - L2
+      - - Y
+        - L3
+  - net.pulse:
+      name: pr
+      path:
+      - S
+      - X
+      - L1
+      when: RPF alone
+  - net.state:
+      name: pr
+      links:
+      - - X
+        - L1
+        - dim
+      when: Truncated reverse
+  - net.state:
+      name: pr
+      links:
+      - - X
+        - L2
+        - dim
+      when: Reverse path multicasting
+  - msg.send:
+      name: pr
+      a: X
+      b: S
+      text: prune
+      kind: error
+      when: it sends a prune
+      t: 1.1
+  - net.state:
+      name: pr
+      links:
+      - - S
+        - X
+        - blocked
+  - net.state:
+      name: pr
+      links:
+      - - S
+        - Y
+        - tree
+      - - Y
+        - L3
+        - tree
+      when: so entire uninterested
+  pre_roll: 2.0
+- id: dense
+  stage: state
+  pdf: 44
+  c:
+  - PIM Dense Mode
+  say: PIM, protocol independent multicast, is the standard router protocol. It's
+    called independent because it reuses whatever unicast routing is available. PIM
+    dense mode is the approach we've just seen. Flood, then prune. Everything is forwarded
+    unless a branch opts out. That's sensible if most networks want the data, but
+    wasteful if very few do. Prunes also expire, so the flooding comes back periodically.
+  moves:
+  - net.pulse:
+      name: pr
+      path:
+      - S
+      - Y
+      - L3
+      when: It's called independent
+  - net.state:
+      name: pr
+      links:
+      - - S
+        - X
+        - solid
+      - - X
+        - L1
+        - solid
+      - - X
+        - L2
+        - solid
+      when: Flood, then prune
+  - net.pulse:
+      name: pr
+      path:
+      - S
+      - X
+      - L2
+  - msg.send:
+      name: pr
+      a: X
+      b: S
+      text: prune
+      kind: error
+      when: Everything is forwarded
+      t: 1.1
+  - rule:
+      text: 'Dense mode: forward unless pruned. Sensible only when most networks are
+        interested.'
+      when: That's sensible
+  - net.pulse:
+      name: pr
+      path:
+      - S
+      - X
+      - L1
+      when: Prunes also expire
+- id: sparse
+  stage: state
+  pdf: 46
+  c:
+  - PIM Sparse Mode
+  - PIM Rendezvous Point
+  clar:
+  - pim-shared
+  say: When receivers are rare, we flip the default. In PIM sparse mode, nothing flows
+    until someone asks. Everyone agrees on a meeting point for the group, called the
+    rendezvous point, or RP. A receiver's designated router sends a star comma G join
+    toward the RP, creating a shared tree. Data then flows only along the branches
+    that joined. The slide's phrase, CBT, source based, is shorthand. What actually
+    happens is that sparse mode starts with this shared tree.
+  moves:
+  - clear: {}
+  - net.show:
+      name: s
+      zone: top
+      nodes:
+        S:
+          k: server
+          at:
+          - 0
+          - 0
+          l: Source
+        DS:
+          k: router
+          at:
+          - 2.6
+          - 0
+          l: Source DR
+        RP:
+          k: router
+          at:
+          - 5.8
+          - 1.6
+          l: RP
+          lp: up
+        DR:
+          k: router
+          at:
+          - 9
+          - 0
+          l: Receiver DR
+        H:
+          k: host
+          at:
+          - 11.6
+          - 0
+          l: Receiver
+      links:
+      - - S
+        - DS
+      - - DS
+        - RP
+      - - RP
+        - DR
+      - - DS
+        - DR
+        - s: dim
+      - - DR
+        - H
+  - net.state:
+      name: s
+      nodes:
+        RP: now
+      when: Everyone agrees
+  - msg.send:
+      name: s
+      a: DR
+      b: RP
+      text: (*,G) join
+      when: A receiver's designated
+  - net.path:
+      name: s
+      path:
+      - RP
+      - DR
+      style: tree
+      when: creating a shared
+  - net.pulse:
+      name: s
+      path:
+      - RP
+      - DR
+      - H
+      when: Data then flows
+  - card:
+      kind: clarification
+      text: Sparse mode begins with a shared (*,G) tree, then may switch to (S,G).
+      zone: bottom
+      when: The slide's phrase
+- id: register
+  stage: state
+  pdf: 47
+  c:
+  - PIM Register
+  say: A source appears. Its designated router doesn't know the receivers. It only
+    knows the RP. So it wraps the first data packets in a PIM Register message, and
+    unicasts those to the RP. That's encapsulation again. The RP unwraps them, and
+    sends them down the shared tree. Then the RP can set up native forwarding from
+    the source, so that encapsulation is no longer needed.
+  moves:
+  - packet.spawn:
+      name: rg
+      net: s
+      at: S
+      layers:
+      - ip
+  - packet.hop:
+      name: rg
+      to: DS
+  - packet.wrap:
+      name: rg
+      kind: tunnel
+      when: So it wraps
+  - packet.hop:
+      name: rg
+      to: RP
+      when: and unicasts
+  - packet.peel:
+      name: rg
+      when: The RP unwraps
+  - packet.hop:
+      name: rg
+      to:
+      - DR
+      - H
+  - packet.fade:
+      name: rg
+  - net.path:
+      name: s
+      path:
+      - DS
+      - RP
+      style: tree
+      when: Then the RP
+- id: register-more
+  stage: state
+  pdf: 47
+  c:
+  - PIM Register
+  say: Why wrap it at all? The source's router knows only the RP, and the RP hasn't
+    built a path back yet. So Register is a bootstrap. The RP can unwrap each packet
+    and send it down the shared tree, while native forwarding toward the source is
+    being set up. A Register is not a join, and it's not a host's IGMP report.
+  moves:
+  - net.state:
+      name: s
+      nodes:
+        DS: now
+      when: The source's router
+  - net.state:
+      name: s
+      nodes:
+        DS: null
+        RP: now
+      when: So Register
+  - net.pulse:
+      name: s
+      path:
+      - RP
+      - DR
+      - H
+      when: The RP can
+  - rule:
+      text: 'Register is a bootstrap: not a join, and not an IGMP report.'
+      when: A Register is
+- id: spt
+  stage: state
+  pdf: 49
+  c:
+  - PIM SPT Switchover
+  say: 'But there''s a problem: the RP might be far out of the way. Say source to
+    RP costs 8, RP to receiver costs 7, and the direct path costs only 4. The receiver''s
+    router can now join toward the source, using S comma G. Once data arrives on the
+    new path, it prunes this source from the RP branch. The cost drops from 15 to
+    4, a saving of 11. The group address stays the same. This is called SPT switchover.
+    Start with a shared tree for easy discovery, then optimize.'
+  moves:
+  - fade:
+      names: _card
+  - net.cost:
+      name: s
+      a: DS
+      b: RP
+      cost: 8
+      when: source to RP
+  - net.cost:
+      name: s
+      a: RP
+      b: DR
+      cost: 7
+      when: RP to receiver
+  - net.cost:
+      name: s
+      a: DS
+      b: DR
+      cost: 4
+      when: the direct path
+  - msg.send:
+      name: s
+      a: DR
+      b: DS
+      text: (S,G) join
+      when: The receiver's router
+  - net.state:
+      name: s
+      links:
+      - - DS
+        - DR
+        - tree
+  - msg.send:
+      name: s
+      a: DR
+      b: RP
+      text: prune
+      kind: error
+      when: it prunes
+  - net.state:
+      name: s
+      links:
+      - - DS
+        - RP
+        - dim
+      - - RP
+        - DR
+        - dim
+  - tex:
+      name: sw
+      zone: bottom
+      tex: (8+7)-4=11\ \text{saved}
+      size: 46
+      when: The cost drops
+  - net.pulse:
+      name: s
+      path:
+      - DS
+      - DR
+      - H
+      when: The group address
+- id: rule
+  stage: rule
+  pdf: 50
+  c:
+  - PIM Sparse Mode
+  say: 'There are two axes. Dense mode says: forward by default, and prune. Sparse
+    mode says: send nothing until joined. And on any tree, RPF checks the upstream
+    direction, while pruning trims the downstream outputs. IGMP tells the last router
+    who is interested, and PIM connects the routers.'
+  moves:
+  - bullets:
+      name: ax
+      zone: bottom
+      show: 0
+      items:
+      - 'Dense: forward by default, then prune'
+      - 'Sparse: send nothing until joined'
+      - RPF checks upstream; pruning trims downstream
+  - reveal:
+      name: ax
+      when: Dense mode says
+  - reveal:
+      name: ax
+      when: Sparse mode says
+  - reveal:
+      name: ax
+      when: And on any tree
+  - rule:
+      text: IGMP learns local interest. PIM connects routers. RPF checks upstream;
+        pruning trims downstream.
+      when: IGMP tells
+- id: compare
+  stage: rule
+  pdf: 50
+  c:
+  - PIM Sparse Mode
+  - PIM Rendezvous Point
+  say: Set the two modes side by side. Dense mode starts broad, and shrinks. It needs
+    no meeting point, but it pays with periodic flooding, and state in routers that
+    have no interest. Sparse mode starts empty, and grows. It needs an RP, and it
+    starts with possible detours, but quiet parts of the network never hear about
+    the group at all. IP multicast is still best effort throughout, and neither mode
+    makes it reliable.
+  moves:
+  - clear: {}
+  - table.show:
+      name: dm
+      zone: top
+      cols:
+      - ''
+      - Dense
+      - Sparse
+      rows:
+      - - Default
+        - forward unless pruned
+        - drop unless joined
+      - - Starts with
+        - flooding
+        - joins to the RP
+      - - Suits
+        - widespread interest
+        - rare interest
+      show: 0
+  - table.reveal:
+      name: dm
+      when: Dense mode starts
+  - table.reveal:
+      name: dm
+      when: Sparse mode starts
+  - table.reveal:
+      name: dm
+      when: but quiet parts
+  - rule:
+      text: Multicast stays best effort in both modes.
+      when: IP multicast is
+- id: laptop
+  stage: rule
+  pdf: 50
+  c:
+  - PIM Sparse Mode
+  - PIM Rendezvous Point
+  say: For our laptop, joining a stream is simple. It sends one IGMP report to its
+    local router. Everything else, the joins, the RP, the tree, happens in routers
+    it never hears about. And if it stops listening, those branches get pruned away.
+  moves:
+  - rule:
+      text: The laptop sends one IGMP report. Routers do the rest.
+      when: For our laptop
+- id: pitfall
+  stage: rule
+  pdf: 50
+  c:
+  - PIM Sparse Mode
+  - PIM Rendezvous Point
+  say: 'A group address has no location to route toward. The reverse path check asks
+    about the source, or the tree''s root: would I reach it through the port this
+    packet came in on?'
+  moves:
+  - trap:
+      wrong: RPF checks the path toward the group
+      right: RPF checks the path back toward the source
+- id: changed
+  stage: changed_example
+  pdf: 49
+  c:
+  - PIM SPT Switchover
+  say: Change the geography. Suppose the RP sits right next to the path. Source to
+    RP costs 2, RP to receiver costs 3, and the direct path costs 5.
+  moves:
+  - clear: {}
+  - bullets:
+      name: c
+      zone: top
+      show: 0
+      items:
+      - 'Source to RP: 2'
+      - 'RP to receiver: 3'
+      - 'Direct: 5'
+  - reveal:
+      name: c
+      when: Source to RP
+  - reveal:
+      name: c
+      when: RP to receiver
+  - reveal:
+      name: c
+      when: and the direct
+- id: predict
+  stage: prediction
+  pdf: 49
+  hold: 12
+  c:
+  - PIM SPT Switchover
+  say: What does a switchover save now? And is the RP then a hot spot, or a bargain?
+  moves:
+  - pause:
+      text: what does switching to the source tree save here?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 49
+  c:
+  - PIM SPT Switchover
+  - PIM Rendezvous Point
+  say: Nothing at all. 2 plus 3 equals the direct 5. Switching would add state, for
+    no shorter path. So the shared tree is not inherently bad. The cost of the detour
+    depends on where the RP sits. That finishes our wired story. Packets have reached
+    one host, one of many, and all who asked. But now the laptop unplugs from its
+    wire, and all those assumptions about who can hear whom begin to fall apart.
+  moves:
+  - tex:
+      name: z
+      zone: bottom
+      tex: (2+3)-5=0\ \text{saved}
+      size: 48
+      when: 2 plus 3
+  - rule:
+      text: 'A detour''s cost depends on where the RP sits. Next: radio.'
+      when: The cost of the detour
+  - clear:
+      when: But now the laptop
+  - q:
+      text: Unplug the laptop. Who can hear whom now?
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 13.4.predict
+  answer_beat: 13.4.answer
+  answer_events:
+  - 13.4.answer:move:0
+  - 13.4.answer:move:1
+  - 13.4.answer:move:2
+  answer_objects:
+  - object: z
+    after: 13.4.answer:move:0
+    effect: tex
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 13.4.answer:move:1
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.

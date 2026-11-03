@@ -1,0 +1,250 @@
+dish: '14.2'
+title: CDMA
+deck: lec14-wireless.pdf
+target_min: 4
+concepts:
+- CDMA
+pad: 2.2
+beats:
+- id: 14.2.question
+  stage: question
+  narration: 14.2.question
+  pdf:
+  - lec14-wireless.pdf
+  - 14
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 14: CDMA'
+  - q:
+      text: Can two senders share a channel at the same moment?
+  adjust: {}
+- id: 14.2.codes
+  stage: animation
+  narration: 14.2.codes
+  pdf:
+  - lec14-wireless.pdf
+  - 14
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - clear: {}
+  - chips.show:
+      name: c
+      zone: top
+      rows:
+      - label: c1
+        values: $wireless.c1
+      - label: c2
+        values: $wireless.c2
+      show: 0
+  - chips.reveal:
+      name: c
+      when: Sender one uses
+  - chips.reveal:
+      name: c
+      when: Sender two uses
+  - tex:
+      name: d
+      zone: bottom
+      tex: c_1\cdot c_2 = 1-1-1+1 = 0
+      size: 48
+      when: Multiply them
+  adjust: {}
+- id: 14.2.send
+  stage: state
+  narration: 14.2.send
+  pdf:
+  - lec14-wireless.pdf
+  - 15
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - clear: {}
+  - chips.show:
+      name: w
+      zone: full
+      rows:
+      - label: c1, bit +1
+        values: $wireless.first_rows.a
+      - label: c2, bit -1
+        values: $wireless.c2
+      - label: z
+        values: $wireless.first.z
+      show: 0
+  - chips.reveal:
+      name: w
+      when: Sender one sends
+  - chips.reveal:
+      name: w
+      when: Sender two sends
+  - chips.flip:
+      name: w
+      row: 1
+      values: $wireless.first_rows.b
+      label: c2, bit -1
+      when: so it transmits its code flipped
+  - chips.sum:
+      name: w
+      when: On the air
+  - rule:
+      text: The sum on the air looks like neither sender.
+      when: This sum
+  adjust: {}
+- id: 14.2.decode
+  stage: state
+  narration: 14.2.decode
+  pdf:
+  - lec14-wireless.pdf
+  - 16
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - clear: {}
+  - chips.show:
+      name: w
+      zone: left
+      rows:
+      - label: z
+        values: $wireless.first.z
+      - label: c1
+        values: $wireless.c1
+      - label: c2
+        values: $wireless.c2
+  - chips.dot:
+      name: w
+      a: 0
+      b: 1
+      products: $wireless.first_rows.corr1
+      total: 4
+      result: '+1'
+      when: 0 times 1
+      t: 4.5
+  - chips.dot:
+      name: w
+      a: 0
+      b: 2
+      products: $wireless.first_rows.corr2
+      total: -4
+      result: '-1'
+      when: With c 2
+      t: 4
+  - rule:
+      text: Correlating with c1 multiplies sender two by c1 · c2, and that's zero.
+      when: Why does this
+  adjust: {}
+- id: 14.2.rule
+  stage: rule
+  narration: 14.2.rule
+  pdf:
+  - lec14-wireless.pdf
+  - 16
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - clear: {}
+  - tex:
+      name: f1
+      zone: top
+      tex: z=\sum_k d_k\,c_k
+      size: 54
+      when: In formula form
+  - tex:
+      name: f2
+      zone: bottom
+      tex: d_k=\frac{z\cdot c_k}{M}
+      size: 54
+      when: The receiver takes
+  - rule:
+      text: 'Ideal model: synchronized chips, balanced power.'
+      when: This is an ideal
+  adjust: {}
+  pre_roll: 0.7
+- id: 14.2.pitfall
+  stage: rule
+  narration: 14.2.pitfall
+  pdf:
+  - lec14-wireless.pdf
+  - 16
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Orthogonal codes never interfere
+      right: Only with synchronized chips and balanced powers
+  adjust: {}
+- id: 14.2.changed
+  stage: changed_example
+  narration: 14.2.changed
+  pdf:
+  - lec14-wireless.pdf
+  - 16
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - clear: {}
+  - chips.show:
+      name: w
+      zone: upper
+      rows:
+      - label: c1, bit -1
+        values: $wireless.second_rows.a
+      - label: c2, bit -1
+        values: $wireless.second_rows.b
+      - label: z
+        values: $wireless.second.z
+      show: 2
+  adjust: {}
+- id: 14.2.predict
+  stage: prediction
+  narration: 14.2.predict
+  pdf:
+  - lec14-wireless.pdf
+  - 16
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - pause:
+      text: the new z? what does each sender decode to?
+      long: true
+  adjust: {}
+  hold: 12
+- id: 14.2.answer
+  stage: explanation
+  narration: 14.2.answer
+  pdf:
+  - lec14-wireless.pdf
+  - 16
+  concepts:
+  - CDMA
+  clarifications: []
+  moves:
+  - chips.sum:
+      name: w
+      when: z is minus 2
+  - tex:
+      name: dc1
+      zone: lower
+      tex: z\cdot c_1/4=(-2+0+0-2)/4=-1
+      size: 38
+      when: Correlate with c 1
+  - tex:
+      name: dc2
+      zone: lower
+      tex: z\cdot c_2/4=(-2+0+0-2)/4=-1
+      size: 38
+      when: Correlate with c 2
+  - rule:
+      text: 'Both decode to −1. Next: joining a Wi-Fi network.'
+      when: Both bits
+  - keep: {}
+  adjust: {}

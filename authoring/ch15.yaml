@@ -1,0 +1,2091 @@
+dish: '15.1'
+title: The cellular core
+deck: lec15-mobile.pdf
+target_min: 6.5
+concepts:
+- 2G Circuit-Switched Core
+- 3G Parallel Voice and Data
+- LTE All-IP Core
+- UE and Subscriber Identity
+- LTE eNodeB
+- LTE Home Subscriber Server
+- LTE Mobility Management Entity
+- LTE Serving Gateway
+- LTE Packet Gateway
+beats:
+- id: question
+  stage: question
+  pdf: 2
+  c:
+  - 2G Circuit-Switched Core
+  say: Our laptop has become a phone, and now it's moving at highway speed, while
+    it streams video. Its local Wi-Fi tricks are no help at this scale. A cellular
+    carrier must find the phone anywhere in the country, keep its session alive across
+    towers, and bill the right person. What kind of network can do all this?
+  moves:
+  - heading:
+      text: 'Lecture 15: the cellular core'
+  - spine:
+      current: Move
+      zone: top
+  - q:
+      text: What network can follow a phone across a whole country?
+      zone: bottom
+- id: g2
+  stage: animation
+  pdf: 3
+  c:
+  - 2G Circuit-Switched Core
+  say: Follow the history, since it explains the design. 2G was built for voice, like
+    the telephone network. A radio site, called a BTS, connects to a base station
+    controller, a BSC. Those connect to a mobile switching center, the MSC, and a
+    gateway leads to the public telephone network. It's circuit switched throughout.
+  moves:
+  - clear: {}
+  - net.show:
+      name: n
+      zone: top
+      nodes:
+        P:
+          k: phone
+          at:
+          - 0
+          - 0
+          l: Phone
+        T:
+          k: tower
+          at:
+          - 2.4
+          - 0
+          l: BTS
+        B:
+          k: box
+          at:
+          - 5
+          - 0
+          l: BSC
+        M:
+          k: box
+          at:
+          - 7.6
+          - 0
+          l: MSC
+        G:
+          k: cloud
+          at:
+          - 10.8
+          - 0
+          l: Telephone
+      links:
+      - - P
+        - T
+        - s: radio
+      - - T
+        - B
+      - - B
+        - M
+      - - M
+        - G
+- id: g3
+  stage: state
+  pdf: 4
+  c:
+  - 3G Parallel Voice and Data
+  say: '3G had to add data, without breaking voice. So it built a parallel packet
+    core. The SGSN and GGSN form a data path to the Internet, sitting right beside
+    the unchanged voice path. Voice and data share the radio side, and split at the
+    edge of the core. That''s the key insight: coexistence, not replacement.'
+  moves:
+  - net.add:
+      name: n
+      nodes:
+        SG:
+          k: box
+          at:
+          - 7.6
+          - -1.6
+          l: SGSN
+        GG:
+          k: box
+          at:
+          - 10.8
+          - -1.6
+          l: GGSN
+      links:
+      - - B
+        - SG
+      - - SG
+        - GG
+        - s: active
+  - rule:
+      text: '3G: a packet-data core running beside the old voice core.'
+- id: g3-more
+  stage: state
+  pdf: 4
+  c:
+  - 3G Parallel Voice and Data
+  say: Watch one handset use both. Its voice call follows the MSC side. Its packet
+    data follows the SGSN and GGSN side, toward the Internet.
+  moves:
+  - packet.spawn:
+      name: vc
+      net: n
+      at: P
+      layers:
+      - eth
+      when: Its voice
+  - packet.hop:
+      name: vc
+      to:
+      - T
+      - B
+      - M
+      t: 1.6
+  - packet.fade:
+      name: vc
+  - packet.spawn:
+      name: dt
+      net: n
+      at: P
+      layers:
+      - ip
+      when: Its packet
+  - packet.hop:
+      name: dt
+      to:
+      - T
+      - B
+      - SG
+      - GG
+      t: 1.8
+  - packet.fade:
+      name: dt
+- id: g4
+  stage: state
+  pdf: 5
+  c:
+  - LTE All-IP Core
+  say: 4G LTE makes a clean break. Everything, even voice, is carried as IP packets
+    through one all-IP core. There's no separate circuit side. But all-IP doesn't
+    mean ordinary routers and nothing else. LTE keeps specialized machinery for subscribers,
+    authentication, location, radio scheduling, and tunnels.
+  moves:
+  - clear: {}
+  - net.show:
+      name: l
+      zone: top
+      nodes:
+        U:
+          k: phone
+          at:
+          - 0
+          - 0
+          l: UE
+        E:
+          k: tower
+          at:
+          - 2.8
+          - 0
+          l: eNodeB
+        S:
+          k: box
+          at:
+          - 6
+          - 0
+          l: S-GW
+        G:
+          k: box
+          at:
+          - 9
+          - 0
+          l: P-GW
+        I:
+          k: cloud
+          at:
+          - 12
+          - 0
+          l: Internet
+        M:
+          k: box
+          at:
+          - 6
+          - 2
+          l: MME
+        H:
+          k: box
+          at:
+          - 9
+          - 2
+          l: HSS
+      links:
+      - - U
+        - E
+        - s: radio
+      - - E
+        - S
+        - s: active
+      - - S
+        - G
+        - s: active
+      - - G
+        - I
+        - s: active
+      - - M
+        - E
+        - s: control
+      - - M
+        - S
+        - s: control
+      - - H
+        - M
+        - s: control
+- id: ue
+  stage: state
+  pdf: 10
+  c:
+  - UE and Subscriber Identity
+  clar:
+  - imsi
+  say: Let's assign each piece one main role. The UE, or user element, is the device,
+    along with its subscription. The subscription is identified by an IMSI. This is
+    an identity that stays the same, not a location. The slide calls it 64 bit, and
+    draws it like a MAC address. In the standard, it's a string of no more than 15
+    decimal digits. The point to keep is that it's separate from any MAC, IP, or tunnel
+    address.
+  moves:
+  - net.state:
+      name: l
+      nodes:
+        U: now
+  - card:
+      kind: clarification
+      text: 'IMSI: a subscriber identity of up to 15 digits, not a MAC address.'
+      zone: left_bottom
+      when: The slide calls
+- id: enb
+  stage: state
+  pdf: 11
+  c:
+  - LTE eNodeB
+  say: The eNodeB is the base station. It's not a passive relay. It manages radio
+    resources, and takes an active part in attachment and handover. It's where the
+    wireless hop meets the core.
+  moves:
+  - fade:
+      names: _card
+  - net.state:
+      name: l
+      nodes:
+        U: null
+        E: now
+- id: enb-more
+  stage: state
+  pdf: 11
+  c:
+  - LTE eNodeB
+  say: For example, base station A decides that a target, B, should serve a moving
+    phone. It asks B for resources, and later directs the phone there. The core's
+    tunnel state then moves to match. An ordinary Ethernet switch does nothing like
+    this.
+  moves:
+  - msg.send:
+      name: l
+      a: U
+      b: E
+      text: radio report
+      when: For example
+      t: 1.1
+  - net.pulse:
+      name: l
+      path:
+      - E
+      - S
+      when: The core's tunnel
+- id: hss
+  stage: state
+  pdf: 12
+  c:
+  - LTE Home Subscriber Server
+  say: The home subscriber server, the HSS, lives in the subscriber's home network.
+    It stores who you are and what you're allowed to do, and it cooperates in authentication.
+    It isn't on the path of your data at all.
+  moves:
+  - net.state:
+      name: l
+      nodes:
+        E: null
+        H: now
+- id: hss-more
+  stage: state
+  pdf: 12
+  c:
+  - LTE Home Subscriber Server
+  say: Picture a phone appearing in a visited network. Its mobility manager coordinates
+    with the home HSS, to authenticate the subscription and set up state for the visit.
+    That's a database and control role. No user packet ever passes through it.
+  moves:
+  - msg.send:
+      name: l
+      a: M
+      b: H
+      text: who is this?
+      kind: control
+      when: Its mobility
+      t: 1.1
+  - msg.send:
+      name: l
+      a: H
+      b: M
+      text: subscription
+      kind: control
+      t: 1.1
+  - rule:
+      text: The HSS is a database and control role, not a packet hop.
+      when: That's a database
+- id: mme
+  stage: state
+  pdf: 14
+  c:
+  - LTE Mobility Management Entity
+  say: The mobility management entity, the MME, is the coordinator. It handles authentication
+    with the HSS, tracks where the device is, handles paging, and sets up the tunnels.
+    It tells other boxes what to do, but user data doesn't pass through it.
+  moves:
+  - net.state:
+      name: l
+      nodes:
+        H: null
+        M: now
+- id: gw
+  stage: state
+  pdf: 13
+  c:
+  - LTE Serving Gateway
+  - LTE Packet Gateway
+  say: The serving gateway and the packet gateway are on the user's data path. The
+    P-GW connects to external networks, such as the Internet. The S-GW joins the radio-side
+    tunnel to the tunnel toward the P-GW. To see the point, watch a packet. It goes
+    UE, eNodeB, S-GW, P-GW. It never touches the MME or the HSS.
+  moves:
+  - net.state:
+      name: l
+      nodes:
+        M: null
+        S: now
+        G: now
+  - packet.spawn:
+      name: p
+      net: l
+      at: U
+      layers:
+      - ip
+      when: To see the point
+  - packet.hop:
+      name: p
+      to:
+      - E
+      - S
+      - G
+      - I
+      t: 2.5
+- id: pgw-more
+  stage: state
+  pdf: 13
+  c:
+  - LTE Packet Gateway
+  say: The P-GW is the cellular system's outward doorway. The radio cell can change,
+    while traffic stays anchored through that gateway. It may also perform NAT. But
+    NAT translation and tunnel encapsulation are different operations, so don't treat
+    them as one.
+  moves:
+  - packet.fade:
+      name: p
+  - net.state:
+      name: l
+      nodes:
+        S: null
+        G: now
+      when: The P-GW is
+  - net.pulse:
+      name: l
+      path:
+      - G
+      - I
+      when: The radio cell
+  - rule:
+      text: NAT translates addresses. A tunnel adds an envelope.
+      when: But NAT
+  pre_roll: 0.5
+- id: rule
+  stage: rule
+  pdf: 15
+  c:
+  - LTE All-IP Core
+  say: Draw two separate pictures. The control story has the HSS and the MME. The
+    payload story has the S-GW and the P-GW. A control message can change a data path
+    without its sender being one of the hops. That's the data plane and control plane
+    split again, from chapter 3.
+  moves:
+  - packet.fade:
+      name: p
+  - net.state:
+      name: l
+      nodes:
+        S: null
+        G: null
+  - rule:
+      text: HSS and MME are in the control story. S-GW and P-GW are in the payload
+        story.
+- id: pitfall
+  stage: rule
+  pdf: 15
+  c:
+  - LTE All-IP Core
+  say: A tempting error is to route user data through every box in the diagram. The
+    HSS and MME do control work. Payload travels through the base station, the S-GW,
+    and the P-GW.
+  moves:
+  - trap:
+      wrong: User data flows through the HSS or MME
+      right: HSS and MME handle control. The gateways carry the data.
+- id: changed
+  stage: changed_example
+  pdf: 14
+  c:
+  - LTE Mobility Management Entity
+  say: Test that. Suppose the MME crashes for a moment, while a phone is sitting still,
+    in the middle of a video stream. Separately, suppose the S-GW crashes.
+  moves:
+  - net.state:
+      name: l
+      nodes:
+        M: error
+- id: predict
+  stage: prediction
+  pdf: 14
+  hold: 6
+  c:
+  - LTE Mobility Management Entity
+  - LTE Serving Gateway
+  say: Which failure immediately stops the video's packets? And which one affects
+    moving phones, and new ones?
+  moves:
+  - pause:
+      text: which failure stops the packets right away?
+- id: answer
+  stage: explanation
+  pdf: 13
+  c:
+  - LTE Serving Gateway
+  - LTE Mobility Management Entity
+  say: An S-GW failure stops the packets right away, since it's on the data path.
+    The tunnels that are already set up don't pass through the MME, so its failure
+    hits control tasks first, like attaching, paging, and handover. So, the data flows
+    through a chain of tunnels. What's inside those tunnels, and how does the radio
+    hop actually work? That's next.
+  moves:
+  - net.state:
+      name: l
+      nodes:
+        M: null
+        S: error
+  - rule:
+      text: Data-path failure stops packets. Control failure stops changes.
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 15.1.predict
+  answer_beat: 15.1.answer
+  answer_events:
+  - 15.1.answer:move:0
+  - 15.1.answer:move:1
+  answer_objects:
+  - object: l
+    after: 15.1.answer:move:0
+    effect: net.state
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 15.1.answer:move:1
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '15.2'
+title: Radio stack and tunnels
+deck: lec15-mobile.pdf
+target_min: 6
+concepts:
+- LTE PDCP
+- LTE RLC
+- LTE Radio Scheduling
+- OFDM
+- GTP Tunnels
+- LTE Attachment and System Information
+- LTE Sleep and Paging
+- 5G New Radio
+- MIMO
+beats:
+- id: question
+  stage: question
+  pdf: 16
+  c:
+  - LTE PDCP
+  - LTE RLC
+  say: A phone's IP packet has to cross a noisy radio link, then a carrier's core
+    network, and every few minutes the radio end of that path moves. How do you carry
+    a packet through all that, so the packet itself never needs to know?
+  moves:
+  - heading:
+      text: 'Lecture 15: radio stack and tunnels'
+  - q:
+      text: How does a packet cross all this without having to know?
+  - keep: {}
+- id: stack
+  stage: animation
+  pdf: 16
+  c:
+  - LTE PDCP
+  - LTE RLC
+  say: Start with the radio hop. LTE splits its link layer into pieces. PDCP handles
+    header compression and encryption, so scarce radio bits aren't wasted on bulky
+    headers. RLC handles fragmentation and reassembly, and reliable transfer over
+    the radio. Below that sits the medium access layer. Note that RLC segmentation
+    is not IPv4 fragmentation. The headers are different, and so is the scope of reassembly.
+    The radio link fixes its own problems locally.
+  moves:
+  - clear: {}
+  - stack.show:
+      name: rs
+      zone: left
+      width: 6
+      layers:
+      - t: IP packet
+        k: ip
+      - t: 'PDCP: compress and encrypt'
+        k: radio
+      - t: 'RLC: segment and recover'
+        k: radio
+      - t: 'MAC: scheduled access'
+        k: radio
+      - t: 'Physical: radio'
+        k: data
+  - stack.mark:
+      name: rs
+      layer: 1
+      when: PDCP handles
+  - stack.mark:
+      name: rs
+      layer: 1
+      state: null
+      when: RLC handles
+  - stack.mark:
+      name: rs
+      layer: 2
+  - card:
+      kind: note
+      text: 'RLC segmentation is not IPv4 fragmentation: different headers, different
+        scope.'
+      zone: right
+      when: Note that RLC
+- id: sched
+  stage: state
+  pdf: 17
+  c:
+  - LTE Radio Scheduling
+  - OFDM
+  say: How do users share the radio? Unlike Wi-Fi, there's no contention for the downlink.
+    The base station is a scheduler. It uses OFDM, which divides the channel into
+    many orthogonal frequency subcarriers. Picture a grid, with time along one axis,
+    and frequency along the other. The scheduler hands each small block to one user.
+    A user with good conditions may get more. That grid only shows opportunities,
+    and doesn't give you application throughput, because coding, modulation, and overhead
+    still apply.
+  moves:
+  - clear: {}
+  - table.show:
+      name: g
+      zone: top
+      cols:
+      - Frequency
+      - t1
+      - t2
+      - t3
+      - t4
+      - t5
+      rows:
+      - - f3
+        - A
+        - A
+        - B
+        - C
+        - C
+      - - f2
+        - B
+        - B
+        - B
+        - C
+        - A
+      - - f1
+        - A
+        - C
+        - C
+        - B
+        - B
+      show: 0
+  - table.reveal:
+      name: g
+      n: 3
+      when: Picture a grid
+  - rule:
+      text: The base station schedules time-frequency blocks. No contention on the
+        downlink.
+- id: gtp
+  stage: animation
+  pdf: 18
+  c:
+  - GTP Tunnels
+  say: The core. Inside the core, the phone's packet isn't routed by its own address.
+    It travels in a tunnel, using GTP, the GPRS tunneling protocol. The eNodeB wraps
+    the phone's IP packet in a GTP header, that in UDP, and that in an outer IP header
+    addressed to the S-GW. Core routers read only that outer header. The S-GW then
+    unwraps and rewraps, into a new tunnel toward the P-GW. There the outer layers
+    come off, and the original packet heads into the Internet, unchanged.
+  moves:
+  - clear: {}
+  - net.show:
+      name: t
+      zone: top
+      nodes:
+        U:
+          k: phone
+          at:
+          - 0
+          - 0
+          l: UE
+        E:
+          k: tower
+          at:
+          - 3
+          - 0
+          l: eNodeB
+        S:
+          k: box
+          at:
+          - 6.4
+          - 0
+          l: S-GW
+        G:
+          k: box
+          at:
+          - 9.8
+          - 0
+          l: P-GW
+        I:
+          k: cloud
+          at:
+          - 13
+          - 0
+          l: Internet
+      links:
+      - - U
+        - E
+        - s: radio
+      - - E
+        - S
+        - s: tunnel
+      - - S
+        - G
+        - s: tunnel
+      - - G
+        - I
+  - stack.show:
+      name: enc
+      zone: bottom
+      width: 6.5
+      reserve: 3
+      layers:
+      - t: "Inner IP: UE \u2192 server"
+        k: ip
+  - packet.spawn:
+      name: p
+      net: t
+      at: U
+      layers:
+      - ip
+  - packet.hop:
+      name: p
+      to: E
+  - packet.wrap:
+      name: p
+      kind: tunnel
+      when: The eNodeB wraps
+  - stack.push:
+      name: enc
+      text: GTP-U
+      kind: tunnel
+  - stack.push:
+      name: enc
+      text: UDP
+      kind: transport
+  - stack.push:
+      name: enc
+      text: "Outer IP: eNodeB \u2192 S-GW"
+      kind: tunnel
+  - packet.hop:
+      name: p
+      to: S
+      when: Core routers read
+  - tunnel.reencapsulate:
+      stack: enc
+      outer: "Outer IP: S-GW \u2192 P-GW"
+      when: The S-GW then
+  - packet.hop:
+      name: p
+      to: G
+  - packet.peel:
+      name: p
+      when: There the outer
+  - packet.hop:
+      name: p
+      to: I
+- id: why
+  stage: rule
+  pdf: 18
+  c:
+  - GTP Tunnels
+  say: What's the benefit of all that wrapping? The radio end of the tunnel can change,
+    without every Internet router learning a new route for this phone. The inner address
+    stays fixed, while only the outer destination moves. And the core needs nothing
+    beyond plain IP routing.
+  moves:
+  - rule:
+      text: The inner packet stays fixed. Only the tunnel's outer destination moves.
+- id: attach
+  stage: state
+  pdf: 19
+  c:
+  - LTE Attachment and System Information
+  say: How does a phone get started? It first synchronizes with a nearby cell, and
+    reads broadcast system information. It selects a base station. Then control setup,
+    with authentication through the MME and HSS. And finally the data path is built.
+    Finding a signal doesn't prove that a tunnel, or even an authorized subscription,
+    is ready. Those are distinct stages.
+  moves:
+  - clear: {}
+  - bullets:
+      name: at
+      zone: left
+      show: 4
+      items:
+      - Synchronize, read system information
+      - Select a base station
+      - Authenticate through MME and HSS
+      - Build the user data path
+- id: sleep
+  stage: state
+  pdf: 20
+  c:
+  - LTE Sleep and Paging
+  say: 'Radios drain batteries, so an idle phone sleeps. It can go into a deeper sleep,
+    where it no longer tracks a specific cell, and then the network knows it only
+    roughly. To reach it, the network pages it across that area. When it wakes, it
+    might have moved, and may need a new association. It''s the same trade-off as
+    Wi-Fi sleep: battery against delivery, with cellular machinery.'
+  moves:
+  - tl.show:
+      name: sl
+      zone: right
+      tracks:
+      - Phone
+      - Network
+      span:
+      - 0
+      - 10
+  - tl.block:
+      name: sl
+      track: Phone
+      start: 0
+      end: 7
+      text: asleep
+      state: idle
+  - tl.block:
+      name: sl
+      track: Network
+      start: 6
+      end: 8
+      text: page
+      kind: label
+      when: To reach it
+  - tl.block:
+      name: sl
+      track: Phone
+      start: 7
+      end: 10
+      text: awake
+      kind: ip
+      when: When it wakes
+- id: sleep-more
+  stage: state
+  pdf: 20
+  c:
+  - LTE Sleep and Paging
+  say: Follow one phone. It sleeps, moves into another cell, and then becomes active.
+    The old radio path can't simply be assumed, so it may need to reestablish access
+    through the new cell before traffic can resume.
+  moves:
+  - rule:
+      text: A sleeper may wake in a new cell, and must reattach.
+      when: The old radio
+  - tl.block:
+      name: sl
+      track: Network
+      start: 8
+      end: 10
+      text: reattach
+      state: now
+      when: so it may need
+- id: interconnect
+  stage: state
+  pdf: 22
+  c:
+  - LTE Attachment and System Information
+  say: 'One more view. Carriers are networks of IP networks, joined by interconnections,
+    just like the rest of the Internet. Your phone might attach in a visited network,
+    while your subscriber record stays at home, in your home carrier''s HSS. So every
+    topic in this course reappears here: tunnels, routers, and policy agreements between
+    providers.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: ic
+      zone: top
+      nodes:
+        V:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: Visited
+        I:
+          k: cloud
+          at:
+          - 5
+          - 0
+          l: Internet
+        H:
+          k: cloud
+          at:
+          - 10
+          - 0
+          l: Home
+      links:
+      - - V
+        - I
+      - - I
+        - H
+- id: fiveg
+  stage: state
+  pdf: 23
+  c:
+  - 5G New Radio
+  - MIMO
+  say: '5G New Radio extends the physical layer. Higher frequencies offer more capacity,
+    but shorter range, so cells must be much denser. MIMO uses many antennas to send
+    and receive multiple spatial streams. The slide''s specific rates and goals describe
+    the era of those slides, so treat them as context. The trade-off is what lasts:
+    more spectrum and antennas for capacity, paid for with deployment density.'
+  moves:
+  - clear: {}
+  - table.show:
+      name: f
+      zone: top
+      cols:
+      - Technique
+      - Gain
+      - Cost
+      rows:
+      - - Higher frequency
+        - more capacity
+        - shorter range and denser cells
+      - - MIMO
+        - multiple spatial streams
+        - more antennas
+  - rule:
+      text: Numbers on these slides are era-specific. The trade-off is what lasts.
+- id: pitfall
+  stage: rule
+  pdf: 23
+  c:
+  - 5G New Radio
+  - MIMO
+  say: Don't mix these up. CDMA separates senders by code. OFDM organizes the channel
+    by frequency and time, and the scheduler hands out those resources.
+  moves:
+  - trap:
+      wrong: OFDM separates users by code, like CDMA
+      right: OFDM separates by frequency and time
+- id: changed
+  stage: changed_example
+  pdf: 18
+  c:
+  - GTP Tunnels
+  say: Look at one packet, deep in the core, between S-GW and P-GW. Its inner destination
+    is a web server on the Internet.
+  moves:
+  - clear: {}
+  - stack.show:
+      name: k
+      zone: top
+      width: 7
+      layers:
+      - t: "Outer IP: S-GW \u2192 P-GW"
+        k: tunnel
+      - t: UDP and GTP-U
+        k: transport
+      - t: "Inner IP: UE \u2192 web server"
+        k: ip
+- id: predict
+  stage: prediction
+  pdf: 18
+  hold: 6
+  c:
+  - GTP Tunnels
+  say: Which address does a core router in the middle use to forward it? Does that
+    router need a route to the phone?
+  moves:
+  - pause:
+      text: which address does a core router read?
+- id: answer
+  stage: explanation
+  pdf: 18
+  c:
+  - GTP Tunnels
+  say: 'It reads the outer destination, the P-GW. It needs no route to the phone at
+    all. That''s the whole benefit: a carrier''s core routers know nothing about individual
+    subscribers. And now the big question. Your phone has moved between cities, or
+    even to another carrier''s network. Its identity hasn''t changed, but where it
+    sits has. How does anybody find it?'
+  moves:
+  - stack.mark:
+      name: k
+      layer: 0
+      state: done
+  - rule:
+      text: 'Core routers follow the outer header. Next: finding a phone that moved.'
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 15.2.predict
+  answer_beat: 15.2.answer
+  answer_events:
+  - 15.2.answer:move:0
+  - 15.2.answer:move:1
+  answer_objects:
+  - object: k
+    after: 15.2.answer:move:0
+    effect: stack.mark
+    selector:
+      layer: 0
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 15.2.answer:move:1
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '15.3'
+title: Finding a moving phone
+deck: lec15-mobile.pdf
+target_min: 6.5
+concepts:
+- Mobile Identity and Location
+- Home and Visited Networks
+- Mobile IP Registration
+- IP Tunneling
+- Indirect Mobile Routing
+- Triangle Routing
+- Direct Mobile Routing
+beats:
+- id: question
+  stage: question
+  pdf: 25
+  c:
+  - Mobile Identity and Location
+  say: The problem that was planted back in chapter 3. An IP address says where you
+    are in the topology. That's what makes routing scale. So what happens when you
+    move? Your old address now points to the wrong place. But your identity, the thing
+    others use to contact you, hasn't changed. One number has been doing two jobs.
+  moves:
+  - heading:
+      text: 'Lecture 15: finding a moving phone'
+  - q:
+      text: An address says where you are. What happens when you move?
+  - keep: {}
+- id: naive
+  stage: animation
+  pdf: 26
+  c:
+  - Mobile Identity and Location
+  say: 'One approach: let the routing system handle it. Have the phone advertise its
+    own slash 32 from wherever it is. Routers would find it, in principle. But think
+    about billions of devices, each changing location constantly, with each change
+    spreading through every router in the world. That would be enormous, rapidly changing
+    routing state. And it would destroy the very aggregation that makes routing scale.
+    So we push the problem to the edge instead.'
+  moves:
+  - clear: {}
+  - bullets:
+      name: n
+      zone: top
+      show: 0
+      items:
+      - Advertise a /32 for every phone, on every move?
+      - Billions of devices, constant updates, no aggregation
+  - reveal:
+      name: n
+      when: Have the phone
+  - reveal:
+      name: n
+      when: But think
+  - rule:
+      text: Separate the identity from the current location, and keep the binding
+        at the edge.
+      when: So we push
+- id: homevisited
+  stage: state
+  pdf: 29
+  c:
+  - Home and Visited Networks
+  say: Split the two roles. The home network is the provider you subscribe to. It
+    always knows who you are. The visited network is wherever you currently are. It
+    provides access, and tells your home where you've gone. This happens even between
+    countries. In cellular, the HSS is on the home side. The generic Mobile IP example
+    and LTE share this principle, even though the protocols and components have different
+    names.
+  moves:
+  - net.show:
+      name: h
+      zone: bottom
+      nodes:
+        H:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: Home network
+        V:
+          k: cloud
+          at:
+          - 7
+          - 0
+          l: Visited network
+        P:
+          k: phone
+          at:
+          - 10.4
+          - 0
+          l: Phone
+      links:
+      - - H
+        - V
+        - s: control
+      - - V
+        - P
+        - s: radio
+  - net.state:
+      name: h
+      nodes:
+        H: now
+      when: The home network
+  - net.state:
+      name: h
+      nodes:
+        H: null
+        V: now
+      when: The visited network
+  - msg.send:
+      name: h
+      a: V
+      b: H
+      text: they're here
+      when: and tells your home
+  - net.badge:
+      name: h
+      node: H
+      text: HSS, in cellular
+      side: up
+      when: In cellular
+- id: register
+  stage: state
+  pdf: 31
+  c:
+  - Mobile IP Registration
+  clar:
+  - fa-coa
+  say: A constructed Mobile IP example. The mobile's home address is 192.0.2.20. On
+    arriving at a visited network, it gets a current locator, called a care-of address,
+    198.51.100.44. It registers this with its home agent, which records a binding
+    from home address to care-of address. The drawing has a foreign agent ending the
+    tunnel. A co-located care-of address, where the mobile itself ends the tunnel,
+    is another valid arrangement. And don't mix this generic Mobile IP up with LTE's
+    HSS, MME, and GTP.
+  moves:
+  - clear: {}
+  - net.show:
+      name: m
+      zone: top
+      nodes:
+        X:
+          k: server
+          at:
+          - 0
+          - 0
+          l: Correspondent
+        HA:
+          k: router
+          at:
+          - 4
+          - 1.8
+          l: Home agent
+        F:
+          k: router
+          at:
+          - 8
+          - 0
+          l: Visited network
+        P:
+          k: phone
+          at:
+          - 11.6
+          - 0
+          l: Mobile
+      links:
+      - - X
+        - HA
+      - - HA
+        - F
+      - - F
+        - P
+        - s: radio
+      - - X
+        - F
+        - s: dim
+  - net.badge:
+      name: m
+      node: P
+      text: $mobile.coa
+      side: up
+      state: now
+      when: On arriving
+  - msg.send:
+      name: m
+      a: P
+      b: F
+      text: register
+      when: It registers
+      t: 0.9
+  - msg.send:
+      name: m
+      a: F
+      b: HA
+      text: register
+      t: 0.9
+  - table.show:
+      name: bd
+      zone: left_bottom
+      cols:
+      - Home address
+      - Care-of
+      rows:
+      - - $mobile.home
+        - $mobile.coa
+      when: which records
+  - card:
+      kind: clarification
+      text: A foreign agent is one arrangement. A co-located care-of address is another.
+      zone: right_bottom
+      when: The drawing has
+- id: tunnel
+  stage: animation
+  pdf: 34
+  c:
+  - IP Tunneling
+  - Indirect Mobile Routing
+  say: 'A correspondent sends to the mobile. It uses the home address, not knowing
+    anything has changed. The packet arrives at the home network. The home agent intercepts
+    it, and puts the whole packet inside a new one: an outer IP header, from the home
+    agent to the care-of address. That''s IP tunneling. Routers in the middle follow
+    only the outer header. At the far end, the outer header comes off, and out comes
+    the original packet, with its source and destination unchanged. This is indirect
+    routing. The correspondent never needed to know about the move.'
+  moves:
+  - clear:
+      keep:
+      - m
+  - stack.show:
+      name: e
+      zone: left_bottom
+      width: 6
+      reserve: 1
+      layers:
+      - t: "Inner: correspondent \u2192 192.0.2.20"
+        k: ip
+  - packet.spawn:
+      name: d
+      net: m
+      at: X
+      layers:
+      - ip
+      when: It uses the home
+  - packet.hop:
+      name: d
+      to: HA
+  - packet.wrap:
+      name: d
+      kind: tunnel
+      when: The home agent intercepts
+  - stack.push:
+      name: e
+      text: "Outer: home agent \u2192 198.51.100.44"
+      kind: tunnel
+  - packet.hop:
+      name: d
+      to: F
+      when: Routers in the middle
+  - packet.peel:
+      name: d
+      when: At the far end
+  - stack.pop:
+      name: e
+  - packet.hop:
+      name: d
+      to: P
+- id: size
+  stage: state
+  pdf: 34
+  c:
+  - IP Tunneling
+  say: Tunnels cost bytes. An illustrative outer IPv4 header adds 20 bytes. A 1,480
+    byte inner packet becomes 1,500, which just fits an Ethernet link. A 1,500 byte
+    inner packet becomes 1,520, and that needs different MTU treatment. And don't
+    confuse tunneling with NAT. NAT rewrites addresses. A tunnel adds an envelope.
+  moves:
+  - table.show:
+      name: sz
+      zone: right_bottom
+      cols:
+      - Inner
+      - With 20-byte outer
+      rows:
+      - - '1480'
+        - $mobile.size_1480
+      - - '1500'
+        - $mobile.size_1500
+      show: 0
+  - table.reveal:
+      name: sz
+      when: A 1,480 byte
+  - table.mark:
+      name: sz
+      r: 0
+      state: done
+      when: which just fits
+  - table.reveal:
+      name: sz
+      when: A 1,500 byte
+  - table.mark:
+      name: sz
+      r: 1
+      state: error
+      when: and that needs
+  - rule:
+      text: NAT rewrites addresses. A tunnel adds an envelope.
+      when: And don't confuse
+- id: move
+  stage: state
+  pdf: 34
+  c:
+  - IP Tunneling
+  - Mobile IP Registration
+  say: 'Watch the mobile move again, to a new locator, 203.0.113.44. It re-registers.
+    The home agent updates its binding. The outer destination changes. The inner destination
+    stays right where it was. That''s the visual to hold on to: identity in blue,
+    unchanged, and location in the outer header, changing.'
+  moves:
+  - clear:
+      keep:
+      - m
+  - table.show:
+      name: hd
+      zone: bottom
+      cols:
+      - Move
+      - Outer destination
+      - Inner destination
+      rows:
+      - - First
+        - $mobile.coa
+        - $mobile.home
+      - - Second
+        - $mobile.coa2
+        - $mobile.home
+      show: 1
+  - net.badge:
+      name: m
+      node: P
+      text: $mobile.coa2
+      side: up
+      state: now
+      when: to a new locator
+  - msg.send:
+      name: m
+      a: P
+      b: HA
+      text: new care-of
+      when: It re-registers
+      t: 1.1
+  - table.reveal:
+      name: hd
+      when: The outer destination
+  - table.mark:
+      name: hd
+      r: 1
+      state: now
+  - rule:
+      text: Identity in blue stays the same. Location, in the outer header, changes.
+      when: That's the visual
+- id: triangle
+  stage: state
+  pdf: 35
+  c:
+  - Triangle Routing
+  say: What's the downside of indirect delivery? A detour. Traffic goes through the
+    home agent, even when the correspondent is right next to the mobile. This is triangle
+    routing. In this constructed example, the correspondent to home agent takes 40
+    milliseconds. Then 50 more to the mobile. That's 90, while a direct path would
+    only take 10. It's a detour, not a loop.
+  moves:
+  - clear: {}
+  - net.show:
+      name: m
+      zone: top
+      nodes:
+        X:
+          k: server
+          at:
+          - 0
+          - 0
+          l: Correspondent
+        HA:
+          k: router
+          at:
+          - 4
+          - 1.8
+          l: Home agent
+        F:
+          k: router
+          at:
+          - 8
+          - 0
+          l: Visited network
+        P:
+          k: phone
+          at:
+          - 11.6
+          - 0
+          l: Mobile
+      links:
+      - - X
+        - HA
+      - - HA
+        - F
+      - - F
+        - P
+        - s: radio
+      - - X
+        - F
+        - s: dim
+  - net.walk:
+      name: m
+      path:
+      - X
+      - HA
+      - F
+      state: error
+      when: Traffic goes through
+  - net.cost:
+      name: m
+      a: X
+      b: HA
+      cost: 40
+      when: takes 40
+  - net.cost:
+      name: m
+      a: HA
+      b: F
+      cost: 50
+      when: Then 50
+  - tex:
+      name: tr
+      zone: bottom
+      tex: 40+50=90\text{ ms}\quad\text{vs}\quad 10\text{ ms}
+      size: 46
+      when: That's 90
+  - net.state:
+      name: m
+      links:
+      - - X
+        - F
+        - active
+      when: a direct path
+- id: direct
+  stage: rule
+  pdf: 36
+  c:
+  - Direct Mobile Routing
+  say: Direct routing removes the detour. The correspondent obtains the current locator,
+    then tunnels straight to it. It saves 80 milliseconds here. But the price is complexity.
+    The correspondent must now handle bindings. And when the mobile moves again, something
+    must handle packets aimed at the old location. Neither design removes location
+    state. It only changes who holds and uses it.
+  moves:
+  - fade:
+      names: tr
+  - net.unwalk:
+      name: m
+  - msg.send:
+      name: m
+      a: HA
+      b: X
+      text: locator
+      when: The correspondent obtains
+  - net.walk:
+      name: m
+      path:
+      - X
+      - F
+      - P
+      state: done
+      when: then tunnels
+  - rule:
+      text: Indirect hides moves from the correspondent. Direct avoids the detour
+        but adds binding work.
+      when: But the price
+  - net.state:
+      name: m
+      nodes:
+        X: now
+      when: The correspondent must
+  - net.state:
+      name: m
+      nodes:
+        X: null
+        F: now
+      when: And when the mobile
+- id: pitfall
+  stage: rule
+  pdf: 36
+  c:
+  - Direct Mobile Routing
+  say: When you trace a tunnel, always say which header you mean. The outer destination
+    changes. The inner source and destination don't. An answer that just says, the
+    destination, is ambiguous.
+  moves:
+  - trap:
+      wrong: A tunnel changes the packet's source and destination
+      right: 'Always say inner or outer: the inner header stays put'
+- id: changed
+  stage: changed_example
+  pdf: 35
+  c:
+  - Triangle Routing
+  - Direct Mobile Routing
+  say: Change the geography. Correspondent to home agent is 60 milliseconds. Home
+    agent to mobile is 70. Direct is 5.
+  moves:
+  - tex:
+      name: tr
+      zone: bottom
+      tex: 60,\ 70,\ \text{direct }5
+      size: 46
+- id: predict
+  stage: prediction
+  pdf: 35
+  hold: 12
+  c:
+  - Triangle Routing
+  say: What's the one-way delay with each design? And if the correspondent is actually
+    beside the home agent, does the triangle still hurt?
+  moves:
+  - pause:
+      text: the delay both ways? when does the triangle hurt?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 35
+  c:
+  - Triangle Routing
+  - Indirect Mobile Routing
+  say: Indirect is 130 milliseconds, and direct is 5. But if the home agent is near
+    the path anyway, the detour shrinks to nothing. It depends on geometry. Now one
+    piece remains. All of this assumed a phone that has already arrived somewhere.
+    What about the moment of moving itself, in the middle of a video, from one tower
+    to another?
+  moves:
+  - tex:
+      name: tr
+      zone: bottom
+      tex: 60+70=130\text{ ms}\quad\text{vs}\quad 5\text{ ms}
+      size: 46
+      when: Indirect is 130
+  - net.state:
+      name: m
+      nodes:
+        F: null
+      when: But if the home
+  - rule:
+      text: 'Next: the moment of moving itself.'
+      when: What about the moment
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 15.3.predict
+  answer_beat: 15.3.answer
+  answer_events:
+  - 15.3.answer:move:0
+  - 15.3.answer:move:1
+  - 15.3.answer:move:2
+  answer_objects:
+  - object: tr
+    after: 15.3.answer:move:0
+    effect: tex
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: m
+    after: 15.3.answer:move:1
+    effect: net.state
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 15.3.answer:move:2
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '15.4'
+title: Handover
+deck: lec15-mobile.pdf
+target_min: 4.5
+concepts:
+- Cellular Handover
+- Wireless Effects on Transport
+beats:
+- id: question
+  stage: question
+  pdf: 38
+  c:
+  - Cellular Handover
+  say: A phone at highway speed leaves one cell, and enters the next, in the middle
+    of a stream. The radio link must move. The tunnel must move. Packets are already
+    in flight toward the old tower. How can you change all of this without dropping
+    the session?
+  moves:
+  - heading:
+      text: 'Lecture 15: handover'
+  - q:
+      text: How do you move a live session between towers?
+- id: before
+  stage: animation
+  pdf: 39
+  c:
+  - Cellular Handover
+  say: This is handover. Here's the setup. Packets come from the S-GW through a tunnel
+    to base station A, then over the radio to the phone. Base station B sits next
+    door, and it's stronger as the phone drives toward it. Base station A notices
+    this from the phone's radio reports.
+  moves:
+  - clear: {}
+  - net.show: &id001
+      name: h
+      zone: top
+      nodes:
+        S:
+          k: box
+          at:
+          - 4
+          - 2
+          l: S-GW
+        M:
+          k: box
+          at:
+          - 9
+          - 2
+          l: MME
+        A:
+          k: tower
+          at:
+          - 1.5
+          - 0.8
+          l: A
+          lp: left
+        B:
+          k: tower
+          at:
+          - 6.5
+          - 0.8
+          l: B
+          lp: right
+        U:
+          k: phone
+          at:
+          - 2.5
+          - -0.5
+          l: UE
+          lp: left
+      links:
+      - - S
+        - A
+        - s: tunnel
+      - - A
+        - U
+        - s: radio
+      - - M
+        - S
+        - s: control
+      - - A
+        - B
+        - s: dim
+      - - S
+        - B
+        - s: dim
+  - packet.spawn:
+      name: p
+      net: h
+      at: S
+      layers:
+      - tunnel
+      - ip
+      when: Packets come
+  - packet.hop:
+      name: p
+      to:
+      - A
+      - U
+  - packet.fade:
+      name: p
+  - bullets:
+      name: st
+      zone: bottom
+      show: 0
+      items: $mobile.steps
+      size: 26
+      gap: 0.01
+  - net.state:
+      name: h
+      nodes:
+        B: candidate
+      when: Base station B
+  - msg.send:
+      name: h
+      a: U
+      b: A
+      text: radio report
+      when: Base station A notices
+      t: 1.1
+- id: prepare
+  stage: state
+  pdf: 40
+  c:
+  - Cellular Handover
+  say: Step one. A chooses B as the target, and asks it to get ready. Step two. B
+    reserves radio resources, and acknowledges. Nothing has moved yet, and the phone
+    keeps working as before. Prepare first, and then act, so that the target is ready
+    when the phone arrives.
+  moves:
+  - reveal:
+      name: st
+      when: Step one
+  - msg.send:
+      name: h
+      a: A
+      b: B
+      text: get ready
+      t: 1.1
+  - reveal:
+      name: st
+      when: Step two
+  - msg.send:
+      name: h
+      a: B
+      b: A
+      text: ready
+      t: 1.1
+  - net.state:
+      name: h
+      nodes:
+        B: done
+  - packet.spawn:
+      name: p2
+      net: h
+      at: S
+      layers:
+      - tunnel
+      - ip
+      when: Nothing has moved
+  - packet.hop:
+      name: p2
+      to:
+      - A
+      - U
+  - packet.fade:
+      name: p2
+- id: switch
+  stage: state
+  pdf: 40
+  c:
+  - Cellular Handover
+  say: Step three. A tells the phone to switch, and the phone begins using B. The
+    radio has moved. But the S-GW has not been told, and it's still sending to A.
+    So what happens to those packets? Step four. A forwards them to B, over a temporary
+    path. So during this period, the path is S-GW, A, B, phone. It's longer, but nothing's
+    lost.
+  moves:
+  - reveal:
+      name: st
+      when: Step three
+  - msg.send:
+      name: h
+      a: A
+      b: U
+      text: switch
+      t: 0.9
+  - net.unlink:
+      name: h
+      a: A
+      b: U
+      when: the phone begins
+  - net.move:
+      name: h
+      node: U
+      to:
+      - 6
+      - -0.5
+  - net.relink:
+      name: h
+      a: B
+      b: U
+      style: radio
+  - net.state:
+      name: h
+      nodes:
+        S: now
+      when: But the S-GW
+  - reveal:
+      name: st
+      when: Step four
+  - net.state:
+      name: h
+      links:
+      - - A
+        - B
+        - now
+  - packet.spawn:
+      name: q
+      net: h
+      at: S
+      layers:
+      - tunnel
+      - ip
+      when: So during
+  - packet.hop:
+      name: q
+      to:
+      - A
+      - B
+      - U
+      t: 1.6
+  - packet.fade:
+      name: q
+- id: pathswitch
+  stage: state
+  pdf: 40
+  c:
+  - Cellular Handover
+  say: Step five. B reports that the move is complete. The MME tells the S-GW to change
+    its tunnel endpoint from A to B. See that this is a control message, and the MME
+    isn't carrying any data. Step six. The S-GW now sends straight to B, and A releases
+    its old resources. The outer destination changed. The inner packet, and the phone's
+    IP address, did not.
+  moves:
+  - reveal:
+      name: st
+      when: Step five
+  - msg.send:
+      name: h
+      a: M
+      b: S
+      text: switch to B
+      kind: control
+      when: The MME tells
+      t: 1.2
+  - net.state:
+      name: h
+      nodes:
+        M: now
+      links:
+      - - M
+        - S
+        - now
+      when: See that this
+  - reveal:
+      name: st
+      when: Step six
+  - net.state:
+      name: h
+      nodes:
+        M: null
+        B: null
+        S: null
+      links:
+      - - S
+        - A
+        - dim
+      - - A
+        - B
+        - dim
+      - - S
+        - B
+        - tunnel
+      - - M
+        - S
+        - control
+  - packet.spawn:
+      name: r
+      net: h
+      at: S
+      layers:
+      - tunnel
+      - ip
+      when: The outer destination
+  - packet.hop:
+      name: r
+      to:
+      - B
+      - U
+  - packet.fade:
+      name: r
+- id: rule
+  stage: rule
+  pdf: 40
+  c:
+  - Cellular Handover
+  say: 'There are three paths to remember. Before: S-GW, A, phone. During: S-GW, A,
+    B, phone. After: S-GW, B, phone. The middle stage explains how the radio can finish
+    moving before the core catches up.'
+  moves:
+  - clear: {}
+  - table.show:
+      name: p3
+      zone: top
+      cols:
+      - Phase
+      - Path
+      rows:
+      - - $mobile.handover.0.phase
+        - S-GW, A, UE
+      - - $mobile.handover.1.phase
+        - S-GW, A, B, UE
+      - - $mobile.handover.2.phase
+        - S-GW, B, UE
+      show: 0
+  - table.reveal:
+      name: p3
+      when: 'Before:'
+  - table.reveal:
+      name: p3
+      when: 'During:'
+  - table.reveal:
+      name: p3
+      when: 'After:'
+  - table.mark:
+      name: p3
+      r: 1
+      state: now
+      when: The middle stage
+  - rule:
+      text: Prepare, move the radio, forward temporarily, switch the core path, release.
+- id: transport
+  stage: state
+  pdf: 41
+  c:
+  - Wireless Effects on Transport
+  say: 'Does a preserved IP address mean nothing changes for TCP? No. The longer forwarding
+    path raises delay for a while. Packets can arrive out of order. Radio errors and
+    local retries make round trip times swing around. IP is still best effort, and
+    its contract hasn''t changed. But TCP might read these effects as congestion,
+    even when no queue is full. The details of transport belong to later lectures.
+    For now, keep the link: what lower layers do can change the performance higher
+    layers see.'
+  moves:
+  - bullets:
+      name: ef
+      zone: bottom
+      show: 0
+      items:
+      - 'Temporary longer path: more delay'
+      - Possible reordering
+      - 'Radio retries: changing round-trip time'
+  - reveal:
+      name: ef
+      when: The longer forwarding
+  - reveal:
+      name: ef
+      when: Packets can arrive
+  - reveal:
+      name: ef
+      when: Radio errors
+  - rule:
+      text: TCP may read these effects as congestion, even when no queue is full.
+      when: But TCP might
+- id: pitfall
+  stage: rule
+  pdf: 41
+  c:
+  - Wireless Effects on Transport
+  say: During handover, notice who carries what. The MME only sends control messages.
+    The data goes from the S-GW, through A, and on to B.
+  moves:
+  - trap:
+      wrong: The MME carries packets during handover
+      right: The MME sends control messages. The data goes through the towers.
+- id: changed
+  stage: changed_example
+  pdf: 40
+  c:
+  - Cellular Handover
+  say: Change the order. Imagine a design where the S-GW switches its tunnel to B
+    first, before the phone has actually moved.
+  moves:
+  - clear: {}
+  - net.show: *id001
+  - net.state:
+      name: h
+      links:
+      - - S
+        - A
+        - dim
+      - - S
+        - B
+        - tunnel
+- id: predict
+  stage: prediction
+  pdf: 40
+  hold: 6
+  c:
+  - Cellular Handover
+  say: What happens to packets for those moments? And is there any forwarding path
+    that would save them?
+  moves:
+  - pause:
+      text: what happens to packets during that gap?
+- id: answer
+  stage: explanation
+  pdf: 40
+  c:
+  - Cellular Handover
+  - Wireless Effects on Transport
+  say: 'Packets reach B, but the phone is still attached to A, so B has nobody to
+    give them to. They would need buffering, or they''d be lost. The real ordering
+    avoids this: the radio moves first, and packets follow, by way of A, and only
+    then does the core switch. Order matters, just as it did with routing convergence.
+    And with that, every piece of the story is in place. So let''s put it all together,
+    one last time.'
+  moves:
+  - packet.spawn:
+      name: x
+      net: h
+      at: S
+      layers:
+      - tunnel
+      - ip
+      when: Packets reach B
+  - packet.hop:
+      name: x
+      to: B
+  - net.state:
+      name: h
+      nodes:
+        B: error
+      when: so B has nobody
+  - packet.drop:
+      name: x
+      when: or they'd be lost
+  - net.state:
+      name: h
+      nodes:
+        B: null
+      links:
+      - - S
+        - B
+        - dim
+      - - S
+        - A
+        - tunnel
+      when: The real ordering
+  - rule:
+      text: 'Order matters: move the radio, forward through A, then switch the core.'
+      when: Order matters
+  - clear:
+      when: So let's put
+  - spine:
+      current: Move
+      zone: top
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 15.4.predict
+  answer_beat: 15.4.answer
+  answer_events:
+  - 15.4.answer:move:0
+  - 15.4.answer:move:1
+  - 15.4.answer:move:2
+  - 15.4.answer:move:3
+  - 15.4.answer:move:4
+  - 15.4.answer:move:5
+  - 15.4.answer:move:6
+  answer_objects:
+  - object: x
+    after: 15.4.answer:move:0
+    effect: packet.spawn
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: x
+    after: 15.4.answer:move:1
+    effect: packet.hop
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: h
+    after: 15.4.answer:move:2
+    effect: net.state
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: x
+    after: 15.4.answer:move:3
+    effect: packet.drop
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: h
+    after: 15.4.answer:move:4
+    effect: net.state
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 15.4.answer:move:5
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.

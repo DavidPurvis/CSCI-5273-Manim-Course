@@ -1,0 +1,1851 @@
+dish: '8.1'
+title: Carving a subnet
+deck: lec08-network2.pdf
+target_min: 6
+concepts:
+- VLSM Subnetting
+beats:
+- id: question
+  stage: question
+  pdf: 3
+  c:
+  - VLSM Subnetting
+  say: Our laptop's network got its addresses from somewhere. An organization holds
+    one block, and four departments of very different sizes. How do you cut the block
+    so that everyone fits, nothing overlaps, and routers can still describe each piece
+    with a single prefix?
+  moves:
+  - heading:
+      text: 'Lecture 8: carving a subnet'
+  - spine:
+      current: Forward
+      zone: top
+  - q:
+      text: One block, four departments. How do you cut it?
+      zone: bottom
+- id: sizing
+  stage: animation
+  pdf: 5
+  c:
+  - VLSM Subnetting
+  say: Start with size, not with addresses. A subnet with h host bits holds 2 to the
+    h addresses. Two are reserved, for the network and the broadcast. So to hold H
+    hosts, choose the smallest h where 2 to the h, minus 2, is at least H. The prefix
+    length is then 32 minus h. Using different sizes inside one block is called variable
+    length subnet masking.
+  moves:
+  - clear: {}
+  - bullets:
+      name: st
+      zone: bottom
+      show: 0
+      items:
+      - h host bits give 2^h addresses
+      - 'Two are reserved: network and broadcast'
+      - 'Different sizes in one block: variable length subnet masking'
+  - reveal:
+      name: st
+      when: A subnet with
+  - reveal:
+      name: st
+      when: Two are reserved
+  - tex:
+      name: size
+      zone: top
+      tex: 2^{h}-2 \ge H,\qquad p = 32-h
+      size: 52
+      when: So to hold
+  - reveal:
+      name: st
+      when: Using different
+- id: borrow
+  stage: state
+  pdf: 4
+  c:
+  - VLSM Subnetting
+  say: 'To feel the trade, take one slash 24 and start borrowing host bits for subnets.
+    Borrow 1 bit: 2 subnets, with 7 host bits left, so 126 hosts in each. Borrow 2
+    bits: 4 subnets of 62 hosts. Borrow 3: 8 subnets of 30. Each borrowed bit doubles
+    the number of subnets, and roughly halves their size. Keep going, and at 7 borrowed
+    bits, only one host bit remains. The formula then gives zero ordinary hosts. A
+    slash 31 needs its own point to point interpretation, so don''t apply the subtraction
+    blindly there.'
+  moves:
+  - clear: {}
+  - table.show:
+      name: bor
+      zone: top
+      cols:
+      - Borrowed bits
+      - Subnets
+      - Host bits
+      - Hosts each
+      rows:
+      - - 1
+        - 2
+        - 7
+        - 126
+      - - 2
+        - 4
+        - 6
+        - 62
+      - - 3
+        - 8
+        - 5
+        - 30
+      - - 7
+        - 128
+        - 1
+        - 0 by the formula
+      show: 0
+  - table.reveal:
+      name: bor
+      when: Borrow 1 bit
+  - table.reveal:
+      name: bor
+      when: Borrow 2 bits
+  - table.reveal:
+      name: bor
+      when: Borrow 3
+  - rule:
+      text: Each borrowed bit doubles the subnets and roughly halves their size.
+      when: Each borrowed
+  - table.reveal:
+      name: bor
+      when: Keep going
+  - table.mark:
+      name: bor
+      r: 3
+      state: error
+      when: A slash 31
+- id: endsystem
+  stage: state
+  pdf: 5
+  c:
+  - VLSM Subnetting
+  say: Why does a host care about all this? Because the mask is how it makes its first
+    decision. Before sending, it ANDs the destination with its own mask, and compares
+    that with its own network. If they match, the destination is on this link, so
+    it sends directly. If not, it sends to its gateway. Routers apply masks too, but
+    to a whole table of prefixes, as we'll see in a moment.
+  moves:
+  - clear: {}
+  - bullets:
+      name: es
+      zone: top
+      show: 0
+      items:
+      - Destination AND my mask = my network?
+      - 'Yes: send directly on this link'
+      - 'No: send to the gateway'
+  - reveal:
+      name: es
+      when: Before sending
+  - reveal:
+      name: es
+      when: If they match
+  - reveal:
+      name: es
+      when: If not
+- id: parent
+  stage: state
+  pdf: 7
+  c:
+  - VLSM Subnetting
+  clar:
+  - parent-23
+  say: The instructor's example. Four departments need 130, 120, 60, and 31 hosts,
+    inside a slash 23. The slide labels the parent 128.101.5.0/23. Apply the mask,
+    though. A slash 23 forces the last bit of the third byte to zero, and 5 is odd.
+    So the true network is 128.101.4.0/23. It covers third byte values 4 and 5, and
+    the slide's department blocks fit this normalized parent.
+  moves:
+  - fade:
+      names: es
+  - bits.show:
+      name: par
+      zone: bottom
+      rows:
+      - label: 'Printed: 128.101.5.0'
+        value: 128.101.5.0
+      - label: 'After the /23 mask: 128.101.4.0'
+        value: 128.101.4.0
+      when: Apply the mask
+  - bits.draw_mask:
+      name: par
+      prefix: 23
+  - bits.mark:
+      name: par
+      row: 0
+      start: 22
+      end: 23
+      state: error
+      when: and 5 is odd
+  - card:
+      kind: correction
+      text: Printed 128.101.5.0/23 normalizes to 128.101.4.0/23.
+      zone: top
+      when: So the true
+- id: largest
+  stage: state
+  pdf: 7
+  c:
+  - VLSM Subnetting
+  say: Allocate the largest first, since that keeps the blocks aligned. Department
+    A needs 130. 7 host bits give only 126, so it takes 8 bits, a slash 24, the first
+    half of the parent. B needs 120, and 7 bits give 126. That is a slash 25, at 128.101.5.0.
+    C needs 60. 6 bits give 62, so a slash 26. D needs 31. It is tempting to pick
+    a slash 27, because 32 addresses seem like enough. But a slash 27 leaves only
+    30 usable. So D also needs a slash 26.
+  moves:
+  - clear: {}
+  - table.show:
+      name: plan
+      zone: top
+      data: $subnet.plan_table
+      show: 0
+  - tl.show:
+      name: blk
+      zone: bottom
+      tracks:
+      - /23
+      - Try
+      span:
+      - 0
+      - 512
+      ticks:
+      - 0
+      - 256
+      - 384
+      - 448
+      - 512
+  - table.reveal:
+      name: plan
+      when: Department A
+  - tl.block:
+      name: blk
+      track: /23
+      start: 0
+      end: 256
+      text: A /24
+      kind: ip
+  - table.reveal:
+      name: plan
+      when: B needs
+  - tl.block:
+      name: blk
+      track: /23
+      start: 256
+      end: 384
+      text: B /25
+      kind: eth
+  - table.reveal:
+      name: plan
+      when: C needs
+  - tl.block:
+      name: blk
+      track: /23
+      start: 384
+      end: 448
+      text: C
+      kind: transport
+  - table.reveal:
+      name: plan
+      when: D needs
+  - table.mark:
+      name: plan
+      r: 3
+      state: error
+      when: It is tempting
+  - table.mark:
+      name: plan
+      r: 3
+      state: done
+      when: So D also
+  - tl.block:
+      name: blk
+      track: /23
+      start: 448
+      end: 512
+      text: D
+      kind: label
+- id: bar
+  stage: state
+  pdf: 7
+  c:
+  - VLSM Subnetting
+  say: See the blocks laid along the parent. 256 plus 128 plus 64 plus 64 is 512,
+    and that fills the slash 23 exactly. Each block begins on a multiple of its own
+    size, which is what lets a single prefix describe it.
+  moves:
+  - tex:
+      name: tot
+      zone: top
+      tex: 256+128+64+64=512
+      size: 48
+      when: 256 plus
+  - tl.ghost:
+      name: blk
+      track: Try
+      start: 400
+      end: 464
+      text: at 400?
+      when: Each block begins
+  - tl.slide:
+      name: blk
+      start: 384
+      end: 448
+      text: at 384
+      when: which is what
+- id: rule
+  stage: rule
+  pdf: 7
+  c:
+  - VLSM Subnetting
+  say: Check any allocation three separate ways. Does each subnet have enough usable
+    hosts? Do any overlap? And is each one contained in the parent? A plausible looking
+    dotted address proves none of those.
+  moves:
+  - clear: {}
+  - bullets:
+      name: ck
+      zone: top
+      show: 0
+      items:
+      - Enough usable hosts in each subnet?
+      - No overlaps?
+      - Contained in the parent?
+  - reveal:
+      name: ck
+      when: Does each subnet
+  - reveal:
+      name: ck
+      when: Do any overlap
+  - reveal:
+      name: ck
+      when: And is each
+  - rule:
+      text: 'Check three things: enough usable hosts, no overlap, contained in the
+        parent.'
+      when: A plausible
+- id: pitfall
+  stage: rule
+  pdf: 7
+  c:
+  - VLSM Subnetting
+  say: 'The mistake that looks harmless: placing a block wherever there''s room. A
+    block must begin on a multiple of its own size. Otherwise, no single prefix can
+    describe it.'
+  moves:
+  - trap:
+      wrong: A block can start anywhere it fits
+      right: A block must start on a multiple of its own size
+- id: changed
+  stage: changed_example
+  pdf: 5
+  c:
+  - VLSM Subnetting
+  say: Change one requirement. Department C's count of 60 did not include its router
+    interface or its printers. The real requirement is 63 interfaces.
+  moves:
+  - clear: {}
+  - q:
+      text: Department C now needs 63 interfaces, not 60.
+      zone: top
+- id: predict
+  stage: prediction
+  pdf: 5
+  hold: 12
+  c:
+  - VLSM Subnetting
+  say: What prefix does C need now? And does the whole plan still fit in the slash
+    23?
+  moves:
+  - pause:
+      text: C's new prefix? does everything still fit?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 5
+  c:
+  - VLSM Subnetting
+  say: '6 bits give only 62 usable, so C jumps to 7 bits, a slash 25, with 128 addresses.
+    Add that up: 256, plus 128, plus 128, plus 64, is 576. That is more than 512,
+    so the plan no longer fits. A single extra host at a boundary doubled the block,
+    which is why you must state exactly what the count includes. The result is a table
+    of overlapping prefixes on every router, so how does a router choose among them?'
+  moves:
+  - tl.show:
+      name: over
+      zone: bottom
+      tracks:
+      - /23
+      span:
+      - 0
+      - 576
+      ticks:
+      - 0
+      - 256
+      - 384
+      - 512
+      - 576
+  - tl.block:
+      name: over
+      track: /23
+      start: 0
+      end: 256
+      text: A /24
+      kind: ip
+      when: Add that up
+      t: 0.5
+  - tl.block:
+      name: over
+      track: /23
+      start: 256
+      end: 384
+      text: B /25
+      kind: eth
+      t: 0.5
+  - tl.block:
+      name: over
+      track: /23
+      start: 384
+      end: 512
+      text: C /25
+      kind: transport
+      t: 0.5
+  - tl.block:
+      name: over
+      track: /23
+      start: 512
+      end: 576
+      text: D
+      state: error
+      when: That is more
+  - rule:
+      text: One host past a boundary doubles the block. State what the count includes.
+      when: A single extra
+  - clear:
+      when: The result is
+  - q:
+      text: Overlapping prefixes on every router. How does it choose?
+prediction_contracts:
+- prediction_beat: 8.1.predict
+  answer_beat: 8.1.answer
+  answer_events:
+  - 8.1.answer:move:0
+  - 8.1.answer:move:1
+  - 8.1.answer:move:2
+  - 8.1.answer:move:3
+  - 8.1.answer:move:4
+  - 8.1.answer:move:5
+  - 8.1.answer:move:6
+  answer_objects:
+  - object: over
+    after: 8.1.answer:move:0
+    effect: tl.show
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: over
+    after: 8.1.answer:move:1
+    effect: tl.block
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: over
+    after: 8.1.answer:move:2
+    effect: tl.block
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: over
+    after: 8.1.answer:move:3
+    effect: tl.block
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: over
+    after: 8.1.answer:move:4
+    effect: tl.block
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 8.1.answer:move:5
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '8.2'
+title: The longest match
+deck: lec08-network2.pdf
+target_min: 7
+concepts:
+- Longest Prefix Matching
+- Patricia Tries
+- Content-Addressable Memory
+- TCAM
+- Generalized Forwarding
+beats:
+- id: question
+  stage: question
+  pdf: 13
+  c:
+  - Longest Prefix Matching
+  say: R1 holds a table of prefixes. Because prefixes can nest, one destination can
+    match several entries at once. Which one should win? And how can a router decide
+    this in a few nanoseconds, a few million times every second?
+  moves:
+  - heading:
+      text: 'Lecture 8: the longest match'
+  - q:
+      text: One destination matches several routes. Which one wins?
+- id: table
+  stage: animation
+  pdf: 29
+  c:
+  - Longest Prefix Matching
+  say: A router's table with three entries. 201.10.0.0/21 goes out output A. Inside
+    that block, 201.10.6.0/23 goes out output B. And 0.0.0.0/0 goes out output C.
+    Those entries overlap on purpose. The slash 21 is an aggregate, the slash 23 is
+    an exception carved out of it, and the slash 0 is the fallback.
+  moves:
+  - clear: {}
+  - table.show:
+      name: rt
+      zone: left_top
+      data: $lpm.routes
+      show: 0
+  - table.reveal:
+      name: rt
+      when: 201.10.0.0/21 goes
+  - table.reveal:
+      name: rt
+      when: Inside that block
+  - table.reveal:
+      name: rt
+      when: And 0.0.0.0/0
+  - bullets:
+      name: note
+      zone: right_top
+      show: 0
+      items:
+      - /21 is an aggregate
+      - /23 is an exception inside it
+      - /0 is the fallback
+  - reveal:
+      name: note
+      when: The slash 21 is
+  - reveal:
+      name: note
+      when: the slash 23 is
+  - reveal:
+      name: note
+      when: and the slash 0
+- id: match
+  stage: state
+  pdf: 29
+  c:
+  - Longest Prefix Matching
+  say: A packet arrives for 201.10.6.17. To test a route, mask the destination with
+    the route's prefix length and compare. Under the slash 21 mask it matches. Under
+    the slash 23 it also matches. And slash 0 matches everything. Three matches. The
+    rule is longest prefix match. Choose the match with the most network bits, because
+    it is the most specific claim. So the slash 23 wins, and the packet leaves on
+    output B.
+  moves:
+  - table.mark:
+      name: rt
+      r: 0
+      state: candidate
+      when: Under the slash 21
+  - table.mark:
+      name: rt
+      r: 1
+      state: candidate
+      when: Under the slash 23
+  - table.mark:
+      name: rt
+      r: 2
+      state: candidate
+      when: And slash 0
+  - rule:
+      text: 'Longest prefix match: the most network bits is the most specific claim.'
+      when: The rule is
+  - table.flash:
+      name: rt
+      rows:
+      - 0
+      - 2
+      state: null
+      when: So the slash 23
+  - table.mark:
+      name: rt
+      r: 1
+      state: done
+  - table.show:
+      name: lk
+      zone: bottom
+      data: $lpm.lookup_table
+      show: 1
+- id: more
+  stage: state
+  pdf: 29
+  c:
+  - Longest Prefix Matching
+  say: 201.10.4.8. Its third byte, 4, lies within the slash 21, which covers 0 through
+    7, but not within the slash 23, which covers only 6 and 7. So output A. And 203.0.113.8
+    matches only the fallback, so output C. A route's position in the list does not
+    matter. Neither does any metric from an unrelated route. Only prefix length decides
+    among installed matches.
+  moves:
+  - table.mark:
+      name: rt
+      r: 1
+      state: null
+  - fade:
+      names: _rule
+  - table.reveal:
+      name: lk
+      when: 201.10.4.8
+  - table.mark:
+      name: rt
+      r: 0
+      state: done
+      when: So output A
+  - table.reveal:
+      name: lk
+      when: And 203.0.113.8
+  - table.flash:
+      name: rt
+      rows:
+      - 0
+      state: null
+  - table.mark:
+      name: rt
+      r: 2
+      state: done
+  - rule:
+      text: Only prefix length decides among installed matches.
+      when: A route's position
+  pre_roll: 1.1
+- id: bitlevel
+  stage: state
+  pdf: 15
+  c:
+  - Longest Prefix Matching
+  say: Let's see this at the level of bits, because that's what the hardware does.
+    Write the destination, 201.10.6.17, above the route's network, 201.10.6.0. Under
+    a slash 23, only the first 23 bits count. Compare them. Every one matches, so
+    this route matches. Whatever's to the right of the boundary doesn't matter. Now
+    compare 201.10.4.8 against that same route. Look at the third byte. 4 is 00000100,
+    and 6 is 00000110. They differ in bit 23, inside the prefix. So that's no match,
+    and that second packet falls through to the shorter route.
+  moves:
+  - clear: {}
+  - bits.show:
+      name: lb
+      zone: full
+      rows:
+      - label: Destination 201.10.6.17
+        value: 201.10.6.17
+      - label: Route 201.10.6.0/23
+        value: 201.10.6.0
+  - bits.draw_mask:
+      name: lb
+      prefix: 23
+      when: Under a slash 23
+  - bits.mark:
+      name: lb
+      row: 0
+      start: 0
+      end: 23
+      state: done
+      when: Every one matches
+  - bits.mark:
+      name: lb
+      row: 0
+      start: 23
+      end: 32
+      state: candidate
+      when: Whatever's to the right
+  - bits.add:
+      name: lb
+      label: Destination 201.10.4.8
+      value: 201.10.4.8
+      when: Now compare
+  - bits.mark:
+      name: lb
+      row: 2
+      start: 16
+      end: 24
+      state: now
+      when: Look at the third
+  - bits.mark:
+      name: lb
+      row: 2
+      start: 22
+      end: 23
+      state: error
+      when: They differ
+- id: budget
+  stage: animation
+  pdf: 30
+  c:
+  - Longest Prefix Matching
+  clar:
+  - budget-51
+  say: The speed problem. Scanning every route is far too slow. On a 10 gigabit link
+    with 64 byte packets, there are about 19 and a half million packets each second,
+    which leaves 51 point 2 nanoseconds per packet. That calculation leaves out Ethernet's
+    physical overhead, so treat it as a budget illustration. But the conclusion holds.
+    There is no time for a linear scan.
+  moves:
+  - clear: {}
+  - tex:
+      name: bud
+      zone: top
+      tex: \frac{10^{10}\text{ b/s}}{8\times 64\text{ bits}}=19{,}531{,}250\text{
+        packets/s}\ \Rightarrow\ 51.2\text{ ns}
+      size: 40
+      when: On a 10 gigabit
+  - card:
+      kind: note
+      text: 'This leaves out Ethernet''s physical overhead: a budget illustration.'
+      zone: bottom
+      when: That calculation
+  - rule:
+      text: No time for a linear scan.
+      when: But the conclusion
+- id: trie
+  stage: state
+  pdf: 31
+  c:
+  - Patricia Tries
+  say: One answer is a trie, a tree you walk one address bit at a time. Follow the
+    destination's bits down from the root. Whenever you pass a node holding a route,
+    remember it. If the path dead-ends deeper down, you still have the last route
+    you remembered. That is why a failed deep branch does not lose the earlier match.
+    A Patricia trie compresses long chains with no branching, and multi-bit nodes
+    trade memory for fewer steps.
+  moves:
+  - clear: {}
+  - net.show:
+      name: tr
+      zone: full
+      nodes:
+        r:
+          k: node
+          at:
+          - 0
+          - 2
+          l: /0
+        a:
+          k: node
+          at:
+          - -2.4
+          - 1
+          l: /21
+        n:
+          k: node
+          at:
+          - 4
+          - 1
+          l: "\xB7"
+        b:
+          k: node
+          at:
+          - -3.8
+          - 0
+          l: /23
+        m:
+          k: node
+          at:
+          - -1
+          - 0
+          l: "\xB7"
+      links:
+      - - r
+        - a
+        - c: "\u2026"
+      - - r
+        - n
+      - - a
+        - b
+        - c: '11'
+      - - a
+        - m
+  - net.state:
+      name: tr
+      nodes:
+        r: now
+      when: Follow the destination
+  - net.badge:
+      name: tr
+      node: r
+      text: remember /0
+      side: right
+      state: now
+      when: Whenever you pass
+  - net.walk:
+      name: tr
+      path:
+      - r
+      - a
+      state: now
+  - net.state:
+      name: tr
+      nodes:
+        r: null
+        a: candidate
+  - net.badge:
+      name: tr
+      node: a
+      text: remember /21
+      side: left
+      state: now
+  - net.walk:
+      name: tr
+      path:
+      - r
+      - a
+      - m
+      state: error
+      when: If the path
+  - net.state:
+      name: tr
+      nodes:
+        m: error
+  - net.state:
+      name: tr
+      nodes:
+        a: done
+        m: null
+      when: That is why
+  - net.unwalk:
+      name: tr
+      when: A Patricia
+  - rule:
+      text: A Patricia trie compresses long chains with no branching.
+      when: compresses long chains
+- id: cam
+  stage: state
+  pdf: 32
+  c:
+  - Content-Addressable Memory
+  - TCAM
+  say: The other answer is hardware. Ordinary memory takes an address and returns
+    the content. Content-addressable memory does the reverse. Give it a key, and it
+    compares against every entry at the same time. A plain CAM needs exact matches,
+    which suits MAC tables. Prefixes have don't care bits. TCAM adds a third state,
+    so a stored entry can say these bits must match, and these do not matter. Several
+    entries can still match, so hardware priority must favor the longest prefix.
+  moves:
+  - clear: {}
+  - table.show:
+      name: tc
+      zone: top
+      cols:
+      - TCAM entry (third byte)
+      - Length
+      - Output
+      rows:
+      - - 0000011*
+        - /23
+        - B
+      - - 00000***
+        - /21
+        - A
+      - - '********'
+        - /0
+        - C
+  - text:
+      name: key
+      zone: bottom
+      lines:
+      - 'Key, third byte of 201.10.6.17: 00000110'
+      when: Give it a key
+  - table.flash:
+      name: tc
+      rows:
+      - 0
+      - 1
+      - 2
+      state: now
+      when: at the same time
+  - table.flash:
+      name: tc
+      rows:
+      - 0
+      - 1
+      - 2
+      state: null
+      when: A plain CAM
+  - table.flash:
+      name: tc
+      rows:
+      - 0
+      - 1
+      - 2
+      state: candidate
+      when: Several entries
+  - table.mark:
+      name: tc
+      r: 0
+      state: done
+      when: so hardware priority
+  - rule:
+      text: TCAM compares every entry at once. Priority must still favor the longest
+        prefix.
+- id: general
+  stage: rule
+  pdf: 11
+  c:
+  - Generalized Forwarding
+  say: Once you can match bit patterns, why stop at the destination? Generalized forwarding
+    matches on selected header fields and applies a configured action, such as forward,
+    drop, or rewrite. That connects back to software-defined networking. Whether by
+    prefix or by general match, the principle holds. Control installs the rules. The
+    data plane applies them, one packet at a time.
+  moves:
+  - fade:
+      names:
+      - key
+      - _rule
+  - table.show:
+      name: gf
+      zone: bottom
+      cols:
+      - Match
+      - Action
+      rows:
+      - - destination prefix
+        - forward
+      - - source and port
+        - drop
+      - - any selected fields
+        - rewrite
+      show: 0
+  - table.reveal:
+      name: gf
+      n: 3
+      when: Generalized forwarding
+  - rule:
+      text: Control installs the rules. The data plane applies them, one packet at
+        a time.
+      when: Control installs
+- id: pitfall
+  stage: rule
+  pdf: 11
+  c:
+  - Generalized Forwarding
+  say: The classic slip is stopping at the first match, or taking the lowest cost.
+    In a table, order doesn't matter. In a trie, you keep walking, and remember the
+    longest valid prefix so far.
+  moves:
+  - trap:
+      wrong: Stop at the first matching route
+      right: 'Keep looking: the longest match wins, wherever it''s listed'
+- id: changed
+  stage: changed_example
+  pdf: 29
+  c:
+  - Longest Prefix Matching
+  say: Add a route. An operator installs 201.10.6.16/28 going to a new output, D,
+    and a metric says the slash 21 is an excellent path. Our first packet, 201.10.6.17,
+    comes back through.
+  moves:
+  - clear: {}
+  - table.show:
+      name: rt2
+      zone: top
+      cols:
+      - Prefix
+      - Output
+      rows:
+      - - 201.10.0.0/21
+        - A
+      - - 201.10.6.0/23
+        - B
+      - - 201.10.6.16/28
+        - D
+      - - 0.0.0.0/0
+        - C
+  - table.mark:
+      name: rt2
+      r: 2
+      state: now
+      when: An operator installs
+- id: predict
+  stage: prediction
+  pdf: 29
+  hold: 12
+  c:
+  - Longest Prefix Matching
+  say: Which output does it take now? And what would 201.10.6.33 do?
+  moves:
+  - pause:
+      text: the output for 201.10.6.17, and for 201.10.6.33?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 29
+  c:
+  - Longest Prefix Matching
+  say: The slash 28 covers 201.10.6.16 through 31, so 201.10.6.17 goes to D. The metric
+    never entered into it. And 201.10.6.33 is outside the slash 28, so the slash 23
+    catches it, output B. Finding the output is only half of forwarding, though. The
+    packet still has to physically cross the router. So let us go inside.
+  moves:
+  - table.mark:
+      name: rt2
+      r: 2
+      state: done
+      when: The slash 28 covers
+  - bullets:
+      name: an
+      zone: bottom
+      show: 0
+      items:
+      - "201.10.6.17 \u2192 /28 \u2192 D"
+      - "201.10.6.33 \u2192 /23 \u2192 B"
+  - reveal:
+      name: an
+      when: so 201.10.6.17
+  - reveal:
+      name: an
+      when: And 201.10.6.33
+  - table.mark:
+      name: rt2
+      r: 1
+      state: done
+  - clear:
+      when: Finding the output
+  - q:
+      text: The packet still has to physically cross the router.
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 8.2.predict
+  answer_beat: 8.2.answer
+  answer_events:
+  - 8.2.answer:move:0
+  - 8.2.answer:move:1
+  - 8.2.answer:move:2
+  - 8.2.answer:move:3
+  - 8.2.answer:move:4
+  - 8.2.answer:move:5
+  answer_objects:
+  - object: rt2
+    after: 8.2.answer:move:0
+    effect: table.mark
+    selector:
+      r: 2
+    before_answer: hidden_or_neutral
+  - object: an
+    after: 8.2.answer:move:1
+    effect: bullets
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: an
+    after: 8.2.answer:move:2
+    effect: reveal
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: an
+    after: 8.2.answer:move:3
+    effect: reveal
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: rt2
+    after: 8.2.answer:move:4
+    effect: table.mark
+    selector:
+      r: 1
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '8.3'
+title: Inside a router
+deck: lec08-network2.pdf
+target_min: 7.5
+concepts:
+- Router Architecture
+- Memory Switching
+- Bus Switching
+- Crossbar and Clos Switching
+- Input Queuing and HOL Blocking
+- Output Queuing and Scheduling
+beats:
+- id: question
+  stage: question
+  pdf: 9
+  c:
+  - Router Architecture
+  say: A router has found the right output. Now a packet must physically cross the
+    machine, while packets arrive on every other port too. Where can this go wrong?
+    When a router is slow, which part is actually the bottleneck?
+  moves:
+  - heading:
+      text: 'Lecture 8: inside a router'
+  - q:
+      text: When a router is slow, which part is the bottleneck?
+  - keep: {}
+- id: parts
+  stage: animation
+  pdf: 9
+  c:
+  - Router Architecture
+  say: 'A router has four main parts. Input ports receive the bits, check the link
+    layer, and do the lookup. A switching fabric moves packets between ports. Output
+    ports buffer and transmit them. And a routing processor runs the control plane,
+    computing the tables that input ports use. Follow our packet: in, lookup, across,
+    queue, out.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: rtr
+      zone: full
+      nodes:
+        I:
+          k: box
+          at:
+          - 0
+          - 0
+          l: Input port
+        F:
+          k: box
+          at:
+          - 4
+          - 0
+          l: Fabric
+        O:
+          k: box
+          at:
+          - 8
+          - 0
+          l: Output port
+        C:
+          k: box
+          at:
+          - 4
+          - 2
+          l: Routing processor
+      links:
+      - - I
+        - F
+      - - F
+        - O
+      - - C
+        - I
+        - s: control
+  - net.state:
+      name: rtr
+      nodes:
+        I: now
+      when: Input ports
+  - net.state:
+      name: rtr
+      nodes:
+        I: null
+        F: now
+      when: A switching fabric
+  - net.state:
+      name: rtr
+      nodes:
+        F: null
+        O: now
+      when: Output ports
+  - net.state:
+      name: rtr
+      nodes:
+        O: null
+        C: now
+      when: And a routing
+  - net.state:
+      name: rtr
+      nodes:
+        C: null
+  - packet.spawn:
+      name: p
+      net: rtr
+      at: I
+      layers:
+      - eth
+      - ip
+      when: Follow our packet
+  - packet.hop:
+      name: p
+      to:
+      - F
+      - O
+      t: 2
+- id: fabrics
+  stage: state
+  pdf: 19
+  c:
+  - Router Architecture
+  say: The fabric's capacity is the first limit. With 4 inputs, each at 10 gigabits
+    per second, up to 40 gigabits per second may be offered. A fabric that cannot
+    move that much makes inputs wait, even when every output is free. There are three
+    classic designs.
+  moves:
+  - clear: {}
+  - tex:
+      name: cap
+      zone: top
+      tex: N\times R = 4\times 10\,\text{Gb/s}=40\,\text{Gb/s offered}
+      size: 44
+      when: With 4 inputs
+  - rule:
+      text: "If the fabric cannot carry N \xD7 R, inputs wait even when outputs are\
+        \ free."
+      when: A fabric that
+- id: memory
+  stage: animation
+  pdf: 20
+  c:
+  - Memory Switching
+  say: The oldest design is memory switching. The packet is copied into shared memory,
+    and then copied out again. Each packet crosses memory twice, so memory bandwidth
+    must be double the useful throughput.
+  moves:
+  - fade:
+      names: _rule
+  - net.show:
+      name: mem
+      zone: bottom
+      nodes:
+        I:
+          k: box
+          at:
+          - 0
+          - 0
+          l: Input
+        M:
+          k: box
+          at:
+          - 4
+          - 0
+          l: Shared memory
+        O:
+          k: box
+          at:
+          - 8
+          - 0
+          l: Output
+      links:
+      - - I
+        - M
+        - c: copy in
+      - - M
+        - O
+        - c: copy out
+  - packet.spawn:
+      name: mp
+      net: mem
+      at: I
+      layers:
+      - ip
+  - packet.hop:
+      name: mp
+      to: M
+      when: The packet is copied
+  - packet.hop:
+      name: mp
+      to: O
+      when: and then copied
+  - packet.fade:
+      name: mp
+  - net.state:
+      name: mem
+      nodes:
+        M: now
+      when: so memory bandwidth
+- id: memory-more
+  stage: state
+  pdf: 20
+  c:
+  - Memory Switching
+  say: Put a number on it. If a memory system can sustain 20 gigabits per second of
+    copying, each forwarded bit is copied twice, so the router tops out near 10 gigabits
+    per second, before any other overhead.
+  moves:
+  - tex:
+      name: mm
+      zone: top
+      tex: 20\ \text{Gb/s of copying}\div 2 = 10\ \text{Gb/s forwarded}
+      size: 42
+      when: Put a number
+  - net.pulse:
+      name: mem
+      path:
+      - I
+      - M
+      - O
+      when: each forwarded bit
+- id: bus
+  stage: animation
+  pdf: 21
+  c:
+  - Bus Switching
+  say: Next is a shared bus. A packet crosses directly from input to output, over
+    one internal bus. That avoids the double copy. But only one packet can use the
+    bus at a time, so the bus speed caps the entire router.
+  moves:
+  - net.show:
+      name: bus
+      zone: bottom
+      nodes:
+        B:
+          k: box
+          at:
+          - 4
+          - 0
+          l: One shared bus
+        A:
+          k: box
+          at:
+          - 0
+          - 1
+          l: Input 1
+        C:
+          k: box
+          at:
+          - 0
+          - -1
+          l: Input 2
+        D:
+          k: box
+          at:
+          - 8
+          - 1
+          l: Output 1
+        E:
+          k: box
+          at:
+          - 8
+          - -1
+          l: Output 2
+      links:
+      - - A
+        - B
+      - - C
+        - B
+      - - B
+        - D
+      - - B
+        - E
+  - packet.spawn:
+      name: bp
+      net: bus
+      at: A
+      layers:
+      - ip
+      when: A packet crosses
+  - packet.hop:
+      name: bp
+      to:
+      - B
+      - E
+  - packet.fade:
+      name: bp
+  - packet.spawn:
+      name: b1
+      net: bus
+      at: A
+      layers:
+      - ip
+      when: But only one
+  - packet.spawn:
+      name: b2
+      net: bus
+      at: C
+      layers:
+      - eth
+  - packet.hop:
+      name: b1
+      to:
+      - B
+      - D
+      t: 1.2
+  - net.state:
+      name: bus
+      nodes:
+        C: error
+  - packet.hop:
+      name: b2
+      to:
+      - B
+      - E
+      t: 1.0
+  - net.state:
+      name: bus
+      nodes:
+        C: null
+- id: bus-more
+  stage: state
+  pdf: 21
+  c:
+  - Bus Switching
+  say: Again, a number. Four 10 gigabit inputs feed a 20 gigabit bus. They offer 40
+    gigabits per second, and only 20 can cross, even if every output link sits idle.
+    The bus is the bottleneck, before the outputs are even considered.
+  moves:
+  - tex:
+      name: bb
+      zone: top
+      tex: 4\times 10=40\ \text{Gb/s offered},\quad 20\ \text{Gb/s bus}
+      size: 42
+      when: Four 10 gigabit
+  - net.state:
+      name: bus
+      nodes:
+        B: error
+      when: The bus is
+- id: crossbar
+  stage: animation
+  pdf: 22
+  c:
+  - Crossbar and Clos Switching
+  say: The third design is an interconnection network, such as a crossbar. Now input
+    1 to output 2 and input 2 to output 1 can transfer at the same moment, over separate
+    crossing points. Clos networks build big fabrics out of small switching stages.
+    Many of them chop packets into fixed internal cells. Those cells are an internal
+    technique, not IP fragments.
+  moves:
+  - net.show:
+      name: xb
+      zone: bottom
+      nodes:
+        A:
+          k: box
+          at:
+          - 0
+          - 1
+          l: Input 1
+        C:
+          k: box
+          at:
+          - 0
+          - -1
+          l: Input 2
+        D:
+          k: box
+          at:
+          - 8
+          - 1
+          l: Output 1
+        E:
+          k: box
+          at:
+          - 8
+          - -1
+          l: Output 2
+      links:
+      - - A
+        - E
+        - s: now
+      - - C
+        - D
+        - s: active
+  - packet.spawn:
+      name: x1
+      net: xb
+      at: A
+      layers:
+      - ip
+      when: The third design
+  - packet.spawn:
+      name: x2
+      net: xb
+      at: C
+      layers:
+      - eth
+  - packet.both:
+      moves:
+      - name: x1
+        to: E
+      - name: x2
+        to: D
+      when: Now input 1
+      t: 2
+  - rule:
+      text: Those cells are an internal technique, not IP fragments.
+      when: Those cells
+  pre_roll: 1.4000000000000001
+- id: crossbar-more
+  stage: state
+  pdf: 22
+  c:
+  - Crossbar and Clos Switching
+  say: There's still a limit. Input 1 to output 2 and input 2 to output 1 can move
+    together. But send both inputs to output 1, and they contend for that one output.
+    Parallel paths inside the fabric create no extra capacity at a single output.
+  moves:
+  - packet.fade:
+      name: x1
+  - packet.fade:
+      name: x2
+  - packet.spawn:
+      name: y1
+      net: xb
+      at: A
+      layers:
+      - ip
+      when: But send both
+  - packet.spawn:
+      name: y2
+      net: xb
+      at: C
+      layers:
+      - eth
+  - packet.both:
+      moves:
+      - name: y1
+        to: D
+      - name: y2
+        to: D
+  - net.state:
+      name: xb
+      nodes:
+        D: error
+  - rule:
+      text: Parallel paths create no extra capacity at a single output.
+      when: Parallel paths
+- id: hol
+  stage: state
+  pdf: 24
+  c:
+  - Input Queuing and HOL Blocking
+  say: Even a crossbar has a trap. If two inputs want the same output at once, one
+    must wait. Say input B and input C both have a head packet for output 1. B wins.
+    C's head packet stays blocked. Now look behind it. C's second packet wants output
+    2, and output 2 is idle. But the queue is first in, first out, so that packet
+    is stuck behind the blocked head. This is head of line blocking. A free output
+    sits unused because of how the queue is arranged.
+  moves:
+  - clear: {}
+  - queue.show:
+      name: qb
+      zone: left_top
+      items:
+      - to 1
+      kind: ip
+      title: Input B
+  - queue.show:
+      name: qc
+      zone: left_bottom
+      items:
+      - to 2
+      - to 1
+      kind: eth
+      title: Input C
+  - bullets:
+      name: idle
+      zone: right
+      show: 0
+      items:
+      - 'Output 1: busy with B'
+      - 'Output 2: idle, yet unused'
+  - queue.pop:
+      name: qb
+      when: B wins
+  - reveal:
+      name: idle
+      when:
+        phrase: B wins
+        frame_offset: 21
+  - queue.mark:
+      name: qc
+      i: 1
+      state: error
+      when: C's head packet
+  - queue.mark:
+      name: qc
+      i: 0
+      state: candidate
+      when: C's second packet
+  - reveal:
+      name: idle
+      when: and output 2
+  - rule:
+      text: 'Head of line blocking: a free output sits unused because of how the queue
+        is arranged.'
+      when: This is head
+- id: outq
+  stage: state
+  pdf: 25
+  c:
+  - Output Queuing and Scheduling
+  say: Packets can also wait at the output, and this limit is physical. Three 1,500
+    byte packets arrive together at a 12 megabit per second output. Each needs 1 millisecond
+    to transmit. So they finish at 1, 2, and 3 milliseconds, after waiting 0, 1, and
+    2. A faster fabric can't help, because the wire has a fixed rate. If arrivals
+    keep exceeding that rate, the buffer eventually fills, and something is dropped.
+    A drop policy chooses what to discard. A scheduler chooses what to send next.
+    Priority shifts who suffers, but it creates no new bits per second.
+  moves:
+  - clear: {}
+  - queue.show:
+      name: oq
+      zone: left_top
+      items:
+      - P3
+      - P2
+      - P1
+      kind: ip
+      title: Output queue
+  - table.show:
+      name: ot
+      zone: right_top
+      data: $router.output_table
+      show: 0
+  - queue.pop:
+      name: oq
+      when: So they finish
+  - table.reveal:
+      name: ot
+  - queue.pop:
+      name: oq
+      t: 0.5
+  - table.reveal:
+      name: ot
+      t: 0.4
+  - queue.pop:
+      name: oq
+      t: 0.5
+  - table.reveal:
+      name: ot
+      t: 0.4
+  - bullets:
+      name: pol
+      zone: bottom
+      show: 0
+      items:
+      - 'Drop policy: what to discard'
+      - 'Scheduler: what to send next'
+      - Priority shifts who suffers, not the total rate
+  - reveal:
+      name: pol
+      when: A drop policy
+  - reveal:
+      name: pol
+      when: A scheduler
+  - reveal:
+      name: pol
+      when: Priority shifts
+- id: timescales
+  stage: state
+  pdf: 34
+  c:
+  - Router Architecture
+  say: Step back from the queues, and look at the timescales in this machine. The
+    data plane forwards, buffers, and schedules, in nanoseconds per packet, in line
+    card hardware. The control plane runs routing and signaling, in tens of milliseconds
+    to seconds per event, in router software. The management plane is people and scripts
+    doing analysis and configuration, in minutes to hours. Tables could be typed in
+    statically, but static entries don't adapt to failures, new equipment, or load.
+  moves:
+  - clear: {}
+  - table.show:
+      name: pl
+      zone: top
+      cols:
+      - Plane
+      - Timescale
+      - Where
+      rows:
+      - - Data
+        - nanoseconds
+        - line cards
+      - - Control
+        - ms to seconds
+        - router software
+      - - Management
+        - minutes to hours
+        - people and scripts
+      show: 0
+  - table.reveal:
+      name: pl
+      when: The data plane
+  - table.reveal:
+      name: pl
+      when: The control plane
+  - table.reveal:
+      name: pl
+      when: The management plane
+  - rule:
+      text: Static entries don't adapt to failures, new equipment, or load.
+      when: Tables could
+- id: macvsip
+  stage: state
+  pdf: 35
+  c:
+  - Router Architecture
+  say: 'It''s also a good moment to compare our two forwarding worlds, as the instructor''s
+    questions do. Are both MAC and IP addresses allocated hierarchically? Yes, both
+    are: MAC blocks go to vendors, and IP blocks go down through registries. Which
+    is organized by topology? Only IP. Which forwards by exact match? MAC, since IP
+    uses longest prefix. Which builds its table automatically, by watching data? Ethernet
+    switches. Which keeps per-host state in the network? MAC. Routers keep state per
+    prefix. And which keeps per-connection state? Neither one. These answers are worked
+    out from the lecture''s material, as the slide gives no key.'
+  moves:
+  - table.show:
+      name: mi
+      zone: full
+      cols:
+      - Property
+      - Answer
+      rows:
+      - - Hierarchically allocated
+        - both
+      - - Organized by topology
+        - IP
+      - - Exact match forwarding
+        - MAC
+      - - Learns by watching data
+        - Ethernet switches
+      - - Per-host state in the network
+        - MAC
+      - - Per-connection state
+        - neither
+      show: 0
+  - table.reveal:
+      name: mi
+      when: Are both MAC
+  - table.reveal:
+      name: mi
+      when: Which is organized
+  - table.reveal:
+      name: mi
+      when: Which forwards
+  - table.reveal:
+      name: mi
+      when: Which builds
+  - table.reveal:
+      name: mi
+      when: Which keeps per-host
+  - table.reveal:
+      name: mi
+      when: And which keeps
+- id: rule
+  stage: rule
+  pdf: 26
+  c:
+  - Router Architecture
+  - Output Queuing and Scheduling
+  say: Before proposing a fix, find the contention. Is it at lookup, in the memory
+    or bus or fabric, in an input queue, or at the output? Upgrading one simply moves
+    the bottleneck to another.
+  moves:
+  - clear: {}
+  - bullets:
+      name: lim
+      zone: top
+      show: 0
+      items:
+      - Lookup
+      - Memory, bus, or fabric
+      - Input queue
+      - Output
+  - reveal:
+      name: lim
+      n: 4
+      when: Is it at lookup
+  - rule:
+      text: 'Locate the contention first: lookup, fabric, input queue, or output.'
+      when: Upgrading one
+- id: pitfall
+  stage: rule
+  pdf: 26
+  c:
+  - Router Architecture
+  - Output Queuing and Scheduling
+  say: Careful with memory switching. Its internal copy rate is not its useful throughput.
+    Each packet crosses memory twice, so useful throughput is half.
+  moves:
+  - trap:
+      wrong: Memory switching forwards at the full memory bandwidth
+      right: Each packet crosses twice, so throughput is half of it
+- id: changed
+  stage: changed_example
+  pdf: 25
+  c:
+  - Output Queuing and Scheduling
+  say: Picture this. Ten senders all saturate one 10 gigabit output. Somebody proposes
+    doubling the fabric speed.
+  moves:
+  - clear: {}
+  - q:
+      text: Ten senders saturate one output. Double the fabric speed?
+      zone: top
+- id: predict
+  stage: prediction
+  pdf: 25
+  hold: 6
+  c:
+  - Output Queuing and Scheduling
+  say: Will it help? What would a bigger buffer do instead?
+  moves:
+  - pause:
+      text: does a faster fabric help? does a bigger buffer?
+- id: answer
+  stage: explanation
+  pdf: 25
+  c:
+  - Output Queuing and Scheduling
+  - Router Architecture
+  say: It won't. Packets just reach the same full output sooner. A bigger buffer absorbs
+    short bursts, but under persistent overload it only adds delay before the same
+    drops. The output's rate is the limit. That finishes the forwarding path, given
+    a table. We assumed our laptop already knew its own address, its router, and its
+    destination. It knew none of them when it woke up. So how does it find out?
+  moves:
+  - bullets:
+      name: ans
+      zone: bottom
+      show: 0
+      items:
+      - 'Faster fabric: reaches the same full output sooner'
+      - 'Bigger buffer: absorbs bursts, adds delay under overload'
+  - reveal:
+      name: ans
+      when: Packets just
+  - reveal:
+      name: ans
+      when: A bigger buffer
+  - rule:
+      text: 'Next: how did the laptop learn its address at all?'
+      when: We assumed
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 8.3.predict
+  answer_beat: 8.3.answer
+  answer_events:
+  - 8.3.answer:move:0
+  - 8.3.answer:move:1
+  - 8.3.answer:move:2
+  - 8.3.answer:move:3
+  answer_objects:
+  - object: ans
+    after: 8.3.answer:move:0
+    effect: bullets
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: ans
+    after: 8.3.answer:move:1
+    effect: reveal
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: ans
+    after: 8.3.answer:move:2
+    effect: reveal
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 8.3.answer:move:3
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.

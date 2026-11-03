@@ -1,0 +1,208 @@
+dish: '17.11'
+title: 'Practice question 11: bad news'
+deck: lec11-convergence.pdf
+target_min: 2
+concepts: []
+pad: 2.2
+beats:
+- id: 17.11.question
+  stage: question
+  narration: 17.11.question
+  pdf:
+  - lec11-convergence.pdf
+  - 16
+  concepts:
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 11: bad news'
+  - net.show:
+      name: g
+      zone: top
+      nodes:
+        X:
+          k: node
+          at:
+          - 0
+          - 0
+          l: X
+        Y:
+          k: node
+          at:
+          - 5
+          - 0
+          l: Y
+        Z:
+          k: node
+          at:
+          - 10
+          - 0
+          l: Z
+      links:
+      - - X
+        - Y
+        - c: 1
+      - - Y
+        - Z
+        - c: 1
+      when:
+        phrase: X to Y
+        occurrence: 1
+  - net.state:
+      name: g
+      links:
+      - - X
+        - Y
+        - failed
+      when: Then the link
+  adjust: {}
+- id: 17.11.predict
+  stage: prediction
+  narration: 17.11.predict
+  pdf:
+  - lec11-convergence.pdf
+  - 16
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: the stale sequence, the poisoned advertisement, and a limit
+  adjust: {}
+  hold: 15
+- id: 17.11.count
+  stage: state
+  narration: 17.11.count
+  pdf:
+  - lec11-convergence.pdf
+  - 17
+  concepts:
+  - Count to Infinity
+  clarifications: []
+  moves:
+  - table.show:
+      name: t
+      zone: bottom
+      data: $practice.q11_table
+      show: 1
+  - msg.send:
+      name: g
+      a: Z
+      b: Y
+      text: '2'
+      when: Z's old 2
+      t: 0.9
+  - table.reveal:
+      name: t
+  - net.badge:
+      name: g
+      node: Y
+      text: 3, via Z
+      side: up
+      state: error
+  - msg.send:
+      name: g
+      a: Y
+      b: Z
+      text: '3'
+      when: Y's 3
+      t: 0.9
+  - table.reveal:
+      name: t
+  - net.badge:
+      name: g
+      node: Z
+      text: 4, via Y
+      side: up
+      state: error
+  - msg.send:
+      name: g
+      a: Z
+      b: Y
+      text: '4'
+      when: Then Y can
+      t: 0.9
+  - table.reveal:
+      name: t
+  - net.badge:
+      name: g
+      node: Y
+      text: 5, via Z
+      side: up
+      state: error
+  - keep: {}
+  adjust: {}
+  pre_roll: 1.0
+- id: 17.11.poison
+  stage: state
+  narration: 17.11.poison
+  pdf:
+  - lec11-convergence.pdf
+  - 18
+  concepts:
+  - Poison Reverse
+  clarifications: []
+  moves:
+  - net.unbadge:
+      name: g
+      node: Y
+  - net.badge:
+      name: g
+      node: Z
+      text: 'tells Y: ∞'
+      side: up
+      state: now
+      when: so Z tells
+  - msg.send:
+      name: g
+      a: Z
+      b: Y
+      text: ∞
+      kind: error
+  - keep: {}
+  adjust: {}
+- id: 17.11.limit
+  stage: explanation
+  narration: 17.11.limit
+  pdf:
+  - lec11-convergence.pdf
+  - 18
+  concepts:
+  - Poison Reverse
+  clarifications: []
+  moves:
+  - rule:
+      text: 'Limit: poison reverse doesn''t eliminate longer dependency cycles.'
+      when: The limit
+  - keep: {}
+  adjust: {}
+- id: 17.11.trap
+  stage: rule
+  narration: 17.11.trap
+  pdf:
+  - lec11-convergence.pdf
+  - 18
+  concepts:
+  - Poison Reverse
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Z deletes its route, or tells every neighbor infinity
+      right: Z keeps its route. Only Y hears infinity.
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.11.marks
+  stage: explanation
+  narration: 17.11.marks
+  pdf:
+  - lec11-convergence.pdf
+  - 18
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '2 points: the trace. 2 points: direction and value. 1 point: a limitation.'
+      when: On marks
+  - keep: {}
+  adjust: {}

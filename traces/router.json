@@ -1,0 +1,65 @@
+{
+ "backlog_bytes": 5000.0,
+ "fabric_offered_gbps": 40,
+ "hol": {
+  "blocked": [
+   {
+    "input": "C",
+    "stuck_behind": [
+     2
+    ],
+    "wanted": 1
+   }
+  ],
+  "idle_outputs": [
+   2
+  ],
+  "moved": [
+   {
+    "input": "B",
+    "output": 1
+   }
+  ]
+ },
+ "output_table": {
+  "cols": [
+   "Packet",
+   "Wait (ms)",
+   "Done (ms)"
+  ],
+  "rows": [
+   [
+    1,
+    "0",
+    "1"
+   ],
+   [
+    2,
+    "1",
+    "2"
+   ],
+   [
+    3,
+    "2",
+    "3"
+   ]
+  ]
+ },
+ "output_three": [
+  {
+   "done_ms": 1.0,
+   "packet": 1,
+   "wait_ms": 0.0
+  },
+  {
+   "done_ms": 2.0,
+   "packet": 2,
+   "wait_ms": 1.0
+  },
+  {
+   "done_ms": 3.0,
+   "packet": 3,
+   "wait_ms": 2.0
+  }
+ ]
+}

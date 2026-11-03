@@ -1,0 +1,337 @@
+{
+ "bf_first": {
+  "total": 6,
+  "totals": {
+   "B": 6,
+   "C": 7
+  },
+  "via": "B"
+ },
+ "bf_second": {
+  "total": 7,
+  "totals": {
+   "B": 13,
+   "C": 7
+  },
+  "via": "C"
+ },
+ "changed_dist": {
+  "A": 0,
+  "B": 2,
+  "C": 5,
+  "D": 6
+ },
+ "changed_first_hop": {
+  "B": "B",
+  "C": "C",
+  "D": "B"
+ },
+ "changed_paths": {
+  "A": [
+   "A"
+  ],
+  "B": [
+   "A",
+   "B"
+  ],
+  "C": [
+   "A",
+   "C"
+  ],
+  "D": [
+   "A",
+   "B",
+   "D"
+  ]
+ },
+ "dv_rounds_A": [
+  {
+   "A": 0,
+   "B": 2,
+   "C": 5,
+   "D": "∞"
+  },
+  {
+   "A": 0,
+   "B": 2,
+   "C": 3,
+   "D": 6
+  },
+  {
+   "A": 0,
+   "B": 2,
+   "C": 3,
+   "D": 5
+  }
+ ],
+ "dv_table_A": {
+  "cols": [
+   "Round",
+   "D(B)",
+   "D(C)",
+   "D(D)"
+  ],
+  "rows": [
+   [
+    1,
+    2,
+    5,
+    "∞"
+   ],
+   [
+    2,
+    2,
+    3,
+    6
+   ],
+   [
+    3,
+    2,
+    3,
+    5
+   ]
+  ]
+ },
+ "mpls": [
+  {
+   "in": 17,
+   "out": 42,
+   "router": "R1"
+  },
+  {
+   "in": 42,
+   "out": 8,
+   "router": "R2"
+  },
+  {
+   "in": 8,
+   "out": "pop",
+   "router": "R3"
+  }
+ ],
+ "pv_accept": true,
+ "pv_reject": false,
+ "slide26_alt_direct": 8,
+ "slide26_alt_via_x": 8,
+ "slide26_cost": 7,
+ "slide26_first_hop": "s",
+ "slide26_path": [
+  "t",
+  "s",
+  "w",
+  "x",
+  "z",
+  "y",
+  "v"
+ ],
+ "slide27_dist": {
+  "A": 0,
+  "B": 2,
+  "C": 4,
+  "D": 4,
+  "E": 8,
+  "F": 14,
+  "G": 7,
+  "H": 13
+ },
+ "slide27_table": {
+  "cols": [
+   "Node",
+   "B",
+   "C",
+   "D",
+   "G",
+   "E",
+   "H",
+   "F"
+  ],
+  "rows": [
+   [
+    "Distance",
+    2,
+    4,
+    4,
+    7,
+    8,
+    13,
+    14
+   ]
+  ]
+ },
+ "small": [
+  {
+   "dist": {
+    "A": 0,
+    "B": 2,
+    "C": 5,
+    "D": "∞"
+   },
+   "pred": {
+    "B": "A",
+    "C": "A"
+   },
+   "relaxed": [
+    {
+     "new": 2,
+     "node": "B",
+     "old": "∞",
+     "via": "A"
+    },
+    {
+     "new": 5,
+     "node": "C",
+     "old": "∞",
+     "via": "A"
+    }
+   ],
+   "settle": "A",
+   "settled": [
+    "A"
+   ]
+  },
+  {
+   "dist": {
+    "A": 0,
+    "B": 2,
+    "C": 3,
+    "D": 6
+   },
+   "pred": {
+    "B": "A",
+    "C": "B",
+    "D": "B"
+   },
+   "relaxed": [
+    {
+     "new": 3,
+     "node": "C",
+     "old": 5,
+     "via": "B"
+    },
+    {
+     "new": 6,
+     "node": "D",
+     "old": "∞",
+     "via": "B"
+    }
+   ],
+   "settle": "B",
+   "settled": [
+    "A",
+    "B"
+   ]
+  },
+  {
+   "dist": {
+    "A": 0,
+    "B": 2,
+    "C": 3,
+    "D": 5
+   },
+   "pred": {
+    "B": "A",
+    "C": "B",
+    "D": "C"
+   },
+   "relaxed": [
+    {
+     "new": 5,
+     "node": "D",
+     "old": 6,
+     "via": "C"
+    }
+   ],
+   "settle": "C",
+   "settled": [
+    "A",
+    "B",
+    "C"
+   ]
+  },
+  {
+   "dist": {
+    "A": 0,
+    "B": 2,
+    "C": 3,
+    "D": 5
+   },
+   "pred": {
+    "B": "A",
+    "C": "B",
+    "D": "C"
+   },
+   "relaxed": [],
+   "settle": "D",
+   "settled": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ]
+  }
+ ],
+ "small_first_hop": {
+  "B": "B",
+  "C": "B",
+  "D": "B"
+ },
+ "small_paths": {
+  "A": [
+   "A"
+  ],
+  "B": [
+   "A",
+   "B"
+  ],
+  "C": [
+   "A",
+   "B",
+   "C"
+  ],
+  "D": [
+   "A",
+   "B",
+   "C",
+   "D"
+  ]
+ },
+ "small_pred": {
+  "B": "A",
+  "C": "B",
+  "D": "C"
+ },
+ "small_table": {
+  "cols": [
+   "Settled",
+   "D(B)",
+   "D(C)",
+   "D(D)"
+  ],
+  "rows": [
+   [
+    "A",
+    2,
+    5,
+    "∞"
+   ],
+   [
+    "B",
+    2,
+    3,
+    6
+   ],
+   [
+    "C",
+    2,
+    3,
+    5
+   ],
+   [
+    "D",
+    2,
+    3,
+    5
+   ]
+  ]
+ }
+}

@@ -1,0 +1,535 @@
+dish: '11.1'
+title: When a link fails
+deck: lec11-convergence.pdf
+target_min: 6
+concepts:
+- Failure Detection
+- Routing Convergence
+- Forwarding Blackholes
+- Transient Forwarding Loops
+pad: 2.2
+beats:
+- id: 11.1.question
+  stage: question
+  narration: 11.1.question
+  pdf:
+  - lec11-convergence.pdf
+  - 4
+  concepts:
+  - Failure Detection
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 11: when a link fails'
+  - spine:
+      current: Failure
+      zone: top
+  - q:
+      text: Correct before, correct after. What about in between?
+      zone: bottom
+  adjust: {}
+- id: 11.1.laptop
+  stage: animation
+  narration: 11.1.laptop
+  pdf:
+  - lec11-convergence.pdf
+  - 4
+  concepts:
+  - Failure Detection
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: lp
+      zone: top
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        A:
+          k: router
+          at:
+          - 3.4
+          - 0
+          l: R1
+        B:
+          k: router
+          at:
+          - 6.8
+          - 0
+          l: R2
+        W:
+          k: server
+          at:
+          - 10.2
+          - 0
+          l: Web server
+      links:
+      - - L
+        - A
+      - - A
+        - B
+      - - B
+        - W
+  - packet.spawn:
+      name: p
+      net: lp
+      at: L
+      layers:
+      - ip
+      when: Picture our
+  - packet.hop:
+      name: p
+      to:
+      - A
+      - B
+      - W
+      t: 2.2
+  - packet.fade:
+      name: p
+  - packet.spawn:
+      name: q
+      net: lp
+      at: L
+      layers:
+      - ip
+      when: The packets keep
+  - packet.hop:
+      name: q
+      to:
+      - A
+      - B
+      - W
+      t: 2.2
+  - packet.fade:
+      name: q
+  - net.state:
+      name: lp
+      links:
+      - - A
+        - B
+        - failed
+      when: So a failure
+  adjust: {}
+  pre_roll: 2.0
+- id: 11.1.causes
+  stage: animation
+  narration: 11.1.causes
+  pdf:
+  - lec11-convergence.pdf
+  - 4
+  concepts:
+  - Failure Detection
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: ch
+      zone: top
+      cols:
+      - Planned
+      - Unplanned
+      rows:
+      - - maintenance
+        - fiber cut
+      - - traffic engineering
+        - power failure
+      - - ''
+        - failed software
+  adjust: {}
+- id: 11.1.detect
+  stage: animation
+  narration: 11.1.detect
+  pdf:
+  - lec11-convergence.pdf
+  - 5
+  concepts:
+  - Failure Detection
+  clarifications: []
+  moves:
+  - clear: {}
+  - tl.show:
+      name: h
+      zone: top
+      tracks:
+      - Hellos
+      span:
+      - 0
+      - 10
+      ticks:
+      - 0
+      - 2
+      - 4
+      - 6
+      - 8
+      - 10
+  - tl.block:
+      name: h
+      track: Hellos
+      start: 0
+      end: 0.3
+      kind: ip
+  - tl.block:
+      name: h
+      track: Hellos
+      start: 2
+      end: 2.3
+      kind: ip
+  - tl.block:
+      name: h
+      track: Hellos
+      start: 4
+      end: 4.3
+      kind: ip
+  - tl.block:
+      name: h
+      track: Hellos
+      start: 6
+      end: 10
+      text: 'missing: declared dead'
+      state: error
+      when: declare a neighbor
+  - table.show:
+      name: tm
+      zone: bottom
+      cols:
+      - Timer
+      - Gain
+      - Cost
+      rows:
+      - - Short
+        - fast detection
+        - traffic and false alarms
+      - - Long
+        - calm and cheap
+        - slow detection
+    when: That leaves
+  adjust: {}
+- id: 11.1.stages
+  stage: state
+  narration: 11.1.stages
+  pdf:
+  - lec11-convergence.pdf
+  - 7
+  concepts:
+  - Routing Convergence
+  clarifications: []
+  moves:
+  - clear: {}
+  - tl.show:
+      name: st
+      zone: top
+      tracks:
+      - Convergence
+      span:
+      - 0
+      - 60
+      ticks:
+      - 0
+      - 30
+      - 40
+      - 45
+      - 60
+  - tl.block:
+      name: st
+      track: Convergence
+      start: 0
+      end: 30
+      text: detect 30
+      kind: ip
+      when: Detect the change
+  - tl.block:
+      name: st
+      track: Convergence
+      start: 30
+      end: 40
+      text: tell
+      kind: eth
+      when: Spread the news
+  - tl.block:
+      name: st
+      track: Convergence
+      start: 40
+      end: 45
+      kind: transport
+      when: Compute new
+  - tl.block:
+      name: st
+      track: Convergence
+      start: 45
+      end: 60
+      text: install
+      kind: label
+      when: Install them
+  - tex:
+      name: tot
+      zone: bottom
+      tex: 30+10+5+15=60\text{ ms}
+      size: 46
+  adjust: {}
+- id: 11.1.blackhole
+  stage: animation
+  narration: 11.1.blackhole
+  pdf:
+  - lec11-convergence.pdf
+  - 8
+  concepts:
+  - Forwarding Blackholes
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show: &id001
+      name: n
+      zone: left
+      nodes:
+        A:
+          k: router
+          at:
+          - 0
+          - 2
+          l: A
+          lp: left
+        B:
+          k: router
+          at:
+          - 4
+          - 2
+          l: B
+          lp: right
+        C:
+          k: router
+          at:
+          - 0
+          - 0
+          l: C
+          lp: left
+        D:
+          k: server
+          at:
+          - 4
+          - 0
+          l: D
+          lp: right
+      links:
+      - - A
+        - B
+        - s: active
+      - - B
+        - D
+        - s: active
+      - - A
+        - C
+      - - C
+        - D
+  - net.state:
+      name: n
+      links:
+      - - B
+        - D
+        - failed
+      when: The link from B
+  - packet.spawn:
+      name: a1
+      net: n
+      at: A
+      layers:
+      - ip
+      when: A keeps sending
+  - packet.hop:
+      name: a1
+      to: B
+  - packet.drop:
+      name: a1
+      when: those packets vanish
+  - text:
+      name: b
+      zone: right
+      lines:
+      - A's route is old, not miscalculated
+      - 'Blackhole: no working continuation'
+      when: That's a forwarding
+  adjust: {}
+- id: 11.1.loop
+  stage: state
+  narration: 11.1.loop
+  pdf:
+  - lec11-convergence.pdf
+  - 9
+  concepts:
+  - Transient Forwarding Loops
+  clarifications: []
+  moves:
+  - net.badge:
+      name: n
+      node: B
+      text: 'new: via A'
+      side: down
+      state: now
+      when: And B installs
+  - net.badge:
+      name: n
+      node: A
+      text: 'old: via B'
+      side: down
+      state: error
+  - packet.spawn:
+      name: a2
+      net: n
+      at: A
+      layers:
+      - ip
+      when: A sends the packet
+  - packet.hop:
+      name: a2
+      to:
+      - B
+      - A
+      - B
+      - A
+      t: 2.4
+  - text:
+      name: b
+      zone: right
+      lines:
+      - 'Old state: no loop'
+      - 'New state: no loop'
+      - 'Mixed state: loop'
+      color: now
+      when: The old configuration
+  adjust: {}
+- id: 11.1.consequences
+  stage: state
+  narration: 11.1.consequences
+  pdf:
+  - lec11-convergence.pdf
+  - 10
+  concepts:
+  - Routing Convergence
+  - Transient Forwarding Loops
+  clarifications: []
+  moves:
+  - packet.drop:
+      name: a2
+  - rule:
+      text: TTL ends a looping packet. It does not recover it, and the loop consumes capacity first.
+  adjust: {}
+- id: 11.1.improve
+  stage: rule
+  narration: 11.1.improve
+  pdf:
+  - lec11-convergence.pdf
+  - 11
+  concepts:
+  - Routing Convergence
+  - Failure Detection
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: im
+      zone: top
+      show: 4
+      items:
+      - Detect faster
+      - Propagate control messages promptly
+      - Compute incrementally
+      - Install forwarding changes efficiently
+  - rule:
+      text: Improve the slowest stage first.
+  adjust: {}
+- id: 11.1.pitfall
+  stage: rule
+  narration: 11.1.pitfall
+  pdf:
+  - lec11-convergence.pdf
+  - 11
+  concepts:
+  - Routing Convergence
+  - Failure Detection
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Correct tables before and after mean no packet loss
+      right: During the transition, packets can still vanish or loop
+  adjust: {}
+- id: 11.1.changed
+  stage: changed_example
+  narration: 11.1.changed
+  pdf:
+  - lec11-convergence.pdf
+  - 9
+  concepts:
+  - Transient Forwarding Loops
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show: *id001
+  - net.state:
+      name: n
+      links:
+      - - B
+        - D
+        - failed
+      - - A
+        - B
+        - solid
+      - - A
+        - C
+        - now
+      - - C
+        - D
+        - now
+  - net.badge:
+      name: n
+      node: A
+      text: 'new: via C'
+      side: up
+      state: done
+  adjust: {}
+- id: 11.1.predict
+  stage: prediction
+  narration: 11.1.predict
+  pdf:
+  - lec11-convergence.pdf
+  - 9
+  concepts:
+  - Transient Forwarding Loops
+  clarifications: []
+  moves:
+  - pause:
+      text: does this install order create a loop or a blackhole?
+  adjust: {}
+  hold: 6
+- id: 11.1.answer
+  stage: explanation
+  narration: 11.1.answer
+  pdf:
+  - lec11-convergence.pdf
+  - 9
+  concepts:
+  - Transient Forwarding Loops
+  - Forwarding Blackholes
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: ok
+      net: n
+      at: A
+      layers:
+      - ip
+  - packet.hop:
+      name: ok
+      to:
+      - C
+      - D
+  - text:
+      name: an
+      zone: right
+      lines:
+      - 'No loop: A avoids B'
+      - B may still drop until it installs
+  - keep: {}
+  adjust: {}

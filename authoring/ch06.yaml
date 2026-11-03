@@ -1,0 +1,2266 @@
+dish: '6.1'
+title: Sharing a wire
+deck: lec06-lan.pdf
+target_min: 6.5
+concepts:
+- Channel Partitioning
+- Taking Turns
+- Random Access
+- Ethernet Frames
+- MAC Addresses
+- CSMA-CD
+- Binary Exponential Backoff
+- Collision Detection Window
+beats:
+- id: question
+  stage: question
+  pdf: 7
+  c:
+  - Channel Partitioning
+  - Taking Turns
+  - Random Access
+  say: Our laptop's very first hop crosses a local network. So start there. Suppose
+    many computers share one wire, and whatever one sends, everybody hears. If two
+    speak at once, the signals garble each other. Who gets to talk, and when? Notice
+    this is not a technical detail. It is a resource allocation problem.
+  moves:
+  - heading:
+      text: 'Lecture 6: sharing a wire'
+  - spine:
+      current: LAN
+      zone: top
+  - q:
+      text: Many senders, one wire. Who talks, and when?
+      zone: bottom
+- id: partition
+  stage: animation
+  pdf: 7
+  c:
+  - Channel Partitioning
+  say: One family of answers is channel partitioning. Divide the wire into fixed shares
+    of time or frequency, one for each user. With four users on a 12 megabit per second
+    wire, each user owns 3 megabits per second. It is perfectly fair and collision
+    free. But watch what happens when only one user has anything to send. Three quarters
+    of the wire sits idle, and that lone user still gets just 3.
+  moves:
+  - clear: {}
+  - tl.show:
+      name: slots
+      zone: top
+      tracks:
+      - Partitioned
+      - Taking turns
+      - Random access
+      span:
+      - 0
+      - 12
+  - tl.block:
+      name: slots
+      track: Partitioned
+      start: 0
+      end: 1
+      text: A
+      kind: ip
+      when: Divide the wire
+  - tl.block:
+      name: slots
+      track: Partitioned
+      start: 1
+      end: 2
+      text: ''
+      kind: data
+  - tl.block:
+      name: slots
+      track: Partitioned
+      start: 2
+      end: 3
+      text: ''
+      kind: data
+  - tl.block:
+      name: slots
+      track: Partitioned
+      start: 3
+      end: 4
+      text: ''
+      kind: data
+  - tl.block:
+      name: slots
+      track: Partitioned
+      start: 4
+      end: 5
+      text: A
+      kind: ip
+      when: But watch
+  - tl.block:
+      name: slots
+      track: Partitioned
+      start: 8
+      end: 9
+      text: A
+      kind: ip
+- id: turns
+  stage: animation
+  pdf: 7
+  c:
+  - Taking Turns
+  say: A second family is taking turns. A controller polls each station, or a token
+    passes around, so only the holder may send. Idle stations can be skipped, which
+    fixes the waste. The price is control overhead, and a dependency on the coordinator
+    or the token.
+  moves:
+  - tl.block:
+      name: slots
+      track: Taking turns
+      start: 0
+      end: 3
+      text: A
+      kind: ip
+  - tl.block:
+      name: slots
+      track: Taking turns
+      start: 3.2
+      end: 3.6
+      text: ''
+      kind: data
+  - tl.block:
+      name: slots
+      track: Taking turns
+      start: 3.8
+      end: 7
+      text: A
+      kind: ip
+- id: random
+  stage: animation
+  pdf: 7
+  c:
+  - Random Access
+  say: The third family is random access. Do not coordinate at all. Whoever has data
+    just tries. When the network is quiet, a lone sender gets nearly the whole wire.
+    When many are active, collisions waste capacity. None of the three wins everywhere.
+    They make different trades among idle capacity, control overhead, and contention.
+    Ethernet chose random access.
+  moves:
+  - tl.block:
+      name: slots
+      track: Random access
+      start: 0
+      end: 5
+      text: A
+      kind: ip
+  - tl.block:
+      name: slots
+      track: Random access
+      start: 5.5
+      end: 6.5
+      text: crash
+      state: error
+  - tl.block:
+      name: slots
+      track: Random access
+      start: 7
+      end: 11
+      text: B
+      kind: eth
+  - rule:
+      text: Partition reserves. Taking turns coordinates. Random access contends.
+        Ethernet contends.
+- id: frame
+  stage: animation
+  pdf: 11
+  c:
+  - Ethernet Frames
+  say: Before watching Ethernet contend, look at what it sends. A frame starts with
+    a preamble, which lets the receiver's clock synchronize. Then a destination address,
+    a source address, a type field saying what the payload is, such as IP, then the
+    payload, and finally a CRC that detects corruption. The CRC only detects. It does
+    not repair, and Ethernet sends no acknowledgment. Delivery here is best effort.
+  moves:
+  - clear: {}
+  - fields.show:
+      name: frame
+      zone: top
+      unit: 0.21
+      rows:
+      - - - Preamble
+          - 9
+        - - Dest MAC
+          - 9
+        - - Source MAC
+          - 11
+        - - Type
+          - 6
+        - - Payload (for example IP)
+          - 20
+        - - CRC
+          - 6
+  - fields.mark:
+      name: frame
+      label: Preamble
+      when: A frame starts
+  - fields.mark:
+      name: frame
+      label: Preamble
+      state: null
+      when: Then a destination
+  - fields.mark:
+      name: frame
+      label: Dest MAC
+  - fields.mark:
+      name: frame
+      label: Source MAC
+  - fields.mark:
+      name: frame
+      label: CRC
+      when: and finally
+- id: mac
+  stage: animation
+  pdf: 28
+  c:
+  - MAC Addresses
+  say: Those addresses are MAC addresses, 48 bits burned into each network interface.
+    A MAC address is flat, like a serial number. It says nothing about location, and
+    it has meaning only for local delivery. A network card keeps a frame only if the
+    destination is its own address, or the broadcast address. Everything else, it
+    ignores.
+  moves:
+  - fields.mark:
+      name: frame
+      label: Source MAC
+      state: null
+  - fields.mark:
+      name: frame
+      label: CRC
+      state: null
+  - bullets:
+      name: macs
+      zone: bottom
+      show: 3
+      items:
+      - 48 bits, assigned to an interface
+      - 'Flat: says nothing about location'
+      - A card keeps frames for its own address or broadcast
+- id: mac-more
+  stage: state
+  pdf: 28
+  c:
+  - MAC Addresses
+  say: Picture one LAN. A host has one IP address and one MAC address, written as
+    six hexadecimal bytes. A switch learns that MAC from incoming frames. A sending
+    host learns the IP to MAC mapping through ARP. And the broadcast address is all
+    ones.
+  moves:
+  - table.show:
+      name: m2
+      zone: bottom
+      cols:
+      - Item
+      - Example
+      rows:
+      - - IP address
+        - 192.0.2.10
+      - - MAC address
+        - 02:00:00:00:00:0A
+      - - Broadcast
+        - FF:FF:FF:FF:FF:FF
+      show: 0
+  - table.reveal:
+      name: m2
+      n: 2
+      when: A host has
+  - table.reveal:
+      name: m2
+      when: And the broadcast
+- id: csma
+  stage: state
+  pdf: 12
+  c:
+  - CSMA-CD
+  say: 'The Ethernet rule, called CSMA/CD. Carrier sense: listen first, and if someone
+    is talking, wait. Collision detection: keep listening while you send. If what
+    you hear differs from what you sent, there is a collision, so stop and send a
+    brief jam signal. But why would a collision ever happen, if everyone listens first?
+    Because signals take time to travel. A and B can both hear silence, because neither
+    signal has arrived yet.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: wire
+      zone: top
+      nodes:
+        A:
+          k: host
+          at:
+          - 0
+          - 0
+          l: A
+        M:
+          k: point
+          at:
+          - 5
+          - 0
+          l: ''
+        B:
+          k: host
+          at:
+          - 10
+          - 0
+          l: B
+      links:
+      - - A
+        - M
+      - - M
+        - B
+  - radio.pulse:
+      net: wire
+      node: A
+      radius: 5.4
+      kind: eth
+      when: A and B can
+  - radio.pulse:
+      net: wire
+      node: B
+      radius: 5.4
+      kind: ip
+  - fx.burst:
+      net: wire
+      node: M
+- id: backoff
+  stage: state
+  pdf: 12
+  c:
+  - Binary Exponential Backoff
+  say: After a collision, if both retry immediately, they collide again forever. So
+    each picks a random wait. After the m-th collision, choose K from zero up to 2
+    to the m, minus one, and wait K times 512 bit times. Each further collision doubles
+    the range, so the group spreads itself out without any coordination. That is binary
+    exponential backoff. Try one. After the third collision, K ranges from 0 to 7.
+    On 10 megabit Ethernet, 512 bit times is 51 point 2 microseconds. So K equal to
+    5 means a wait of 256 microseconds.
+  moves:
+  - text:
+      name: bo
+      zone: left_bottom
+      lines:
+      - "K is random, from 0 to 2^m \u2212 1"
+      - "Wait K \xD7 512 bit times"
+  - table.show:
+      name: bo3
+      zone: right_bottom
+      cols:
+      - Quantity
+      - Value
+      rows:
+      - - Collision m
+        - 3
+      - - K range
+        - 0 to 7
+      - - One slot
+        - "51.2 \u03BCs"
+      - - K = 5 waits
+        - "256 \u03BCs"
+      show: 0
+    when: Try one
+  - table.reveal:
+      name: bo3
+      n: 2
+  - table.reveal:
+      name: bo3
+      n: 2
+      when: On 10 megabit
+- id: window
+  stage: rule
+  pdf: 13
+  c:
+  - Collision Detection Window
+  say: 'There is one more trap. A sender can only detect a collision while it is still
+    transmitting. Suppose A starts at time zero, and the one-way delay is d. B starts
+    just before A''s signal arrives, at almost d. B''s collision news then needs another
+    d to return. So A may not hear about it until 2 d. So A must still be sending
+    at 2 d, which gives the rule: frame length over rate must be at least twice the
+    propagation delay.'
+  moves:
+  - clear:
+      keep:
+      - wire
+  - tl.show:
+      name: win
+      zone: bottom
+      tracks:
+      - A sends
+      - B sends
+      span:
+      - 0
+      - 2.4
+      ticks:
+      - 0
+      - 1
+      - 2
+  - tl.block:
+      name: win
+      track: A sends
+      start: 0
+      end: 2
+      text: A must still be sending
+      kind: ip
+      when: Suppose A starts
+  - tl.block:
+      name: win
+      track: B sends
+      start: 0.95
+      end: 1.15
+      state: error
+      when: B starts just
+  - rule:
+      text: "Frame length \xF7 rate \u2265 2 \xD7 propagation delay"
+      when: which gives the rule
+- id: pitfall
+  stage: rule
+  pdf: 13
+  c:
+  - Collision Detection Window
+  say: 'A tempting one: if everyone listens before sending, collisions can''t happen.
+    But a signal takes time to travel, so two stations can both hear silence, and
+    both start.'
+  moves:
+  - trap:
+      wrong: Carrier sensing prevents collisions
+      right: Propagation delay still lets two senders collide
+- id: changed
+  stage: changed_example
+  pdf: 14
+  c:
+  - Collision Detection Window
+  say: Put in the classic numbers. At 10 megabits per second, with a one-way delay
+    of 25 point 6 microseconds, the frame must last at least 51 point 2 microseconds.
+    That is 512 bits, which is the famous 64 byte minimum Ethernet frame. Now change
+    the delay to just 20 microseconds, at the same rate.
+  moves:
+  - clear: {}
+  - tex:
+      name: f
+      zone: top
+      tex: L \ge 2dR = 2 \times 25.6\,\mu s \times 10\,\text{Mb/s} = 512 \text{ bits}
+      size: 40
+  - text:
+      name: tw
+      zone: bottom
+      lines:
+      - "Now: d = 20 \u03BCs at the same 10 Mb/s"
+      when: Now change
+- id: predict
+  stage: prediction
+  pdf: 14
+  hold: 12
+  c:
+  - Collision Detection Window
+  say: What minimum length does the same formula give now, in bits?
+  moves:
+  - pause:
+      text: "the minimum L in bits for d = 20 \u03BCs?"
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 14
+  c:
+  - Collision Detection Window
+  - CSMA-CD
+  say: 'Two times 20 microseconds times 10 megabits per second is 400 bits. That is
+    the formula''s answer. It does not replace Ethernet''s real minimum of 64 bytes,
+    and the rule belongs to shared, half-duplex wires. Notice what the whole design
+    has been fighting: everyone shares one collision domain. So the next question
+    is obvious. Could we simply stop sharing?'
+  moves:
+  - text:
+      name: tw
+      zone: bottom
+      lines:
+      - "L \u2265 2 \xD7 20 \u03BCs \xD7 10 Mb/s = 400 bits"
+      - The formula's answer, not a new Ethernet minimum
+  - rule:
+      text: 'These limits belong to shared half-duplex wires. Next: stop sharing.'
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 6.1.predict
+  answer_beat: 6.1.answer
+  answer_events:
+  - 6.1.answer:move:0
+  - 6.1.answer:move:1
+  answer_objects:
+  - object: tw
+    after: 6.1.answer:move:0
+    effect: text
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 6.1.answer:move:1
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '6.2'
+title: From hub to switch
+deck: lec06-lan.pdf
+target_min: 3.5
+concepts:
+- Repeaters and Hubs
+- Ethernet Switching
+- Full-Duplex Links
+- Store-and-Forward Switching
+- Cut-Through Switching
+beats:
+- id: question
+  stage: question
+  pdf: 15
+  c:
+  - Repeaters and Hubs
+  say: Plug eight machines into one box. Do they now have eight private conversations,
+    or one big shared one? It depends entirely on what the box does with the bits.
+  moves:
+  - heading:
+      text: 'Lecture 6: from hub to switch'
+  - q:
+      text: 'Eight machines in one box: eight conversations, or one?'
+- id: hub
+  stage: animation
+  pdf: 16
+  c:
+  - Repeaters and Hubs
+  say: A repeater amplifies a weakening signal, so a LAN can stretch further. A hub
+    is a repeater with many ports. Every bit arriving on one port is copied out of
+    all the others. It reads no addresses. It stores nothing. So a hub with eight
+    ports is still one wire, wearing a different shape. If A sends to B while C sends
+    to D, they collide. The boundary that matters is the collision domain, not the
+    number of boxes in the picture.
+  moves:
+  - clear: {}
+  - net.show:
+      name: hubnet
+      zone: left
+      nodes:
+        H:
+          k: hub
+          at:
+          - 0
+          - 0
+          l: Hub
+          lp: right
+        A:
+          k: host
+          at:
+          - -2
+          - 1.4
+          l: A
+        B:
+          k: host
+          at:
+          - 2
+          - 1.4
+          l: B
+        C:
+          k: host
+          at:
+          - -2
+          - -1.4
+          l: C
+        D:
+          k: host
+          at:
+          - 2
+          - -1.4
+          l: D
+      links:
+      - - A
+        - H
+      - - B
+        - H
+      - - C
+        - H
+      - - D
+        - H
+  - packet.spawn:
+      name: f1
+      net: hubnet
+      at: A
+      layers:
+      - eth
+      when: Every bit
+  - packet.hop:
+      name: f1
+      to: H
+  - packet.flood:
+      name: f1
+      to:
+      - B
+      - C
+      - D
+  - packet.fade:
+      name: f1
+  - fx.burst:
+      net: hubnet
+      node: H
+      when: If A sends
+- id: switch
+  stage: animation
+  pdf: 20
+  c:
+  - Ethernet Switching
+  say: Ethernet switching is different in kind. It receives a whole frame, reads the
+    destination MAC address, and sends the frame only out the port that leads there.
+    Now A to B and C to D run at the same time, through independent port pairs, with
+    no collision at all. Each link has become its own little collision domain.
+  moves:
+  - net.show:
+      name: swnet
+      zone: right
+      nodes:
+        H:
+          k: switch
+          at:
+          - 0
+          - 0
+          l: Switch
+          lp: right
+        A:
+          k: host
+          at:
+          - -2
+          - 1.4
+          l: A
+        B:
+          k: host
+          at:
+          - 2
+          - 1.4
+          l: B
+        C:
+          k: host
+          at:
+          - -2
+          - -1.4
+          l: C
+        D:
+          k: host
+          at:
+          - 2
+          - -1.4
+          l: D
+      links:
+      - - A
+        - H
+      - - B
+        - H
+      - - C
+        - H
+      - - D
+        - H
+  - packet.spawn:
+      name: f2
+      net: swnet
+      at: A
+      layers:
+      - eth
+      when: It receives
+  - packet.spawn:
+      name: f3
+      net: swnet
+      at: C
+      layers:
+      - eth
+      when: Now A to B
+  - packet.hop:
+      name: f2
+      to:
+      - H
+      - B
+  - packet.hop:
+      name: f3
+      to:
+      - H
+      - D
+- id: duplex
+  stage: state
+  pdf: 22
+  c:
+  - Full-Duplex Links
+  say: And with a private point to point link, a host can send and receive at once.
+    That is a full-duplex link, and on it, collision detection has nothing left to
+    do. Does that mean a switch never loses anything? No. If A and C both send to
+    B, both frames need the same output. A switch has finite output rates and finite
+    buffers, so frames must queue. We removed collisions, not contention.
+  moves:
+  - packet.fade:
+      name: f2
+  - packet.fade:
+      name: f3
+  - rule:
+      text: 'Full duplex removes collisions, not contention: a shared output still
+        queues.'
+  - packet.spawn:
+      name: f4
+      net: swnet
+      at: A
+      layers:
+      - eth
+      when: If A and C
+  - packet.spawn:
+      name: f5
+      net: swnet
+      at: C
+      layers:
+      - eth
+  - packet.hop:
+      name: f4
+      to: H
+  - packet.hop:
+      name: f5
+      to: H
+- id: modes
+  stage: state
+  pdf: 26
+  c:
+  - Store-and-Forward Switching
+  - Cut-Through Switching
+  say: 'One choice remains: when does the switch start sending? Store-and-forward
+    switching receives the entire frame first, and checks the CRC, so bad frames die
+    here. Cut-through switching begins as soon as it has read the destination address.
+    That saves some waiting, but it may forward a frame that later turns out to be
+    corrupt.'
+  moves:
+  - clear: {}
+  - tl.show:
+      name: sf
+      zone: top
+      tracks:
+      - Store-and-forward
+      - Cut-through
+      span:
+      - 0
+      - 10
+  - tl.block:
+      name: sf
+      track: Store-and-forward
+      start: 0
+      end: 5
+      text: receive all
+      kind: eth
+      when: Store-and-forward switching
+  - tl.block:
+      name: sf
+      track: Store-and-forward
+      start: 5
+      end: 10
+      text: send
+      kind: ip
+  - tl.block:
+      name: sf
+      track: Cut-through
+      start: 0
+      end: 0.8
+      kind: eth
+      when: Cut-through switching
+  - tl.block:
+      name: sf
+      track: Cut-through
+      start: 0.8
+      end: 5.8
+      text: send while receiving
+      kind: ip
+- id: rule
+  stage: rule
+  pdf: 26
+  c:
+  - Store-and-Forward Switching
+  say: It helps to name exactly which delay is being removed. Reception time is frame
+    length divided by rate. A 1500 byte frame at 100 megabits per second takes 120
+    microseconds just to arrive. Store-and-forward pays this at every switch.
+  moves:
+  - tex:
+      name: rx
+      zone: bottom
+      tex: \frac{1500 \times 8 \text{ bits}}{100\,\text{Mb/s}} = 120\,\mu s
+      size: 44
+  - rule:
+      text: Store-and-forward pays the full reception time at each switch, but checks
+        the CRC first.
+- id: pitfall
+  stage: rule
+  pdf: 26
+  c:
+  - Store-and-Forward Switching
+  say: People often say a switch fixes everything a hub got wrong. It doesn't stop
+    broadcasts from spreading, and a collision-free output can still queue and drop.
+  moves:
+  - trap:
+      wrong: A switch stops broadcasts and ends all congestion
+      right: A switch isolates unicast. Broadcasts still spread, and outputs still
+        queue.
+- id: changed
+  stage: changed_example
+  pdf: 26
+  c:
+  - Cut-Through Switching
+  say: Change the situation. Our frame's last bytes get corrupted on the way into
+    the switch. And suppose the output port is busy, so the frame cannot begin leaving
+    at once either.
+  moves:
+  - clear: {}
+  - net.show:
+      name: pair
+      zone: top
+      nodes:
+        A:
+          k: host
+          at:
+          - 0
+          - 0
+          l: A
+        H:
+          k: switch
+          at:
+          - 4
+          - 0
+          l: Switch
+        B:
+          k: host
+          at:
+          - 8
+          - 0
+          l: B
+      links:
+      - - A
+        - H
+      - - H
+        - B
+  - packet.spawn:
+      name: bad
+      net: pair
+      at: A
+      layers:
+      - eth
+  - packet.hop:
+      name: bad
+      to: H
+- id: predict
+  stage: prediction
+  pdf: 26
+  hold: 6
+  c:
+  - Cut-Through Switching
+  say: Under cut-through, does the bad frame reach B? And what does cut-through save
+    if the output was busy anyway?
+  moves:
+  - pause:
+      text: does the corrupt frame reach B? what was saved?
+- id: answer
+  stage: explanation
+  pdf: 26
+  c:
+  - Cut-Through Switching
+  - Ethernet Switching
+  say: With a free output, cut-through would already be sending when the corruption
+    arrives, so a bad frame can reach B. With a busy output, the frame has to wait
+    anyway, so the savings shrink. Store-and-forward would have discarded it. There
+    is still a gap in the switch story. It sends a frame only out the right port.
+    But how could a box you just took out of the packaging possibly know which port
+    is right?
+  moves:
+  - packet.hop:
+      name: bad
+      to: B
+  - packet.drop:
+      name: bad
+      when: Store-and-forward would
+  - rule:
+      text: How does a brand new switch know which port is right?
+      when: There is still
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 6.2.predict
+  answer_beat: 6.2.answer
+  answer_events:
+  - 6.2.answer:move:0
+  - 6.2.answer:move:1
+  - 6.2.answer:move:2
+  answer_objects:
+  - object: bad
+    after: 6.2.answer:move:0
+    effect: packet.hop
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: bad
+    after: 6.2.answer:move:1
+    effect: packet.drop
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 6.2.answer:move:2
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '6.3'
+title: Learning and loops
+deck: lec06-lan.pdf
+target_min: 6
+concepts:
+- Self-Learning Switch Tables
+- Spanning Tree Protocol
+beats:
+- id: question
+  stage: question
+  pdf: 30
+  c:
+  - Self-Learning Switch Tables
+  say: 'Nobody configures a home switch. You plug in the cables and it works. Yet
+    it sends frames out the correct port. Where did that knowledge come from? Pause
+    on a clue: every frame carries two addresses. Only one of them says where a machine
+    actually is right now.'
+  moves:
+  - heading:
+      text: 'Lecture 6: learning and loops'
+  - q:
+      text: Nobody configures a switch. How does it know where hosts are?
+- id: setup
+  stage: animation
+  pdf: 31
+  c:
+  - Self-Learning Switch Tables
+  say: A switch with an empty table, and three hosts. A is on port 1, B is on port
+    2, and C is on port 3. A sends a frame to B. Watch the order of the next two steps,
+    because they use two different addresses.
+  moves:
+  - clear: {}
+  - net.show:
+      name: sw
+      zone: left
+      nodes:
+        X:
+          k: switch
+          at:
+          - 0
+          - 0
+          l: Switch
+          lp: up
+        A:
+          k: host
+          at:
+          - -3
+          - -1
+          l: A (port 1)
+        B:
+          k: host
+          at:
+          - 0
+          - -1.6
+          l: B (port 2)
+        C:
+          k: host
+          at:
+          - 3
+          - -1
+          l: C (port 3)
+      links:
+      - - A
+        - X
+      - - B
+        - X
+      - - C
+        - X
+  - table.show:
+      name: mac
+      zone: right_top
+      cols:
+      - MAC
+      - Port
+      rows: []
+  - packet.spawn:
+      name: f
+      net: sw
+      at: A
+      layers:
+      - eth
+      when: A sends
+- id: learn
+  stage: state
+  pdf: 33
+  c:
+  - Self-Learning Switch Tables
+  say: First, the switch looks at the source address. This frame says it came from
+    A, and it arrived on port 1. So A must be reachable through port 1. Write that
+    down. Second, it looks up the destination, B. B is not in the table, so the switch
+    has no idea. It floods the frame out every other port. Note what it did not learn.
+    It cannot learn where B is just because A mentioned B.
+  moves:
+  - packet.hop:
+      name: f
+      to: X
+  - switch.learn_source:
+      table: mac
+      mac: A
+      port: '1'
+      when: So A must
+  - packet.flood:
+      name: f
+      to:
+      - B
+      - C
+      when: It floods
+  - packet.fade:
+      name: f
+- id: reply
+  stage: state
+  pdf: 34
+  c:
+  - Self-Learning Switch Tables
+  say: B answers. Its frame's source address teaches the switch that B is on port
+    2. And now the destination, A, is in the table, so this frame goes only out port
+    1. Finally, A sends to B once more. Nothing new to learn. The destination is known,
+    and the frame goes only to port 2. C is no longer bothered.
+  moves:
+  - packet.spawn:
+      name: g
+      net: sw
+      at: B
+      layers:
+      - eth
+  - packet.hop:
+      name: g
+      to: X
+  - switch.learn_source:
+      table: mac
+      mac: B
+      port: '2'
+      when: teaches the switch
+  - packet.hop:
+      name: g
+      to: A
+      when: so this frame
+  - packet.fade:
+      name: g
+  - packet.spawn:
+      name: h
+      net: sw
+      at: A
+      layers:
+      - eth
+      when: Finally, A sends
+  - packet.hop:
+      name: h
+      to:
+      - X
+      - B
+  - packet.fade:
+      name: h
+  - table.show:
+      name: tr
+      zone: right_bottom
+      data: $ethernet.learning_table
+      size: 28
+- id: aging
+  stage: rule
+  pdf: 30
+  c:
+  - Self-Learning Switch Tables
+  clar:
+  - ttl-aging
+  say: The rule is, learn from the source, then forward by the destination. Unknown
+    destination, flood. Known destination on another port, forward. Known destination
+    on the arrival port, filter. Entries also expire, so that a host which moves or
+    disappears does not stay wrong forever. The slides call this a TTL. Be careful
+    with that word. It is a local aging timer in the switch. It is not a hop counter
+    carried in the Ethernet frame, and that fact is about to matter a great deal.
+  moves:
+  - rule:
+      text: Learn from the source. Forward by the destination. Flood when unknown.
+      when: The rule
+  - net.state:
+      name: sw
+      nodes:
+        X: now
+      when: Entries also expire
+  - card:
+      kind: clarification
+      text: The slide's table TTL is a local aging timer, not a hop count in the frame.
+      zone: right_bottom
+      when: The slides call
+- id: loop
+  stage: animation
+  pdf: 35
+  c:
+  - Spanning Tree Protocol
+  say: Networks want spare links, in case one fails. So connect three switches in
+    a triangle. Now send one broadcast. S1 floods it to S2 and S3. Each floods it
+    onward, to the other. Those copies come back, and get flooded again. IP has a
+    TTL that kills looping packets. Ethernet has no such field. The copies circulate
+    and multiply until the network collapses. A cycle in the wiring is fatal.
+  moves:
+  - clear: {}
+  - net.show:
+      name: tri
+      zone: left
+      nodes:
+        S1:
+          k: switch
+          at:
+          - 0
+          - 1.3
+          l: S1
+          lp: up
+        S2:
+          k: switch
+          at:
+          - -2.4
+          - -1.2
+          l: S2
+        S3:
+          k: switch
+          at:
+          - 2.4
+          - -1.2
+          l: S3
+      links:
+      - - S1
+        - S2
+      - - S1
+        - S3
+      - - S2
+        - S3
+  - packet.spawn:
+      name: b
+      net: tri
+      at: S1
+      layers:
+      - eth
+      when: Now send one
+  - packet.flood:
+      name: b
+      to:
+      - S2
+      - S3
+  - packet.fade:
+      name: b
+  - packet.spawn:
+      name: b2
+      net: tri
+      at: S2
+      layers:
+      - eth
+      when: Each floods
+  - packet.flood:
+      name: b2
+      to:
+      - S3
+      - S1
+  - packet.fade:
+      name: b2
+  - packet.spawn:
+      name: b3
+      net: tri
+      at: S3
+      layers:
+      - eth
+      when: Those copies
+  - packet.flood:
+      name: b3
+      to:
+      - S2
+      - S1
+  - packet.fade:
+      name: b3
+  - text:
+      name: why
+      zone: right
+      lines:
+      - Ethernet has no hop limit.
+      - Copies circulate and multiply.
+      color: error
+      when: IP has a TTL
+  - packet.spawn:
+      name: b4
+      net: tri
+      at: S2
+      layers:
+      - eth
+      when: The copies circulate
+  - packet.hop:
+      name: b4
+      to:
+      - S3
+      - S1
+      - S2
+      - S3
+      - S1
+      t: 2.5
+  - packet.drop:
+      name: b4
+- id: stp
+  stage: state
+  pdf: 37
+  c: &id001
+  - Spanning Tree Protocol
+  clar:
+  - stp-simplified
+  say: 'The fix is the spanning tree protocol. Keep every physical link, but let frames
+    use only a loop-free subset. Switches exchange messages carrying three things:
+    who they think the root is, their distance to it, and their own ID. Each begins
+    by claiming to be the root. Hearing a lower ID, it gives up that claim.'
+  moves:
+  - text:
+      name: why
+      zone: right_top
+      lines:
+      - 'Each message: root ID, distance, sender ID'
+      when: Switches exchange
+  - net.badge:
+      name: tri
+      node: S2
+      text: I'm root
+      side: down
+      when: Each begins
+  - net.badge:
+      name: tri
+      node: S3
+      text: I'm root
+      side: down
+      t: 0.3
+  - msg.send:
+      name: tri
+      a: S1
+      b: S2
+      text: root S1
+      when: Hearing a lower
+      t: 1.0
+  - net.unbadge:
+      name: tri
+      node: S2
+- id: stp-2
+  stage: state
+  pdf: 37
+  c: *id001
+  say: Hearing a shorter path to the root, it adopts that path. In the triangle, S1
+    becomes root, S2 and S3 use their direct links, and the link between them stops
+    forwarding. Three switches, two active links, and no cycle. The slides simplify
+    the real protocol, which also needs deterministic ties and a designated forwarder
+    on each segment.
+  moves:
+  - msg.send:
+      name: tri
+      a: S1
+      b: S3
+      text: root S1
+      when: Hearing a shorter
+      t: 1.0
+  - net.unbadge:
+      name: tri
+      node: S3
+  - net.state:
+      name: tri
+      nodes:
+        S1: done
+      when: In the triangle
+  - net.state:
+      name: tri
+      links:
+      - - S1
+        - S2
+        - tree
+      - - S1
+        - S3
+        - tree
+      - - S2
+        - S3
+        - blocked
+      when: S2 and S3 use
+  - card:
+      kind: clarification
+      text: This is a simplified account. Real STP adds tie handling and designated
+        forwarding.
+      zone: right_bottom
+      when: The slides simplify
+- id: instructor
+  stage: rule
+  pdf: 41
+  c:
+  - Spanning Tree Protocol
+  say: The exercise from the instructor's slides, with seven switches. The drawing
+    gives no priorities or costs, so we must state an assumption. Treat all links
+    as equal cost, and treat S1 through S7 as increasing bridge IDs. Then S1 is the
+    root. Most switches connect to it directly. S3 is two hops away, through either
+    S2 or S5, and the lower ID, S2, wins the tie. That leaves six active links for
+    seven switches, exactly a tree.
+  moves:
+  - clear: {}
+  - net.show:
+      name: seven
+      zone: left
+      nodes:
+        S3:
+          k: switch
+          at:
+          - -2.2
+          - 2
+          l: S3
+          lp: up
+        S5:
+          k: switch
+          at:
+          - 0.4
+          - 1.3
+          l: S5
+          lp: up
+        S7:
+          k: switch
+          at:
+          - 2.8
+          - 2
+          l: S7
+          lp: up
+        S2:
+          k: switch
+          at:
+          - -3
+          - 0
+          l: S2
+        S1:
+          k: switch
+          at:
+          - 0
+          - -0.4
+          l: S1
+        S6:
+          k: switch
+          at:
+          - -2
+          - -2
+          l: S6
+        S4:
+          k: switch
+          at:
+          - 2
+          - -2
+          l: S4
+      links:
+      - - S3
+        - S2
+      - - S2
+        - S1
+      - - S1
+        - S5
+      - - S1
+        - S7
+      - - S1
+        - S6
+      - - S1
+        - S4
+      - - S3
+        - S5
+      - - S5
+        - S7
+      - - S6
+        - S4
+  - card:
+      kind: assumption
+      text: Equal link costs; S1 to S7 are increasing bridge IDs. The figure supplies
+        neither.
+      zone: right_top
+      when: so we must
+  - net.state:
+      name: seven
+      nodes:
+        S1: done
+      when: Then S1 is
+  - net.state:
+      name: seven
+      links:
+      - - S1
+        - S2
+        - tree
+      - - S1
+        - S4
+        - tree
+      - - S1
+        - S5
+        - tree
+      - - S1
+        - S6
+        - tree
+      - - S1
+        - S7
+        - tree
+      when: Most switches
+  - net.state:
+      name: seven
+      links:
+      - - S2
+        - S3
+        - tree
+      - - S3
+        - S5
+        - blocked
+      - - S5
+        - S7
+        - blocked
+      - - S6
+        - S4
+        - blocked
+      when: and the lower ID
+  - net.port_state:
+      name: seven
+      device: S3
+      peer: S5
+      state: discarding
+  - net.port_state:
+      name: seven
+      device: S7
+      peer: S5
+      state: discarding
+  - net.port_state:
+      name: seven
+      device: S6
+      peer: S4
+      state: discarding
+- id: pitfall
+  stage: rule
+  pdf: 41
+  c:
+  - Spanning Tree Protocol
+  say: Watch out for this one. When a switch floods an unknown destination, the frame
+    doesn't become a broadcast. Its destination address stays exactly as it was. Only
+    the set of output ports changed.
+  moves:
+  - trap:
+      wrong: Flooding turns the frame into a broadcast
+      right: Unknown unicast floods, but the destination address doesn't change
+- id: changed
+  stage: changed_example
+  pdf: 41
+  c:
+  - Spanning Tree Protocol
+  say: Use this tree. Host A hangs off S3, host B off S7, and host C off S4. A to
+    B cannot use the short-looking route through S5, because those dashed links do
+    not forward.
+  moves:
+  - table.show:
+      name: paths
+      zone: right_bottom
+      cols:
+      - Hosts
+      - Path
+      rows:
+      - - A to B
+        - S3 S2 S1 S7
+      - - A to C
+        - '?'
+      - - B to C
+        - '?'
+      when: Use this
+  - net.walk:
+      name: seven
+      path:
+      - S3
+      - S2
+      - S1
+      - S7
+      when: A to B
+- id: predict
+  stage: prediction
+  pdf: 41
+  hold: 6
+  c:
+  - Spanning Tree Protocol
+  say: Trace the other two paths on the tree. What route does A to C follow? And B
+    to C?
+  moves:
+  - pause:
+      text: the switch path for A to C, and for B to C?
+- id: answer
+  stage: explanation
+  pdf: 41
+  c:
+  - Spanning Tree Protocol
+  say: 'A to C goes S3, S2, S1, S4. B to C goes S7, S1, S4. Notice that A to B took
+    three hops, though the physical drawing offers something shorter. Spanning tree
+    does not promise shortest paths between hosts, and it does not minimize total
+    cost either. It promises one thing: no loops. Different priorities could pick
+    a different tree, so the assumptions stay attached to the answer.'
+  moves:
+  - net.walk:
+      name: seven
+      path:
+      - S3
+      - S2
+      - S1
+      - S4
+      state: done
+      when: A to C goes
+  - table.set:
+      name: paths
+      r: 1
+      c: 1
+      v: S3 S2 S1 S4
+      state: done
+  - net.walk:
+      name: seven
+      path:
+      - S7
+      - S1
+      - S4
+      state: done
+      when: B to C goes
+  - table.set:
+      name: paths
+      r: 2
+      c: 1
+      v: S7 S1 S4
+      state: done
+  - net.walk:
+      name: seven
+      path:
+      - S3
+      - S2
+      - S1
+      - S7
+      when: Notice that A
+  - rule:
+      text: A spanning tree promises no loops. It does not promise shortest paths.
+      when: Spanning tree does
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 6.3.predict
+  answer_beat: 6.3.answer
+  answer_events:
+  - 6.3.answer:move:0
+  - 6.3.answer:move:1
+  - 6.3.answer:move:2
+  - 6.3.answer:move:3
+  - 6.3.answer:move:4
+  - 6.3.answer:move:5
+  answer_objects:
+  - object: seven
+    after: 6.3.answer:move:0
+    effect: net.walk
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: paths
+    after: 6.3.answer:move:1
+    effect: table.set
+    selector:
+      r: 1
+      c: 1
+    before_answer: hidden_or_neutral
+  - object: seven
+    after: 6.3.answer:move:2
+    effect: net.walk
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: paths
+    after: 6.3.answer:move:3
+    effect: table.set
+    selector:
+      r: 2
+      c: 1
+    before_answer: hidden_or_neutral
+  - object: seven
+    after: 6.3.answer:move:4
+    effect: net.walk
+    selector: {}
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 6.3.answer:move:5
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '6.4'
+title: VLANs and trunks
+deck: lec06-lan.pdf
+target_min: 4
+concepts:
+- VLANs
+- Port-Based VLANs
+- MAC-Based VLANs
+- 802.1Q Trunking
+beats:
+- id: question
+  stage: question
+  pdf: 42
+  c:
+  - VLANs
+  say: A building has one set of switches, but two departments that should not share
+    broadcasts. Finance sits on three different floors, mixed in with engineering.
+    Do we have to rewire the building each time someone changes desks?
+  moves:
+  - heading:
+      text: 'Lecture 6: VLANs and trunks'
+  - q:
+      text: One set of switches. Two departments. Must we rewire?
+  - keep: {}
+- id: vlans
+  stage: animation
+  pdf: 43
+  c:
+  - VLANs
+  say: A virtual LAN lets one physical switching system act as several separate LANs.
+    Group by organization rather than by location. A broadcast from a finance machine
+    is now flooded only to finance ports, and engineering never sees it. A flood is
+    confined to its VLAN, even though every frame crosses the same box.
+  moves:
+  - clear: {}
+  - net.show:
+      name: v
+      zone: left
+      nodes:
+        X:
+          k: switch
+          at:
+          - 0
+          - 0
+          l: Switch
+          lp: right
+        F1:
+          k: host
+          at:
+          - -3
+          - 1.5
+          l: Finance 1
+        E1:
+          k: host
+          at:
+          - 3
+          - 1.5
+          l: Eng 1
+        F2:
+          k: host
+          at:
+          - -3
+          - -1.5
+          l: Finance 2
+        E2:
+          k: host
+          at:
+          - 3
+          - -1.5
+          l: Eng 2
+      links:
+      - - F1
+        - X
+      - - E1
+        - X
+      - - F2
+        - X
+      - - E2
+        - X
+  - net.state:
+      name: v
+      nodes:
+        F1: now
+        F2: now
+      when: Group by
+  - packet.spawn:
+      name: bc
+      net: v
+      at: F1
+      layers:
+      - eth
+      when: A broadcast
+  - packet.hop:
+      name: bc
+      to: X
+  - packet.flood:
+      name: bc
+      to:
+      - F2
+  - packet.fade:
+      name: bc
+- id: membership
+  stage: state
+  pdf: 45
+  c:
+  - Port-Based VLANs
+  - MAC-Based VLANs
+  say: How does a switch know which VLAN a frame belongs to? There are two ways. With
+    port-based VLANs, membership belongs to the port. Ports 1 through 8 are VLAN 10,
+    and ports 9 through 16 are VLAN 20. Whatever plugs into that port joins that VLAN.
+    With MAC-based VLANs, membership follows the machine's address instead, so a laptop
+    keeps its VLAN wherever it plugs in.
+  moves:
+  - table.show:
+      name: m
+      zone: right
+      cols:
+      - Method
+      - Decided by
+      rows:
+      - - Port-based
+        - access port
+      - - MAC-based
+        - endpoint address
+- id: vlan-trace-1
+  stage: state
+  pdf:
+  - 30
+  - 45
+  c:
+  - VLANs
+  - Self-Learning Switch Tables
+  say: An independent-learning example. Ports 1 and 2 are VLAN 10. Ports 3 and 4 are
+    VLAN 20. Port 5 is a trunk for both. Port 6 is in VLAN 10 but discards data. A
+    frame from A enters port 1 for unknown B. Learn A in VLAN 10 on port 1. Flood
+    only ports 2 and 5.
+  moves:
+  - clear: {}
+  - net.show:
+      name: vl
+      zone: left
+      nodes:
+        X:
+          k: box
+          at:
+          - 3
+          - 1
+          l: SW
+          lp: up
+        P1:
+          k: box
+          at:
+          - 0
+          - 2
+          l: '1: VLAN 10'
+        P2:
+          k: box
+          at:
+          - 0
+          - 0
+          l: '2: VLAN 10'
+        P3:
+          k: box
+          at:
+          - 6
+          - 2
+          l: '3: VLAN 20'
+        P4:
+          k: box
+          at:
+          - 6
+          - 0
+          l: '4: VLAN 20'
+        P5:
+          k: box
+          at:
+          - 3
+          - -1
+          l: '5: trunk'
+        P6:
+          k: box
+          at:
+          - 3
+          - 3
+          l: '6: VLAN 10'
+      links:
+      - - X
+        - P1
+      - - X
+        - P2
+      - - X
+        - P3
+      - - X
+        - P4
+      - - X
+        - P5
+      - - X
+        - P6
+  - table.show:
+      name: vf
+      zone: right_top
+      cols:
+      - VLAN
+      - MAC
+      - Port
+      rows: []
+      ghost:
+      - - 10
+        - A
+        - 1
+      - - 20
+        - B
+        - 4
+  - net.port_state:
+      name: vl
+      device: X
+      peer: P6
+      state: discarding
+  - packet.spawn:
+      name: vfpacket
+      net: vl
+      at: P1
+      layers:
+      - eth
+    when: A frame from A
+    event_id: vlan-1-ingress
+  - packet.hop:
+      name: vfpacket
+      to: X
+    event_id: vlan-1-arrive
+  - table.add:
+      name: vf
+      row:
+      - 10
+      - A
+      - 1
+      state: changed
+    when: Learn A
+    event_id: vlan-1-learn
+  - packet.flood:
+      name: vfpacket
+      to:
+      - P2
+      - P5
+    when: Flood only
+    event_id: vlan-1-forward
+  - packet.fade:
+      name: vfpacket
+    event_id: vlan-1-cleanup
+  assertions:
+  - after: vlan-1-arrive
+    kind: equals
+    object: vfpacket
+    field: at
+    value: X
+- id: vlan-trace-2
+  stage: state
+  pdf:
+  - 30
+  - 45
+  c:
+  - VLANs
+  - Self-Learning Switch Tables
+  say: The same MAC, A, enters port 3 in VLAN 20. Learn a separate entry for A in
+    VLAN 20 on port 3. B is unknown in this VLAN too, so flood only ports 4 and 5.
+    The VLAN 10 entry is still there. This example uses independent learning, rather
+    than claiming all hardware organizes its memory identically.
+  moves:
+  - packet.spawn:
+      name: vfpacket
+      net: vl
+      at: P3
+      layers:
+      - eth
+    when: The same
+    event_id: vlan-2-ingress
+  - packet.hop:
+      name: vfpacket
+      to: X
+    event_id: vlan-2-arrive
+  - table.add:
+      name: vf
+      row:
+      - 20
+      - A
+      - 3
+      state: changed
+    when: Learn a separate
+    event_id: vlan-2-learn
+  - packet.flood:
+      name: vfpacket
+      to:
+      - P4
+      - P5
+    when: so flood only
+    event_id: vlan-2-forward
+  - packet.fade:
+      name: vfpacket
+    event_id: vlan-2-cleanup
+  assertions:
+  - after: vlan-2-arrive
+    kind: equals
+    object: vfpacket
+    field: at
+    value: X
+- id: vlan-trace-3
+  stage: state
+  pdf:
+  - 30
+  - 45
+  c:
+  - VLANs
+  - Self-Learning Switch Tables
+  say: B replies on port 2 in VLAN 10. Learn B in VLAN 10 on port 2, then look up
+    A within VLAN 10. The frame goes only to port 1. Neither the other VLAN nor the
+    discarding port receives it.
+  moves:
+  - packet.spawn:
+      name: vfpacket
+      net: vl
+      at: P2
+      layers:
+      - eth
+    when: B replies
+    event_id: vlan-3-ingress
+  - packet.hop:
+      name: vfpacket
+      to: X
+    event_id: vlan-3-arrive
+  - table.add:
+      name: vf
+      row:
+      - 10
+      - B
+      - 2
+      state: changed
+    when: Learn B
+    event_id: vlan-3-learn
+  - table.mark:
+      name: vf
+      r: 0
+      state: now
+    when: then look up A
+    event_id: vlan-3-lookup
+  - packet.hop:
+      name: vfpacket
+      to: P1
+    when: The frame goes
+    event_id: vlan-3-forward
+  - packet.fade:
+      name: vfpacket
+    event_id: vlan-3-cleanup
+  - table.mark:
+      name: vf
+      r: 0
+      state: null
+    event_id: vlan-3-clear-lookup
+  assertions:
+  - after: vlan-3-arrive
+    kind: equals
+    object: vfpacket
+    field: at
+    value: X
+- id: vlan-trace-4
+  stage: state
+  pdf:
+  - 30
+  - 45
+  c:
+  - VLANs
+  - Self-Learning Switch Tables
+  say: Finally B replies on port 4 in VLAN 20. Learn B in VLAN 20 on port 4, then
+    look up A within that VLAN. Send only to port 3. The VLAN context chooses which
+    learned location is relevant. The trunk can carry both groups while keeping their
+    identities separate.
+  moves:
+  - packet.spawn:
+      name: vfpacket
+      net: vl
+      at: P4
+      layers:
+      - eth
+    when: Finally B replies
+    event_id: vlan-4-ingress
+  - packet.hop:
+      name: vfpacket
+      to: X
+    event_id: vlan-4-arrive
+  - table.add:
+      name: vf
+      row:
+      - 20
+      - B
+      - 4
+      state: changed
+    when: Learn B
+    event_id: vlan-4-learn
+  - table.mark:
+      name: vf
+      r: 1
+      state: now
+    when: then look up A
+    event_id: vlan-4-lookup
+  - packet.hop:
+      name: vfpacket
+      to: P3
+    when: Send only
+    event_id: vlan-4-forward
+  - packet.fade:
+      name: vfpacket
+    event_id: vlan-4-cleanup
+  - table.mark:
+      name: vf
+      r: 1
+      state: null
+    event_id: vlan-4-clear-lookup
+  assertions:
+  - after: vlan-4-arrive
+    kind: equals
+    object: vfpacket
+    field: at
+    value: X
+- id: trunk
+  stage: state
+  pdf: 47
+  c:
+  - 802.1Q Trunking
+  say: Finance spans two switches, joined by one cable. That cable carries both departments.
+    When a frame arrives at the far switch, how can it tell which VLAN the frame belongs
+    to? The sending switch inserts a tag. This is 802.1Q trunking. It adds four bytes
+    after the source address, including a 12 bit VLAN ID. Because the frame changed,
+    the CRC is recomputed. The receiving switch reads the tag, and removes it before
+    delivering to an ordinary host.
+  moves:
+  - clear: {}
+  - net.show:
+      name: t
+      zone: top
+      nodes:
+        F1:
+          k: host
+          at:
+          - 0
+          - 0
+          l: Finance 1
+        A:
+          k: switch
+          at:
+          - 3.5
+          - 0
+          l: Switch A
+        B:
+          k: switch
+          at:
+          - 7
+          - 0
+          l: Switch B
+        F2:
+          k: host
+          at:
+          - 10.5
+          - 0
+          l: Finance 2
+      links:
+      - - F1
+        - A
+      - - A
+        - B
+        - s: active
+      - - B
+        - F2
+  - fields.show:
+      name: tag
+      zone: bottom
+      unit: 0.21
+      rows:
+      - - - Dest
+          - 7
+        - - Source
+          - 8
+        - - 802.1Q tag
+          - 13
+        - - Type
+          - 6
+        - - Payload
+          - 13
+        - - New CRC
+          - 11
+    when: The sending switch
+  - fields.mark:
+      name: tag
+      label: 802.1Q tag
+      when: It adds four
+  - fields.mark:
+      name: tag
+      label: New CRC
+      when: the CRC is
+  - packet.spawn:
+      name: tf
+      net: t
+      at: F1
+      layers:
+      - eth
+      when: The receiving switch
+  - packet.hop:
+      name: tf
+      to:
+      - A
+      - B
+      - F2
+- id: devices
+  stage: rule
+  pdf: 49
+  c:
+  - VLANs
+  - Ethernet Switching
+  say: Before leaving the LAN, compare the three boxes we now have. A hub gives you
+    no traffic isolation, and it needs no setup. A switch isolates traffic, and it's
+    still plug and play, but flooding and spanning trees keep it from routing efficiently.
+    An IP router isolates traffic and routes well, but it isn't plug and play, because
+    someone must configure it. Each step up costs something, and buys something.
+  moves:
+  - clear: {}
+  - table.show:
+      name: dev
+      zone: top
+      cols:
+      - ''
+      - Hub
+      - Switch
+      - Router
+      rows:
+      - - Traffic isolation
+        - 'no'
+        - 'yes'
+        - 'yes'
+      - - Plug and play
+        - 'yes'
+        - 'yes'
+        - 'no'
+      - - Efficient routing
+        - 'no'
+        - 'no'
+        - 'yes'
+- id: rule
+  stage: rule
+  pdf: 48
+  c:
+  - VLANs
+  - 802.1Q Trunking
+  say: Keep the jobs separate. A VLAN decides who shares a broadcast domain. A trunk
+    carries that identity between switches. Neither one moves traffic between different
+    VLANs. For that, you need a router, even if the router lives inside a multilayer
+    switch.
+  moves:
+  - packet.fade:
+      name: tf
+  - rule:
+      text: A VLAN limits a broadcast domain. A trunk preserves VLAN identity. Only
+        routing crosses between VLANs.
+- id: pitfall
+  stage: rule
+  pdf: 48
+  c:
+  - VLANs
+  - 802.1Q Trunking
+  say: The slide's phrase can mislead you here. A trunk carries frames between switches,
+    keeping their VLANs separate. It doesn't move traffic from one VLAN to another.
+    That takes a router.
+  moves:
+  - trap:
+      wrong: A trunk routes traffic between VLANs
+      right: A trunk carries VLANs across switches. Moving between VLANs needs a router.
+- id: changed
+  stage: changed_example
+  pdf: 46
+  c:
+  - Port-Based VLANs
+  say: Change one thing. A finance laptop's owner moves desks, and plugs into a port
+    in VLAN 20, the engineering VLAN, on a port-based switch.
+  moves:
+  - clear:
+      keep:
+      - _rule
+  - net.show:
+      name: mv
+      zone: top
+      nodes:
+        X:
+          k: switch
+          at:
+          - 4
+          - 0.6
+          l: Switch
+          lp: up
+        P:
+          k: point
+          at:
+          - 1
+          - -0.4
+          l: VLAN 10 port
+          lp: down
+        Q:
+          k: point
+          at:
+          - 7
+          - -0.4
+          l: VLAN 20 port
+          lp: down
+        L:
+          k: laptop
+          at:
+          - 1
+          - 0.6
+          l: Finance laptop
+          lp: up
+      links:
+      - - P
+        - X
+      - - Q
+        - X
+  - net.move:
+      name: mv
+      node: L
+      to:
+      - 7
+      - 0.6
+- id: predict
+  stage: prediction
+  pdf: 46
+  hold: 6
+  c:
+  - Port-Based VLANs
+  say: Whose broadcasts does the laptop hear now? And can it keep its old IP address
+    and still work?
+  moves:
+  - pause:
+      text: whose broadcasts does it hear? does its old IP still work?
+- id: answer
+  stage: explanation
+  pdf: 46
+  c:
+  - Port-Based VLANs
+  - VLANs
+  say: It now hears engineering's broadcasts, because the port decided its membership.
+    And if each VLAN is its own IP subnet, its old address no longer fits, so it needs
+    a new configuration. The laptop is physically fine, yet logically it moved. Remember
+    too that VLANs separate traffic, but they are no complete security proof. Addresses
+    can be changed, and configuration decides what is accepted. That word, subnet,
+    needs a real meaning. And it is the point where local delivery runs out. To go
+    further, we need addresses with structure.
+  moves:
+  - table.show:
+      name: res
+      zone: bottom
+      cols:
+      - Question
+      - Answer
+      rows: &id001
+      - - Broadcasts heard
+        - engineering
+      - - Old IP address
+        - fails if the subnet changed
+  - rule:
+      text: 'Next: addresses with structure.'
+      when: To go further
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 6.4.predict
+  answer_beat: 6.4.answer
+  answer_events:
+  - 6.4.answer:move:0
+  - 6.4.answer:move:1
+  answer_objects:
+  - object: res
+    after: 6.4.answer:move:0
+    effect: table.show
+    selector:
+      rows: *id001
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 6.4.answer:move:1
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.

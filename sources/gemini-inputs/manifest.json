@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "inputs": [
+    {
+      "path": "transcript/transcript.md",
+      "sha256": "20c63c55f447f6cd54530f7e4300d393acbaac0e53f22d2bf8eaea5a5213a617"
+    },
+    {
+      "path": "transcript/supplements.md",
+      "sha256": "5f1f3cc20a053c3dc1d9c2c0ff19b9c449d622fb907e5a8d0693e8da89c8f65e"
+    }
+  ]
+}

@@ -1,0 +1,779 @@
+dish: '12.4'
+title: Money shapes paths
+deck: lec12-bgp.pdf
+target_min: 7
+concepts:
+- Customer-Provider Relationships
+- Peering
+- Gao-Rexford Conditions
+- Valley-Free Paths
+pad: 2.2
+beats:
+- id: 12.4.question
+  stage: question
+  narration: 12.4.question
+  pdf:
+  - lec12-bgp.pdf
+  - 34
+  concepts:
+  - Customer-Provider Relationships
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 12: money shapes paths'
+  - q:
+      text: If you ran a network, whose traffic would you carry for free?
+  - keep: {}
+  adjust: {}
+- id: 12.4.rel
+  stage: animation
+  narration: 12.4.rel
+  pdf:
+  - lec12-bgp.pdf
+  - 35
+  concepts:
+  - Customer-Provider Relationships
+  - Peering
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: r
+      zone: top
+      nodes:
+        P:
+          k: cloud
+          at:
+          - 0
+          - 1.5
+          l: Provider
+        Q:
+          k: cloud
+          at:
+          - 6
+          - 1.5
+          l: Peer
+        C:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: Customer
+      links:
+      - - C
+        - P
+        - s: up
+      - - P
+        - Q
+        - c: peer
+  - msg.send:
+      name: r
+      a: C
+      b: P
+      text: pays
+      when: the customer pays
+  - net.state:
+      name: r
+      nodes:
+        C: now
+      when: We draw
+  - msg.send:
+      name: r
+      a: P
+      b: Q
+      text: own traffic
+      when: In peering
+  - net.state:
+      name: r
+      nodes:
+        C: null
+        Q: now
+      when: A peer isn't
+  - rule:
+      text: Customer pays provider. Peers exchange only their own and their customers' traffic.
+  adjust: {}
+- id: 12.4.export
+  stage: rule
+  narration: 12.4.export
+  pdf:
+  - lec12-bgp.pdf
+  - 41
+  concepts:
+  - Customer-Provider Relationships
+  - Peering
+  - BGP Export Policy
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: ex
+      zone: top
+      data: $bgp.export
+      show: 0
+  - rule:
+      text: Would this make me carry traffic between two non-customers? Then don't advertise it.
+  - table.reveal:
+      name: ex
+      n: 2
+      when: If a route came
+  - table.reveal:
+      name: ex
+      n: 2
+      when: If it came
+  - table.mark:
+      name: ex
+      r: 2
+      state: now
+      when: Telling a provider
+  adjust: {}
+- id: 12.4.tiers
+  stage: state
+  narration: 12.4.tiers
+  pdf:
+  - lec12-bgp.pdf
+  - 36
+  concepts:
+  - Customer-Provider Relationships
+  - Autonomous Systems
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: tier
+      zone: full
+      nodes:
+        T1:
+          k: cloud
+          at:
+          - 2
+          - 2
+          l: Tier 1
+        T2:
+          k: cloud
+          at:
+          - 7
+          - 2
+          l: Tier 1
+        P:
+          k: cloud
+          at:
+          - 2
+          - 1
+          l: Provider
+        Q:
+          k: cloud
+          at:
+          - 7
+          - 1
+          l: Provider
+        S1:
+          k: cloud
+          at:
+          - 0
+          - 0
+          l: Stub
+        S2:
+          k: cloud
+          at:
+          - 4
+          - 0
+          l: Stub
+        S3:
+          k: cloud
+          at:
+          - 8.5
+          - 0
+          l: Stub
+      links:
+      - - P
+        - T1
+        - s: up
+      - - Q
+        - T2
+        - s: up
+      - - T1
+        - T2
+      - - S1
+        - P
+        - s: up
+      - - S2
+        - P
+        - s: up
+      - - S3
+        - Q
+        - s: up
+  - net.state:
+      name: tier
+      nodes:
+        T1: now
+        T2: now
+      when: At the top
+  - net.state:
+      name: tier
+      nodes:
+        T1: null
+        T2: null
+        P: now
+        Q: now
+      when: Below them
+  - net.state:
+      name: tier
+      nodes:
+        P: null
+        Q: null
+        S1: now
+        S2: now
+        S3: now
+      when: At the bottom
+  - net.state:
+      name: tier
+      nodes:
+        S1: null
+        S2: null
+        S3: null
+      when: And this graph
+  - net.walk:
+      name: tier
+      path:
+      - S1
+      - P
+      - T1
+      state: done
+      when: If u is a customer
+  adjust: {}
+- id: 12.4.valley
+  stage: state
+  narration: 12.4.valley
+  pdf:
+  - lec12-bgp.pdf
+  - 43
+  concepts:
+  - Valley-Free Paths
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: v
+      zone: left
+      nodes:
+        n1:
+          k: node
+          at:
+          - 4
+          - 5
+          l: '1'
+        n2:
+          k: node
+          at:
+          - 1.5
+          - 3.2
+          l: '2'
+        n3:
+          k: node
+          at:
+          - 5
+          - 3.2
+          l: '3'
+        n4:
+          k: node
+          at:
+          - 8
+          - 3.2
+          l: '4'
+        d:
+          k: node
+          at:
+          - 3.4
+          - 1.6
+          l: d
+        n5:
+          k: node
+          at:
+          - 6.4
+          - 1.6
+          l: '5'
+        n6:
+          k: node
+          at:
+          - 9.2
+          - 1.6
+          l: '6'
+        n7:
+          k: node
+          at:
+          - 1.6
+          - 0
+          l: '7'
+        n8:
+          k: node
+          at:
+          - 4.6
+          - 0
+          l: '8'
+      links:
+      - - n2
+        - n1
+        - s: up
+      - - n3
+        - n1
+        - s: up
+      - - n4
+        - n1
+        - s: up
+      - - d
+        - n2
+        - s: up
+      - - d
+        - n3
+        - s: up
+      - - n5
+        - n4
+        - s: up
+      - - n6
+        - n4
+        - s: up
+      - - n7
+        - d
+        - s: up
+      - - n8
+        - d
+        - s: up
+      - - n8
+        - n5
+        - s: up
+      - - n3
+        - n4
+      - - d
+        - n5
+      - - n5
+        - n6
+  - table.show:
+      name: key
+      zone: right_top
+      cols:
+      - Line
+      - Meaning
+      rows:
+      - - Arrow
+        - customer to provider
+      - - Plain line
+        - peer to peer
+  - net.walk:
+      name: v
+      path:
+      - n7
+      - d
+      - n3
+      - n4
+      - n5
+      state: done
+      when: A permitted path
+  - rule:
+      text: 'Valley free: up, then at most one peer link, then down.'
+      when: It's called
+  - net.walk:
+      name: v
+      path:
+      - n5
+      - n8
+      - d
+      state: error
+      when: Going down
+  adjust: {}
+- id: 12.4.classify
+  stage: state
+  narration: 12.4.classify
+  pdf:
+  - lec12-bgp.pdf
+  - 46
+  concepts:
+  - Valley-Free Paths
+  clarifications: []
+  moves:
+  - clear:
+      keep:
+      - v
+      - _rule
+  - net.unwalk:
+      name: v
+  - table.show:
+      name: vt
+      zone: right
+      data: $bgp.valley_table
+      show: 0
+      size: 26
+  - net.walk:
+      name: v
+      path:
+      - n1
+      - n2
+      - d
+      state: done
+      when: 1, 2, d
+  - table.reveal:
+      name: vt
+  - net.walk:
+      name: v
+      path:
+      - n7
+      - d
+      state: done
+      when: 7, d
+  - table.reveal:
+      name: vt
+  - net.walk:
+      name: v
+      path:
+      - n5
+      - n8
+      - d
+      state: error
+      when: 5, 8, d
+  - table.reveal:
+      name: vt
+  - net.walk:
+      name: v
+      path:
+      - n6
+      - n4
+      - n3
+      - d
+      state: done
+      when: 6, 4, 3, d
+  - table.reveal:
+      name: vt
+  - net.walk:
+      name: v
+      path:
+      - n8
+      - n5
+      - d
+      state: done
+      when: 8, 5, d
+  - table.reveal:
+      name: vt
+  - net.walk:
+      name: v
+      path:
+      - n6
+      - n5
+      - d
+      state: error
+      when: 6, 5, d
+  - table.reveal:
+      name: vt
+  - net.walk:
+      name: v
+      path:
+      - n1
+      - n4
+      - n3
+      - d
+      state: error
+      when: And 1, 4, 3
+  - table.reveal:
+      name: vt
+  adjust: {}
+- id: 12.4.reverse
+  stage: rule
+  narration: 12.4.reverse
+  pdf:
+  - lec12-bgp.pdf
+  - 47
+  concepts:
+  - Valley-Free Paths
+  clarifications: []
+  moves:
+  - net.walk:
+      name: v
+      path:
+      - n5
+      - n8
+      - d
+      state: error
+      when: 5, 8, d is
+  - table.mark:
+      name: vt
+      r: 2
+      state: error
+  - net.walk:
+      name: v
+      path:
+      - n8
+      - n5
+      - d
+      state: done
+      when: And 8, 5, d
+  - table.mark:
+      name: vt
+      r: 4
+      state: done
+  - rule:
+      text: Validity depends on direction. Build the sequence of relationships.
+      when: So direction
+  adjust: {}
+- id: 12.4.gao
+  stage: rule
+  narration: 12.4.gao
+  pdf:
+  - lec12-bgp.pdf
+  - 39
+  concepts: &id001
+  - Gao-Rexford Conditions
+  clarifications: []
+  moves:
+  - clear: {}
+  - bullets:
+      name: gr
+      zone: top
+      show: 0
+      items:
+      - No customer-provider cycles
+      - Prefer customer routes
+      - Follow the export rule
+  - reveal:
+      name: gr
+      when: 'One: the customer'
+  - reveal:
+      name: gr
+      when: 'Two: prefer'
+  - reveal:
+      name: gr
+      when: 'Three: follow'
+  - net.show:
+      name: ring
+      zone: bottom
+      nodes:
+        n1:
+          k: node
+          at:
+          - 0
+          - 0
+          l: '1'
+        n2:
+          k: node
+          at:
+          - 4
+          - 0
+          l: '2'
+        n3:
+          k: node
+          at:
+          - 2
+          - 1.6
+          l: '3'
+      links:
+      - - n1
+        - n2
+      - - n2
+        - n3
+      - - n3
+        - n1
+      when: Why does the bad
+  adjust: {}
+- id: 12.4.gao-2
+  stage: rule
+  narration: 12.4.gao-2
+  pdf:
+  - lec12-bgp.pdf
+  - 39
+  concepts: *id001
+  clarifications: []
+  moves:
+  - net.walk:
+      name: ring
+      path:
+      - n1
+      - n2
+      - n3
+      - n1
+      state: error
+      when: around a ring
+  - fx.burst:
+      net: ring
+      node: n3
+      when: that ring
+  - rule:
+      text: Sufficient for stability in the model. Not a claim about every deployment.
+      when: Those are sufficient
+  - net.unwalk:
+      name: ring
+      when: No one coordinates
+  - net.state:
+      name: ring
+      nodes:
+        n1: done
+        n2: done
+        n3: done
+  adjust: {}
+- id: 12.4.laptop
+  stage: rule
+  narration: 12.4.laptop
+  pdf:
+  - lec12-bgp.pdf
+  - 39
+  concepts:
+  - Gao-Rexford Conditions
+  clarifications: []
+  moves:
+  - rule:
+      text: 'Up, across one peer link, and down: contracts set the laptop''s path.'
+      when: Look
+  adjust: {}
+- id: 12.4.pitfall
+  stage: rule
+  narration: 12.4.pitfall
+  pdf:
+  - lec12-bgp.pdf
+  - 39
+  concepts:
+  - Gao-Rexford Conditions
+  clarifications: []
+  moves:
+  - trap:
+      wrong: A physically connected path is always usable
+      right: Export policy can forbid a short, connected route
+  adjust: {}
+- id: 12.4.changed
+  stage: changed_example
+  narration: 12.4.changed
+  pdf:
+  - lec12-bgp.pdf
+  - 41
+  concepts:
+  - BGP Export Policy
+  - Peering
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: a
+      zone: left
+      nodes:
+        U:
+          k: cloud
+          at:
+          - 2
+          - 2
+          l: Provider U
+        A:
+          k: cloud
+          at:
+          - 2
+          - 1
+          l: AS A
+        P:
+          k: cloud
+          at:
+          - 5
+          - 1
+          l: Peer P
+        C:
+          k: cloud
+          at:
+          - 2
+          - 0
+          l: Customer C
+      links:
+      - - A
+        - U
+        - s: up
+      - - A
+        - P
+      - - C
+        - A
+        - s: up
+  - msg.send:
+      name: a
+      a: P
+      b: A
+      text: route
+      when: It learns a route
+  - msg.send:
+      name: a
+      a: C
+      b: A
+      text: route
+      when: And it learns
+  adjust: {}
+- id: 12.4.predict
+  stage: prediction
+  narration: 12.4.predict
+  pdf:
+  - lec12-bgp.pdf
+  - 41
+  concepts:
+  - BGP Export Policy
+  clarifications: []
+  moves:
+  - pause:
+      text: who hears P's route? who hears C's route?
+  adjust: {}
+  hold: 7
+- id: 12.4.answer
+  stage: explanation
+  narration: 12.4.answer
+  pdf:
+  - lec12-bgp.pdf
+  - 41
+  concepts:
+  - BGP Export Policy
+  - Customer-Provider Relationships
+  - Peering
+  clarifications: []
+  moves:
+  - table.show:
+      name: an
+      zone: right
+      cols:
+      - Route from
+      - Told to
+      rows:
+      - - Peer P
+        - customer C only
+      - - Customer C
+        - provider U and peer P
+      show: 0
+  - msg.send:
+      name: a
+      a: A
+      b: C
+      text: P's route
+      when: P's route goes
+  - table.reveal:
+      name: an
+  - net.state:
+      name: a
+      links:
+      - - A
+        - U
+        - blocked
+      when: Telling U
+  - net.state:
+      name: a
+      links:
+      - - A
+        - U
+        - up
+      when: C's route goes
+  - msg.send:
+      name: a
+      a: A
+      b: U
+      text: C's route
+      t: 1.1
+  - msg.send:
+      name: a
+      a: A
+      b: P
+      text: C's route
+      t: 1.1
+  - table.reveal:
+      name: an
+  - clear:
+      when: So far, every
+  - q:
+      text: What if one address means several servers, or a thousand receivers want one stream?
+  - keep: {}
+  adjust: {}
+  pre_roll: 1.0

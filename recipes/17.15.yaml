@@ -1,0 +1,209 @@
+dish: '17.15'
+title: 'Practice question 15: audience and bandwidth'
+deck: lec13-multicast.pdf
+target_min: 1.5
+concepts: []
+pad: 2.2
+beats:
+- id: 17.15.question
+  stage: question
+  narration: 17.15.question
+  pdf:
+  - lec13-multicast.pdf
+  - 22
+  concepts:
+  - Iterated Unicast
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 15: audience and bandwidth'
+  - net.show:
+      name: n
+      zone: top
+      nodes:
+        S:
+          k: server
+          at:
+          - 0
+          - 0.8
+          l: Source
+        R:
+          k: router
+          at:
+          - 4
+          - 0.8
+          l: Branch
+        A:
+          k: host
+          at:
+          - 8
+          - 1.8
+          l: R1
+        B:
+          k: host
+          at:
+          - 8
+          - 0.8
+          l: R2
+        C:
+          k: host
+          at:
+          - 8
+          - -0.2
+          l: R3
+      links:
+      - - S
+        - R
+        - c: first link
+      - - R
+        - A
+      - - R
+        - B
+      - - R
+        - C
+      when: Distinguish anycast and
+  adjust: {}
+- id: 17.15.predict
+  stage: prediction
+  narration: 17.15.predict
+  pdf:
+  - lec13-multicast.pdf
+  - 22
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: who each one reaches, the two rates, and a limitation
+  adjust: {}
+  hold: 12
+- id: 17.15.audience
+  stage: state
+  narration: 17.15.audience
+  pdf:
+  - lec13-multicast.pdf
+  - 5
+  concepts:
+  - IP Anycast
+  clarifications: []
+  moves:
+  - table.show:
+      name: t
+      zone: bottom
+      cols:
+      - ''
+      - Reaches
+      rows:
+      - - Anycast
+        - one instance of a shared address
+      - - Multicast
+        - the interested group
+      show: 0
+  - table.reveal:
+      name: t
+      when: Anycast selects
+  - table.reveal:
+      name: t
+      when: Multicast delivers
+  adjust: {}
+  pre_roll: 1.0
+- id: 17.15.rates
+  stage: state
+  narration: 17.15.rates
+  pdf:
+  - lec13-multicast.pdf
+  - 22
+  concepts:
+  - Iterated Unicast
+  clarifications: []
+  moves:
+  - fade:
+      names: t
+  - packet.spawn:
+      name: u1
+      net: n
+      at: S
+      layers:
+      - ip
+      when: Iterated unicast
+  - packet.hop:
+      name: u1
+      to: R
+      t: 0.8
+  - packet.fade:
+      name: u1
+      t: 0.2
+  - packet.spawn:
+      name: u2
+      net: n
+      at: S
+      layers:
+      - ip
+      t: 0.2
+  - packet.hop:
+      name: u2
+      to: R
+      t: 0.8
+  - packet.fade:
+      name: u2
+      t: 0.2
+  - tex:
+      name: r
+      zone: bottom
+      tex: 3\times 10 = 30\text{ Mb/s}\quad\text{versus}\quad 10\text{ Mb/s}
+      size: 44
+      when: Multicast sends
+  - net.pulse:
+      name: n
+      path:
+      - S
+      - R
+      when:
+        phrase: one copy
+        frame_offset: 4
+  - keep: {}
+  adjust: {}
+  pre_roll: 0.6
+- id: 17.15.limit
+  stage: explanation
+  narration: 17.15.limit
+  pdf:
+  - lec13-multicast.pdf
+  - 14
+  concepts:
+  - IP Anycast
+  clarifications: []
+  moves:
+  - rule:
+      text: A new instance may lack the connection's state.
+      when: One limitation
+  - keep: {}
+  adjust: {}
+- id: 17.15.trap
+  stage: rule
+  narration: 17.15.trap
+  pdf:
+  - lec13-multicast.pdf
+  - 14
+  concepts:
+  - IP Anycast
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Anycast delivers to every member of a group
+      right: Anycast reaches one instance. Multicast reaches the group.
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.15.marks
+  stage: explanation
+  narration: 17.15.marks
+  pdf:
+  - lec13-multicast.pdf
+  - 14
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '2 points: audience. 2 points: rates. 1 point: a valid limitation.'
+      when: On marks
+  adjust: {}

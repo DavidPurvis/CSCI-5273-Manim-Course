@@ -1,0 +1,178 @@
+dish: '17.8'
+title: 'Practice question 8: directory roles'
+deck: lec09-discovery.pdf
+target_min: 2
+concepts: []
+pad: 2.2
+beats:
+- id: 17.8.question
+  stage: question
+  narration: 17.8.question
+  pdf:
+  - lec09-discovery.pdf
+  - 41
+  concepts:
+  - DNS Resource Records
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 8: directory roles'
+  - bullets:
+      name: q
+      zone: top
+      show: 3
+      items:
+      - 'NS referral, then CNAME, then A record: each role?'
+      - Recursive request versus iterative queries?
+      - One cache-freshness tradeoff?
+      when: A resolver receives
+  adjust: {}
+- id: 17.8.predict
+  stage: prediction
+  narration: 17.8.predict
+  pdf:
+  - lec09-discovery.pdf
+  - 41
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: three record roles, the query distinction, and a tradeoff
+  adjust: {}
+  hold: 12
+- id: 17.8.records
+  stage: state
+  narration: 17.8.records
+  pdf:
+  - lec09-discovery.pdf
+  - 42
+  concepts:
+  - DNS Resource Records
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: r
+      zone: top
+      cols:
+      - Record
+      - Gives
+      - Role
+      rows:
+      - - NS
+        - server hostname
+        - delegation
+      - - CNAME
+        - target hostname
+        - alias
+      - - A
+        - IPv4 address
+        - the answer
+      show: 0
+  - table.reveal:
+      name: r
+      when: An NS record
+  - table.reveal:
+      name: r
+      when: A CNAME gives
+  - table.reveal:
+      name: r
+      when: And an A record
+  adjust: {}
+  pre_roll: 1.6
+- id: 17.8.queries
+  stage: state
+  narration: 17.8.queries
+  pdf:
+  - lec09-discovery.pdf
+  - 35
+  concepts:
+  - Recursive DNS Queries
+  - Iterative DNS Queries
+  clarifications: []
+  moves:
+  - net.show:
+      name: d
+      zone: bottom
+      nodes:
+        C:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Client
+        R:
+          k: server
+          at:
+          - 5
+          - 0
+          l: Resolver
+        A:
+          k: server
+          at:
+          - 10
+          - 0
+          l: Name servers
+      links:
+      - - C
+        - R
+      - - R
+        - A
+  - msg.send:
+      name: d
+      a: C
+      b: R
+      text: obtain it for me
+      when: Recursive means
+  - msg.send:
+      name: d
+      a: R
+      b: A
+      text: answer, or whom to ask?
+      when: Iterative means
+  adjust: {}
+  pre_roll: 1.4000000000000001
+- id: 17.8.ttl
+  stage: explanation
+  narration: 17.8.ttl
+  pdf:
+  - lec09-discovery.pdf
+  - 37
+  concepts:
+  - DNS Caching
+  clarifications: []
+  moves:
+  - rule:
+      text: 'Long TTL: less work and latency, slower to notice changes.'
+      when: The tradeoff
+  adjust: {}
+- id: 17.8.trap
+  stage: rule
+  narration: 17.8.trap
+  pdf:
+  - lec09-discovery.pdf
+  - 42
+  concepts:
+  - DNS Resource Records
+  clarifications: []
+  moves:
+  - trap:
+      wrong: NS and CNAME records give the server's address
+      right: NS names a server, CNAME names an alias target, and only A gives an address
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.8.marks
+  stage: explanation
+  narration: 17.8.marks
+  pdf:
+  - lec09-discovery.pdf
+  - 42
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '3 points: record roles. 1 point: the query distinction. 1 point: the tradeoff.'
+      when: On marks
+  - keep: {}
+  adjust: {}

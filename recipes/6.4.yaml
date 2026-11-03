@@ -1,0 +1,677 @@
+dish: '6.4'
+title: VLANs and trunks
+deck: lec06-lan.pdf
+target_min: 4
+concepts:
+- VLANs
+- Port-Based VLANs
+- MAC-Based VLANs
+- 802.1Q Trunking
+pad: 2.2
+beats:
+- id: 6.4.question
+  stage: question
+  narration: 6.4.question
+  pdf:
+  - lec06-lan.pdf
+  - 42
+  concepts:
+  - VLANs
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Lecture 6: VLANs and trunks'
+  - q:
+      text: One set of switches. Two departments. Must we rewire?
+  - keep: {}
+  adjust: {}
+- id: 6.4.vlans
+  stage: animation
+  narration: 6.4.vlans
+  pdf:
+  - lec06-lan.pdf
+  - 43
+  concepts:
+  - VLANs
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: v
+      zone: left
+      nodes:
+        X:
+          k: switch
+          at:
+          - 0
+          - 0
+          l: Switch
+          lp: right
+        F1:
+          k: host
+          at:
+          - -3
+          - 1.5
+          l: Finance 1
+        E1:
+          k: host
+          at:
+          - 3
+          - 1.5
+          l: Eng 1
+        F2:
+          k: host
+          at:
+          - -3
+          - -1.5
+          l: Finance 2
+        E2:
+          k: host
+          at:
+          - 3
+          - -1.5
+          l: Eng 2
+      links:
+      - - F1
+        - X
+      - - E1
+        - X
+      - - F2
+        - X
+      - - E2
+        - X
+  - net.state:
+      name: v
+      nodes:
+        F1: now
+        F2: now
+      when: Group by
+  - packet.spawn:
+      name: bc
+      net: v
+      at: F1
+      layers:
+      - eth
+      when: A broadcast
+  - packet.hop:
+      name: bc
+      to: X
+  - packet.flood:
+      name: bc
+      to:
+      - F2
+  - packet.fade:
+      name: bc
+  adjust: {}
+- id: 6.4.membership
+  stage: state
+  narration: 6.4.membership
+  pdf:
+  - lec06-lan.pdf
+  - 45
+  concepts:
+  - Port-Based VLANs
+  - MAC-Based VLANs
+  clarifications: []
+  moves:
+  - table.show:
+      name: m
+      zone: right
+      cols:
+      - Method
+      - Decided by
+      rows:
+      - - Port-based
+        - access port
+      - - MAC-based
+        - endpoint address
+  adjust: {}
+- id: 6.4.vlan-trace-1
+  stage: state
+  narration: 6.4.vlan-trace-1
+  pdf:
+  - lec06-lan.pdf
+  - 30
+  - 45
+  concepts:
+  - VLANs
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: vl
+      zone: left
+      nodes:
+        X:
+          k: box
+          at:
+          - 3
+          - 1
+          l: SW
+          lp: up
+        P1:
+          k: box
+          at:
+          - 0
+          - 2
+          l: '1: VLAN 10'
+        P2:
+          k: box
+          at:
+          - 0
+          - 0
+          l: '2: VLAN 10'
+        P3:
+          k: box
+          at:
+          - 6
+          - 2
+          l: '3: VLAN 20'
+        P4:
+          k: box
+          at:
+          - 6
+          - 0
+          l: '4: VLAN 20'
+        P5:
+          k: box
+          at:
+          - 3
+          - -1
+          l: '5: trunk'
+        P6:
+          k: box
+          at:
+          - 3
+          - 3
+          l: '6: VLAN 10'
+      links:
+      - - X
+        - P1
+      - - X
+        - P2
+      - - X
+        - P3
+      - - X
+        - P4
+      - - X
+        - P5
+      - - X
+        - P6
+  - table.show:
+      name: vf
+      zone: right_top
+      cols:
+      - VLAN
+      - MAC
+      - Port
+      rows: []
+      ghost:
+      - - 10
+        - A
+        - 1
+      - - 20
+        - B
+        - 4
+  - net.port_state:
+      name: vl
+      device: X
+      peer: P6
+      state: discarding
+  - packet.spawn:
+      name: vfpacket
+      net: vl
+      at: P1
+      layers:
+      - eth
+    when: A frame from A
+    event_id: vlan-1-ingress
+  - packet.hop:
+      name: vfpacket
+      to: X
+    event_id: vlan-1-arrive
+  - table.add:
+      name: vf
+      row:
+      - 10
+      - A
+      - 1
+      state: changed
+    when: Learn A
+    event_id: vlan-1-learn
+  - packet.flood:
+      name: vfpacket
+      to:
+      - P2
+      - P5
+    when: Flood only
+    event_id: vlan-1-forward
+  - packet.fade:
+      name: vfpacket
+    event_id: vlan-1-cleanup
+  adjust: {}
+  assertions:
+  - after: vlan-1-arrive
+    kind: equals
+    object: vfpacket
+    field: at
+    value: X
+- id: 6.4.vlan-trace-2
+  stage: state
+  narration: 6.4.vlan-trace-2
+  pdf:
+  - lec06-lan.pdf
+  - 30
+  - 45
+  concepts:
+  - VLANs
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: vfpacket
+      net: vl
+      at: P3
+      layers:
+      - eth
+    when: The same
+    event_id: vlan-2-ingress
+  - packet.hop:
+      name: vfpacket
+      to: X
+    event_id: vlan-2-arrive
+  - table.add:
+      name: vf
+      row:
+      - 20
+      - A
+      - 3
+      state: changed
+    when: Learn a separate
+    event_id: vlan-2-learn
+  - packet.flood:
+      name: vfpacket
+      to:
+      - P4
+      - P5
+    when: so flood only
+    event_id: vlan-2-forward
+  - packet.fade:
+      name: vfpacket
+    event_id: vlan-2-cleanup
+  adjust: {}
+  assertions:
+  - after: vlan-2-arrive
+    kind: equals
+    object: vfpacket
+    field: at
+    value: X
+- id: 6.4.vlan-trace-3
+  stage: state
+  narration: 6.4.vlan-trace-3
+  pdf:
+  - lec06-lan.pdf
+  - 30
+  - 45
+  concepts:
+  - VLANs
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: vfpacket
+      net: vl
+      at: P2
+      layers:
+      - eth
+    when: B replies
+    event_id: vlan-3-ingress
+  - packet.hop:
+      name: vfpacket
+      to: X
+    event_id: vlan-3-arrive
+  - table.add:
+      name: vf
+      row:
+      - 10
+      - B
+      - 2
+      state: changed
+    when: Learn B
+    event_id: vlan-3-learn
+  - table.mark:
+      name: vf
+      r: 0
+      state: now
+    when: then look up A
+    event_id: vlan-3-lookup
+  - packet.hop:
+      name: vfpacket
+      to: P1
+    when: The frame goes
+    event_id: vlan-3-forward
+  - packet.fade:
+      name: vfpacket
+    event_id: vlan-3-cleanup
+  - table.mark:
+      name: vf
+      r: 0
+      state: null
+    event_id: vlan-3-clear-lookup
+  adjust: {}
+  assertions:
+  - after: vlan-3-arrive
+    kind: equals
+    object: vfpacket
+    field: at
+    value: X
+- id: 6.4.vlan-trace-4
+  stage: state
+  narration: 6.4.vlan-trace-4
+  pdf:
+  - lec06-lan.pdf
+  - 30
+  - 45
+  concepts:
+  - VLANs
+  - Self-Learning Switch Tables
+  clarifications: []
+  moves:
+  - packet.spawn:
+      name: vfpacket
+      net: vl
+      at: P4
+      layers:
+      - eth
+    when: Finally B replies
+    event_id: vlan-4-ingress
+  - packet.hop:
+      name: vfpacket
+      to: X
+    event_id: vlan-4-arrive
+  - table.add:
+      name: vf
+      row:
+      - 20
+      - B
+      - 4
+      state: changed
+    when: Learn B
+    event_id: vlan-4-learn
+  - table.mark:
+      name: vf
+      r: 1
+      state: now
+    when: then look up A
+    event_id: vlan-4-lookup
+  - packet.hop:
+      name: vfpacket
+      to: P3
+    when: Send only
+    event_id: vlan-4-forward
+  - packet.fade:
+      name: vfpacket
+    event_id: vlan-4-cleanup
+  - table.mark:
+      name: vf
+      r: 1
+      state: null
+    event_id: vlan-4-clear-lookup
+  adjust: {}
+  assertions:
+  - after: vlan-4-arrive
+    kind: equals
+    object: vfpacket
+    field: at
+    value: X
+- id: 6.4.trunk
+  stage: state
+  narration: 6.4.trunk
+  pdf:
+  - lec06-lan.pdf
+  - 47
+  concepts:
+  - 802.1Q Trunking
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: t
+      zone: top
+      nodes:
+        F1:
+          k: host
+          at:
+          - 0
+          - 0
+          l: Finance 1
+        A:
+          k: switch
+          at:
+          - 3.5
+          - 0
+          l: Switch A
+        B:
+          k: switch
+          at:
+          - 7
+          - 0
+          l: Switch B
+        F2:
+          k: host
+          at:
+          - 10.5
+          - 0
+          l: Finance 2
+      links:
+      - - F1
+        - A
+      - - A
+        - B
+        - s: active
+      - - B
+        - F2
+  - fields.show:
+      name: tag
+      zone: bottom
+      unit: 0.21
+      rows:
+      - - - Dest
+          - 7
+        - - Source
+          - 8
+        - - 802.1Q tag
+          - 13
+        - - Type
+          - 6
+        - - Payload
+          - 13
+        - - New CRC
+          - 11
+    when: The sending switch
+  - fields.mark:
+      name: tag
+      label: 802.1Q tag
+      when: It adds four
+  - fields.mark:
+      name: tag
+      label: New CRC
+      when: the CRC is
+  - packet.spawn:
+      name: tf
+      net: t
+      at: F1
+      layers:
+      - eth
+      when: The receiving switch
+  - packet.hop:
+      name: tf
+      to:
+      - A
+      - B
+      - F2
+  adjust: {}
+- id: 6.4.devices
+  stage: rule
+  narration: 6.4.devices
+  pdf:
+  - lec06-lan.pdf
+  - 49
+  concepts:
+  - VLANs
+  - Ethernet Switching
+  clarifications: []
+  moves:
+  - clear: {}
+  - table.show:
+      name: dev
+      zone: top
+      cols:
+      - ''
+      - Hub
+      - Switch
+      - Router
+      rows:
+      - - Traffic isolation
+        - 'no'
+        - 'yes'
+        - 'yes'
+      - - Plug and play
+        - 'yes'
+        - 'yes'
+        - 'no'
+      - - Efficient routing
+        - 'no'
+        - 'no'
+        - 'yes'
+  adjust: {}
+- id: 6.4.rule
+  stage: rule
+  narration: 6.4.rule
+  pdf:
+  - lec06-lan.pdf
+  - 48
+  concepts:
+  - VLANs
+  - 802.1Q Trunking
+  clarifications: []
+  moves:
+  - packet.fade:
+      name: tf
+  - rule:
+      text: A VLAN limits a broadcast domain. A trunk preserves VLAN identity. Only routing crosses between VLANs.
+  adjust: {}
+- id: 6.4.pitfall
+  stage: rule
+  narration: 6.4.pitfall
+  pdf:
+  - lec06-lan.pdf
+  - 48
+  concepts:
+  - VLANs
+  - 802.1Q Trunking
+  clarifications: []
+  moves:
+  - trap:
+      wrong: A trunk routes traffic between VLANs
+      right: A trunk carries VLANs across switches. Moving between VLANs needs a router.
+  adjust: {}
+- id: 6.4.changed
+  stage: changed_example
+  narration: 6.4.changed
+  pdf:
+  - lec06-lan.pdf
+  - 46
+  concepts:
+  - Port-Based VLANs
+  clarifications: []
+  moves:
+  - clear:
+      keep:
+      - _rule
+  - net.show:
+      name: mv
+      zone: top
+      nodes:
+        X:
+          k: switch
+          at:
+          - 4
+          - 0.6
+          l: Switch
+          lp: up
+        P:
+          k: point
+          at:
+          - 1
+          - -0.4
+          l: VLAN 10 port
+          lp: down
+        Q:
+          k: point
+          at:
+          - 7
+          - -0.4
+          l: VLAN 20 port
+          lp: down
+        L:
+          k: laptop
+          at:
+          - 1
+          - 0.6
+          l: Finance laptop
+          lp: up
+      links:
+      - - P
+        - X
+      - - Q
+        - X
+  - net.move:
+      name: mv
+      node: L
+      to:
+      - 7
+      - 0.6
+  adjust: {}
+- id: 6.4.predict
+  stage: prediction
+  narration: 6.4.predict
+  pdf:
+  - lec06-lan.pdf
+  - 46
+  concepts:
+  - Port-Based VLANs
+  clarifications: []
+  moves:
+  - pause:
+      text: whose broadcasts does it hear? does its old IP still work?
+  adjust: {}
+  hold: 6
+- id: 6.4.answer
+  stage: explanation
+  narration: 6.4.answer
+  pdf:
+  - lec06-lan.pdf
+  - 46
+  concepts:
+  - Port-Based VLANs
+  - VLANs
+  clarifications: []
+  moves:
+  - table.show:
+      name: res
+      zone: bottom
+      cols:
+      - Question
+      - Answer
+      rows:
+      - - Broadcasts heard
+        - engineering
+      - - Old IP address
+        - fails if the subnet changed
+  - rule:
+      text: 'Next: addresses with structure.'
+      when: To go further
+  - keep: {}
+  adjust: {}

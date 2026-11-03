@@ -1,0 +1,228 @@
+dish: '17.2'
+title: 'Practice question 2: collisions and loops'
+deck: lec06-lan.pdf
+target_min: 2
+concepts: []
+pad: 2.2
+beats:
+- id: 17.2.question
+  stage: question
+  narration: 17.2.question
+  pdf:
+  - lec06-lan.pdf
+  - 22
+  concepts:
+  - Full-Duplex Links
+  clarifications: []
+  moves:
+  - heading:
+      text: 'Practice midterm, question 2: collisions and loops'
+  - bullets:
+      name: q
+      zone: top
+      show: 3
+      items:
+      - Why can full-duplex switching still queue?
+      - Why do redundant links need spanning tree?
+      - Collision, output contention, or flooding loop?
+      when: Explain why full-duplex
+  adjust: {}
+- id: 17.2.predict
+  stage: prediction
+  narration: 17.2.predict
+  pdf:
+  - lec06-lan.pdf
+  - 22
+  concepts: []
+  clarifications: []
+  moves:
+  - pause:
+      text: match each mechanism to the problem it addresses
+  adjust: {}
+  hold: 12
+- id: 17.2.duplex
+  stage: state
+  narration: 17.2.duplex
+  pdf:
+  - lec06-lan.pdf
+  - 23
+  concepts:
+  - Full-Duplex Links
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: d
+      zone: left
+      nodes:
+        A:
+          k: host
+          at:
+          - 0
+          - 1.4
+          l: A
+        B:
+          k: host
+          at:
+          - 0
+          - -1.4
+          l: B
+        S:
+          k: switch
+          at:
+          - 3
+          - 0
+          l: Switch
+          lp: up
+        C:
+          k: host
+          at:
+          - 6
+          - 0
+          l: C
+      links:
+      - - A
+        - S
+      - - B
+        - S
+      - - S
+        - C
+  - packet.spawn:
+      name: a
+      net: d
+      at: A
+      layers:
+      - eth
+      when: two inputs
+  - packet.spawn:
+      name: b
+      net: d
+      at: B
+      layers:
+      - eth
+  - packet.both:
+      moves:
+      - name: a
+        to: S
+      - name: b
+        to: S
+  - packet.hop:
+      name: a
+      to: C
+      when: Only one frame
+  - queue.show:
+      name: wait
+      zone: right
+      items:
+      - B's frame
+      kind: eth
+      title: Output queue
+      when: so the other
+  - packet.fade:
+      name: b
+  - keep: {}
+  adjust: {}
+- id: 17.2.stp
+  stage: state
+  narration: 17.2.stp
+  pdf:
+  - lec06-lan.pdf
+  - 35
+  concepts:
+  - Spanning Tree Protocol
+  clarifications: []
+  moves:
+  - clear: {}
+  - net.show:
+      name: tri
+      zone: left
+      nodes:
+        S1:
+          k: switch
+          at:
+          - 0
+          - 1.3
+          l: S1
+          lp: up
+        S2:
+          k: switch
+          at:
+          - -2.4
+          - -1.2
+          l: S2
+        S3:
+          k: switch
+          at:
+          - 2.4
+          - -1.2
+          l: S3
+      links:
+      - - S1
+        - S2
+      - - S1
+        - S3
+      - - S2
+        - S3
+  - packet.spawn:
+      name: l
+      net: tri
+      at: S1
+      layers:
+      - eth
+      when: A flooded frame
+  - packet.hop:
+      name: l
+      to:
+      - S2
+      - S3
+      - S1
+      - S2
+      - S3
+      t: 3
+  - packet.fade:
+      name: l
+  - net.state:
+      name: tri
+      links:
+      - - S1
+        - S2
+        - tree
+      - - S1
+        - S3
+        - tree
+      - - S2
+        - S3
+        - blocked
+      when: Spanning tree blocks
+  - keep: {}
+  adjust: {}
+- id: 17.2.trap
+  stage: rule
+  narration: 17.2.trap
+  pdf:
+  - lec06-lan.pdf
+  - 37
+  concepts:
+  - Spanning Tree Protocol
+  clarifications: []
+  moves:
+  - trap:
+      wrong: Full duplex ends all waiting, and STP stops collisions
+      right: Full duplex ends link collisions; outputs still queue; STP stops flood loops
+      when: The tempting
+  - keep: {}
+  adjust: {}
+- id: 17.2.marks
+  stage: explanation
+  narration: 17.2.marks
+  pdf:
+  - lec06-lan.pdf
+  - 37
+  concepts: []
+  clarifications: []
+  moves:
+  - rule:
+      text: '2 points: output contention. 2 points: flooding and STP. 1 point: separate scopes.'
+      when: On marks
+  - keep: {}
+  adjust: {}

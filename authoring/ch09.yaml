@@ -1,0 +1,1274 @@
+dish: '9.1'
+title: Getting an address and a neighbor
+deck: lec09-discovery.pdf
+target_min: 6
+concepts:
+- Names Addresses and Indirection
+- Soft State
+- DHCP
+- DHCP Leases and Reservations
+- ARP
+beats:
+- id: question
+  stage: question
+  pdf: 4
+  c:
+  - Names Addresses and Indirection
+  say: 'Rewind to the moment the laptop wakes up. It holds one thing: its burned-in
+    MAC address. It has no IP address, no mask, no idea where the router is, and no
+    way to translate a name like www.example.test. How does it get from knowing nothing
+    to sending a packet?'
+  moves:
+  - heading:
+      text: 'Lecture 9: getting an address and a neighbor'
+  - spine:
+      current: Discover
+      zone: top
+  - q:
+      text: The laptop wakes up knowing nothing. How does it begin?
+      zone: bottom
+- id: identifiers
+  stage: animation
+  pdf: 5
+  c:
+  - Names Addresses and Indirection
+  say: It needs three kinds of identifier, because they answer three different questions.
+    A name is for people, and it can stay the same when a service moves. An IP address
+    says where an interface sits in the topology. A MAC address gets a frame across
+    one local link. Each translation between them is a separate protocol. That indirection
+    is what lets a server change its address while its name stays fixed.
+  moves:
+  - clear: {}
+  - table.show:
+      name: ids
+      zone: top
+      cols:
+      - Identifier
+      - Example
+      - Purpose
+      rows:
+      - - Name
+        - www.example.test
+        - for people
+      - - IP address
+        - 203.0.113.80
+        - topological location
+      - - MAC address
+        - a local interface
+        - one link
+- id: habit
+  stage: rule
+  pdf: 6
+  c:
+  - Names Addresses and Indirection
+  say: 'The habit to build. Before naming a protocol, state the missing fact. I need
+    my own address and my gateway: that is DHCP. I need the MAC address of my next
+    hop: that is ARP. I need the IP address behind a name: that is DNS.'
+  moves:
+  - table.show:
+      name: miss
+      zone: bottom
+      cols:
+      - Missing fact
+      - Protocol
+      rows:
+      - - my address and gateway
+        - DHCP
+      - - next hop's MAC
+        - ARP
+      - - IP behind a name
+        - DNS
+- id: bootstrap
+  stage: animation
+  pdf: 14
+  c:
+  - DHCP
+  say: Start with the bootstrap problem. The laptop needs to ask a server for an address.
+    But it has no address to send from, and it doesn't know where any server is. There
+    is a way out of that circle. Local broadcast reaches everyone on the LAN, with
+    no configuration at all. So DHCP begins with a shout.
+  moves:
+  - clear: {}
+  - net.show:
+      name: lan
+      zone: left
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        S:
+          k: switch
+          at:
+          - 3
+          - 0
+          l: Switch
+        R:
+          k: router
+          at:
+          - 6
+          - 1
+          l: R1
+        D:
+          k: server
+          at:
+          - 6
+          - -1
+          l: DHCP server
+      links:
+      - - L
+        - S
+      - - S
+        - R
+      - - S
+        - D
+  - packet.spawn:
+      name: dis
+      net: lan
+      at: L
+      layers:
+      - eth
+      when: So DHCP begins
+  - packet.hop:
+      name: dis
+      to: S
+  - packet.flood:
+      name: dis
+      to:
+      - R
+      - D
+  - packet.fade:
+      name: dis
+- id: dora
+  stage: state
+  pdf: 17
+  c:
+  - DHCP
+  say: 'Four messages follow. Discover: is any DHCP server out there? Offer: a server
+    proposes an address, say 192.0.2.10, along with a mask, a gateway, a DNS resolver,
+    and a lease time. Several servers might offer. Request: the client announces which
+    offer it chooses. ACK: that server confirms. Only after the ACK does the client
+    begin using the address. An offer alone is just a proposal.'
+  moves:
+  - seq.show:
+      name: d
+      zone: right
+      lanes:
+      - Laptop
+      - Server
+      steps: 4
+  - seq.msg:
+      name: d
+      a: Laptop
+      b: Server
+      text: Discover
+      kind: eth
+      when: 'Discover: is any'
+  - seq.msg:
+      name: d
+      a: Server
+      b: Laptop
+      text: Offer
+      kind: ip
+      when: 'Offer: a server'
+  - seq.msg:
+      name: d
+      a: Laptop
+      b: Server
+      text: Request
+      kind: eth
+      when: 'Request: the client'
+  - seq.msg:
+      name: d
+      a: Server
+      b: Laptop
+      text: ACK
+      kind: ip
+      state: done
+      when: 'ACK: that server'
+- id: config
+  stage: state
+  pdf: 17
+  c:
+  - DHCP
+  say: Look at what the laptop now knows. Its address, 192.0.2.10, with a slash 24
+    mask. Its gateway, 192.0.2.1. Its resolver, 198.51.100.53. It knows what counts
+    as local, and where to send everything else. Yet it still does not know the gateway's
+    MAC address. Knowledge arrives in stages, not in one magic connected moment.
+  moves:
+  - clear: {}
+  - table.show:
+      name: cfg
+      zone: left
+      cols:
+      - Setting
+      - Value
+      rows:
+      - - Address
+        - 192.0.2.10/24
+      - - Gateway
+        - 192.0.2.1
+      - - DNS resolver
+        - 198.51.100.53
+      - - Lease
+        - limited time
+- id: lease
+  stage: state
+  pdf: 18
+  c:
+  - DHCP Leases and Reservations
+  - Soft State
+  say: 'Why does the address come with a lease? Suppose a laptop crashes, or simply
+    leaves. It never says goodbye. If allocations were permanent, the pool would slowly
+    drain. With a lease, the allocation expires unless it is renewed. This is called
+    soft state: information that disappears on its own unless refreshed. Failed machines
+    clean up after themselves, by doing nothing. A reservation is different. An administrator
+    configures a fixed address for a particular machine, and the server hands it out
+    centrally each time.'
+  moves:
+  - tl.show:
+      name: ls
+      zone: right
+      tracks:
+      - Renewing
+      - Crashed
+      span:
+      - 0
+      - 10
+  - tl.block:
+      name: ls
+      track: Renewing
+      start: 0
+      end: 4
+      text: lease
+      kind: ip
+  - tl.block:
+      name: ls
+      track: Renewing
+      start: 4
+      end: 8
+      text: renewed
+      kind: ip
+  - tl.block:
+      name: ls
+      track: Crashed
+      start: 0
+      end: 4
+      text: lease
+      kind: ip
+      when: Suppose a laptop
+  - tl.block:
+      name: ls
+      track: Crashed
+      start: 4
+      end: 8
+      text: back in pool
+      state: done
+      when: With a lease
+- id: arp
+  stage: animation
+  pdf: 24
+  c:
+  - ARP
+  say: 'The laptop wants to send through its gateway, 192.0.2.1. A frame needs a MAC
+    address, and it has only an IP address. So it checks its ARP cache. Empty. It
+    broadcasts: who has 192.0.2.1? Every machine on the LAN hears. Only R1 replies,
+    directly: that''s me, and here is my MAC. The laptop caches that mapping for a
+    while. Another soft state table.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: a
+      zone: left
+      nodes:
+        L:
+          k: laptop
+          at:
+          - 0
+          - 0
+          l: Laptop
+        S:
+          k: switch
+          at:
+          - 3
+          - 0
+          l: Switch
+        R:
+          k: router
+          at:
+          - 6
+          - 1
+          l: R1
+        H:
+          k: host
+          at:
+          - 6
+          - -1
+          l: Host H
+      links:
+      - - L
+        - S
+      - - S
+        - R
+      - - S
+        - H
+  - table.show:
+      name: ac
+      zone: right_top
+      cols:
+      - IP
+      - MAC
+      rows: []
+      ghost:
+      - - 192.0.2.1
+        - R1's MAC
+  - packet.spawn:
+      name: q
+      net: a
+      at: L
+      layers:
+      - eth
+      when: It broadcasts
+  - packet.hop:
+      name: q
+      to: S
+  - packet.flood:
+      name: q
+      to:
+      - R
+      - H
+  - packet.fade:
+      name: q
+  - packet.spawn:
+      name: r
+      net: a
+      at: R
+      layers:
+      - eth
+      when: Only R1 replies
+  - packet.hop:
+      name: r
+      to:
+      - S
+      - L
+  - packet.fade:
+      name: r
+  - table.add:
+      name: ac
+      row:
+      - 192.0.2.1
+      - R1's MAC
+      state: changed
+      when: The laptop caches
+- id: two-tables
+  stage: rule
+  pdf: 25
+  c:
+  - ARP
+  say: 'ARP resolves only the next local hop, never the whole path. And don''t confuse
+    it with the switch''s table. The host''s ARP table maps IP to MAC. The switch''s
+    table maps MAC to port. Both changed during that exchange, and neither replaces
+    the other. The rule is: route first, resolve the next hop''s MAC second, transmit
+    third.'
+  moves:
+  - rule:
+      text: Route first. Resolve the next hop's MAC second. Transmit third.
+  - table.show:
+      name: two
+      zone: right_bottom
+      cols:
+      - Table
+      - Maps
+      rows:
+      - - Host ARP
+        - IP to MAC
+      - - Switch
+        - MAC to port
+- id: pitfall
+  stage: rule
+  pdf: 25
+  c:
+  - ARP
+  say: Keep these lookups apart. ARP doesn't resolve a hostname, and DNS doesn't choose
+    the Ethernet destination. DNS maps a name to an IP. ARP maps an IP to a MAC.
+  moves:
+  - trap:
+      wrong: ARP finds a host's address from its name
+      right: DNS maps names to IPs. ARP maps IPs to MACs.
+- id: changed
+  stage: changed_example
+  pdf: 25
+  c:
+  - ARP
+  say: Change the target. The laptop now wants to send to the DNS resolver, 198.51.100.53.
+    Apply the slash 24 mask to both addresses. 192.0.2.0 is not 198.51.100.0.
+  moves:
+  - clear: {}
+  - text:
+      name: t
+      zone: top
+      lines:
+      - "Laptop 192.0.2.10/24 \u2192 resolver 198.51.100.53"
+      - 192.0.2.0 is not 198.51.100.0
+- id: predict
+  stage: prediction
+  pdf: 25
+  hold: 6
+  c:
+  - ARP
+  say: Which IP address does the laptop put in its ARP request?
+  moves:
+  - pause:
+      text: which IP address does the laptop ARP for?
+- id: answer
+  stage: explanation
+  pdf: 25
+  c:
+  - ARP
+  - DHCP
+  say: It asks for the gateway, 192.0.2.1, never for the resolver, because ARP cannot
+    cross a router. If the resolver were on the same subnet, at 192.0.2.53, it would
+    ARP for the resolver directly. So the mask chooses the next hop, and the next
+    hop chooses the ARP target. The laptop can now reach its resolver. But what does
+    a resolver actually do? How can any system answer for every name on Earth?
+  moves:
+  - table.show:
+      name: ans
+      zone: bottom
+      cols:
+      - Destination
+      - ARP target
+      rows: &id001
+      - - 198.51.100.53 (remote)
+        - 192.0.2.1
+      - - 192.0.2.53 (local)
+        - 192.0.2.53
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 9.1.predict
+  answer_beat: 9.1.answer
+  answer_events:
+  - 9.1.answer:move:0
+  answer_objects:
+  - object: ans
+    after: 9.1.answer:move:0
+    effect: table.show
+    selector:
+      rows: *id001
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '9.2'
+title: Finding a name
+deck: lec09-discovery.pdf
+target_min: 5.5
+concepts:
+- DNS Hierarchy and Zones
+- Recursive DNS Queries
+- Iterative DNS Queries
+- DNS Caching
+- Negative DNS Caching
+beats:
+- id: question
+  stage: question
+  pdf: 26
+  c:
+  - DNS Hierarchy and Zones
+  say: The browser has the name www.example.test. It needs an address. There are billions
+    of names, changing constantly, owned by millions of organizations. Could one file
+    hold them? Could one giant server answer them all?
+  moves:
+  - heading:
+      text: 'Lecture 9: finding a name'
+  - q:
+      text: Could one file, or one server, hold every name?
+- id: rejected
+  stage: animation
+  pdf: 27
+  c:
+  - DNS Hierarchy and Zones
+  say: The two obvious designs fail. A hosts file downloaded by everyone would be
+    enormous, and always stale. One central server would be a single point of failure,
+    a traffic bottleneck, and far away from most people. So DNS distributes the database,
+    by splitting up responsibility.
+  moves:
+  - clear: {}
+  - table.show:
+      name: false
+      zone: top
+      cols:
+      - Design
+      - Why it fails
+      rows:
+      - - Global hosts file
+        - huge and always stale
+      - - One central server
+        - fragile and overloaded
+- id: hierarchy
+  stage: state
+  pdf: 30
+  c:
+  - DNS Hierarchy and Zones
+  clar:
+  - dns-roots
+  say: Names form a tree, read from the right. The root delegates to top-level domain
+    servers, such as dot test or dot com. Those delegate to authoritative servers
+    for each organization's zone. A zone is a piece of the tree under one administration.
+    Nobody holds everything. Each server only knows who to ask next. By the way, you
+    may hear about 13 root servers. That is 13 named identities, A through M, each
+    deployed as many physical instances around the world.
+  moves:
+  - net.show:
+      name: tree
+      zone: bottom
+      nodes:
+        r:
+          k: box
+          at:
+          - 4
+          - 2
+          l: Root
+        t:
+          k: box
+          at:
+          - 1.5
+          - 1
+          l: .test
+        c:
+          k: box
+          at:
+          - 6.5
+          - 1
+          l: .com
+        e:
+          k: box
+          at:
+          - 1.5
+          - 0
+          l: example.test
+      links:
+      - - r
+        - t
+      - - r
+        - c
+      - - t
+        - e
+  - card:
+      kind: clarification
+      text: 13 root identities, A to M, with many physical instances.
+      zone: top
+      when: By the way
+- id: lookup
+  stage: state
+  pdf: 36
+  c:
+  - Recursive DNS Queries
+  - Iterative DNS Queries
+  say: 'Follow one lookup with empty caches. The laptop asks its resolver: please
+    find this name for me. That is a recursive query. It asks the server to do all
+    the work. The resolver then asks the root. The root doesn''t know the answer,
+    but it gives a referral: ask the dot test servers. The resolver asks those, and
+    gets another referral: ask example dot test. It asks that authoritative server,
+    and gets the answer. Those are iterative queries. Each returns an answer or a
+    pointer, and leaves the next step to the asker. The result returns to the laptop:
+    203.0.113.80.'
+  moves:
+  - clear: {}
+  - seq.show:
+      name: dn
+      zone: full
+      lanes:
+      - Laptop
+      - Resolver
+      - Root
+      - .test
+      - example.test
+      steps: 8
+  - seq.msg:
+      name: dn
+      a: Laptop
+      b: Resolver
+      text: find this name
+      kind: transport
+      when: The laptop asks
+  - seq.msg:
+      name: dn
+      a: Resolver
+      b: Root
+      text: query
+      kind: ip
+      when: The resolver then
+  - seq.msg:
+      name: dn
+      a: Root
+      b: Resolver
+      text: try .test
+      kind: data
+  - seq.msg:
+      name: dn
+      a: Resolver
+      b: .test
+      text: query
+      kind: ip
+      when: The resolver asks those
+  - seq.msg:
+      name: dn
+      a: .test
+      b: Resolver
+      text: try example.test
+      kind: data
+  - seq.msg:
+      name: dn
+      a: Resolver
+      b: example.test
+      text: query
+      kind: ip
+      when: It asks that
+  - seq.msg:
+      name: dn
+      a: example.test
+      b: Resolver
+      text: 203.0.113.80
+      kind: data
+      state: done
+  - seq.msg:
+      name: dn
+      a: Resolver
+      b: Laptop
+      text: 203.0.113.80
+      kind: transport
+      state: done
+      when: The result returns
+- id: rule-rec
+  stage: rule
+  pdf: 36
+  c:
+  - Recursive DNS Queries
+  - Iterative DNS Queries
+  say: One lookup uses both styles. The client to resolver request is recursive. The
+    resolver's walk down the tree is iterative. An exam question that asks which one
+    DNS uses is really asking, which hop?
+  moves:
+  - rule:
+      text: 'Client to resolver: recursive. Resolver down the tree: iterative.'
+- id: cache
+  stage: state
+  pdf: 37
+  c:
+  - DNS Caching
+  say: Doing all that for every request would crush the root. So the resolver caches.
+    Each answer carries a TTL, in seconds. Store a record with TTL 300 at noon, and
+    it can be reused until 12:05. Now the catch. If the real address changes at 12:01,
+    the cache keeps giving out the old one for four more minutes. A shorter TTL narrows
+    that window, at the cost of more lookups. That's a straight trade between freshness
+    and load. Resolvers also cache referrals, so most queries never touch the root.
+  moves:
+  - clear: {}
+  - tl.show:
+      name: cl
+      zone: top
+      tracks:
+      - Authoritative
+      - Cache
+      span:
+      - 0
+      - 5
+      ticks:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+  - tl.block:
+      name: cl
+      track: Cache
+      start: 0
+      end: 5
+      text: old address, TTL 300 s
+      kind: ip
+      when: Store a record
+  - tl.block:
+      name: cl
+      track: Authoritative
+      start: 0
+      end: 1
+      text: old
+      kind: data
+      when: If the real
+  - tl.block:
+      name: cl
+      track: Authoritative
+      start: 1
+      end: 5
+      text: new address
+      state: done
+  - rule:
+      text: 'Long TTL: less load, staler answers. Short TTL: fresher answers, more
+        load.'
+- id: negative
+  stage: state
+  pdf: 38
+  c:
+  - Negative DNS Caching
+  say: Resolvers remember failures too. Negative caching stores the answer that a
+    name doesn't exist. Repeated typos, like www dot example dot tesst, then fail
+    quickly, instead of walking the tree each time. There's a downside. A brand new
+    name might stay hidden behind an unexpired negative answer. And don't confuse
+    a genuine no such name result with a mere timeout.
+  moves:
+  - table.show:
+      name: neg
+      zone: bottom
+      cols:
+      - Cached result
+      - Effect
+      rows:
+      - - name does not exist
+        - typos fail fast
+      - - but then the name is added
+        - hidden until expiry
+- id: negative-more
+  stage: state
+  pdf: 38
+  c:
+  - Negative DNS Caching
+  say: Imagine someone keeps typing a name with a letter missing. Once the resolver
+    learns that name doesn't exist, it can fail those requests quickly, until the
+    negative result expires. A timeout is different. It only means no answer arrived,
+    not that the name is missing.
+  moves:
+  - table.mark:
+      name: neg
+      r: 0
+      state: done
+      when: Once the resolver
+  - rule:
+      text: No such name is an answer. A timeout is only silence.
+      when: A timeout is
+- id: pitfall
+  stage: rule
+  pdf: 38
+  c:
+  - Negative DNS Caching
+  say: Same word, different meaning. A DNS TTL is a cache lifetime, in seconds. An
+    IP TTL is a hop limit. And a switch's aging timer is different again.
+  moves:
+  - trap:
+      wrong: DNS TTL counts hops, like IP TTL
+      right: DNS TTL is a cache lifetime in seconds
+- id: changed
+  stage: changed_example
+  pdf: 38
+  c:
+  - DNS Caching
+  say: Change the state of the cache. A second laptop on the same LAN asks for www.example.test
+    4 minutes after the first one. The resolver stored the record with TTL 300.
+  moves:
+  - clear: {}
+  - q:
+      text: A second laptop asks 240 seconds later. The TTL is 300.
+      zone: top
+- id: predict
+  stage: prediction
+  pdf: 38
+  hold: 12
+  c:
+  - DNS Caching
+  say: How many queries does the resolver send to the hierarchy? And what about a
+    third laptop at 5 minutes exactly?
+  moves:
+  - pause:
+      text: how many hierarchy queries at 240 s? at 300 s?
+      long: true
+- id: answer
+  stage: explanation
+  pdf: 38
+  c:
+  - DNS Caching
+  - Iterative DNS Queries
+  say: At 240 seconds the cache is still valid, so zero queries leave the resolver.
+    At 300 seconds the entry has expired, so it must ask again, though a cached referral
+    could skip the root. Caching removes hierarchy traffic only. The packets to the
+    web server still need routes and frames. Next, let us see what else this database
+    holds.
+  moves:
+  - table.show:
+      name: a
+      zone: bottom
+      cols:
+      - Time
+      - Hierarchy queries
+      rows: &id001
+      - - 240 s
+        - '0'
+      - - 300 s
+        - up to 3, fewer with cached referrals
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 9.2.predict
+  answer_beat: 9.2.answer
+  answer_events:
+  - 9.2.answer:move:0
+  answer_objects:
+  - object: a
+    after: 9.2.answer:move:0
+    effect: table.show
+    selector:
+      rows: *id001
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
+---
+dish: '9.3'
+title: Records and the whole journey
+deck: lec09-discovery.pdf
+target_min: 6.5
+concepts:
+- DNS Resource Records
+- DNS A Records
+- DNS NS Records
+- DNS CNAME Records
+- DNS MX Records
+- DNS Reliability
+beats:
+- id: question
+  stage: question
+  pdf: 41
+  c:
+  - DNS Resource Records
+  say: A DNS answer isn't just a name and an address. How does the same system tell
+    you where to send email, or which server is in charge of a zone? And what happens
+    if the question or its answer simply gets lost?
+  moves:
+  - heading:
+      text: 'Lecture 9: records and the whole journey'
+  - q:
+      text: What else does DNS store, and what if a query is lost?
+- id: records
+  stage: animation
+  pdf: 41
+  c:
+  - DNS Resource Records
+  - DNS A Records
+  - DNS NS Records
+  - DNS CNAME Records
+  - DNS MX Records
+  say: DNS stores typed resource records, each with a name, a type, a value, and a
+    TTL. An A record maps a name to an IPv4 address. An NS record names the server
+    authoritative for a zone. A CNAME maps an alias to its canonical name. An MX record
+    names a domain's mail exchanger, with a preference. Notice that NS, CNAME, and
+    MX values are hostnames, not addresses. So they may need another lookup, to find
+    an address.
+  moves:
+  - clear: {}
+  - table.show:
+      name: rr
+      zone: top
+      cols:
+      - Type
+      - Name
+      - Value
+      rows:
+      - - A
+        - www.example.test
+        - 203.0.113.80
+      - - NS
+        - example.test
+        - ns1.example.test
+      - - CNAME
+        - web.example.test
+        - www.example.test
+      - - MX
+        - example.test
+        - 10 mail.example.test
+      show: 0
+  - table.reveal:
+      name: rr
+      when: An A record
+  - table.reveal:
+      name: rr
+      when: An NS record
+  - table.reveal:
+      name: rr
+      when: A CNAME maps
+  - table.reveal:
+      name: rr
+      when: An MX record
+  - rule:
+      text: NS, CNAME and MX values are hostnames. They may need another lookup.
+      when: Notice that
+- id: reliability
+  stage: state
+  pdf: 43
+  c:
+  - DNS Reliability
+  say: DNS usually runs over UDP, which recovers nothing. So reliability is built
+    above it. Zones keep replicated servers. Clients use timeouts, retry, and try
+    a different server. Replies are matched to questions by an ID. DNS can also use
+    TCP, so UDP is common, not exclusive.
+  moves:
+  - bullets:
+      name: rel
+      zone: bottom
+      show: 4
+      items:
+      - Replicated servers
+      - Timeouts and retries
+      - An ID matches replies to queries
+      - UDP is common; TCP also works
+- id: reliability-more
+  stage: state
+  pdf: 43
+  c:
+  - DNS Reliability
+  say: Walk through a failure. A resolver queries server A, and hears nothing. After
+    its timer, it tries replica B, and it accepts a reply only if it matches the outstanding
+    request. Repeating immediately to the same failed server would add load, without
+    helping.
+  moves:
+  - net.show:
+      name: rr
+      zone: top
+      nodes:
+        R:
+          k: server
+          at:
+          - 0
+          - 0.6
+          l: Resolver
+        A:
+          k: server
+          at:
+          - 6
+          - 1.6
+          l: Server A
+          lp: right
+        B:
+          k: server
+          at:
+          - 6
+          - -0.4
+          l: Replica B
+          lp: right
+      links:
+      - - R
+        - A
+      - - R
+        - B
+  - msg.send:
+      name: rr
+      a: R
+      b: A
+      text: query
+      when: A resolver queries
+      t: 1.1
+  - fx.burst:
+      net: rr
+      node: A
+  - msg.send:
+      name: rr
+      a: R
+      b: B
+      text: retry
+      when: After its timer
+      t: 1.1
+  - msg.send:
+      name: rr
+      a: B
+      b: R
+      text: reply, same ID
+      when: and it accepts
+      t: 1.1
+- id: journey
+  stage: animation
+  pdf: 49
+  clar:
+  - tcp-recap
+  say: We can tell the whole story in order, and there's a surprise in it. To reach
+    the name, the laptop must query the resolver. But the resolver is remote. So before
+    the DNS query can even leave, the laptop must ARP for its gateway. Then the frame
+    goes to R1, carrying a packet to the resolver. The DNS answer returns. Only then
+    can it send to the server, and a TCP connection can begin. The recap slide compresses
+    that handshake. The classic form ends with a final ACK after the SYN and SYN-ACK.
+  moves:
+  - clear: {}
+  - bullets:
+      name: j
+      zone: full
+      show: 0
+      items:
+      - 'DHCP: learn address, gateway, resolver'
+      - 'Mask: the resolver is remote, use the gateway'
+      - 'ARP: learn the gateway''s MAC'
+      - 'DNS: query goes through R1, answer returns'
+      - 'Mask: server is remote too, reuse gateway MAC'
+      - Packet crosses R1 and R2; TCP begins
+  - reveal:
+      name: j
+      when: To reach the name
+  - reveal:
+      name: j
+      when: But the resolver
+  - reveal:
+      name: j
+      when: So before the DNS
+  - reveal:
+      name: j
+      when: Then the frame
+  - reveal:
+      name: j
+      when: Only then
+  - reveal:
+      name: j
+      when: a TCP connection
+- id: insert
+  stage: state
+  pdf: 44
+  c:
+  - DNS NS Records
+  - DNS A Records
+  - DNS MX Records
+  say: 'How does a new name enter this system? Say a startup called FooBar registers
+    foobar.com. The registrar inserts two records into the dot com servers: an NS
+    record saying that foobar.com is served by dns1.foobar.com, and an A record giving
+    that server''s address. That second one is needed, because otherwise you''d have
+    to resolve dns1.foobar.com in order to reach the server that answers for foobar.com.
+    On its own server, FooBar then adds an A record for www, and an MX record for
+    mail.'
+  moves:
+  - clear: {}
+  - table.show:
+      name: ins
+      zone: top
+      cols:
+      - Stored at
+      - Record
+      - Type
+      rows:
+      - - .com
+        - "foobar.com \u2192 dns1.foobar.com"
+        - NS
+      - - .com
+        - "dns1.foobar.com \u2192 212.212.212.1"
+        - A
+      - - dns1
+        - "www.foobar.com \u2192 an address"
+        - A
+      - - dns1
+        - "foobar.com \u2192 a mail server"
+        - MX
+      show: 0
+  - table.reveal:
+      name: ins
+      n: 2
+      when: The registrar inserts
+  - table.reveal:
+      name: ins
+      n: 2
+      when: On its own server
+- id: dig
+  stage: state
+  pdf: 45
+  c:
+  - DNS Resource Records
+  - Iterative DNS Queries
+  say: You can watch all of this with a tool called dig. A plain query prints three
+    sections. The answer section has the record you asked for. The authority section
+    names the servers responsible for that zone. The additional section gives those
+    servers' addresses, which saves another lookup. An address shown under additional
+    isn't necessarily the web server you asked about. Running dig with plus trace
+    shows the entire walk from root to TLD to authoritative. And asking a TLD server
+    directly, with recursion off, returns no answer at all, only a referral. That's
+    an iterative reply, visible in plain text.
+  moves:
+  - clear: {}
+  - table.show:
+      name: dg
+      zone: top
+      cols:
+      - dig section
+      - Holds
+      rows:
+      - - ANSWER
+        - the record you asked for
+      - - AUTHORITY
+        - the zone's name servers
+      - - ADDITIONAL
+        - those servers' addresses
+  - rule:
+      text: dig +trace shows the walk from root to TLD to authoritative.
+      when: Running dig
+- id: arb
+  stage: animation
+  pdf: 55
+  c: &id001
+  - ARP
+  say: 'The instructor''s slides run this as a compact example: host A, router R,
+    host B. A''s address is 111.111.111.111, and B''s is 222.222.222.222. A''s mask
+    says that B is off-subnet, so A uses ARP to learn R''s near-side MAC. The frame
+    runs from A''s MAC to R''s MAC, while the IP header reads A to B.'
+  moves:
+  - clear: {}
+  - net.show:
+      name: ab
+      zone: top
+      nodes:
+        A:
+          k: host
+          at:
+          - 0
+          - 0
+          l: A
+        R:
+          k: router
+          at:
+          - 5
+          - 0
+          l: R
+        B:
+          k: host
+          at:
+          - 10
+          - 0
+          l: B
+      links:
+      - - A
+        - R
+      - - R
+        - B
+  - stack.show:
+      name: fr
+      zone: bottom
+      width: 7.4
+      layers:
+      - t: "Ethernet: A's MAC \u2192 R's near MAC"
+        k: eth
+      - t: "IP: 111.111.111.111 \u2192 222.222.222.222"
+        k: ip
+    when: The frame runs
+  - packet.spawn:
+      name: p
+      net: ab
+      at: A
+      layers:
+      - eth
+      - ip
+  - packet.hop:
+      name: p
+      to: R
+- id: arb-2
+  stage: animation
+  pdf: 55
+  c: *id001
+  say: 'R removes the frame, looks up B''s prefix, finds B''s MAC on the outgoing
+    subnet, and emits a new frame from its far-side MAC to B''s MAC. There it is again:
+    the Ethernet destination is R on one link, and B on the other. The IP endpoints
+    never change, in this ordinary trace with no NAT.'
+  moves:
+  - packet.swap_link_header:
+      name: p
+      when: R removes
+  - stack.set:
+      name: fr
+      layer: 0
+      text: "Ethernet: R's far MAC \u2192 B's MAC"
+      kind: eth
+  - packet.hop:
+      name: p
+      to: B
+      when: There it is
+- id: rule
+  stage: rule
+  pdf: 58
+  say: There's no fixed order that says DNS comes before ARP. What is missing right
+    now decides what happens next. The name's address is missing, so we need DNS.
+    To reach DNS, we need the gateway's MAC, so we need ARP first. Discovery traffic
+    has its own delivery dependencies.
+  moves:
+  - rule:
+      text: What is missing right now decides the next step. Discovery traffic needs
+        delivery too.
+- id: pitfall
+  stage: rule
+  pdf: 58
+  say: A frequent confusion. A CNAME is not an HTTP redirect. It's an alias inside
+    DNS, so the resolver just looks up another name. The browser never gets sent to
+    a new URL.
+  moves:
+  - trap:
+      wrong: A CNAME redirects your browser
+      right: 'A CNAME is a DNS alias: no HTTP redirect happens'
+- id: changed
+  stage: changed_example
+  pdf: 58
+  say: Change three facts. Put the resolver on the laptop's own subnet. Make the DNS
+    answer already cached. And then cut the link between R1 and R2.
+  moves:
+  - clear: {}
+  - bullets:
+      name: ch
+      zone: top
+      show: 3
+      items:
+      - 'The resolver is local: 192.0.2.53'
+      - The answer is already cached
+      - The R1 to R2 link is cut
+- id: predict
+  stage: prediction
+  pdf: 58
+  hold: 6
+  say: For each change, which steps disappear, and which still have to happen?
+  moves:
+  - pause:
+      text: which steps disappear, and which remain?
+- id: answer
+  stage: explanation
+  pdf: 58
+  say: A local resolver means the laptop ARPs for the resolver directly. A cached
+    answer removes the hierarchy queries, but the web packet still needs its gateway
+    and its routes. And a cut link? All of the laptop's DNS and ARP entries remain
+    perfectly correct, yet delivery still fails, because R1's forwarding table is
+    now wrong or incomplete. That table is the one piece we've taken for granted since
+    the start. Who fills it in? That is routing.
+  moves:
+  - table.show:
+      name: a3
+      zone: bottom
+      cols:
+      - Change
+      - Effect
+      rows: &id002
+      - - Local resolver
+        - ARP for the resolver itself
+      - - Cached answer
+        - no hierarchy queries
+      - - Cut link
+        - correct caches; delivery still fails
+  - rule:
+      text: 'Next: who fills in the router''s table?'
+      when: Who fills it
+  - keep: {}
+prediction_contracts:
+- prediction_beat: 9.3.predict
+  answer_beat: 9.3.answer
+  answer_events:
+  - 9.3.answer:move:0
+  - 9.3.answer:move:1
+  answer_objects:
+  - object: a3
+    after: 9.3.answer:move:0
+    effect: table.show
+    selector:
+      rows: *id002
+    before_answer: hidden_or_neutral
+  - object: _rule
+    after: 9.3.answer:move:1
+    effect: rule
+    selector: {}
+    before_answer: hidden_or_neutral
+  review_scope: Inspect the listed answer objects for neutral or hidden state during
+    the prediction hold.
