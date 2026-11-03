@@ -7,7 +7,7 @@ Scene setup uses authoritative `pre_roll` seconds, quantized to frames. Audio an
 
 ## Timing pipeline
 
-Raw cached transcription → written/spoken token mapping → ASR/interpolated interval provenance → occurrence-qualified phrase anchors → integer frame schedule. The renderer invokes mutating move functions only at their start. Anchor conflicts are errors, not permission to speed up animations. Audio-byte identity invalidates timing. Caption intervals and animation schedules use 30 fps. Prediction holds prevent incidental highlighting. `build/audit.json` identifies authored conflicts. No transcription score establishes perceptual review.
+Provider character timestamps or explicit ASR → written/spoken token mapping → synthesizer/ASR/interpolated provenance → occurrence-qualified phrase anchors → integer frame schedule. The renderer invokes mutating move functions only at their start. Anchor conflicts are errors, not permission to speed up animations. Audio-byte identity invalidates timing. Caption intervals and animation schedules use 30 fps. Prediction holds prevent incidental highlighting. `build/audit.json` identifies authored conflicts. No transcription score establishes perceptual review.
 
 ## Inputs, ownership and order
 

@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Wednesday warm-up: say it out loud'
+      text: 'Exam warm-up: say it out loud'
   - q:
       text: Say the BGP selection order out loud.
   adjust: {}

@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 16: membership and trees'
+      text: Practice midterm, question 16
   - net.show:
       name: s
       zone: top

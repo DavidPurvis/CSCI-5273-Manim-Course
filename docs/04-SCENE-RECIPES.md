@@ -2,1159 +2,554 @@
 
 Generated scene inventory. Existing choreography is preserved except the explicit work orders.
 
-## 1.1 A packet's journey
-- 1.1.question (question): 3 moves; source ['lec09-discovery.pdf', 49]
-- 1.1.network (animation): 2 moves; source ['lec09-discovery.pdf', 49]
-- 1.1.two-addresses (animation): 4 moves; source ['lec09-discovery.pdf', 55]
-- 1.1.first-hop (state): 4 moves; source ['lec09-discovery.pdf', 55]
-- 1.1.swap (state): 5 moves; source ['lec09-discovery.pdf', 59]
-- 1.1.second-swap (state): 7 moves; source ['lec09-discovery.pdf', 59]
-- 1.1.table (state): 1 moves; source ['lec09-discovery.pdf', 59]
-- 1.1.rule (rule): 1 moves; source ['lec09-discovery.pdf', 59]
-- 1.1.pitfall (rule): 1 moves; source ['lec09-discovery.pdf', 59]
-- 1.1.changed (changed_example): 3 moves; source ['lec09-discovery.pdf', 58]
-- 1.1.predict (prediction): 2 moves; source ['lec09-discovery.pdf', 58]
-- 1.1.answer (explanation): 3 moves; source ['lec09-discovery.pdf', 58]
-## 1.2 Layers and local versus global delivery
-- 1.2.question (question): 2 moves; source ['lec02-layering.pdf', 3]
-- 1.2.stack (animation): 3 moves; source ['lec02-layering.pdf', 5]
-- 1.2.services (animation): 4 moves; source ['lec02-layering.pdf', 10]
-- 1.2.encapsulation (state): 5 moves; source ['lec02-layering.pdf', 18]
-- 1.2.scopes (state): 1 moves; source ['lec02-layering.pdf', 13]
-- 1.2.rule (rule): 1 moves; source ['lec02-layering.pdf', 8]
-- 1.2.pitfall (rule): 1 moves; source ['lec02-layering.pdf', 8]
-- 1.2.changed (changed_example): 3 moves; source ['lec02-layering.pdf', 14]
-- 1.2.predict (prediction): 2 moves; source ['lec02-layering.pdf', 14]
-- 1.2.answer (explanation): 3 moves; source ['lec02-layering.pdf', 14]
-## 2.1 Sharing a wire
-- 2.1.question (question): 3 moves; source ['lec06-lan.pdf', 7]
-- 2.1.partition (animation): 8 moves; source ['lec06-lan.pdf', 7]
-- 2.1.turns (animation): 3 moves; source ['lec06-lan.pdf', 7]
-- 2.1.random (animation): 4 moves; source ['lec06-lan.pdf', 7]
-- 2.1.frame (animation): 7 moves; source ['lec06-lan.pdf', 11]
-- 2.1.mac (animation): 3 moves; source ['lec06-lan.pdf', 28]
-- 2.1.mac-more (state): 3 moves; source ['lec06-lan.pdf', 28]
-- 2.1.csma (state): 5 moves; source ['lec06-lan.pdf', 12]
-- 2.1.backoff (state): 4 moves; source ['lec06-lan.pdf', 12]
-- 2.1.window (rule): 5 moves; source ['lec06-lan.pdf', 13]
-- 2.1.pitfall (rule): 1 moves; source ['lec06-lan.pdf', 13]
-- 2.1.changed (changed_example): 3 moves; source ['lec06-lan.pdf', 14]
-- 2.1.predict (prediction): 1 moves; source ['lec06-lan.pdf', 14]
-- 2.1.answer (explanation): 2 moves; source ['lec06-lan.pdf', 14]
-## 2.2 From hub to switch
-- 2.2.question (question): 2 moves; source ['lec06-lan.pdf', 15]
-- 2.2.hub (animation): 7 moves; source ['lec06-lan.pdf', 16]
-- 2.2.switch (animation): 5 moves; source ['lec06-lan.pdf', 20]
-- 2.2.duplex (state): 7 moves; source ['lec06-lan.pdf', 22]
-- 2.2.modes (state): 6 moves; source ['lec06-lan.pdf', 26]
-- 2.2.rule (rule): 2 moves; source ['lec06-lan.pdf', 26]
-- 2.2.pitfall (rule): 1 moves; source ['lec06-lan.pdf', 26]
-- 2.2.changed (changed_example): 4 moves; source ['lec06-lan.pdf', 26]
-- 2.2.predict (prediction): 1 moves; source ['lec06-lan.pdf', 26]
-- 2.2.answer (explanation): 3 moves; source ['lec06-lan.pdf', 26]
-## 2.3 Learning and loops
-- 2.3.question (question): 2 moves; source ['lec06-lan.pdf', 30]
-- 2.3.setup (animation): 4 moves; source ['lec06-lan.pdf', 31]
-- 2.3.learn (state): 4 moves; source ['lec06-lan.pdf', 33]
-- 2.3.reply (state): 9 moves; source ['lec06-lan.pdf', 34]
-- 2.3.aging (rule): 3 moves; source ['lec06-lan.pdf', 30]
-- 2.3.loop (animation): 15 moves; source ['lec06-lan.pdf', 35]
-- 2.3.stp (state): 5 moves; source ['lec06-lan.pdf', 37]
-- 2.3.stp-2 (state): 5 moves; source ['lec06-lan.pdf', 37]
-- 2.3.instructor (rule): 9 moves; source ['lec06-lan.pdf', 41]
-- 2.3.pitfall (rule): 1 moves; source ['lec06-lan.pdf', 41]
-- 2.3.changed (changed_example): 2 moves; source ['lec06-lan.pdf', 41]
-- 2.3.predict (prediction): 1 moves; source ['lec06-lan.pdf', 41]
-- 2.3.answer (explanation): 6 moves; source ['lec06-lan.pdf', 41]
-## 2.4 VLANs and trunks
-- 2.4.question (question): 2 moves; source ['lec06-lan.pdf', 42]
-- 2.4.vlans (animation): 7 moves; source ['lec06-lan.pdf', 43]
-- 2.4.membership (state): 1 moves; source ['lec06-lan.pdf', 45]
-- 2.4.vlan-trace-1 (state): 9 moves; source ['lec06-lan.pdf', 30, 45]
-- 2.4.vlan-trace-2 (state): 5 moves; source ['lec06-lan.pdf', 30, 45]
-- 2.4.vlan-trace-3 (state): 7 moves; source ['lec06-lan.pdf', 30, 45]
-- 2.4.vlan-trace-4 (state): 7 moves; source ['lec06-lan.pdf', 30, 45]
-- 2.4.trunk (state): 7 moves; source ['lec06-lan.pdf', 47]
-- 2.4.devices (rule): 2 moves; source ['lec06-lan.pdf', 49]
-- 2.4.rule (rule): 2 moves; source ['lec06-lan.pdf', 48]
-- 2.4.pitfall (rule): 1 moves; source ['lec06-lan.pdf', 48]
-- 2.4.changed (changed_example): 3 moves; source ['lec06-lan.pdf', 46]
-- 2.4.predict (prediction): 1 moves; source ['lec06-lan.pdf', 46]
-- 2.4.answer (explanation): 2 moves; source ['lec06-lan.pdf', 46]
-## 3.1 What the network promises
-- 3.1.question (question): 3 moves; source ['lec07-network1.pdf', 4]
-- 3.1.circuit (animation): 6 moves; source ['lec07-network1.pdf', 8]
-- 3.1.circuit-more (state): 1 moves; source ['lec07-network1.pdf', 8]
-- 3.1.packet (animation): 5 moves; source ['lec07-network1.pdf', 4]
-- 3.1.statmux (state): 2 moves; source ['lec07-network1.pdf', 5]
-- 3.1.best (state): 4 moves; source ['lec07-network1.pdf', 6]
-- 3.1.services (state): 6 moves; source ['lec07-network1.pdf', 14]
-- 3.1.planes (animation): 8 moves; source ['lec07-network1.pdf', 9]
-- 3.1.rule (rule): 5 moves; source ['lec07-network1.pdf', 13]
-- 3.1.pitfall (rule): 1 moves; source ['lec07-network1.pdf', 13]
-- 3.1.changed (changed_example): 2 moves; source ['lec07-network1.pdf', 15]
-- 3.1.predict (prediction): 1 moves; source ['lec07-network1.pdf', 15]
-- 3.1.answer (explanation): 2 moves; source ['lec07-network1.pdf', 15]
-## 3.2 Addresses and prefixes
-- 3.2.question (question): 2 moves; source ['lec07-network1.pdf', 17]
-- 3.2.address (animation): 5 moves; source ['lec07-network1.pdf', 17]
-- 3.2.prefix (state): 6 moves; source ['lec07-network1.pdf', 21]
-- 3.2.classful (animation): 7 moves; source ['lec07-network1.pdf', 27]
-- 3.2.classful-more (state): 5 moves; source ['lec07-network1.pdf', 27]
-- 3.2.cidr (state): 3 moves; source ['lec07-network1.pdf', 29]
-- 3.2.allocation (state): 10 moves; source ['lec07-network1.pdf', 30]
-- 3.2.mask (state): 5 moves; source ['lec07-network1.pdf', 23]
-- 3.2.broadcast (state): 3 moves; source ['lec07-network1.pdf', 23]
-- 3.2.rule (rule): 3 moves; source ['lec07-network1.pdf', 23]
-- 3.2.pitfall (rule): 1 moves; source ['lec07-network1.pdf', 23]
-- 3.2.changed (changed_example): 3 moves; source ['lec07-network1.pdf', 24]
-- 3.2.predict (prediction): 1 moves; source ['lec07-network1.pdf', 24]
-- 3.2.answer (explanation): 4 moves; source ['lec07-network1.pdf', 24]
-## 3.3 The IPv4 header
-- 3.3.question (question): 2 moves; source ['lec07-network1.pdf', 33]
-- 3.3.fields (animation): 4 moves; source ['lec07-network1.pdf', 33]
-- 3.3.length (state): 3 moves; source ['lec07-network1.pdf', 35]
-- 3.3.protocol (state): 3 moves; source ['lec07-network1.pdf', 39]
-- 3.3.ttl (animation): 10 moves; source ['lec07-network1.pdf', 38]
-- 3.3.checksum (state): 1 moves; source ['lec07-network1.pdf', 41]
-- 3.3.rule (rule): 3 moves; source ['lec07-network1.pdf', 42]
-- 3.3.pitfall (rule): 1 moves; source ['lec07-network1.pdf', 42]
-- 3.3.changed (changed_example): 4 moves; source ['lec07-network1.pdf', 38]
-- 3.3.predict (prediction): 1 moves; source ['lec07-network1.pdf', 38]
-- 3.3.answer (explanation): 2 moves; source ['lec07-network1.pdf', 38]
-## 3.4 Fragmentation
-- 3.4.question (question): 2 moves; source ['lec07-network1.pdf', 35]
-- 3.4.idea (animation): 5 moves; source ['lec07-network1.pdf', 36]
-- 3.4.payload (state): 4 moves; source ['lec07-network1.pdf', 37]
-- 3.4.table (state): 3 moves; source ['lec07-network1.pdf', 37]
-- 3.4.check (state): 5 moves; source ['lec07-network1.pdf', 37]
-- 3.4.rule (rule): 4 moves; source ['lec07-network1.pdf', 37]
-- 3.4.pitfall (rule): 1 moves; source ['lec07-network1.pdf', 37]
-- 3.4.changed (changed_example): 4 moves; source ['lec07-network1.pdf', 37]
-- 3.4.predict (prediction): 1 moves; source ['lec07-network1.pdf', 37]
-- 3.4.answer (explanation): 12 moves; source ['lec07-network1.pdf', 37]
-## 4.1 Carving a subnet
-- 4.1.question (question): 3 moves; source ['lec08-network2.pdf', 3]
-- 4.1.sizing (animation): 6 moves; source ['lec08-network2.pdf', 5]
-- 4.1.borrow (state): 8 moves; source ['lec08-network2.pdf', 4]
-- 4.1.endsystem (state): 5 moves; source ['lec08-network2.pdf', 5]
-- 4.1.parent (state): 5 moves; source ['lec08-network2.pdf', 7]
-- 4.1.largest (state): 13 moves; source ['lec08-network2.pdf', 7]
-- 4.1.bar (state): 3 moves; source ['lec08-network2.pdf', 7]
-- 4.1.rule (rule): 6 moves; source ['lec08-network2.pdf', 7]
-- 4.1.pitfall (rule): 1 moves; source ['lec08-network2.pdf', 7]
-- 4.1.changed (changed_example): 2 moves; source ['lec08-network2.pdf', 5]
-- 4.1.predict (prediction): 1 moves; source ['lec08-network2.pdf', 5]
-- 4.1.answer (explanation): 8 moves; source ['lec08-network2.pdf', 5]
-## 4.2 The longest match
-- 4.2.question (question): 2 moves; source ['lec08-network2.pdf', 13]
-- 4.2.table (animation): 9 moves; source ['lec08-network2.pdf', 29]
-- 4.2.match (state): 7 moves; source ['lec08-network2.pdf', 29]
-- 4.2.more (state): 8 moves; source ['lec08-network2.pdf', 29]
-- 4.2.bitlevel (state): 8 moves; source ['lec08-network2.pdf', 15]
-- 4.2.budget (animation): 4 moves; source ['lec08-network2.pdf', 30]
-- 4.2.trie (state): 12 moves; source ['lec08-network2.pdf', 31]
-- 4.2.cam (state): 8 moves; source ['lec08-network2.pdf', 32]
-- 4.2.general (rule): 4 moves; source ['lec08-network2.pdf', 11]
-- 4.2.pitfall (rule): 1 moves; source ['lec08-network2.pdf', 11]
-- 4.2.changed (changed_example): 3 moves; source ['lec08-network2.pdf', 29]
-- 4.2.predict (prediction): 1 moves; source ['lec08-network2.pdf', 29]
-- 4.2.answer (explanation): 7 moves; source ['lec08-network2.pdf', 29]
-## 4.3 Inside a router
-- 4.3.question (question): 2 moves; source ['lec08-network2.pdf', 9]
-- 4.3.parts (animation): 9 moves; source ['lec08-network2.pdf', 9]
-- 4.3.fabrics (state): 3 moves; source ['lec08-network2.pdf', 19]
-- 4.3.memory (animation): 7 moves; source ['lec08-network2.pdf', 20]
-- 4.3.memory-more (state): 2 moves; source ['lec08-network2.pdf', 20]
-- 4.3.bus (animation): 10 moves; source ['lec08-network2.pdf', 21]
-- 4.3.bus-more (state): 2 moves; source ['lec08-network2.pdf', 21]
-- 4.3.crossbar (animation): 5 moves; source ['lec08-network2.pdf', 22]
-- 4.3.crossbar-more (state): 7 moves; source ['lec08-network2.pdf', 22]
-- 4.3.hol (state): 10 moves; source ['lec08-network2.pdf', 24]
-- 4.3.outq (state): 13 moves; source ['lec08-network2.pdf', 25]
-- 4.3.timescales (state): 6 moves; source ['lec08-network2.pdf', 34]
-- 4.3.macvsip (state): 7 moves; source ['lec08-network2.pdf', 35]
-- 4.3.rule (rule): 4 moves; source ['lec08-network2.pdf', 26]
-- 4.3.pitfall (rule): 1 moves; source ['lec08-network2.pdf', 26]
-- 4.3.changed (changed_example): 2 moves; source ['lec08-network2.pdf', 25]
-- 4.3.predict (prediction): 1 moves; source ['lec08-network2.pdf', 25]
-- 4.3.answer (explanation): 4 moves; source ['lec08-network2.pdf', 25]
-## 5.1 Getting an address and a neighbor
-- 5.1.question (question): 3 moves; source ['lec09-discovery.pdf', 4]
-- 5.1.identifiers (animation): 2 moves; source ['lec09-discovery.pdf', 5]
-- 5.1.habit (rule): 1 moves; source ['lec09-discovery.pdf', 6]
-- 5.1.bootstrap (animation): 6 moves; source ['lec09-discovery.pdf', 14]
-- 5.1.dora (state): 5 moves; source ['lec09-discovery.pdf', 17]
-- 5.1.config (state): 2 moves; source ['lec09-discovery.pdf', 17]
-- 5.1.lease (state): 5 moves; source ['lec09-discovery.pdf', 18]
-- 5.1.arp (animation): 11 moves; source ['lec09-discovery.pdf', 24]
-- 5.1.two-tables (rule): 2 moves; source ['lec09-discovery.pdf', 25]
-- 5.1.pitfall (rule): 1 moves; source ['lec09-discovery.pdf', 25]
-- 5.1.changed (changed_example): 2 moves; source ['lec09-discovery.pdf', 25]
-- 5.1.predict (prediction): 1 moves; source ['lec09-discovery.pdf', 25]
-- 5.1.answer (explanation): 1 moves; source ['lec09-discovery.pdf', 25]
-## 5.2 Finding a name
-- 5.2.question (question): 2 moves; source ['lec09-discovery.pdf', 26]
-- 5.2.rejected (animation): 2 moves; source ['lec09-discovery.pdf', 27]
-- 5.2.hierarchy (state): 2 moves; source ['lec09-discovery.pdf', 30]
-- 5.2.lookup (state): 10 moves; source ['lec09-discovery.pdf', 36]
-- 5.2.rule-rec (rule): 1 moves; source ['lec09-discovery.pdf', 36]
-- 5.2.cache (state): 6 moves; source ['lec09-discovery.pdf', 37]
-- 5.2.negative (state): 1 moves; source ['lec09-discovery.pdf', 38]
-- 5.2.negative-more (state): 2 moves; source ['lec09-discovery.pdf', 38]
-- 5.2.pitfall (rule): 1 moves; source ['lec09-discovery.pdf', 38]
-- 5.2.changed (changed_example): 2 moves; source ['lec09-discovery.pdf', 38]
-- 5.2.predict (prediction): 1 moves; source ['lec09-discovery.pdf', 38]
-- 5.2.answer (explanation): 1 moves; source ['lec09-discovery.pdf', 38]
-## 5.3 Records and the whole journey
-- 5.3.question (question): 2 moves; source ['lec09-discovery.pdf', 41]
-- 5.3.records (animation): 7 moves; source ['lec09-discovery.pdf', 41]
-- 5.3.reliability (state): 1 moves; source ['lec09-discovery.pdf', 43]
-- 5.3.reliability-more (state): 5 moves; source ['lec09-discovery.pdf', 43]
-- 5.3.journey (animation): 8 moves; source ['lec09-discovery.pdf', 49]
-- 5.3.insert (state): 4 moves; source ['lec09-discovery.pdf', 44]
-- 5.3.dig (state): 3 moves; source ['lec09-discovery.pdf', 45]
-- 5.3.arb (animation): 5 moves; source ['lec09-discovery.pdf', 55]
-- 5.3.arb-2 (animation): 3 moves; source ['lec09-discovery.pdf', 55]
-- 5.3.rule (rule): 1 moves; source ['lec09-discovery.pdf', 58]
-- 5.3.pitfall (rule): 1 moves; source ['lec09-discovery.pdf', 58]
-- 5.3.changed (changed_example): 2 moves; source ['lec09-discovery.pdf', 58]
-- 5.3.predict (prediction): 1 moves; source ['lec09-discovery.pdf', 58]
-- 5.3.answer (explanation): 2 moves; source ['lec09-discovery.pdf', 58]
-## 6.1 Dijkstra
-- 6.1.question (question): 3 moves; source ['lec10-routing.pdf', 19]
-- 6.1.laptop (animation): 7 moves; source ['lec10-routing.pdf', 19]
-- 6.1.routing-forwarding (animation): 13 moves; source ['lec10-routing.pdf', 12]
-- 6.1.model (animation): 5 moves; source ['lec10-routing.pdf', 19]
-- 6.1.model-2 (animation): 6 moves; source ['lec10-routing.pdf', 19]
-- 6.1.linkstate (animation): 11 moves; source ['lec10-routing.pdf', 22]
-- 6.1.ospf (state): 8 moves; source ['lec10-routing.pdf', 22]
-- 6.1.idea (rule): 9 moves; source ['lec10-routing.pdf', 22]
-- 6.1.init (state): 13 moves; source ['lec10-routing.pdf', 27]
-- 6.1.settle-b (state): 12 moves; source ['lec10-routing.pdf', 28]
-- 6.1.settle-c (state): 9 moves; source ['lec10-routing.pdf', 30]
-- 6.1.settle-d (state): 8 moves; source ['lec10-routing.pdf', 36]
-- 6.1.firsthop (rule): 12 moves; source ['lec10-routing.pdf', 36]
-- 6.1.slide (rule): 16 moves; source ['lec10-routing.pdf', 26]
-- 6.1.bigger (state): 10 moves; source ['lec10-routing.pdf', 36]
-- 6.1.bigger-2 (state): 16 moves; source ['lec10-routing.pdf', 36]
-- 6.1.pitfall (rule): 1 moves; source ['lec10-routing.pdf', 36]
-- 6.1.changed (changed_example): 4 moves; source ['lec10-routing.pdf', 36]
-- 6.1.predict (prediction): 1 moves; source ['lec10-routing.pdf', 36]
-- 6.1.answer (explanation): 16 moves; source ['lec10-routing.pdf', 36]
-## 6.2 Distance vector
-- 6.2.question (question): 2 moves; source ['lec10-routing.pdf', 37]
-- 6.2.idea (animation): 9 moves; source ['lec10-routing.pdf', 37]
-- 6.2.compute (state): 21 moves; source ['lec10-routing.pdf', 40]
-- 6.2.formula (rule): 12 moves; source ['lec10-routing.pdf', 38]
-- 6.2.setup-rounds (animation): 8 moves; source ['lec10-routing.pdf', 42]
-- 6.2.round2 (state): 7 moves; source ['lec10-routing.pdf', 43]
-- 6.2.round3 (state): 10 moves; source ['lec10-routing.pdf', 44]
-- 6.2.real (rule): 5 moves; source ['lec10-routing.pdf', 38]
-- 6.2.real-more (state): 9 moves; source ['lec10-routing.pdf', 38]
-- 6.2.compare (rule): 6 moves; source ['lec10-routing.pdf', 46]
-- 6.2.robustness (rule): 6 moves; source ['lec10-routing.pdf', 46]
-- 6.2.pitfall (rule): 1 moves; source ['lec10-routing.pdf', 46]
-- 6.2.changed (changed_example): 3 moves; source ['lec10-routing.pdf', 41]
-- 6.2.predict (prediction): 1 moves; source ['lec10-routing.pdf', 41]
-- 6.2.answer (explanation): 7 moves; source ['lec10-routing.pdf', 41]
-## 6.3 Path vector
-- 6.3.question (question): 2 moves; source ['lec10-routing.pdf', 47]
-- 6.3.limits (animation): 6 moves; source ['lec10-routing.pdf', 48]
-- 6.3.fix (state): 10 moves; source ['lec10-routing.pdf', 50]
-- 6.3.loop (state): 5 moves; source ['lec10-routing.pdf', 51]
-- 6.3.policy (rule): 4 moves; source ['lec10-routing.pdf', 52]
-- 6.3.pitfall (rule): 1 moves; source ['lec10-routing.pdf', 52]
-- 6.3.changed (changed_example): 2 moves; source ['lec10-routing.pdf', 51]
-- 6.3.predict (prediction): 1 moves; source ['lec10-routing.pdf', 51]
-- 6.3.answer (explanation): 8 moves; source ['lec10-routing.pdf', 52]
-## 6.4 MPLS labels
-- 6.4.question (question): 2 moves; source ['lec10-routing.pdf', 53]
-- 6.4.label (animation): 10 moves; source ['lec10-routing.pdf', 54]
-- 6.4.swap (state): 10 moves; source ['lec10-routing.pdf', 56]
-- 6.4.signal (state): 6 moves; source ['lec10-routing.pdf', 53]
-- 6.4.te (state): 6 moves; source ['lec10-routing.pdf', 55]
-- 6.4.rule (rule): 3 moves; source ['lec10-routing.pdf', 54]
-- 6.4.laptop (rule): 4 moves; source ['lec10-routing.pdf', 54]
-- 6.4.pitfall (rule): 1 moves; source ['lec10-routing.pdf', 54]
-- 6.4.changed (changed_example): 2 moves; source ['lec10-routing.pdf', 56]
-- 6.4.predict (prediction): 1 moves; source ['lec10-routing.pdf', 56]
-- 6.4.answer (explanation): 4 moves; source ['lec10-routing.pdf', 56]
-## 7.1 When a link fails
-- 7.1.question (question): 3 moves; source ['lec11-convergence.pdf', 4]
-- 7.1.laptop (animation): 9 moves; source ['lec11-convergence.pdf', 4]
-- 7.1.causes (animation): 2 moves; source ['lec11-convergence.pdf', 4]
-- 7.1.detect (animation): 7 moves; source ['lec11-convergence.pdf', 5]
-- 7.1.stages (state): 7 moves; source ['lec11-convergence.pdf', 7]
-- 7.1.blackhole (animation): 7 moves; source ['lec11-convergence.pdf', 8]
-- 7.1.loop (state): 5 moves; source ['lec11-convergence.pdf', 9]
-- 7.1.consequences (state): 2 moves; source ['lec11-convergence.pdf', 10]
-- 7.1.improve (rule): 3 moves; source ['lec11-convergence.pdf', 11]
-- 7.1.pitfall (rule): 1 moves; source ['lec11-convergence.pdf', 11]
-- 7.1.changed (changed_example): 4 moves; source ['lec11-convergence.pdf', 9]
-- 7.1.predict (prediction): 1 moves; source ['lec11-convergence.pdf', 9]
-- 7.1.answer (explanation): 3 moves; source ['lec11-convergence.pdf', 9]
-## 7.2 Counting to infinity
-- 7.2.question (question): 2 moves; source ['lec11-convergence.pdf', 12]
-- 7.2.goodnews (animation): 7 moves; source ['lec11-convergence.pdf', 14]
-- 7.2.setup (state): 9 moves; source ['lec11-convergence.pdf', 16]
-- 7.2.trap (state): 13 moves; source ['lec11-convergence.pdf', 17]
-- 7.2.meaning (rule): 9 moves; source ['lec11-convergence.pdf', 17]
-- 7.2.rip (state): 6 moves; source ['lec11-convergence.pdf', 19]
-- 7.2.poison (state): 7 moves; source ['lec11-convergence.pdf', 18]
-- 7.2.poisoned (state): 9 moves; source ['lec11-convergence.pdf', 18]
-- 7.2.slide-good (state): 8 moves; source ['lec11-convergence.pdf', 15]
-- 7.2.slide-bad (state): 6 moves; source ['lec11-convergence.pdf', 17]
-- 7.2.slide-bad-2 (state): 6 moves; source ['lec11-convergence.pdf', 17]
-- 7.2.pitfall (rule): 1 moves; source ['lec11-convergence.pdf', 17]
-- 7.2.changed (changed_example): 2 moves; source ['lec11-convergence.pdf', 18]
-- 7.2.predict (prediction): 1 moves; source ['lec11-convergence.pdf', 18]
-- 7.2.answer (explanation): 8 moves; source ['lec11-convergence.pdf', 18]
-## 7.3 BGP that won't settle
-- 7.3.question (question): 2 moves; source ['lec11-convergence.pdf', 25]
-- 7.3.liveness (animation): 6 moves; source ['lec11-convergence.pdf', 24]
-- 7.3.explore (state): 8 moves; source ['lec11-convergence.pdf', 27]
-- 7.3.exploration-cost (state): 3 moves; source ['lec11-convergence.pdf', 28]
-- 7.3.spp (rule): 4 moves; source ['lec11-convergence.pdf', 30]
-- 7.3.solve (state): 6 moves; source ['lec11-convergence.pdf', 31]
-- 7.3.solve-2 (state): 4 moves; source ['lec11-convergence.pdf', 31]
-- 7.3.multi (state): 3 moves; source ['lec11-convergence.pdf', 32]
-- 7.3.gadget (state): 9 moves; source ['lec11-convergence.pdf', 34]
-- 7.3.laptop (rule): 1 moves; source ['lec11-convergence.pdf', 34]
-- 7.3.pitfall (rule): 1 moves; source ['lec11-convergence.pdf', 34]
-- 7.3.changed (changed_example): 2 moves; source ['lec11-convergence.pdf', 34]
-- 7.3.predict (prediction): 1 moves; source ['lec11-convergence.pdf', 34]
-- 7.3.answer (explanation): 4 moves; source ['lec11-convergence.pdf', 36]
-## 8.1 What BGP carries
-- 8.1.question (question): 3 moves; source ['lec12-bgp.pdf', 3]
-- 8.1.laptop (animation): 4 moves; source ['lec12-bgp.pdf', 3]
-- 8.1.history (animation): 2 moves; source ['lec12-bgp.pdf', 3]
-- 8.1.as (animation): 3 moves; source ['lec12-bgp.pdf', 4]
-- 8.1.session (animation): 7 moves; source ['lec12-bgp.pdf', 5]
-- 8.1.route (state): 5 moves; source ['lec12-bgp.pdf', 7]
-- 8.1.loopcheck (rule): 1 moves; source ['lec12-bgp.pdf', 8]
-- 8.1.abstraction (state): 3 moves; source ['lec12-bgp.pdf', 10]
-- 8.1.pitfall (rule): 1 moves; source ['lec12-bgp.pdf', 10]
-- 8.1.changed (changed_example): 1 moves; source ['lec12-bgp.pdf', 8]
-- 8.1.predict (prediction): 1 moves; source ['lec12-bgp.pdf', 8]
-- 8.1.answer (explanation): 2 moves; source ['lec12-bgp.pdf', 8]
-## 8.2 Import and export
-- 8.2.question (question): 2 moves; source ['lec12-bgp.pdf', 12]
-- 8.2.pipeline (animation): 7 moves; source ['lec12-bgp.pdf', 13]
-- 8.2.import (state): 7 moves; source ['lec12-bgp.pdf', 15]
-- 8.2.lp (state): 3 moves; source ['lec12-bgp.pdf', 14]
-- 8.2.export (state): 7 moves; source ['lec12-bgp.pdf', 16]
-- 8.2.prepend (state): 11 moves; source ['lec12-bgp.pdf', 18]
-- 8.2.rule (rule): 5 moves; source ['lec12-bgp.pdf', 18]
-- 8.2.config (rule): 4 moves; source ['lec12-bgp.pdf', 19]
-- 8.2.pitfall (rule): 1 moves; source ['lec12-bgp.pdf', 19]
-- 8.2.changed (changed_example): 4 moves; source ['lec12-bgp.pdf', 14]
-- 8.2.predict (prediction): 1 moves; source ['lec12-bgp.pdf', 18]
-- 8.2.answer (explanation): 5 moves; source ['lec12-bgp.pdf', 18]
-## 8.3 Inside an AS
-- 8.3.question (question): 2 moves; source ['lec12-bgp.pdf', 21]
-- 8.3.ibgp (animation): 5 moves; source ['lec12-bgp.pdf', 22]
-- 8.3.igp (state): 4 moves; source ['lec12-bgp.pdf', 23]
-- 8.3.nexthop (state): 7 moves; source ['lec12-bgp.pdf', 29]
-- 8.3.order (rule): 11 moves; source ['lec12-bgp.pdf', 24]
-- 8.3.decide (state): 15 moves; source ['lec12-bgp.pdf', 26]
-- 8.3.hot (state): 7 moves; source ['lec12-bgp.pdf', 25]
-- 8.3.default (state): 4 moves; source ['lec12-bgp.pdf', 30]
-- 8.3.pitfall (rule): 1 moves; source ['lec12-bgp.pdf', 30]
-- 8.3.changed (changed_example): 2 moves; source ['lec12-bgp.pdf', 25]
-- 8.3.predict (prediction): 1 moves; source ['lec12-bgp.pdf', 25]
-- 8.3.answer (explanation): 3 moves; source ['lec12-bgp.pdf', 25]
-## 8.4 Money shapes paths
-- 8.4.question (question): 2 moves; source ['lec12-bgp.pdf', 34]
-- 8.4.rel (animation): 7 moves; source ['lec12-bgp.pdf', 35]
-- 8.4.export (rule): 6 moves; source ['lec12-bgp.pdf', 41]
-- 8.4.tiers (state): 7 moves; source ['lec12-bgp.pdf', 36]
-- 8.4.valley (state): 6 moves; source ['lec12-bgp.pdf', 43]
-- 8.4.classify (state): 17 moves; source ['lec12-bgp.pdf', 46]
-- 8.4.reverse (rule): 5 moves; source ['lec12-bgp.pdf', 47]
-- 8.4.gao (rule): 6 moves; source ['lec12-bgp.pdf', 39]
-- 8.4.gao-2 (rule): 5 moves; source ['lec12-bgp.pdf', 39]
-- 8.4.laptop (rule): 1 moves; source ['lec12-bgp.pdf', 39]
-- 8.4.pitfall (rule): 1 moves; source ['lec12-bgp.pdf', 39]
-- 8.4.changed (changed_example): 4 moves; source ['lec12-bgp.pdf', 41]
-- 8.4.predict (prediction): 1 moves; source ['lec12-bgp.pdf', 41]
-- 8.4.answer (explanation): 10 moves; source ['lec12-bgp.pdf', 41]
-## 9.1 One address, many servers
-- 9.1.question (question): 3 moves; source ['lec13-multicast.pdf', 5]
-- 9.1.laptop (animation): 6 moves; source ['lec13-multicast.pdf', 5]
-- 9.1.dnslimits (animation): 3 moves; source ['lec13-multicast.pdf', 4]
-- 9.1.announce (animation): 7 moves; source ['lec13-multicast.pdf', 7]
-- 9.1.failover (state): 6 moves; source ['lec13-multicast.pdf', 11]
-- 9.1.rule (rule): 1 moves; source ['lec13-multicast.pdf', 9]
-- 9.1.pitfall (rule): 1 moves; source ['lec13-multicast.pdf', 9]
-- 9.1.changed (changed_example): 4 moves; source ['lec13-multicast.pdf', 14]
-- 9.1.predict (prediction): 1 moves; source ['lec13-multicast.pdf', 14]
-- 9.1.answer (explanation): 2 moves; source ['lec13-multicast.pdf', 14]
-## 9.2 Who wants the stream?
-- 9.2.question (question): 2 moves; source ['lec13-multicast.pdf', 16]
-- 9.2.unicast (animation): 5 moves; source ['lec13-multicast.pdf', 22]
-- 9.2.unicast-more (state): 2 moves; source ['lec13-multicast.pdf', 22]
-- 9.2.multicast (state): 5 moves; source ['lec13-multicast.pdf', 18]
-- 9.2.address (state): 3 moves; source ['lec13-multicast.pdf', 19]
-- 9.2.address-more (state): 4 moves; source ['lec13-multicast.pdf', 19]
-- 9.2.overlay (state): 1 moves; source ['lec13-multicast.pdf', 22]
-- 9.2.overlay-more (state): 3 moves; source ['lec13-multicast.pdf', 22]
-- 9.2.igmp1 (animation): 6 moves; source ['lec13-multicast.pdf', 28]
-- 9.2.dest (rule): 1 moves; source ['lec13-multicast.pdf', 27]
-- 9.2.igmp23 (state): 6 moves; source ['lec13-multicast.pdf', 32]
-- 9.2.timer (state): 1 moves; source ['lec13-multicast.pdf', 33]
-- 9.2.snoop (rule): 3 moves; source ['lec13-multicast.pdf', 33]
-- 9.2.snoop-more (state): 3 moves; source ['lec13-multicast.pdf', 33]
-- 9.2.pitfall (rule): 1 moves; source ['lec13-multicast.pdf', 33]
-- 9.2.changed (changed_example): 2 moves; source ['lec13-multicast.pdf', 30]
-- 9.2.predict (prediction): 1 moves; source ['lec13-multicast.pdf', 30]
-- 9.2.answer (explanation): 1 moves; source ['lec13-multicast.pdf', 30]
-## 9.3 Choosing a tree
-- 9.3.question (question): 2 moves; source ['lec13-multicast.pdf', 36]
-- 9.3.kinds (animation): 2 moves; source ['lec13-multicast.pdf', 36]
-- 9.3.mst (state): 6 moves; source ['lec13-multicast.pdf', 37]
-- 9.3.objectives (rule): 1 moves; source ['lec13-multicast.pdf', 37]
-- 9.3.core (state): 9 moves; source ['lec13-multicast.pdf', 38]
-- 9.3.core-more (state): 4 moves; source ['lec13-multicast.pdf', 38]
-- 9.3.pitfall (rule): 1 moves; source ['lec13-multicast.pdf', 38]
-- 9.3.changed (changed_example): 2 moves; source ['lec13-multicast.pdf', 37]
-- 9.3.predict (prediction): 1 moves; source ['lec13-multicast.pdf', 37]
-- 9.3.answer (explanation): 3 moves; source ['lec13-multicast.pdf', 37]
-## 9.4 RPF and PIM
-- 9.4.question (question): 2 moves; source ['lec13-multicast.pdf', 40]
-- 9.4.rpf (animation): 17 moves; source ['lec13-multicast.pdf', 40]
-- 9.4.prune (state): 8 moves; source ['lec13-multicast.pdf', 41]
-- 9.4.dense (state): 6 moves; source ['lec13-multicast.pdf', 44]
-- 9.4.sparse (state): 7 moves; source ['lec13-multicast.pdf', 46]
-- 9.4.register (state): 8 moves; source ['lec13-multicast.pdf', 47]
-- 9.4.register-more (state): 4 moves; source ['lec13-multicast.pdf', 47]
-- 9.4.spt (state): 10 moves; source ['lec13-multicast.pdf', 49]
-- 9.4.rule (rule): 5 moves; source ['lec13-multicast.pdf', 50]
-- 9.4.compare (rule): 6 moves; source ['lec13-multicast.pdf', 50]
-- 9.4.laptop (rule): 1 moves; source ['lec13-multicast.pdf', 50]
-- 9.4.pitfall (rule): 1 moves; source ['lec13-multicast.pdf', 50]
-- 9.4.changed (changed_example): 5 moves; source ['lec13-multicast.pdf', 49]
-- 9.4.predict (prediction): 1 moves; source ['lec13-multicast.pdf', 49]
-- 9.4.answer (explanation): 4 moves; source ['lec13-multicast.pdf', 49]
-## 10.1 What radio does to bits
-- 10.1.question (question): 3 moves; source ['lec14-wireless.pdf', 2]
-- 10.1.two (animation): 2 moves; source ['lec14-wireless.pdf', 2]
-- 10.1.types (animation): 1 moves; source ['lec14-wireless.pdf', 10]
-- 10.1.rates (animation): 3 moves; source ['lec14-wireless.pdf', 7]
-- 10.1.impair (animation): 6 moves; source ['lec14-wireless.pdf', 11]
-- 10.1.snr (state): 5 moves; source ['lec14-wireless.pdf', 12]
-- 10.1.adapt (state): 1 moves; source ['lec14-wireless.pdf', 36]
-- 10.1.rule (rule): 1 moves; source ['lec14-wireless.pdf', 12]
-- 10.1.pitfall (rule): 1 moves; source ['lec14-wireless.pdf', 12]
-- 10.1.changed (changed_example): 2 moves; source ['lec14-wireless.pdf', 12]
-- 10.1.predict (prediction): 1 moves; source ['lec14-wireless.pdf', 12]
-- 10.1.answer (explanation): 3 moves; source ['lec14-wireless.pdf', 12]
-## 10.2 CDMA
-- 10.2.question (question): 2 moves; source ['lec14-wireless.pdf', 14]
-- 10.2.codes (animation): 5 moves; source ['lec14-wireless.pdf', 14]
-- 10.2.send (state): 7 moves; source ['lec14-wireless.pdf', 15]
-- 10.2.decode (state): 5 moves; source ['lec14-wireless.pdf', 16]
-- 10.2.rule (rule): 4 moves; source ['lec14-wireless.pdf', 16]
-- 10.2.pitfall (rule): 1 moves; source ['lec14-wireless.pdf', 16]
-- 10.2.changed (changed_example): 2 moves; source ['lec14-wireless.pdf', 16]
-- 10.2.predict (prediction): 1 moves; source ['lec14-wireless.pdf', 16]
-- 10.2.answer (explanation): 4 moves; source ['lec14-wireless.pdf', 16]
-## 10.3 Joining and moving
-- 10.3.question (question): 2 moves; source ['lec14-wireless.pdf', 18]
-- 10.3.channels (animation): 2 moves; source ['lec14-wireless.pdf', 17]
-- 10.3.scan (animation): 10 moves; source ['lec14-wireless.pdf', 20]
-- 10.3.assoc (rule): 1 moves; source ['lec14-wireless.pdf', 20]
-- 10.3.addressing (state): 9 moves; source ['lec14-wireless.pdf', 31]
-- 10.3.four (state): 1 moves; source ['lec14-wireless.pdf', 32]
-- 10.3.roam (state): 7 moves; source ['lec14-wireless.pdf', 35]
-- 10.3.pitfall (rule): 1 moves; source ['lec14-wireless.pdf', 35]
-- 10.3.changed (changed_example): 1 moves; source ['lec14-wireless.pdf', 35]
-- 10.3.predict (prediction): 1 moves; source ['lec14-wireless.pdf', 35]
-- 10.3.answer (explanation): 1 moves; source ['lec14-wireless.pdf', 35]
-## 10.4 Contention and reservations
-- 10.4.question (question): 2 moves; source ['lec14-wireless.pdf', 21]
-- 10.4.why (animation): 4 moves; source ['lec14-wireless.pdf', 22]
-- 10.4.hidden (animation): 11 moves; source ['lec14-wireless.pdf', 13]
-- 10.4.exposed (animation): 9 moves; source ['lec14-wireless.pdf', 27]
-- 10.4.csmaca (state): 8 moves; source ['lec14-wireless.pdf', 28]
-- 10.4.counter (state): 13 moves; source ['lec14-wireless.pdf', 28]
-- 10.4.noack (rule): 6 moves; source ['lec14-wireless.pdf', 40]
-- 10.4.rts (state): 9 moves; source ['lec14-wireless.pdf', 24]
-- 10.4.nav (state): 8 moves; source ['lec14-wireless.pdf', 25]
-- 10.4.tradeoff (rule): 6 moves; source ['lec14-wireless.pdf', 26]
-- 10.4.power (state): 8 moves; source ['lec14-wireless.pdf', 37]
-- 10.4.idlelisten (rule): 1 moves; source ['lec14-wireless.pdf', 39]
-- 10.4.bluetooth (state): 7 moves; source ['lec14-wireless.pdf', 38]
-- 10.4.bluetooth-more (state): 2 moves; source ['lec14-wireless.pdf', 38]
-- 10.4.pitfall (rule): 1 moves; source ['lec14-wireless.pdf', 38]
-- 10.4.changed (changed_example): 5 moves; source ['lec14-wireless.pdf', 26]
-- 10.4.predict (prediction): 1 moves; source ['lec14-wireless.pdf', 26]
-- 10.4.answer (explanation): 4 moves; source ['lec14-wireless.pdf', 27]
-## 11.1 The cellular core
-- 11.1.question (question): 3 moves; source ['lec15-mobile.pdf', 2]
-- 11.1.g2 (animation): 2 moves; source ['lec15-mobile.pdf', 3]
-- 11.1.g3 (state): 2 moves; source ['lec15-mobile.pdf', 4]
-- 11.1.g3-more (state): 6 moves; source ['lec15-mobile.pdf', 4]
-- 11.1.g4 (state): 2 moves; source ['lec15-mobile.pdf', 5]
-- 11.1.ue (state): 2 moves; source ['lec15-mobile.pdf', 10]
-- 11.1.enb (state): 2 moves; source ['lec15-mobile.pdf', 11]
-- 11.1.enb-more (state): 2 moves; source ['lec15-mobile.pdf', 11]
-- 11.1.hss (state): 1 moves; source ['lec15-mobile.pdf', 12]
-- 11.1.hss-more (state): 3 moves; source ['lec15-mobile.pdf', 12]
-- 11.1.mme (state): 1 moves; source ['lec15-mobile.pdf', 14]
-- 11.1.gw (state): 3 moves; source ['lec15-mobile.pdf', 13]
-- 11.1.pgw-more (state): 4 moves; source ['lec15-mobile.pdf', 13]
-- 11.1.rule (rule): 3 moves; source ['lec15-mobile.pdf', 15]
-- 11.1.pitfall (rule): 1 moves; source ['lec15-mobile.pdf', 15]
-- 11.1.changed (changed_example): 1 moves; source ['lec15-mobile.pdf', 14]
-- 11.1.predict (prediction): 1 moves; source ['lec15-mobile.pdf', 14]
-- 11.1.answer (explanation): 2 moves; source ['lec15-mobile.pdf', 13]
-## 11.2 Radio stack and tunnels
-- 11.2.question (question): 2 moves; source ['lec15-mobile.pdf', 16]
-- 11.2.stack (animation): 6 moves; source ['lec15-mobile.pdf', 16]
-- 11.2.sched (state): 4 moves; source ['lec15-mobile.pdf', 17]
-- 11.2.gtp (animation): 14 moves; source ['lec15-mobile.pdf', 18]
-- 11.2.why (rule): 1 moves; source ['lec15-mobile.pdf', 18]
-- 11.2.attach (state): 2 moves; source ['lec15-mobile.pdf', 19]
-- 11.2.sleep (state): 4 moves; source ['lec15-mobile.pdf', 20]
-- 11.2.sleep-more (state): 2 moves; source ['lec15-mobile.pdf', 20]
-- 11.2.interconnect (state): 2 moves; source ['lec15-mobile.pdf', 22]
-- 11.2.fiveg (state): 3 moves; source ['lec15-mobile.pdf', 23]
-- 11.2.pitfall (rule): 1 moves; source ['lec15-mobile.pdf', 23]
-- 11.2.changed (changed_example): 2 moves; source ['lec15-mobile.pdf', 18]
-- 11.2.predict (prediction): 1 moves; source ['lec15-mobile.pdf', 18]
-- 11.2.answer (explanation): 2 moves; source ['lec15-mobile.pdf', 18]
-## 11.3 Finding a moving phone
-- 11.3.question (question): 2 moves; source ['lec15-mobile.pdf', 25]
-- 11.3.naive (animation): 5 moves; source ['lec15-mobile.pdf', 26]
-- 11.3.homevisited (state): 5 moves; source ['lec15-mobile.pdf', 29]
-- 11.3.register (state): 7 moves; source ['lec15-mobile.pdf', 31]
-- 11.3.tunnel (animation): 10 moves; source ['lec15-mobile.pdf', 34]
-- 11.3.size (state): 6 moves; source ['lec15-mobile.pdf', 34]
-- 11.3.move (state): 7 moves; source ['lec15-mobile.pdf', 34]
-- 11.3.triangle (state): 7 moves; source ['lec15-mobile.pdf', 35]
-- 11.3.direct (rule): 7 moves; source ['lec15-mobile.pdf', 36]
-- 11.3.pitfall (rule): 1 moves; source ['lec15-mobile.pdf', 36]
-- 11.3.changed (changed_example): 1 moves; source ['lec15-mobile.pdf', 35]
-- 11.3.predict (prediction): 1 moves; source ['lec15-mobile.pdf', 35]
-- 11.3.answer (explanation): 3 moves; source ['lec15-mobile.pdf', 35]
-## 11.4 Handover
-- 11.4.question (question): 2 moves; source ['lec15-mobile.pdf', 38]
-- 11.4.before (animation): 8 moves; source ['lec15-mobile.pdf', 39]
-- 11.4.prepare (state): 8 moves; source ['lec15-mobile.pdf', 40]
-- 11.4.switch (state): 11 moves; source ['lec15-mobile.pdf', 40]
-- 11.4.pathswitch (state): 8 moves; source ['lec15-mobile.pdf', 40]
-- 11.4.rule (rule): 7 moves; source ['lec15-mobile.pdf', 40]
-- 11.4.transport (state): 5 moves; source ['lec15-mobile.pdf', 41]
-- 11.4.pitfall (rule): 1 moves; source ['lec15-mobile.pdf', 41]
-- 11.4.changed (changed_example): 3 moves; source ['lec15-mobile.pdf', 40]
-- 11.4.predict (prediction): 1 moves; source ['lec15-mobile.pdf', 40]
-- 11.4.answer (explanation): 8 moves; source ['lec15-mobile.pdf', 40]
-## 12.1 The whole story, then mixed problems
-- 12.1.question (question): 3 moves; source ['lec10-routing.pdf', 3]
-- 12.1.story1 (animation): 6 moves; source ['lec09-discovery.pdf', 9]
-- 12.1.story2 (animation): 4 moves; source ['lec06-lan.pdf', 30]
-- 12.1.story3 (animation): 7 moves; source ['lec11-convergence.pdf', 10]
-- 12.1.pitfall (rule): 1 moves; source ['lec02-layering.pdf', 3]
-- 12.1.p1 (rule): 2 moves; source ['lec08-network2.pdf', 5]
-- 12.1.a1 (explanation): 1 moves; source ['lec08-network2.pdf', 5]
-- 12.1.p2 (rule): 2 moves; source ['lec11-convergence.pdf', 16]
-- 12.1.a2 (explanation): 3 moves; source ['lec11-convergence.pdf', 16]
-- 12.1.p3 (rule): 2 moves; source ['lec12-bgp.pdf', 14]
-- 12.1.a3 (explanation): 2 moves; source ['lec12-bgp.pdf', 14]
-- 12.1.p5 (rule): 2 moves; source ['lec07-network1.pdf', 37]
-- 12.1.a5 (explanation): 1 moves; source ['lec07-network1.pdf', 37]
-- 12.1.p6 (rule): 2 moves; source ['lec13-multicast.pdf', 32]
-- 12.1.a6 (explanation): 1 moves; source ['lec13-multicast.pdf', 32]
-- 12.1.p4 (changed_example): 2 moves; source ['lec15-mobile.pdf', 7]
-- 12.1.predict (prediction): 1 moves; source ['lec15-mobile.pdf', 7]
-- 12.1.a4 (explanation): 4 moves; source ['lec15-mobile.pdf', 7]
+## 6.1 Sharing a wire
+- 6.1.question (question): 3 moves; source ['lec06-lan.pdf', 7]
+- 6.1.partition (animation): 8 moves; source ['lec06-lan.pdf', 7]
+- 6.1.turns (animation): 3 moves; source ['lec06-lan.pdf', 7]
+- 6.1.random (animation): 4 moves; source ['lec06-lan.pdf', 7]
+- 6.1.frame (animation): 7 moves; source ['lec06-lan.pdf', 11]
+- 6.1.mac (animation): 3 moves; source ['lec06-lan.pdf', 28]
+- 6.1.mac-more (state): 3 moves; source ['lec06-lan.pdf', 28]
+- 6.1.csma (state): 5 moves; source ['lec06-lan.pdf', 12]
+- 6.1.backoff (state): 4 moves; source ['lec06-lan.pdf', 12]
+- 6.1.window (rule): 5 moves; source ['lec06-lan.pdf', 13]
+- 6.1.pitfall (rule): 1 moves; source ['lec06-lan.pdf', 13]
+- 6.1.changed (changed_example): 3 moves; source ['lec06-lan.pdf', 14]
+- 6.1.predict (prediction): 1 moves; source ['lec06-lan.pdf', 14]
+- 6.1.answer (explanation): 3 moves; source ['lec06-lan.pdf', 14]
+## 6.2 From hub to switch
+- 6.2.question (question): 2 moves; source ['lec06-lan.pdf', 15]
+- 6.2.hub (animation): 7 moves; source ['lec06-lan.pdf', 16]
+- 6.2.switch (animation): 5 moves; source ['lec06-lan.pdf', 20]
+- 6.2.duplex (state): 7 moves; source ['lec06-lan.pdf', 22]
+- 6.2.modes (state): 6 moves; source ['lec06-lan.pdf', 26]
+- 6.2.rule (rule): 2 moves; source ['lec06-lan.pdf', 26]
+- 6.2.pitfall (rule): 1 moves; source ['lec06-lan.pdf', 26]
+- 6.2.changed (changed_example): 4 moves; source ['lec06-lan.pdf', 26]
+- 6.2.predict (prediction): 1 moves; source ['lec06-lan.pdf', 26]
+- 6.2.answer (explanation): 4 moves; source ['lec06-lan.pdf', 26]
+## 6.3 Learning and loops
+- 6.3.question (question): 2 moves; source ['lec06-lan.pdf', 30]
+- 6.3.setup (animation): 4 moves; source ['lec06-lan.pdf', 31]
+- 6.3.learn (state): 4 moves; source ['lec06-lan.pdf', 33]
+- 6.3.reply (state): 9 moves; source ['lec06-lan.pdf', 34]
+- 6.3.aging (rule): 3 moves; source ['lec06-lan.pdf', 30]
+- 6.3.loop (animation): 15 moves; source ['lec06-lan.pdf', 35]
+- 6.3.stp (state): 5 moves; source ['lec06-lan.pdf', 37]
+- 6.3.stp-2 (state): 5 moves; source ['lec06-lan.pdf', 37]
+- 6.3.instructor (rule): 9 moves; source ['lec06-lan.pdf', 41]
+- 6.3.pitfall (rule): 1 moves; source ['lec06-lan.pdf', 41]
+- 6.3.changed (changed_example): 2 moves; source ['lec06-lan.pdf', 41]
+- 6.3.predict (prediction): 1 moves; source ['lec06-lan.pdf', 41]
+- 6.3.answer (explanation): 7 moves; source ['lec06-lan.pdf', 41]
+## 6.4 VLANs and trunks
+- 6.4.question (question): 3 moves; source ['lec06-lan.pdf', 42]
+- 6.4.vlans (animation): 7 moves; source ['lec06-lan.pdf', 43]
+- 6.4.membership (state): 1 moves; source ['lec06-lan.pdf', 45]
+- 6.4.vlan-trace-1 (state): 9 moves; source ['lec06-lan.pdf', 30, 45]
+- 6.4.vlan-trace-2 (state): 5 moves; source ['lec06-lan.pdf', 30, 45]
+- 6.4.vlan-trace-3 (state): 7 moves; source ['lec06-lan.pdf', 30, 45]
+- 6.4.vlan-trace-4 (state): 7 moves; source ['lec06-lan.pdf', 30, 45]
+- 6.4.trunk (state): 7 moves; source ['lec06-lan.pdf', 47]
+- 6.4.devices (rule): 2 moves; source ['lec06-lan.pdf', 49]
+- 6.4.rule (rule): 2 moves; source ['lec06-lan.pdf', 48]
+- 6.4.pitfall (rule): 1 moves; source ['lec06-lan.pdf', 48]
+- 6.4.changed (changed_example): 3 moves; source ['lec06-lan.pdf', 46]
+- 6.4.predict (prediction): 1 moves; source ['lec06-lan.pdf', 46]
+- 6.4.answer (explanation): 3 moves; source ['lec06-lan.pdf', 46]
+## 7.1 What the network promises
+- 7.1.question (question): 3 moves; source ['lec07-network1.pdf', 4]
+- 7.1.circuit (animation): 6 moves; source ['lec07-network1.pdf', 8]
+- 7.1.circuit-more (state): 1 moves; source ['lec07-network1.pdf', 8]
+- 7.1.packet (animation): 5 moves; source ['lec07-network1.pdf', 4]
+- 7.1.statmux (state): 2 moves; source ['lec07-network1.pdf', 5]
+- 7.1.best (state): 4 moves; source ['lec07-network1.pdf', 6]
+- 7.1.services (state): 6 moves; source ['lec07-network1.pdf', 14]
+- 7.1.planes (animation): 8 moves; source ['lec07-network1.pdf', 9]
+- 7.1.rule (rule): 5 moves; source ['lec07-network1.pdf', 13]
+- 7.1.pitfall (rule): 1 moves; source ['lec07-network1.pdf', 13]
+- 7.1.changed (changed_example): 2 moves; source ['lec07-network1.pdf', 15]
+- 7.1.predict (prediction): 1 moves; source ['lec07-network1.pdf', 15]
+- 7.1.answer (explanation): 3 moves; source ['lec07-network1.pdf', 15]
+## 7.2 Addresses and prefixes
+- 7.2.question (question): 3 moves; source ['lec07-network1.pdf', 17]
+- 7.2.address (animation): 5 moves; source ['lec07-network1.pdf', 17]
+- 7.2.prefix (state): 6 moves; source ['lec07-network1.pdf', 21]
+- 7.2.classful (animation): 7 moves; source ['lec07-network1.pdf', 27]
+- 7.2.classful-more (state): 5 moves; source ['lec07-network1.pdf', 27]
+- 7.2.cidr (state): 3 moves; source ['lec07-network1.pdf', 29]
+- 7.2.allocation (state): 10 moves; source ['lec07-network1.pdf', 30]
+- 7.2.mask (state): 5 moves; source ['lec07-network1.pdf', 23]
+- 7.2.broadcast (state): 3 moves; source ['lec07-network1.pdf', 23]
+- 7.2.rule (rule): 3 moves; source ['lec07-network1.pdf', 23]
+- 7.2.pitfall (rule): 1 moves; source ['lec07-network1.pdf', 23]
+- 7.2.changed (changed_example): 3 moves; source ['lec07-network1.pdf', 24]
+- 7.2.predict (prediction): 1 moves; source ['lec07-network1.pdf', 24]
+- 7.2.answer (explanation): 5 moves; source ['lec07-network1.pdf', 24]
+## 7.3 The IPv4 header
+- 7.3.question (question): 2 moves; source ['lec07-network1.pdf', 33]
+- 7.3.fields (animation): 4 moves; source ['lec07-network1.pdf', 33]
+- 7.3.length (state): 3 moves; source ['lec07-network1.pdf', 35]
+- 7.3.protocol (state): 3 moves; source ['lec07-network1.pdf', 39]
+- 7.3.ttl (animation): 10 moves; source ['lec07-network1.pdf', 38]
+- 7.3.checksum (state): 1 moves; source ['lec07-network1.pdf', 41]
+- 7.3.rule (rule): 3 moves; source ['lec07-network1.pdf', 42]
+- 7.3.pitfall (rule): 1 moves; source ['lec07-network1.pdf', 42]
+- 7.3.changed (changed_example): 4 moves; source ['lec07-network1.pdf', 38]
+- 7.3.predict (prediction): 1 moves; source ['lec07-network1.pdf', 38]
+- 7.3.answer (explanation): 3 moves; source ['lec07-network1.pdf', 38]
+## 7.4 Fragmentation
+- 7.4.question (question): 3 moves; source ['lec07-network1.pdf', 35]
+- 7.4.idea (animation): 5 moves; source ['lec07-network1.pdf', 36]
+- 7.4.payload (state): 4 moves; source ['lec07-network1.pdf', 37]
+- 7.4.table (state): 3 moves; source ['lec07-network1.pdf', 37]
+- 7.4.check (state): 5 moves; source ['lec07-network1.pdf', 37]
+- 7.4.rule (rule): 4 moves; source ['lec07-network1.pdf', 37]
+- 7.4.pitfall (rule): 1 moves; source ['lec07-network1.pdf', 37]
+- 7.4.changed (changed_example): 4 moves; source ['lec07-network1.pdf', 37]
+- 7.4.predict (prediction): 1 moves; source ['lec07-network1.pdf', 37]
+- 7.4.answer (explanation): 12 moves; source ['lec07-network1.pdf', 37]
+## 8.1 Carving a subnet
+- 8.1.question (question): 3 moves; source ['lec08-network2.pdf', 3]
+- 8.1.sizing (animation): 6 moves; source ['lec08-network2.pdf', 5]
+- 8.1.borrow (state): 8 moves; source ['lec08-network2.pdf', 4]
+- 8.1.endsystem (state): 5 moves; source ['lec08-network2.pdf', 5]
+- 8.1.parent (state): 5 moves; source ['lec08-network2.pdf', 7]
+- 8.1.largest (state): 13 moves; source ['lec08-network2.pdf', 7]
+- 8.1.bar (state): 3 moves; source ['lec08-network2.pdf', 7]
+- 8.1.rule (rule): 6 moves; source ['lec08-network2.pdf', 7]
+- 8.1.pitfall (rule): 1 moves; source ['lec08-network2.pdf', 7]
+- 8.1.changed (changed_example): 2 moves; source ['lec08-network2.pdf', 5]
+- 8.1.predict (prediction): 1 moves; source ['lec08-network2.pdf', 5]
+- 8.1.answer (explanation): 8 moves; source ['lec08-network2.pdf', 5]
+## 8.2 The longest match
+- 8.2.question (question): 2 moves; source ['lec08-network2.pdf', 13]
+- 8.2.table (animation): 9 moves; source ['lec08-network2.pdf', 29]
+- 8.2.match (state): 7 moves; source ['lec08-network2.pdf', 29]
+- 8.2.more (state): 8 moves; source ['lec08-network2.pdf', 29]
+- 8.2.bitlevel (state): 8 moves; source ['lec08-network2.pdf', 15]
+- 8.2.budget (animation): 4 moves; source ['lec08-network2.pdf', 30]
+- 8.2.trie (state): 12 moves; source ['lec08-network2.pdf', 31]
+- 8.2.cam (state): 8 moves; source ['lec08-network2.pdf', 32]
+- 8.2.general (rule): 4 moves; source ['lec08-network2.pdf', 11]
+- 8.2.pitfall (rule): 1 moves; source ['lec08-network2.pdf', 11]
+- 8.2.changed (changed_example): 3 moves; source ['lec08-network2.pdf', 29]
+- 8.2.predict (prediction): 1 moves; source ['lec08-network2.pdf', 29]
+- 8.2.answer (explanation): 8 moves; source ['lec08-network2.pdf', 29]
+## 8.3 Inside a router
+- 8.3.question (question): 3 moves; source ['lec08-network2.pdf', 9]
+- 8.3.parts (animation): 9 moves; source ['lec08-network2.pdf', 9]
+- 8.3.fabrics (state): 3 moves; source ['lec08-network2.pdf', 19]
+- 8.3.memory (animation): 7 moves; source ['lec08-network2.pdf', 20]
+- 8.3.memory-more (state): 2 moves; source ['lec08-network2.pdf', 20]
+- 8.3.bus (animation): 10 moves; source ['lec08-network2.pdf', 21]
+- 8.3.bus-more (state): 2 moves; source ['lec08-network2.pdf', 21]
+- 8.3.crossbar (animation): 5 moves; source ['lec08-network2.pdf', 22]
+- 8.3.crossbar-more (state): 7 moves; source ['lec08-network2.pdf', 22]
+- 8.3.hol (state): 10 moves; source ['lec08-network2.pdf', 24]
+- 8.3.outq (state): 13 moves; source ['lec08-network2.pdf', 25]
+- 8.3.timescales (state): 6 moves; source ['lec08-network2.pdf', 34]
+- 8.3.macvsip (state): 7 moves; source ['lec08-network2.pdf', 35]
+- 8.3.rule (rule): 4 moves; source ['lec08-network2.pdf', 26]
+- 8.3.pitfall (rule): 1 moves; source ['lec08-network2.pdf', 26]
+- 8.3.changed (changed_example): 2 moves; source ['lec08-network2.pdf', 25]
+- 8.3.predict (prediction): 1 moves; source ['lec08-network2.pdf', 25]
+- 8.3.answer (explanation): 5 moves; source ['lec08-network2.pdf', 25]
+## 9.1 Getting an address and a neighbor
+- 9.1.question (question): 3 moves; source ['lec09-discovery.pdf', 4]
+- 9.1.identifiers (animation): 2 moves; source ['lec09-discovery.pdf', 5]
+- 9.1.habit (rule): 1 moves; source ['lec09-discovery.pdf', 6]
+- 9.1.bootstrap (animation): 6 moves; source ['lec09-discovery.pdf', 14]
+- 9.1.dora (state): 5 moves; source ['lec09-discovery.pdf', 17]
+- 9.1.config (state): 2 moves; source ['lec09-discovery.pdf', 17]
+- 9.1.lease (state): 5 moves; source ['lec09-discovery.pdf', 18]
+- 9.1.arp (animation): 11 moves; source ['lec09-discovery.pdf', 24]
+- 9.1.two-tables (rule): 2 moves; source ['lec09-discovery.pdf', 25]
+- 9.1.pitfall (rule): 1 moves; source ['lec09-discovery.pdf', 25]
+- 9.1.changed (changed_example): 2 moves; source ['lec09-discovery.pdf', 25]
+- 9.1.predict (prediction): 1 moves; source ['lec09-discovery.pdf', 25]
+- 9.1.answer (explanation): 2 moves; source ['lec09-discovery.pdf', 25]
+## 9.2 Finding a name
+- 9.2.question (question): 2 moves; source ['lec09-discovery.pdf', 26]
+- 9.2.rejected (animation): 2 moves; source ['lec09-discovery.pdf', 27]
+- 9.2.hierarchy (state): 2 moves; source ['lec09-discovery.pdf', 30]
+- 9.2.lookup (state): 10 moves; source ['lec09-discovery.pdf', 36]
+- 9.2.rule-rec (rule): 1 moves; source ['lec09-discovery.pdf', 36]
+- 9.2.cache (state): 6 moves; source ['lec09-discovery.pdf', 37]
+- 9.2.negative (state): 1 moves; source ['lec09-discovery.pdf', 38]
+- 9.2.negative-more (state): 2 moves; source ['lec09-discovery.pdf', 38]
+- 9.2.pitfall (rule): 1 moves; source ['lec09-discovery.pdf', 38]
+- 9.2.changed (changed_example): 2 moves; source ['lec09-discovery.pdf', 38]
+- 9.2.predict (prediction): 1 moves; source ['lec09-discovery.pdf', 38]
+- 9.2.answer (explanation): 2 moves; source ['lec09-discovery.pdf', 38]
+## 9.3 Records and the whole journey
+- 9.3.question (question): 2 moves; source ['lec09-discovery.pdf', 41]
+- 9.3.records (animation): 7 moves; source ['lec09-discovery.pdf', 41]
+- 9.3.reliability (state): 1 moves; source ['lec09-discovery.pdf', 43]
+- 9.3.reliability-more (state): 5 moves; source ['lec09-discovery.pdf', 43]
+- 9.3.journey (animation): 8 moves; source ['lec09-discovery.pdf', 49]
+- 9.3.insert (state): 4 moves; source ['lec09-discovery.pdf', 44]
+- 9.3.dig (state): 3 moves; source ['lec09-discovery.pdf', 45]
+- 9.3.arb (animation): 5 moves; source ['lec09-discovery.pdf', 55]
+- 9.3.arb-2 (animation): 3 moves; source ['lec09-discovery.pdf', 55]
+- 9.3.rule (rule): 1 moves; source ['lec09-discovery.pdf', 58]
+- 9.3.pitfall (rule): 1 moves; source ['lec09-discovery.pdf', 58]
+- 9.3.changed (changed_example): 2 moves; source ['lec09-discovery.pdf', 58]
+- 9.3.predict (prediction): 1 moves; source ['lec09-discovery.pdf', 58]
+- 9.3.answer (explanation): 3 moves; source ['lec09-discovery.pdf', 58]
+## 10.1 Dijkstra
+- 10.1.question (question): 3 moves; source ['lec10-routing.pdf', 19]
+- 10.1.laptop (animation): 7 moves; source ['lec10-routing.pdf', 19]
+- 10.1.routing-forwarding (animation): 13 moves; source ['lec10-routing.pdf', 12]
+- 10.1.model (animation): 5 moves; source ['lec10-routing.pdf', 19]
+- 10.1.model-2 (animation): 6 moves; source ['lec10-routing.pdf', 19]
+- 10.1.linkstate (animation): 11 moves; source ['lec10-routing.pdf', 22]
+- 10.1.ospf (state): 8 moves; source ['lec10-routing.pdf', 22]
+- 10.1.idea (rule): 9 moves; source ['lec10-routing.pdf', 22]
+- 10.1.init (state): 13 moves; source ['lec10-routing.pdf', 27]
+- 10.1.settle-b (state): 12 moves; source ['lec10-routing.pdf', 28]
+- 10.1.settle-c (state): 9 moves; source ['lec10-routing.pdf', 30]
+- 10.1.settle-d (state): 8 moves; source ['lec10-routing.pdf', 36]
+- 10.1.firsthop (rule): 12 moves; source ['lec10-routing.pdf', 36]
+- 10.1.slide (rule): 16 moves; source ['lec10-routing.pdf', 26]
+- 10.1.bigger (state): 10 moves; source ['lec10-routing.pdf', 36]
+- 10.1.bigger-2 (state): 16 moves; source ['lec10-routing.pdf', 36]
+- 10.1.pitfall (rule): 1 moves; source ['lec10-routing.pdf', 36]
+- 10.1.changed (changed_example): 4 moves; source ['lec10-routing.pdf', 36]
+- 10.1.predict (prediction): 1 moves; source ['lec10-routing.pdf', 36]
+- 10.1.answer (explanation): 16 moves; source ['lec10-routing.pdf', 36]
+## 10.2 Distance vector
+- 10.2.question (question): 2 moves; source ['lec10-routing.pdf', 37]
+- 10.2.idea (animation): 9 moves; source ['lec10-routing.pdf', 37]
+- 10.2.compute (state): 21 moves; source ['lec10-routing.pdf', 40]
+- 10.2.formula (rule): 12 moves; source ['lec10-routing.pdf', 38]
+- 10.2.setup-rounds (animation): 8 moves; source ['lec10-routing.pdf', 42]
+- 10.2.round2 (state): 7 moves; source ['lec10-routing.pdf', 43]
+- 10.2.round3 (state): 10 moves; source ['lec10-routing.pdf', 44]
+- 10.2.real (rule): 5 moves; source ['lec10-routing.pdf', 38]
+- 10.2.real-more (state): 9 moves; source ['lec10-routing.pdf', 38]
+- 10.2.compare (rule): 6 moves; source ['lec10-routing.pdf', 46]
+- 10.2.robustness (rule): 6 moves; source ['lec10-routing.pdf', 46]
+- 10.2.pitfall (rule): 1 moves; source ['lec10-routing.pdf', 46]
+- 10.2.changed (changed_example): 3 moves; source ['lec10-routing.pdf', 41]
+- 10.2.predict (prediction): 1 moves; source ['lec10-routing.pdf', 41]
+- 10.2.answer (explanation): 8 moves; source ['lec10-routing.pdf', 41]
+## 10.3 Path vector
+- 10.3.question (question): 2 moves; source ['lec10-routing.pdf', 47]
+- 10.3.limits (animation): 6 moves; source ['lec10-routing.pdf', 48]
+- 10.3.fix (state): 10 moves; source ['lec10-routing.pdf', 50]
+- 10.3.loop (state): 5 moves; source ['lec10-routing.pdf', 51]
+- 10.3.policy (rule): 4 moves; source ['lec10-routing.pdf', 52]
+- 10.3.pitfall (rule): 1 moves; source ['lec10-routing.pdf', 52]
+- 10.3.changed (changed_example): 2 moves; source ['lec10-routing.pdf', 51]
+- 10.3.predict (prediction): 1 moves; source ['lec10-routing.pdf', 51]
+- 10.3.answer (explanation): 8 moves; source ['lec10-routing.pdf', 52]
+## 10.4 MPLS labels
+- 10.4.question (question): 2 moves; source ['lec10-routing.pdf', 53]
+- 10.4.label (animation): 10 moves; source ['lec10-routing.pdf', 54]
+- 10.4.swap (state): 10 moves; source ['lec10-routing.pdf', 56]
+- 10.4.signal (state): 6 moves; source ['lec10-routing.pdf', 53]
+- 10.4.te (state): 6 moves; source ['lec10-routing.pdf', 55]
+- 10.4.rule (rule): 3 moves; source ['lec10-routing.pdf', 54]
+- 10.4.laptop (rule): 4 moves; source ['lec10-routing.pdf', 54]
+- 10.4.pitfall (rule): 1 moves; source ['lec10-routing.pdf', 54]
+- 10.4.changed (changed_example): 2 moves; source ['lec10-routing.pdf', 56]
+- 10.4.predict (prediction): 1 moves; source ['lec10-routing.pdf', 56]
+- 10.4.answer (explanation): 5 moves; source ['lec10-routing.pdf', 56]
+## 11.1 When a link fails
+- 11.1.question (question): 3 moves; source ['lec11-convergence.pdf', 4]
+- 11.1.laptop (animation): 9 moves; source ['lec11-convergence.pdf', 4]
+- 11.1.causes (animation): 2 moves; source ['lec11-convergence.pdf', 4]
+- 11.1.detect (animation): 7 moves; source ['lec11-convergence.pdf', 5]
+- 11.1.stages (state): 7 moves; source ['lec11-convergence.pdf', 7]
+- 11.1.blackhole (animation): 7 moves; source ['lec11-convergence.pdf', 8]
+- 11.1.loop (state): 5 moves; source ['lec11-convergence.pdf', 9]
+- 11.1.consequences (state): 2 moves; source ['lec11-convergence.pdf', 10]
+- 11.1.improve (rule): 3 moves; source ['lec11-convergence.pdf', 11]
+- 11.1.pitfall (rule): 1 moves; source ['lec11-convergence.pdf', 11]
+- 11.1.changed (changed_example): 4 moves; source ['lec11-convergence.pdf', 9]
+- 11.1.predict (prediction): 1 moves; source ['lec11-convergence.pdf', 9]
+- 11.1.answer (explanation): 4 moves; source ['lec11-convergence.pdf', 9]
+## 11.2 Counting to infinity
+- 11.2.question (question): 3 moves; source ['lec11-convergence.pdf', 12]
+- 11.2.goodnews (animation): 7 moves; source ['lec11-convergence.pdf', 14]
+- 11.2.setup (state): 9 moves; source ['lec11-convergence.pdf', 16]
+- 11.2.trap (state): 13 moves; source ['lec11-convergence.pdf', 17]
+- 11.2.meaning (rule): 9 moves; source ['lec11-convergence.pdf', 17]
+- 11.2.rip (state): 6 moves; source ['lec11-convergence.pdf', 19]
+- 11.2.poison (state): 7 moves; source ['lec11-convergence.pdf', 18]
+- 11.2.poisoned (state): 9 moves; source ['lec11-convergence.pdf', 18]
+- 11.2.slide-good (state): 8 moves; source ['lec11-convergence.pdf', 15]
+- 11.2.slide-bad (state): 6 moves; source ['lec11-convergence.pdf', 17]
+- 11.2.slide-bad-2 (state): 6 moves; source ['lec11-convergence.pdf', 17]
+- 11.2.pitfall (rule): 1 moves; source ['lec11-convergence.pdf', 17]
+- 11.2.changed (changed_example): 2 moves; source ['lec11-convergence.pdf', 18]
+- 11.2.predict (prediction): 1 moves; source ['lec11-convergence.pdf', 18]
+- 11.2.answer (explanation): 9 moves; source ['lec11-convergence.pdf', 18]
+## 11.3 BGP that won't settle
+- 11.3.question (question): 2 moves; source ['lec11-convergence.pdf', 25]
+- 11.3.liveness (animation): 6 moves; source ['lec11-convergence.pdf', 24]
+- 11.3.explore (state): 8 moves; source ['lec11-convergence.pdf', 27]
+- 11.3.exploration-cost (state): 3 moves; source ['lec11-convergence.pdf', 28]
+- 11.3.spp (rule): 4 moves; source ['lec11-convergence.pdf', 30]
+- 11.3.solve (state): 6 moves; source ['lec11-convergence.pdf', 31]
+- 11.3.solve-2 (state): 4 moves; source ['lec11-convergence.pdf', 31]
+- 11.3.multi (state): 3 moves; source ['lec11-convergence.pdf', 32]
+- 11.3.gadget (state): 9 moves; source ['lec11-convergence.pdf', 34]
+- 11.3.laptop (rule): 1 moves; source ['lec11-convergence.pdf', 34]
+- 11.3.pitfall (rule): 1 moves; source ['lec11-convergence.pdf', 34]
+- 11.3.changed (changed_example): 2 moves; source ['lec11-convergence.pdf', 34]
+- 11.3.predict (prediction): 1 moves; source ['lec11-convergence.pdf', 34]
+- 11.3.answer (explanation): 5 moves; source ['lec11-convergence.pdf', 36]
+## 12.1 What BGP carries
+- 12.1.question (question): 3 moves; source ['lec12-bgp.pdf', 3]
+- 12.1.laptop (animation): 4 moves; source ['lec12-bgp.pdf', 3]
+- 12.1.history (animation): 2 moves; source ['lec12-bgp.pdf', 3]
+- 12.1.as (animation): 3 moves; source ['lec12-bgp.pdf', 4]
+- 12.1.session (animation): 7 moves; source ['lec12-bgp.pdf', 5]
+- 12.1.route (state): 5 moves; source ['lec12-bgp.pdf', 7]
+- 12.1.loopcheck (rule): 1 moves; source ['lec12-bgp.pdf', 8]
+- 12.1.abstraction (state): 3 moves; source ['lec12-bgp.pdf', 10]
+- 12.1.pitfall (rule): 1 moves; source ['lec12-bgp.pdf', 10]
+- 12.1.changed (changed_example): 1 moves; source ['lec12-bgp.pdf', 8]
+- 12.1.predict (prediction): 1 moves; source ['lec12-bgp.pdf', 8]
+- 12.1.answer (explanation): 3 moves; source ['lec12-bgp.pdf', 8]
+## 12.2 Import and export
+- 12.2.question (question): 2 moves; source ['lec12-bgp.pdf', 12]
+- 12.2.pipeline (animation): 7 moves; source ['lec12-bgp.pdf', 13]
+- 12.2.import (state): 7 moves; source ['lec12-bgp.pdf', 15]
+- 12.2.lp (state): 3 moves; source ['lec12-bgp.pdf', 14]
+- 12.2.export (state): 7 moves; source ['lec12-bgp.pdf', 16]
+- 12.2.prepend (state): 11 moves; source ['lec12-bgp.pdf', 18]
+- 12.2.rule (rule): 5 moves; source ['lec12-bgp.pdf', 18]
+- 12.2.config (rule): 4 moves; source ['lec12-bgp.pdf', 19]
+- 12.2.pitfall (rule): 1 moves; source ['lec12-bgp.pdf', 19]
+- 12.2.changed (changed_example): 4 moves; source ['lec12-bgp.pdf', 14]
+- 12.2.predict (prediction): 1 moves; source ['lec12-bgp.pdf', 18]
+- 12.2.answer (explanation): 6 moves; source ['lec12-bgp.pdf', 18]
+## 12.3 Inside an AS
+- 12.3.question (question): 2 moves; source ['lec12-bgp.pdf', 21]
+- 12.3.ibgp (animation): 5 moves; source ['lec12-bgp.pdf', 22]
+- 12.3.igp (state): 4 moves; source ['lec12-bgp.pdf', 23]
+- 12.3.nexthop (state): 7 moves; source ['lec12-bgp.pdf', 29]
+- 12.3.order (rule): 11 moves; source ['lec12-bgp.pdf', 24]
+- 12.3.decide (state): 15 moves; source ['lec12-bgp.pdf', 26]
+- 12.3.hot (state): 7 moves; source ['lec12-bgp.pdf', 25]
+- 12.3.default (state): 4 moves; source ['lec12-bgp.pdf', 30]
+- 12.3.pitfall (rule): 1 moves; source ['lec12-bgp.pdf', 30]
+- 12.3.changed (changed_example): 2 moves; source ['lec12-bgp.pdf', 25]
+- 12.3.predict (prediction): 1 moves; source ['lec12-bgp.pdf', 25]
+- 12.3.answer (explanation): 4 moves; source ['lec12-bgp.pdf', 25]
+## 12.4 Money shapes paths
+- 12.4.question (question): 3 moves; source ['lec12-bgp.pdf', 34]
+- 12.4.rel (animation): 7 moves; source ['lec12-bgp.pdf', 35]
+- 12.4.export (rule): 6 moves; source ['lec12-bgp.pdf', 41]
+- 12.4.tiers (state): 7 moves; source ['lec12-bgp.pdf', 36]
+- 12.4.valley (state): 6 moves; source ['lec12-bgp.pdf', 43]
+- 12.4.classify (state): 17 moves; source ['lec12-bgp.pdf', 46]
+- 12.4.reverse (rule): 5 moves; source ['lec12-bgp.pdf', 47]
+- 12.4.gao (rule): 6 moves; source ['lec12-bgp.pdf', 39]
+- 12.4.gao-2 (rule): 5 moves; source ['lec12-bgp.pdf', 39]
+- 12.4.laptop (rule): 1 moves; source ['lec12-bgp.pdf', 39]
+- 12.4.pitfall (rule): 1 moves; source ['lec12-bgp.pdf', 39]
+- 12.4.changed (changed_example): 4 moves; source ['lec12-bgp.pdf', 41]
+- 12.4.predict (prediction): 1 moves; source ['lec12-bgp.pdf', 41]
+- 12.4.answer (explanation): 11 moves; source ['lec12-bgp.pdf', 41]
+## 13.1 One address, many servers
+- 13.1.question (question): 3 moves; source ['lec13-multicast.pdf', 5]
+- 13.1.laptop (animation): 6 moves; source ['lec13-multicast.pdf', 5]
+- 13.1.dnslimits (animation): 3 moves; source ['lec13-multicast.pdf', 4]
+- 13.1.announce (animation): 7 moves; source ['lec13-multicast.pdf', 7]
+- 13.1.failover (state): 6 moves; source ['lec13-multicast.pdf', 11]
+- 13.1.rule (rule): 1 moves; source ['lec13-multicast.pdf', 9]
+- 13.1.pitfall (rule): 1 moves; source ['lec13-multicast.pdf', 9]
+- 13.1.changed (changed_example): 4 moves; source ['lec13-multicast.pdf', 14]
+- 13.1.predict (prediction): 1 moves; source ['lec13-multicast.pdf', 14]
+- 13.1.answer (explanation): 3 moves; source ['lec13-multicast.pdf', 14]
+## 13.2 Who wants the stream?
+- 13.2.question (question): 3 moves; source ['lec13-multicast.pdf', 16]
+- 13.2.unicast (animation): 5 moves; source ['lec13-multicast.pdf', 22]
+- 13.2.unicast-more (state): 2 moves; source ['lec13-multicast.pdf', 22]
+- 13.2.multicast (state): 5 moves; source ['lec13-multicast.pdf', 18]
+- 13.2.address (state): 3 moves; source ['lec13-multicast.pdf', 19]
+- 13.2.address-more (state): 4 moves; source ['lec13-multicast.pdf', 19]
+- 13.2.overlay (state): 1 moves; source ['lec13-multicast.pdf', 22]
+- 13.2.overlay-more (state): 3 moves; source ['lec13-multicast.pdf', 22]
+- 13.2.igmp1 (animation): 6 moves; source ['lec13-multicast.pdf', 28]
+- 13.2.dest (rule): 1 moves; source ['lec13-multicast.pdf', 27]
+- 13.2.igmp23 (state): 6 moves; source ['lec13-multicast.pdf', 32]
+- 13.2.timer (state): 1 moves; source ['lec13-multicast.pdf', 33]
+- 13.2.snoop (rule): 3 moves; source ['lec13-multicast.pdf', 33]
+- 13.2.snoop-more (state): 3 moves; source ['lec13-multicast.pdf', 33]
+- 13.2.pitfall (rule): 1 moves; source ['lec13-multicast.pdf', 33]
+- 13.2.changed (changed_example): 2 moves; source ['lec13-multicast.pdf', 30]
+- 13.2.predict (prediction): 1 moves; source ['lec13-multicast.pdf', 30]
+- 13.2.answer (explanation): 2 moves; source ['lec13-multicast.pdf', 30]
+## 13.3 Choosing a tree
+- 13.3.question (question): 3 moves; source ['lec13-multicast.pdf', 36]
+- 13.3.kinds (animation): 2 moves; source ['lec13-multicast.pdf', 36]
+- 13.3.mst (state): 6 moves; source ['lec13-multicast.pdf', 37]
+- 13.3.objectives (rule): 1 moves; source ['lec13-multicast.pdf', 37]
+- 13.3.core (state): 9 moves; source ['lec13-multicast.pdf', 38]
+- 13.3.core-more (state): 4 moves; source ['lec13-multicast.pdf', 38]
+- 13.3.pitfall (rule): 1 moves; source ['lec13-multicast.pdf', 38]
+- 13.3.changed (changed_example): 2 moves; source ['lec13-multicast.pdf', 37]
+- 13.3.predict (prediction): 1 moves; source ['lec13-multicast.pdf', 37]
+- 13.3.answer (explanation): 4 moves; source ['lec13-multicast.pdf', 37]
+## 13.4 RPF and PIM
+- 13.4.question (question): 2 moves; source ['lec13-multicast.pdf', 40]
+- 13.4.rpf (animation): 17 moves; source ['lec13-multicast.pdf', 40]
+- 13.4.prune (state): 8 moves; source ['lec13-multicast.pdf', 41]
+- 13.4.dense (state): 6 moves; source ['lec13-multicast.pdf', 44]
+- 13.4.sparse (state): 7 moves; source ['lec13-multicast.pdf', 46]
+- 13.4.register (state): 8 moves; source ['lec13-multicast.pdf', 47]
+- 13.4.register-more (state): 4 moves; source ['lec13-multicast.pdf', 47]
+- 13.4.spt (state): 10 moves; source ['lec13-multicast.pdf', 49]
+- 13.4.rule (rule): 5 moves; source ['lec13-multicast.pdf', 50]
+- 13.4.compare (rule): 6 moves; source ['lec13-multicast.pdf', 50]
+- 13.4.laptop (rule): 1 moves; source ['lec13-multicast.pdf', 50]
+- 13.4.pitfall (rule): 1 moves; source ['lec13-multicast.pdf', 50]
+- 13.4.changed (changed_example): 5 moves; source ['lec13-multicast.pdf', 49]
+- 13.4.predict (prediction): 1 moves; source ['lec13-multicast.pdf', 49]
+- 13.4.answer (explanation): 5 moves; source ['lec13-multicast.pdf', 49]
+## 14.1 What radio does to bits
+- 14.1.question (question): 3 moves; source ['lec14-wireless.pdf', 2]
+- 14.1.two (animation): 2 moves; source ['lec14-wireless.pdf', 2]
+- 14.1.types (animation): 1 moves; source ['lec14-wireless.pdf', 10]
+- 14.1.rates (animation): 3 moves; source ['lec14-wireless.pdf', 7]
+- 14.1.impair (animation): 6 moves; source ['lec14-wireless.pdf', 11]
+- 14.1.snr (state): 5 moves; source ['lec14-wireless.pdf', 12]
+- 14.1.adapt (state): 1 moves; source ['lec14-wireless.pdf', 36]
+- 14.1.rule (rule): 1 moves; source ['lec14-wireless.pdf', 12]
+- 14.1.pitfall (rule): 1 moves; source ['lec14-wireless.pdf', 12]
+- 14.1.changed (changed_example): 2 moves; source ['lec14-wireless.pdf', 12]
+- 14.1.predict (prediction): 1 moves; source ['lec14-wireless.pdf', 12]
+- 14.1.answer (explanation): 4 moves; source ['lec14-wireless.pdf', 12]
+## 14.2 CDMA
+- 14.2.question (question): 2 moves; source ['lec14-wireless.pdf', 14]
+- 14.2.codes (animation): 5 moves; source ['lec14-wireless.pdf', 14]
+- 14.2.send (state): 7 moves; source ['lec14-wireless.pdf', 15]
+- 14.2.decode (state): 5 moves; source ['lec14-wireless.pdf', 16]
+- 14.2.rule (rule): 4 moves; source ['lec14-wireless.pdf', 16]
+- 14.2.pitfall (rule): 1 moves; source ['lec14-wireless.pdf', 16]
+- 14.2.changed (changed_example): 2 moves; source ['lec14-wireless.pdf', 16]
+- 14.2.predict (prediction): 1 moves; source ['lec14-wireless.pdf', 16]
+- 14.2.answer (explanation): 5 moves; source ['lec14-wireless.pdf', 16]
+## 14.3 Joining and moving
+- 14.3.question (question): 2 moves; source ['lec14-wireless.pdf', 18]
+- 14.3.channels (animation): 2 moves; source ['lec14-wireless.pdf', 17]
+- 14.3.scan (animation): 10 moves; source ['lec14-wireless.pdf', 20]
+- 14.3.assoc (rule): 1 moves; source ['lec14-wireless.pdf', 20]
+- 14.3.addressing (state): 9 moves; source ['lec14-wireless.pdf', 31]
+- 14.3.four (state): 1 moves; source ['lec14-wireless.pdf', 32]
+- 14.3.roam (state): 7 moves; source ['lec14-wireless.pdf', 35]
+- 14.3.pitfall (rule): 1 moves; source ['lec14-wireless.pdf', 35]
+- 14.3.changed (changed_example): 1 moves; source ['lec14-wireless.pdf', 35]
+- 14.3.predict (prediction): 1 moves; source ['lec14-wireless.pdf', 35]
+- 14.3.answer (explanation): 2 moves; source ['lec14-wireless.pdf', 35]
+## 14.4 Contention and reservations
+- 14.4.question (question): 3 moves; source ['lec14-wireless.pdf', 21]
+- 14.4.why (animation): 4 moves; source ['lec14-wireless.pdf', 22]
+- 14.4.hidden (animation): 11 moves; source ['lec14-wireless.pdf', 13]
+- 14.4.exposed (animation): 9 moves; source ['lec14-wireless.pdf', 27]
+- 14.4.csmaca (state): 8 moves; source ['lec14-wireless.pdf', 28]
+- 14.4.counter (state): 13 moves; source ['lec14-wireless.pdf', 28]
+- 14.4.noack (rule): 6 moves; source ['lec14-wireless.pdf', 40]
+- 14.4.rts (state): 9 moves; source ['lec14-wireless.pdf', 24]
+- 14.4.nav (state): 8 moves; source ['lec14-wireless.pdf', 25]
+- 14.4.tradeoff (rule): 6 moves; source ['lec14-wireless.pdf', 26]
+- 14.4.power (state): 8 moves; source ['lec14-wireless.pdf', 37]
+- 14.4.idlelisten (rule): 1 moves; source ['lec14-wireless.pdf', 39]
+- 14.4.bluetooth (state): 7 moves; source ['lec14-wireless.pdf', 38]
+- 14.4.bluetooth-more (state): 2 moves; source ['lec14-wireless.pdf', 38]
+- 14.4.pitfall (rule): 1 moves; source ['lec14-wireless.pdf', 38]
+- 14.4.changed (changed_example): 5 moves; source ['lec14-wireless.pdf', 26]
+- 14.4.predict (prediction): 1 moves; source ['lec14-wireless.pdf', 26]
+- 14.4.answer (explanation): 5 moves; source ['lec14-wireless.pdf', 27]
+## 15.1 The cellular core
+- 15.1.question (question): 3 moves; source ['lec15-mobile.pdf', 2]
+- 15.1.g2 (animation): 2 moves; source ['lec15-mobile.pdf', 3]
+- 15.1.g3 (state): 2 moves; source ['lec15-mobile.pdf', 4]
+- 15.1.g3-more (state): 6 moves; source ['lec15-mobile.pdf', 4]
+- 15.1.g4 (state): 2 moves; source ['lec15-mobile.pdf', 5]
+- 15.1.ue (state): 2 moves; source ['lec15-mobile.pdf', 10]
+- 15.1.enb (state): 2 moves; source ['lec15-mobile.pdf', 11]
+- 15.1.enb-more (state): 2 moves; source ['lec15-mobile.pdf', 11]
+- 15.1.hss (state): 1 moves; source ['lec15-mobile.pdf', 12]
+- 15.1.hss-more (state): 3 moves; source ['lec15-mobile.pdf', 12]
+- 15.1.mme (state): 1 moves; source ['lec15-mobile.pdf', 14]
+- 15.1.gw (state): 3 moves; source ['lec15-mobile.pdf', 13]
+- 15.1.pgw-more (state): 4 moves; source ['lec15-mobile.pdf', 13]
+- 15.1.rule (rule): 3 moves; source ['lec15-mobile.pdf', 15]
+- 15.1.pitfall (rule): 1 moves; source ['lec15-mobile.pdf', 15]
+- 15.1.changed (changed_example): 1 moves; source ['lec15-mobile.pdf', 14]
+- 15.1.predict (prediction): 1 moves; source ['lec15-mobile.pdf', 14]
+- 15.1.answer (explanation): 3 moves; source ['lec15-mobile.pdf', 13]
+## 15.2 Radio stack and tunnels
+- 15.2.question (question): 3 moves; source ['lec15-mobile.pdf', 16]
+- 15.2.stack (animation): 6 moves; source ['lec15-mobile.pdf', 16]
+- 15.2.sched (state): 4 moves; source ['lec15-mobile.pdf', 17]
+- 15.2.gtp (animation): 14 moves; source ['lec15-mobile.pdf', 18]
+- 15.2.why (rule): 1 moves; source ['lec15-mobile.pdf', 18]
+- 15.2.attach (state): 2 moves; source ['lec15-mobile.pdf', 19]
+- 15.2.sleep (state): 4 moves; source ['lec15-mobile.pdf', 20]
+- 15.2.sleep-more (state): 2 moves; source ['lec15-mobile.pdf', 20]
+- 15.2.interconnect (state): 2 moves; source ['lec15-mobile.pdf', 22]
+- 15.2.fiveg (state): 3 moves; source ['lec15-mobile.pdf', 23]
+- 15.2.pitfall (rule): 1 moves; source ['lec15-mobile.pdf', 23]
+- 15.2.changed (changed_example): 2 moves; source ['lec15-mobile.pdf', 18]
+- 15.2.predict (prediction): 1 moves; source ['lec15-mobile.pdf', 18]
+- 15.2.answer (explanation): 3 moves; source ['lec15-mobile.pdf', 18]
+## 15.3 Finding a moving phone
+- 15.3.question (question): 3 moves; source ['lec15-mobile.pdf', 25]
+- 15.3.naive (animation): 5 moves; source ['lec15-mobile.pdf', 26]
+- 15.3.homevisited (state): 5 moves; source ['lec15-mobile.pdf', 29]
+- 15.3.register (state): 7 moves; source ['lec15-mobile.pdf', 31]
+- 15.3.tunnel (animation): 10 moves; source ['lec15-mobile.pdf', 34]
+- 15.3.size (state): 6 moves; source ['lec15-mobile.pdf', 34]
+- 15.3.move (state): 7 moves; source ['lec15-mobile.pdf', 34]
+- 15.3.triangle (state): 7 moves; source ['lec15-mobile.pdf', 35]
+- 15.3.direct (rule): 7 moves; source ['lec15-mobile.pdf', 36]
+- 15.3.pitfall (rule): 1 moves; source ['lec15-mobile.pdf', 36]
+- 15.3.changed (changed_example): 1 moves; source ['lec15-mobile.pdf', 35]
+- 15.3.predict (prediction): 1 moves; source ['lec15-mobile.pdf', 35]
+- 15.3.answer (explanation): 4 moves; source ['lec15-mobile.pdf', 35]
+## 15.4 Handover
+- 15.4.question (question): 2 moves; source ['lec15-mobile.pdf', 38]
+- 15.4.before (animation): 8 moves; source ['lec15-mobile.pdf', 39]
+- 15.4.prepare (state): 8 moves; source ['lec15-mobile.pdf', 40]
+- 15.4.switch (state): 11 moves; source ['lec15-mobile.pdf', 40]
+- 15.4.pathswitch (state): 8 moves; source ['lec15-mobile.pdf', 40]
+- 15.4.rule (rule): 7 moves; source ['lec15-mobile.pdf', 40]
+- 15.4.transport (state): 5 moves; source ['lec15-mobile.pdf', 41]
+- 15.4.pitfall (rule): 1 moves; source ['lec15-mobile.pdf', 41]
+- 15.4.changed (changed_example): 3 moves; source ['lec15-mobile.pdf', 40]
+- 15.4.predict (prediction): 1 moves; source ['lec15-mobile.pdf', 40]
+- 15.4.answer (explanation): 9 moves; source ['lec15-mobile.pdf', 40]
+## 16.1 The whole story, then mixed problems
+- 16.1.question (question): 3 moves; source ['lec10-routing.pdf', 3]
+- 16.1.story1 (animation): 6 moves; source ['lec09-discovery.pdf', 9]
+- 16.1.story2 (animation): 4 moves; source ['lec06-lan.pdf', 30]
+- 16.1.story3 (animation): 7 moves; source ['lec11-convergence.pdf', 10]
+- 16.1.pitfall (rule): 1 moves; source ['lec10-routing.pdf', 15]
+- 16.1.p1 (rule): 2 moves; source ['lec08-network2.pdf', 5]
+- 16.1.a1 (explanation): 1 moves; source ['lec08-network2.pdf', 5]
+- 16.1.p2 (rule): 2 moves; source ['lec11-convergence.pdf', 16]
+- 16.1.a2 (explanation): 3 moves; source ['lec11-convergence.pdf', 16]
+- 16.1.p3 (rule): 2 moves; source ['lec12-bgp.pdf', 14]
+- 16.1.a3 (explanation): 2 moves; source ['lec12-bgp.pdf', 14]
+- 16.1.p5 (rule): 2 moves; source ['lec07-network1.pdf', 37]
+- 16.1.a5 (explanation): 1 moves; source ['lec07-network1.pdf', 37]
+- 16.1.p6 (rule): 2 moves; source ['lec13-multicast.pdf', 32]
+- 16.1.a6 (explanation): 1 moves; source ['lec13-multicast.pdf', 32]
+- 16.1.p4 (changed_example): 2 moves; source ['lec15-mobile.pdf', 7]
+- 16.1.predict (prediction): 1 moves; source ['lec15-mobile.pdf', 7]
+- 16.1.a4 (explanation): 5 moves; source ['lec15-mobile.pdf', 7]
 
 ## Exact generated cards
 
 ```yaml
-dish: '1.1'
-title: A packet's journey
-deck: lec09-discovery.pdf
-target_min: 4.5
-concepts: []
-pad: 2.2
-beats:
-- id: 1.1.question
-  stage: question
-  narration: 1.1.question
-  pdf:
-  - lec09-discovery.pdf
-  - 49
-  concepts: []
-  clarifications: []
-  moves:
-  - heading:
-      text: 'Foundations: a packet''s journey'
-  - spine:
-      current: LAN
-      zone: top
-  - q:
-      text: How does a packet arrive when no device knows the whole path?
-      zone: bottom
-  adjust: {}
-- id: 1.1.network
-  stage: animation
-  narration: 1.1.network
-  pdf:
-  - lec09-discovery.pdf
-  - 49
-  concepts: []
-  clarifications: []
-  moves:
-  - clear: {}
-  - net.show:
-      name: j
-      zone: top
-      nodes:
-        L:
-          k: laptop
-          at:
-          - 0
-          - 0
-          l: Laptop
-        S:
-          k: switch
-          at:
-          - 2
-          - 0
-          l: Switch
-        R1:
-          k: router
-          at:
-          - 4.4
-          - 0
-          l: R1
-        R2:
-          k: router
-          at:
-          - 7.4
-          - 0
-          l: R2
-        W:
-          k: server
-          at:
-          - 10
-          - 0
-          l: Web server
-      links:
-      - - L
-        - S
-      - - S
-        - R1
-      - - R1
-        - R2
-      - - R2
-        - W
-  adjust: {}
-- id: 1.1.two-addresses
-  stage: animation
-  narration: 1.1.two-addresses
-  pdf:
-  - lec09-discovery.pdf
-  - 55
-  concepts: []
-  clarifications: []
-  moves:
-  - stack.show:
-      name: p
-      zone: left_bottom
-      layers:
-      - t: 'IP: laptop → 203.0.113.80, TTL 64'
-        k: ip
-    when: Inside, in blue
-  - packet.spawn:
-      name: pkt
-      net: j
-      at: L
-      layers:
-      - ip
-  - stack.push:
-      name: p
-      text: 'Ethernet frame: laptop → R1'
-      kind: eth
-      when: So the laptop wraps
-  - packet.wrap:
-      name: pkt
-      kind: eth
-  adjust: {}
-- id: 1.1.first-hop
-  stage: state
-  narration: 1.1.first-hop
-  pdf:
-  - lec09-discovery.pdf
-  - 55
-  concepts: []
-  clarifications: []
-  moves:
-  - packet.hop:
-      name: pkt
-      to: S
-      when: The switch reads
-  - net.state:
-      name: j
-      nodes:
-        S: now
-  - packet.hop:
-      name: pkt
-      to: R1
-      when: R1 receives
-  - net.state:
-      name: j
-      nodes:
-        S: null
-        R1: now
-  adjust: {}
-- id: 1.1.swap
-  stage: state
-  narration: 1.1.swap
-  pdf:
-  - lec09-discovery.pdf
-  - 59
-  concepts: []
-  clarifications: []
-  moves:
-  - packet.peel:
-      name: pkt
-      when: R1 tears off
-  - stack.pop:
-      name: p
-  - stack.set:
-      name: p
-      layer: 0
-      text: 'IP: laptop → 203.0.113.80, TTL 63'
-      kind: ip
-      when: lowers the TTL
-  - packet.wrap:
-      name: pkt
-      kind: eth
-  - stack.push:
-      name: p
-      text: 'Ethernet: R1 → R2'
-      kind: eth
-  adjust: {}
-- id: 1.1.second-swap
-  stage: state
-  narration: 1.1.second-swap
-  pdf:
-  - lec09-discovery.pdf
-  - 59
-  concepts: []
-  clarifications: []
-  moves:
-  - packet.hop:
-      name: pkt
-      to: R2
-  - net.state:
-      name: j
-      nodes:
-        R1: null
-        R2: now
-  - packet.swap_link_header:
-      name: pkt
-  - stack.set:
-      name: p
-      layer: 1
-      text: 'IP: laptop → 203.0.113.80, TTL 62'
-      kind: ip
-  - stack.set:
-      name: p
-      layer: 0
-      text: 'Ethernet: R2 → server'
-      kind: eth
-  - packet.hop:
-      name: pkt
-      to: W
-      when: so the frame
-  - net.state:
-      name: j
-      nodes:
-        R2: null
-        W: done
-  adjust: {}
-- id: 1.1.table
-  stage: state
-  narration: 1.1.table
-  pdf:
-  - lec09-discovery.pdf
-  - 59
-  concepts: []
-  clarifications: []
-  moves:
-  - table.show:
-      name: hops
-      zone: bottom
-      data: $discovery.journey_table
-  adjust: {}
-- id: 1.1.rule
-  stage: rule
-  narration: 1.1.rule
-  pdf:
-  - lec09-discovery.pdf
-  - 59
-  concepts: []
-  clarifications: []
-  moves:
-  - rule:
-      text: A frame crosses one link. A packet crosses the network. Routers replace
-        frames and keep packet endpoints.
-  adjust: {}
-- id: 1.1.pitfall
-  stage: rule
-  narration: 1.1.pitfall
-  pdf:
-  - lec09-discovery.pdf
-  - 59
-  concepts: []
-  clarifications: []
-  moves:
-  - trap:
-      wrong: A router rewrites the packet's destination at each hop
-      right: The frame is replaced at each hop. The packet's endpoints stay.
-  adjust: {}
-- id: 1.1.changed
-  stage: changed_example
-  narration: 1.1.changed
-  pdf:
-  - lec09-discovery.pdf
-  - 58
-  concepts: []
-  clarifications: []
-  moves:
-  - clear:
-      keep:
-      - j
-  - net.state:
-      name: j
-      nodes:
-        W: null
-  - net.add:
-      nodes:
-        D:
-          k: server
-          at:
-          - 2
-          - -1.1
-          l: 192.0.2.53
-      links:
-      - - S
-        - D
-      name: j
-  adjust: {}
-- id: 1.1.predict
-  stage: prediction
-  narration: 1.1.predict
-  pdf:
-  - lec09-discovery.pdf
-  - 58
-  concepts: []
-  clarifications: []
-  moves:
-  - stack.show:
-      name: frame
-      zone: right_bottom
-      layers:
-      - t: Ethernet frame
-        k: eth
-  - pause:
-      text: whose address goes on the Ethernet frame?
-  adjust: {}
-  hold: 6
-- id: 1.1.answer
-  stage: explanation
-  narration: 1.1.answer
-  pdf:
-  - lec09-discovery.pdf
-  - 58
-  concepts: []
-  clarifications: []
-  moves:
-  - packet.spawn:
-      name: near
-      net: j
-      at: L
-      layers:
-      - eth
-      - ip
-  - packet.hop:
-      name: near
-      to:
-      - S
-      - D
-  - rule:
-      text: 'Local destination: address the frame to it. Remote destination: address
-        the frame to the router.'
-  adjust: {}
----
-dish: '1.2'
-title: Layers and local versus global delivery
-deck: lec02-layering.pdf
-target_min: 4
-concepts: []
-pad: 2.2
-beats:
-- id: 1.2.question
-  stage: question
-  narration: 1.2.question
-  pdf:
-  - lec02-layering.pdf
-  - 3
-  concepts: []
-  clarifications: []
-  moves:
-  - heading:
-      text: 'Foundations: layers'
-  - q:
-      text: Why not one giant protocol that does everything?
-  adjust: {}
-- id: 1.2.stack
-  stage: animation
-  narration: 1.2.stack
-  pdf:
-  - lec02-layering.pdf
-  - 5
-  concepts: []
-  clarifications: []
-  moves:
-  - clear: {}
-  - stack.show:
-      name: layers
-      zone: left
-      width: 5.6
-      layers:
-      - t: 'Application: the web request'
-        k: data
-      - t: 'Transport: between programs'
-        k: transport
-      - t: 'Network: across many links'
-        k: ip
-      - t: 'Link: to one neighbor'
-        k: eth
-      - t: 'Physical: bits on a medium'
-        k: radio
-  - bullets:
-      name: who
-      zone: right
-      show: 0
-      items:
-      - Each layer uses the one below
-      - Each layer serves the one above
-      - A layer can change while the others stay the same
-  adjust: {}
-- id: 1.2.services
-  stage: animation
-  narration: 1.2.services
-  pdf:
-  - lec02-layering.pdf
-  - 10
-  concepts: []
-  clarifications: []
-  moves:
-  - reveal:
-      name: who
-  - stack.mark:
-      name: layers
-      layer: 3
-  - reveal:
-      name: who
-  - reveal:
-      name: who
-      when: Because the agreement
-  adjust: {}
-- id: 1.2.encapsulation
-  stage: state
-  narration: 1.2.encapsulation
-  pdf:
-  - lec02-layering.pdf
-  - 18
-  concepts: []
-  clarifications: []
-  moves:
-  - stack.mark:
-      name: layers
-      layer: 3
-      state: null
-  - stack.show:
-      name: wrap
-      zone: right_top
-      width: 5.8
-      reserve: 3
-      layers:
-      - t: Application data
-        k: data
-    when: Going down the stack
-  - stack.push:
-      name: wrap
-      text: Transport header
-      kind: transport
-  - stack.push:
-      name: wrap
-      text: IP header
-      kind: ip
-  - stack.push:
-      name: wrap
-      text: Ethernet frame
-      kind: eth
-      when: That wrapping
-  adjust: {}
-  pre_roll: 0.6
-- id: 1.2.scopes
-  stage: state
-  narration: 1.2.scopes
-  pdf:
-  - lec02-layering.pdf
-  - 13
-  concepts: []
-  clarifications: []
-  moves:
-  - table.show:
-      name: scope
-      zone: right_bottom
-      cols:
-      - Header
-      - Names
-      - Scope
-      rows:
-      - - Ethernet
-        - interface
-        - one link
-      - - IP
-        - location
-        - end to end
-      - - Transport
-        - program
-        - one host
-  adjust: {}
-- id: 1.2.rule
-  stage: rule
-  narration: 1.2.rule
-  pdf:
-  - lec02-layering.pdf
-  - 8
-  concepts: []
-  clarifications: []
-  moves:
-  - rule:
-      text: 'Link address: who is my next neighbor? IP address: where is the final
-        destination?'
-  adjust: {}
-- id: 1.2.pitfall
-  stage: rule
-  narration: 1.2.pitfall
-  pdf:
-  - lec02-layering.pdf
-  - 8
-  concepts: []
-  clarifications: []
-  moves:
-  - trap:
-      wrong: A switch and a router do the same job
-      right: A switch forwards frames by MAC. A router forwards packets by IP.
-  adjust: {}
-- id: 1.2.changed
-  stage: changed_example
-  narration: 1.2.changed
-  pdf:
-  - lec02-layering.pdf
-  - 14
-  concepts: []
-  clarifications: []
-  moves:
-  - clear: {}
-  - net.show:
-      name: j
-      zone: top
-      nodes:
-        L:
-          k: laptop
-          at:
-          - 0
-          - 0
-          l: Laptop
-        R1:
-          k: router
-          at:
-          - 3.4
-          - 0
-          l: R1
-        R2:
-          k: router
-          at:
-          - 6.8
-          - 0
-          l: R2
-        W:
-          k: server
-          at:
-          - 10.2
-          - 0
-          l: Web server
-      links:
-      - - L
-        - R1
-      - - R1
-        - R2
-        - s: radio
-      - - R2
-        - W
-  - net.badge:
-      name: j
-      node: R1
-      text: new link type
-      side: up
-  adjust: {}
-- id: 1.2.predict
-  stage: prediction
-  narration: 1.2.predict
-  pdf:
-  - lec02-layering.pdf
-  - 14
-  concepts: []
-  clarifications: []
-  moves:
-  - stack.show:
-      name: which
-      zone: bottom
-      width: 6.4
-      layers:
-      - t: IP header?
-        k: ip
-      - t: Link header?
-        k: eth
-  - pause:
-      text: which header changes on the new link?
-  adjust: {}
-  hold: 6
-- id: 1.2.answer
-  stage: explanation
-  narration: 1.2.answer
-  pdf:
-  - lec02-layering.pdf
-  - 14
-  concepts: []
-  clarifications: []
-  moves:
-  - stack.set:
-      name: which
-      layer: 0
-      text: 'IP header: unchanged'
-      kind: ip
-  - stack.set:
-      name: which
-      layer: 1
-      text: 'Link header: rebuilt for this hop'
-      kind: eth
-  - rule:
-      text: 'IP is the common layer: networks with different hardware still act as
-        one Internet.'
-  adjust: {}
----
-dish: '2.1'
+dish: '6.1'
 title: Sharing a wire
 deck: lec06-lan.pdf
 target_min: 6.5
@@ -1169,9 +564,9 @@ concepts:
 - Collision Detection Window
 pad: 2.2
 beats:
-- id: 2.1.question
+- id: 6.1.question
   stage: question
-  narration: 2.1.question
+  narration: 6.1.question
   pdf:
   - lec06-lan.pdf
   - 7
@@ -1190,9 +585,9 @@ beats:
       text: Many senders, one wire. Who talks, and when?
       zone: bottom
   adjust: {}
-- id: 2.1.partition
+- id: 6.1.partition
   stage: animation
-  narration: 2.1.partition
+  narration: 6.1.partition
   pdf:
   - lec06-lan.pdf
   - 7
@@ -1256,9 +651,9 @@ beats:
       text: A
       kind: ip
   adjust: {}
-- id: 2.1.turns
+- id: 6.1.turns
   stage: animation
-  narration: 2.1.turns
+  narration: 6.1.turns
   pdf:
   - lec06-lan.pdf
   - 7
@@ -1288,9 +683,9 @@ beats:
       text: A
       kind: ip
   adjust: {}
-- id: 2.1.random
+- id: 6.1.random
   stage: animation
-  narration: 2.1.random
+  narration: 6.1.random
   pdf:
   - lec06-lan.pdf
   - 7
@@ -1323,9 +718,9 @@ beats:
       text: Partition reserves. Taking turns coordinates. Random access contends.
         Ethernet contends.
   adjust: {}
-- id: 2.1.frame
+- id: 6.1.frame
   stage: animation
-  narration: 2.1.frame
+  narration: 6.1.frame
   pdf:
   - lec06-lan.pdf
   - 11
@@ -1371,9 +766,9 @@ beats:
       label: CRC
       when: and finally
   adjust: {}
-- id: 2.1.mac
+- id: 6.1.mac
   stage: animation
-  narration: 2.1.mac
+  narration: 6.1.mac
   pdf:
   - lec06-lan.pdf
   - 28
@@ -1398,9 +793,9 @@ beats:
       - 'Flat: says nothing about location'
       - A card keeps frames for its own address or broadcast
   adjust: {}
-- id: 2.1.mac-more
+- id: 6.1.mac-more
   stage: state
-  narration: 2.1.mac-more
+  narration: 6.1.mac-more
   pdf:
   - lec06-lan.pdf
   - 28
@@ -1430,9 +825,9 @@ beats:
       name: m2
       when: And the broadcast
   adjust: {}
-- id: 2.1.csma
+- id: 6.1.csma
   stage: state
-  narration: 2.1.csma
+  narration: 6.1.csma
   pdf:
   - lec06-lan.pdf
   - 12
@@ -1483,9 +878,9 @@ beats:
       net: wire
       node: M
   adjust: {}
-- id: 2.1.backoff
+- id: 6.1.backoff
   stage: state
-  narration: 2.1.backoff
+  narration: 6.1.backoff
   pdf:
   - lec06-lan.pdf
   - 12
@@ -1524,9 +919,9 @@ beats:
       n: 2
       when: On 10 megabit
   adjust: {}
-- id: 2.1.window
+- id: 6.1.window
   stage: rule
-  narration: 2.1.window
+  narration: 6.1.window
   pdf:
   - lec06-lan.pdf
   - 13
@@ -1569,9 +964,9 @@ beats:
       text: Frame length ÷ rate ≥ 2 × propagation delay
       when: which gives the rule
   adjust: {}
-- id: 2.1.pitfall
+- id: 6.1.pitfall
   stage: rule
-  narration: 2.1.pitfall
+  narration: 6.1.pitfall
   pdf:
   - lec06-lan.pdf
   - 13
@@ -1583,9 +978,9 @@ beats:
       wrong: Carrier sensing prevents collisions
       right: Propagation delay still lets two senders collide
   adjust: {}
-- id: 2.1.changed
+- id: 6.1.changed
   stage: changed_example
-  narration: 2.1.changed
+  narration: 6.1.changed
   pdf:
   - lec06-lan.pdf
   - 14
@@ -1606,9 +1001,9 @@ beats:
       - 'Now: d = 20 μs at the same 10 Mb/s'
       when: Now change
   adjust: {}
-- id: 2.1.predict
+- id: 6.1.predict
   stage: prediction
-  narration: 2.1.predict
+  narration: 6.1.predict
   pdf:
   - lec06-lan.pdf
   - 14
@@ -1621,9 +1016,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 2.1.answer
+- id: 6.1.answer
   stage: explanation
-  narration: 2.1.answer
+  narration: 6.1.answer
   pdf:
   - lec06-lan.pdf
   - 14
@@ -1640,9 +1035,10 @@ beats:
       - The formula's answer, not a new Ethernet minimum
   - rule:
       text: 'These limits belong to shared half-duplex wires. Next: stop sharing.'
+  - keep: {}
   adjust: {}
 ---
-dish: '2.2'
+dish: '6.2'
 title: From hub to switch
 deck: lec06-lan.pdf
 target_min: 3.5
@@ -1654,9 +1050,9 @@ concepts:
 - Cut-Through Switching
 pad: 2.2
 beats:
-- id: 2.2.question
+- id: 6.2.question
   stage: question
-  narration: 2.2.question
+  narration: 6.2.question
   pdf:
   - lec06-lan.pdf
   - 15
@@ -1669,9 +1065,9 @@ beats:
   - q:
       text: 'Eight machines in one box: eight conversations, or one?'
   adjust: {}
-- id: 2.2.hub
+- id: 6.2.hub
   stage: animation
-  narration: 2.2.hub
+  narration: 6.2.hub
   pdf:
   - lec06-lan.pdf
   - 16
@@ -1747,9 +1143,9 @@ beats:
       node: H
       when: If A sends
   adjust: {}
-- id: 2.2.switch
+- id: 6.2.switch
   stage: animation
-  narration: 2.2.switch
+  narration: 6.2.switch
   pdf:
   - lec06-lan.pdf
   - 20
@@ -1826,9 +1222,9 @@ beats:
       - H
       - D
   adjust: {}
-- id: 2.2.duplex
+- id: 6.2.duplex
   stage: state
-  narration: 2.2.duplex
+  narration: 6.2.duplex
   pdf:
   - lec06-lan.pdf
   - 22
@@ -1863,9 +1259,9 @@ beats:
       name: f5
       to: H
   adjust: {}
-- id: 2.2.modes
+- id: 6.2.modes
   stage: state
-  narration: 2.2.modes
+  narration: 6.2.modes
   pdf:
   - lec06-lan.pdf
   - 26
@@ -1914,9 +1310,9 @@ beats:
       text: send while receiving
       kind: ip
   adjust: {}
-- id: 2.2.rule
+- id: 6.2.rule
   stage: rule
-  narration: 2.2.rule
+  narration: 6.2.rule
   pdf:
   - lec06-lan.pdf
   - 26
@@ -1933,9 +1329,9 @@ beats:
       text: Store-and-forward pays the full reception time at each switch, but checks
         the CRC first.
   adjust: {}
-- id: 2.2.pitfall
+- id: 6.2.pitfall
   stage: rule
-  narration: 2.2.pitfall
+  narration: 6.2.pitfall
   pdf:
   - lec06-lan.pdf
   - 26
@@ -1948,9 +1344,9 @@ beats:
       right: A switch isolates unicast. Broadcasts still spread, and outputs still
         queue.
   adjust: {}
-- id: 2.2.changed
+- id: 6.2.changed
   stage: changed_example
-  narration: 2.2.changed
+  narration: 6.2.changed
   pdf:
   - lec06-lan.pdf
   - 26
@@ -1996,9 +1392,9 @@ beats:
       name: bad
       to: H
   adjust: {}
-- id: 2.2.predict
+- id: 6.2.predict
   stage: prediction
-  narration: 2.2.predict
+  narration: 6.2.predict
   pdf:
   - lec06-lan.pdf
   - 26
@@ -2010,9 +1406,9 @@ beats:
       text: does the corrupt frame reach B? what was saved?
   adjust: {}
   hold: 6
-- id: 2.2.answer
+- id: 6.2.answer
   stage: explanation
-  narration: 2.2.answer
+  narration: 6.2.answer
   pdf:
   - lec06-lan.pdf
   - 26
@@ -2030,9 +1426,10 @@ beats:
   - rule:
       text: How does a brand new switch know which port is right?
       when: There is still
+  - keep: {}
   adjust: {}
 ---
-dish: '2.3'
+dish: '6.3'
 title: Learning and loops
 deck: lec06-lan.pdf
 target_min: 6
@@ -2041,9 +1438,9 @@ concepts:
 - Spanning Tree Protocol
 pad: 2.2
 beats:
-- id: 2.3.question
+- id: 6.3.question
   stage: question
-  narration: 2.3.question
+  narration: 6.3.question
   pdf:
   - lec06-lan.pdf
   - 30
@@ -2056,9 +1453,9 @@ beats:
   - q:
       text: Nobody configures a switch. How does it know where hosts are?
   adjust: {}
-- id: 2.3.setup
+- id: 6.3.setup
   stage: animation
-  narration: 2.3.setup
+  narration: 6.3.setup
   pdf:
   - lec06-lan.pdf
   - 31
@@ -2118,9 +1515,9 @@ beats:
       - eth
       when: A sends
   adjust: {}
-- id: 2.3.learn
+- id: 6.3.learn
   stage: state
-  narration: 2.3.learn
+  narration: 6.3.learn
   pdf:
   - lec06-lan.pdf
   - 33
@@ -2145,9 +1542,9 @@ beats:
   - packet.fade:
       name: f
   adjust: {}
-- id: 2.3.reply
+- id: 6.3.reply
   stage: state
-  narration: 2.3.reply
+  narration: 6.3.reply
   pdf:
   - lec06-lan.pdf
   - 34
@@ -2195,9 +1592,9 @@ beats:
       data: $ethernet.learning_table
       size: 28
   adjust: {}
-- id: 2.3.aging
+- id: 6.3.aging
   stage: rule
-  narration: 2.3.aging
+  narration: 6.3.aging
   pdf:
   - lec06-lan.pdf
   - 30
@@ -2220,9 +1617,9 @@ beats:
       zone: right_bottom
       when: The slides call
   adjust: {}
-- id: 2.3.loop
+- id: 6.3.loop
   stage: animation
-  narration: 2.3.loop
+  narration: 6.3.loop
   pdf:
   - lec06-lan.pdf
   - 35
@@ -2330,9 +1727,9 @@ beats:
   - packet.drop:
       name: b4
   adjust: {}
-- id: 2.3.stp
+- id: 6.3.stp
   stage: state
-  narration: 2.3.stp
+  narration: 6.3.stp
   pdf:
   - lec06-lan.pdf
   - 37
@@ -2370,9 +1767,9 @@ beats:
       name: tri
       node: S2
   adjust: {}
-- id: 2.3.stp-2
+- id: 6.3.stp-2
   stage: state
-  narration: 2.3.stp-2
+  narration: 6.3.stp-2
   pdf:
   - lec06-lan.pdf
   - 37
@@ -2414,9 +1811,9 @@ beats:
       zone: right_bottom
       when: The slides simplify
   adjust: {}
-- id: 2.3.instructor
+- id: 6.3.instructor
   stage: rule
-  narration: 2.3.instructor
+  narration: 6.3.instructor
   pdf:
   - lec06-lan.pdf
   - 41
@@ -2555,9 +1952,9 @@ beats:
       peer: S4
       state: discarding
   adjust: {}
-- id: 2.3.pitfall
+- id: 6.3.pitfall
   stage: rule
-  narration: 2.3.pitfall
+  narration: 6.3.pitfall
   pdf:
   - lec06-lan.pdf
   - 41
@@ -2569,9 +1966,9 @@ beats:
       wrong: Flooding turns the frame into a broadcast
       right: Unknown unicast floods, but the destination address doesn't change
   adjust: {}
-- id: 2.3.changed
+- id: 6.3.changed
   stage: changed_example
-  narration: 2.3.changed
+  narration: 6.3.changed
   pdf:
   - lec06-lan.pdf
   - 41
@@ -2602,9 +1999,9 @@ beats:
       - S7
       when: A to B
   adjust: {}
-- id: 2.3.predict
+- id: 6.3.predict
   stage: prediction
-  narration: 2.3.predict
+  narration: 6.3.predict
   pdf:
   - lec06-lan.pdf
   - 41
@@ -2616,9 +2013,9 @@ beats:
       text: the switch path for A to C, and for B to C?
   adjust: {}
   hold: 6
-- id: 2.3.answer
+- id: 6.3.answer
   stage: explanation
-  narration: 2.3.answer
+  narration: 6.3.answer
   pdf:
   - lec06-lan.pdf
   - 41
@@ -2666,9 +2063,10 @@ beats:
   - rule:
       text: A spanning tree promises no loops. It does not promise shortest paths.
       when: Spanning tree does
+  - keep: {}
   adjust: {}
 ---
-dish: '2.4'
+dish: '6.4'
 title: VLANs and trunks
 deck: lec06-lan.pdf
 target_min: 4
@@ -2679,9 +2077,9 @@ concepts:
 - 802.1Q Trunking
 pad: 2.2
 beats:
-- id: 2.4.question
+- id: 6.4.question
   stage: question
-  narration: 2.4.question
+  narration: 6.4.question
   pdf:
   - lec06-lan.pdf
   - 42
@@ -2693,10 +2091,11 @@ beats:
       text: 'Lecture 6: VLANs and trunks'
   - q:
       text: One set of switches. Two departments. Must we rewire?
+  - keep: {}
   adjust: {}
-- id: 2.4.vlans
+- id: 6.4.vlans
   stage: animation
-  narration: 2.4.vlans
+  narration: 6.4.vlans
   pdf:
   - lec06-lan.pdf
   - 43
@@ -2772,9 +2171,9 @@ beats:
   - packet.fade:
       name: bc
   adjust: {}
-- id: 2.4.membership
+- id: 6.4.membership
   stage: state
-  narration: 2.4.membership
+  narration: 6.4.membership
   pdf:
   - lec06-lan.pdf
   - 45
@@ -2795,9 +2194,9 @@ beats:
       - - MAC-based
         - endpoint address
   adjust: {}
-- id: 2.4.vlan-trace-1
+- id: 6.4.vlan-trace-1
   stage: state
-  narration: 2.4.vlan-trace-1
+  narration: 6.4.vlan-trace-1
   pdf:
   - lec06-lan.pdf
   - 30
@@ -2926,9 +2325,9 @@ beats:
     object: vfpacket
     field: at
     value: X
-- id: 2.4.vlan-trace-2
+- id: 6.4.vlan-trace-2
   stage: state
-  narration: 2.4.vlan-trace-2
+  narration: 6.4.vlan-trace-2
   pdf:
   - lec06-lan.pdf
   - 30
@@ -2976,9 +2375,9 @@ beats:
     object: vfpacket
     field: at
     value: X
-- id: 2.4.vlan-trace-3
+- id: 6.4.vlan-trace-3
   stage: state
-  narration: 2.4.vlan-trace-3
+  narration: 6.4.vlan-trace-3
   pdf:
   - lec06-lan.pdf
   - 30
@@ -3035,9 +2434,9 @@ beats:
     object: vfpacket
     field: at
     value: X
-- id: 2.4.vlan-trace-4
+- id: 6.4.vlan-trace-4
   stage: state
-  narration: 2.4.vlan-trace-4
+  narration: 6.4.vlan-trace-4
   pdf:
   - lec06-lan.pdf
   - 30
@@ -3094,9 +2493,9 @@ beats:
     object: vfpacket
     field: at
     value: X
-- id: 2.4.trunk
+- id: 6.4.trunk
   stage: state
-  narration: 2.4.trunk
+  narration: 6.4.trunk
   pdf:
   - lec06-lan.pdf
   - 47
@@ -3181,9 +2580,9 @@ beats:
       - B
       - F2
   adjust: {}
-- id: 2.4.devices
+- id: 6.4.devices
   stage: rule
-  narration: 2.4.devices
+  narration: 6.4.devices
   pdf:
   - lec06-lan.pdf
   - 49
@@ -3215,9 +2614,9 @@ beats:
         - 'no'
         - 'yes'
   adjust: {}
-- id: 2.4.rule
+- id: 6.4.rule
   stage: rule
-  narration: 2.4.rule
+  narration: 6.4.rule
   pdf:
   - lec06-lan.pdf
   - 48
@@ -3232,9 +2631,9 @@ beats:
       text: A VLAN limits a broadcast domain. A trunk preserves VLAN identity. Only
         routing crosses between VLANs.
   adjust: {}
-- id: 2.4.pitfall
+- id: 6.4.pitfall
   stage: rule
-  narration: 2.4.pitfall
+  narration: 6.4.pitfall
   pdf:
   - lec06-lan.pdf
   - 48
@@ -3247,9 +2646,9 @@ beats:
       wrong: A trunk routes traffic between VLANs
       right: A trunk carries VLANs across switches. Moving between VLANs needs a router.
   adjust: {}
-- id: 2.4.changed
+- id: 6.4.changed
   stage: changed_example
-  narration: 2.4.changed
+  narration: 6.4.changed
   pdf:
   - lec06-lan.pdf
   - 46
@@ -3304,9 +2703,9 @@ beats:
       - 7
       - 0.6
   adjust: {}
-- id: 2.4.predict
+- id: 6.4.predict
   stage: prediction
-  narration: 2.4.predict
+  narration: 6.4.predict
   pdf:
   - lec06-lan.pdf
   - 46
@@ -3318,9 +2717,9 @@ beats:
       text: whose broadcasts does it hear? does its old IP still work?
   adjust: {}
   hold: 6
-- id: 2.4.answer
+- id: 6.4.answer
   stage: explanation
-  narration: 2.4.answer
+  narration: 6.4.answer
   pdf:
   - lec06-lan.pdf
   - 46
@@ -3343,9 +2742,10 @@ beats:
   - rule:
       text: 'Next: addresses with structure.'
       when: To go further
+  - keep: {}
   adjust: {}
 ---
-dish: '3.1'
+dish: '7.1'
 title: What the network promises
 deck: lec07-network1.pdf
 target_min: 6
@@ -3363,9 +2763,9 @@ concepts:
 - Differentiated Services
 pad: 2.2
 beats:
-- id: 3.1.question
+- id: 7.1.question
   stage: question
-  narration: 3.1.question
+  narration: 7.1.question
   pdf:
   - lec07-network1.pdf
   - 4
@@ -3382,9 +2782,9 @@ beats:
       text: What should a network of networks actually promise?
       zone: bottom
   adjust: {}
-- id: 3.1.circuit
+- id: 7.1.circuit
   stage: animation
-  narration: 3.1.circuit
+  narration: 7.1.circuit
   pdf:
   - lec07-network1.pdf
   - 8
@@ -3432,9 +2832,9 @@ beats:
       text: A
       kind: ip
   adjust: {}
-- id: 3.1.circuit-more
+- id: 7.1.circuit-more
   stage: state
-  narration: 3.1.circuit-more
+  narration: 7.1.circuit-more
   pdf:
   - lec07-network1.pdf
   - 8
@@ -3449,9 +2849,9 @@ beats:
       size: 42
       when: A 1 megabit
   adjust: {}
-- id: 3.1.packet
+- id: 7.1.packet
   stage: animation
-  narration: 3.1.packet
+  narration: 7.1.packet
   pdf:
   - lec07-network1.pdf
   - 4
@@ -3495,9 +2895,9 @@ beats:
       text: A
       kind: ip
   adjust: {}
-- id: 3.1.statmux
+- id: 7.1.statmux
   stage: state
-  narration: 3.1.statmux
+  narration: 7.1.statmux
   pdf:
   - lec07-network1.pdf
   - 5
@@ -3522,9 +2922,9 @@ beats:
       size: 38
       when: If 8 megabits
   adjust: {}
-- id: 3.1.best
+- id: 7.1.best
   stage: state
-  narration: 3.1.best
+  narration: 7.1.best
   pdf:
   - lec07-network1.pdf
   - 6
@@ -3555,9 +2955,9 @@ beats:
       - end machines add reliability
       when: That sounds terrible
   adjust: {}
-- id: 3.1.services
+- id: 7.1.services
   stage: state
-  narration: 3.1.services
+  narration: 7.1.services
   pdf:
   - lec07-network1.pdf
   - 14
@@ -3601,9 +3001,9 @@ beats:
       name: svc
       when: Differentiated Services treats
   adjust: {}
-- id: 3.1.planes
+- id: 7.1.planes
   stage: animation
-  narration: 3.1.planes
+  narration: 7.1.planes
   pdf:
   - lec07-network1.pdf
   - 9
@@ -3654,9 +3054,9 @@ beats:
       - Later packets follow it
       when: Say an operator
   adjust: {}
-- id: 3.1.rule
+- id: 7.1.rule
   stage: rule
-  narration: 3.1.rule
+  narration: 7.1.rule
   pdf:
   - lec07-network1.pdf
   - 13
@@ -3724,9 +3124,9 @@ beats:
   - rule:
       text: Control decides what goes in the table. Data executes the table.
   adjust: {}
-- id: 3.1.pitfall
+- id: 7.1.pitfall
   stage: rule
-  narration: 3.1.pitfall
+  narration: 7.1.pitfall
   pdf:
   - lec07-network1.pdf
   - 13
@@ -3739,9 +3139,9 @@ beats:
       wrong: Average load below capacity means no queues
       right: Bursts still queue, even when the average fits
   adjust: {}
-- id: 3.1.changed
+- id: 7.1.changed
   stage: changed_example
-  narration: 3.1.changed
+  narration: 7.1.changed
   pdf:
   - lec07-network1.pdf
   - 15
@@ -3754,9 +3154,9 @@ beats:
       text: Valid address, good checksum, a route exists. It never arrives.
       zone: top
   adjust: {}
-- id: 3.1.predict
+- id: 7.1.predict
   stage: prediction
-  narration: 3.1.predict
+  narration: 7.1.predict
   pdf:
   - lec07-network1.pdf
   - 15
@@ -3768,9 +3168,9 @@ beats:
       text: was the contract broken? how could this happen?
   adjust: {}
   hold: 6
-- id: 3.1.answer
+- id: 7.1.answer
   stage: explanation
-  narration: 3.1.answer
+  narration: 7.1.answer
   pdf:
   - lec07-network1.pdf
   - 15
@@ -3788,9 +3188,10 @@ beats:
       - A failure or policy stops it
   - rule:
       text: 'No promise was broken. Next: addresses that scale.'
+  - keep: {}
   adjust: {}
 ---
-dish: '3.2'
+dish: '7.2'
 title: Addresses and prefixes
 deck: lec07-network1.pdf
 target_min: 6.5
@@ -3802,9 +3203,9 @@ concepts:
 - Network and Broadcast Addresses
 pad: 2.2
 beats:
-- id: 3.2.question
+- id: 7.2.question
   stage: question
-  narration: 3.2.question
+  narration: 7.2.question
   pdf:
   - lec07-network1.pdf
   - 17
@@ -3816,10 +3217,11 @@ beats:
       text: 'Lecture 7: addresses and prefixes'
   - q:
       text: How can a router forward toward a machine it has never heard of?
+  - keep: {}
   adjust: {}
-- id: 3.2.address
+- id: 7.2.address
   stage: animation
-  narration: 3.2.address
+  narration: 7.2.address
   pdf:
   - lec07-network1.pdf
   - 17
@@ -3854,9 +3256,9 @@ beats:
       state: null
       when: It identifies
   adjust: {}
-- id: 3.2.prefix
+- id: 7.2.prefix
   stage: state
-  narration: 3.2.prefix
+  narration: 7.2.prefix
   pdf:
   - lec07-network1.pdf
   - 21
@@ -3899,9 +3301,9 @@ beats:
         whole block.'
       when: A router far away
   adjust: {}
-- id: 3.2.classful
+- id: 7.2.classful
   stage: animation
-  narration: 3.2.classful
+  narration: 7.2.classful
   pdf:
   - lec07-network1.pdf
   - 27
@@ -3954,9 +3356,9 @@ beats:
       state: now
       when: so it received
   adjust: {}
-- id: 3.2.classful-more
+- id: 7.2.classful-more
   stage: state
-  narration: 3.2.classful-more
+  narration: 7.2.classful-more
   pdf:
   - lec07-network1.pdf
   - 27
@@ -3998,9 +3400,9 @@ beats:
       name: cl
       when: Class D
   adjust: {}
-- id: 3.2.cidr
+- id: 7.2.cidr
   stage: state
-  narration: 3.2.cidr
+  narration: 7.2.cidr
   pdf:
   - lec07-network1.pdf
   - 29
@@ -4024,9 +3426,9 @@ beats:
       text: Aggregation needs aligned, adjacent blocks with the same reachability.
       when: CIDR also allows
   adjust: {}
-- id: 3.2.allocation
+- id: 7.2.allocation
   stage: state
-  narration: 3.2.allocation
+  narration: 7.2.allocation
   pdf:
   - lec07-network1.pdf
   - 30
@@ -4112,9 +3514,9 @@ beats:
         small.
       when: A provider can
   adjust: {}
-- id: 3.2.mask
+- id: 7.2.mask
   stage: state
-  narration: 3.2.mask
+  narration: 7.2.mask
   pdf:
   - lec07-network1.pdf
   - 23
@@ -4148,9 +3550,9 @@ beats:
       end: 24
       when: Notice what happened
   adjust: {}
-- id: 3.2.broadcast
+- id: 7.2.broadcast
   stage: state
-  narration: 3.2.broadcast
+  narration: 7.2.broadcast
   pdf:
   - lec07-network1.pdf
   - 23
@@ -4173,9 +3575,9 @@ beats:
       text: 'Network: host bits zero. Broadcast: host bits one. Usable: 2^h − 2.'
       when: So this block
   adjust: {}
-- id: 3.2.rule
+- id: 7.2.rule
   stage: rule
-  narration: 3.2.rule
+  narration: 7.2.rule
   pdf:
   - lec07-network1.pdf
   - 23
@@ -4196,9 +3598,9 @@ beats:
   - rule:
       text: An address alone says nothing about its subnet. You need the mask.
   adjust: {}
-- id: 3.2.pitfall
+- id: 7.2.pitfall
   stage: rule
-  narration: 3.2.pitfall
+  narration: 7.2.pitfall
   pdf:
   - lec07-network1.pdf
   - 23
@@ -4211,9 +3613,9 @@ beats:
       wrong: Compare the first three bytes to find the subnet
       right: Only a /24 works that way. Always apply the actual mask.
   adjust: {}
-- id: 3.2.changed
+- id: 7.2.changed
   stage: changed_example
-  narration: 3.2.changed
+  narration: 7.2.changed
   pdf:
   - lec07-network1.pdf
   - 24
@@ -4234,9 +3636,9 @@ beats:
       name: t
       prefix: 23
   adjust: {}
-- id: 3.2.predict
+- id: 7.2.predict
   stage: prediction
-  narration: 3.2.predict
+  narration: 7.2.predict
   pdf:
   - lec07-network1.pdf
   - 24
@@ -4249,9 +3651,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 3.2.answer
+- id: 7.2.answer
   stage: explanation
-  narration: 3.2.answer
+  narration: 7.2.answer
   pdf:
   - lec07-network1.pdf
   - 24
@@ -4284,9 +3686,10 @@ beats:
   - rule:
       text: 255 only means broadcast when the mask says so.
       when: The ending 255
+  - keep: {}
   adjust: {}
 ---
-dish: '3.3'
+dish: '7.3'
 title: The IPv4 header
 deck: lec07-network1.pdf
 target_min: 4.5
@@ -4296,9 +3699,9 @@ concepts:
 - IP TTL and Traceroute
 pad: 2.2
 beats:
-- id: 3.3.question
+- id: 7.3.question
   stage: question
-  narration: 3.3.question
+  narration: 7.3.question
   pdf:
   - lec07-network1.pdf
   - 33
@@ -4311,9 +3714,9 @@ beats:
   - q:
       text: What does a router actually need to read?
   adjust: {}
-- id: 3.3.fields
+- id: 7.3.fields
   stage: animation
-  narration: 3.3.fields
+  narration: 7.3.fields
   pdf:
   - lec07-network1.pdf
   - 33
@@ -4363,9 +3766,9 @@ beats:
       size: 36
       when: A packet with
   adjust: {}
-- id: 3.3.length
+- id: 7.3.length
   stage: state
-  narration: 3.3.length
+  narration: 7.3.length
   pdf:
   - lec07-network1.pdf
   - 35
@@ -4387,9 +3790,9 @@ beats:
       zone: bottom
       when: The slide prints
   adjust: {}
-- id: 3.3.protocol
+- id: 7.3.protocol
   stage: state
-  narration: 3.3.protocol
+  narration: 7.3.protocol
   pdf:
   - lec07-network1.pdf
   - 39
@@ -4416,9 +3819,9 @@ beats:
       - t: 'UDP port: this program'
         k: transport
   adjust: {}
-- id: 3.3.ttl
+- id: 7.3.ttl
   stage: animation
-  narration: 3.3.ttl
+  narration: 7.3.ttl
   pdf:
   - lec07-network1.pdf
   - 38
@@ -4505,9 +3908,9 @@ beats:
   - table.reveal:
       name: tt
   adjust: {}
-- id: 3.3.checksum
+- id: 7.3.checksum
   stage: state
-  narration: 3.3.checksum
+  narration: 7.3.checksum
   pdf:
   - lec07-network1.pdf
   - 41
@@ -4528,9 +3931,9 @@ beats:
         - $ipv4.checksum_ttl63.checksum
     when: With TTL 64
   adjust: {}
-- id: 3.3.rule
+- id: 7.3.rule
   stage: rule
-  narration: 3.3.rule
+  narration: 7.3.rule
   pdf:
   - lec07-network1.pdf
   - 42
@@ -4557,9 +3960,9 @@ beats:
   - rule:
       text: Every field has a unit. Read the unit first.
   adjust: {}
-- id: 3.3.pitfall
+- id: 7.3.pitfall
   stage: rule
-  narration: 3.3.pitfall
+  narration: 7.3.pitfall
   pdf:
   - lec07-network1.pdf
   - 42
@@ -4571,9 +3974,9 @@ beats:
       wrong: The IP checksum protects the whole packet
       right: It covers the header only, and it can't correct errors
   adjust: {}
-- id: 3.3.changed
+- id: 7.3.changed
   stage: changed_example
-  narration: 3.3.changed
+  narration: 7.3.changed
   pdf:
   - lec07-network1.pdf
   - 38
@@ -4615,9 +4018,9 @@ beats:
       - R1
       - R2
   adjust: {}
-- id: 3.3.predict
+- id: 7.3.predict
   stage: prediction
-  narration: 3.3.predict
+  narration: 7.3.predict
   pdf:
   - lec07-network1.pdf
   - 38
@@ -4629,9 +4032,9 @@ beats:
       text: does TTL rescue it? what does each TTL count?
   adjust: {}
   hold: 6
-- id: 3.3.answer
+- id: 7.3.answer
   stage: explanation
-  narration: 3.3.answer
+  narration: 7.3.answer
   pdf:
   - lec07-network1.pdf
   - 38
@@ -4654,9 +4057,10 @@ beats:
         - seconds of cache
       - - Switch timer
         - seconds of aging
+  - keep: {}
   adjust: {}
 ---
-dish: '3.4'
+dish: '7.4'
 title: Fragmentation
 deck: lec07-network1.pdf
 target_min: 4.5
@@ -4664,9 +4068,9 @@ concepts:
 - IPv4 Fragmentation
 pad: 2.2
 beats:
-- id: 3.4.question
+- id: 7.4.question
   stage: question
-  narration: 3.4.question
+  narration: 7.4.question
   pdf:
   - lec07-network1.pdf
   - 35
@@ -4678,10 +4082,11 @@ beats:
       text: 'Lecture 7: fragmentation'
   - q:
       text: A 4000-byte datagram meets a 1500-byte link. Now what?
+  - keep: {}
   adjust: {}
-- id: 3.4.idea
+- id: 7.4.idea
   stage: animation
-  narration: 3.4.idea
+  narration: 7.4.idea
   pdf:
   - lec07-network1.pdf
   - 36
@@ -4734,9 +4139,9 @@ beats:
       - B
       when: Each fragment
   adjust: {}
-- id: 3.4.payload
+- id: 7.4.payload
   stage: state
-  narration: 3.4.payload
+  narration: 7.4.payload
   pdf:
   - lec07-network1.pdf
   - 37
@@ -4762,9 +4167,9 @@ beats:
       at: 1480
       when: 1,480 divides
   adjust: {}
-- id: 3.4.table
+- id: 7.4.table
   stage: state
-  narration: 3.4.table
+  narration: 7.4.table
   pdf:
   - lec07-network1.pdf
   - 37
@@ -4788,9 +4193,9 @@ beats:
       frag: $ipv4.frag_4000.2
       when: The third carries
   adjust: {}
-- id: 3.4.check
+- id: 7.4.check
   stage: state
-  narration: 3.4.check
+  narration: 7.4.check
   pdf:
   - lec07-network1.pdf
   - 37
@@ -4820,9 +4225,9 @@ beats:
       state: error
       when: the whole datagram
   adjust: {}
-- id: 3.4.rule
+- id: 7.4.rule
   stage: rule
-  narration: 3.4.rule
+  narration: 7.4.rule
   pdf:
   - lec07-network1.pdf
   - 37
@@ -4849,9 +4254,9 @@ beats:
         MF = 0.
       when: Fragmentation exists
   adjust: {}
-- id: 3.4.pitfall
+- id: 7.4.pitfall
   stage: rule
-  narration: 3.4.pitfall
+  narration: 7.4.pitfall
   pdf:
   - lec07-network1.pdf
   - 37
@@ -4863,9 +4268,9 @@ beats:
       wrong: A router always fragments a packet that's too big
       right: If Don't Fragment is set, the router can't fragment it
   adjust: {}
-- id: 3.4.changed
+- id: 7.4.changed
   stage: changed_example
-  narration: 3.4.changed
+  narration: 7.4.changed
   pdf:
   - lec07-network1.pdf
   - 37
@@ -4888,9 +4293,9 @@ beats:
       state: error
       when: and 980 is not
   adjust: {}
-- id: 3.4.predict
+- id: 7.4.predict
   stage: prediction
-  narration: 3.4.predict
+  narration: 7.4.predict
   pdf:
   - lec07-network1.pdf
   - 37
@@ -4903,9 +4308,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 3.4.answer
+- id: 7.4.answer
   stage: explanation
-  narration: 3.4.answer
+  narration: 7.4.answer
   pdf:
   - lec07-network1.pdf
   - 37
@@ -4970,7 +4375,7 @@ beats:
       text: How do you carve up an address space, and pick among overlapping routes?
   adjust: {}
 ---
-dish: '4.1'
+dish: '8.1'
 title: Carving a subnet
 deck: lec08-network2.pdf
 target_min: 6
@@ -4978,9 +4383,9 @@ concepts:
 - VLSM Subnetting
 pad: 2.2
 beats:
-- id: 4.1.question
+- id: 8.1.question
   stage: question
-  narration: 4.1.question
+  narration: 8.1.question
   pdf:
   - lec08-network2.pdf
   - 3
@@ -4997,9 +4402,9 @@ beats:
       text: One block, four departments. How do you cut it?
       zone: bottom
   adjust: {}
-- id: 4.1.sizing
+- id: 8.1.sizing
   stage: animation
-  narration: 4.1.sizing
+  narration: 8.1.sizing
   pdf:
   - lec08-network2.pdf
   - 5
@@ -5032,9 +4437,9 @@ beats:
       name: st
       when: Using different
   adjust: {}
-- id: 4.1.borrow
+- id: 8.1.borrow
   stage: state
-  narration: 4.1.borrow
+  narration: 8.1.borrow
   pdf:
   - lec08-network2.pdf
   - 4
@@ -5090,9 +4495,9 @@ beats:
       state: error
       when: A slash 31
   adjust: {}
-- id: 4.1.endsystem
+- id: 8.1.endsystem
   stage: state
-  narration: 4.1.endsystem
+  narration: 8.1.endsystem
   pdf:
   - lec08-network2.pdf
   - 5
@@ -5119,9 +4524,9 @@ beats:
       name: es
       when: If not
   adjust: {}
-- id: 4.1.parent
+- id: 8.1.parent
   stage: state
-  narration: 4.1.parent
+  narration: 8.1.parent
   pdf:
   - lec08-network2.pdf
   - 7
@@ -5157,9 +4562,9 @@ beats:
       zone: top
       when: So the true
   adjust: {}
-- id: 4.1.largest
+- id: 8.1.largest
   stage: state
-  narration: 4.1.largest
+  narration: 8.1.largest
   pdf:
   - lec08-network2.pdf
   - 7
@@ -5239,9 +4644,9 @@ beats:
       text: D
       kind: label
   adjust: {}
-- id: 4.1.bar
+- id: 8.1.bar
   stage: state
-  narration: 4.1.bar
+  narration: 8.1.bar
   pdf:
   - lec08-network2.pdf
   - 7
@@ -5269,9 +4674,9 @@ beats:
       text: at 384
       when: which is what
   adjust: {}
-- id: 4.1.rule
+- id: 8.1.rule
   stage: rule
-  narration: 4.1.rule
+  narration: 8.1.rule
   pdf:
   - lec08-network2.pdf
   - 7
@@ -5302,9 +4707,9 @@ beats:
         parent.'
       when: A plausible
   adjust: {}
-- id: 4.1.pitfall
+- id: 8.1.pitfall
   stage: rule
-  narration: 4.1.pitfall
+  narration: 8.1.pitfall
   pdf:
   - lec08-network2.pdf
   - 7
@@ -5316,9 +4721,9 @@ beats:
       wrong: A block can start anywhere it fits
       right: A block must start on a multiple of its own size
   adjust: {}
-- id: 4.1.changed
+- id: 8.1.changed
   stage: changed_example
-  narration: 4.1.changed
+  narration: 8.1.changed
   pdf:
   - lec08-network2.pdf
   - 5
@@ -5331,9 +4736,9 @@ beats:
       text: Department C now needs 63 interfaces, not 60.
       zone: top
   adjust: {}
-- id: 4.1.predict
+- id: 8.1.predict
   stage: prediction
-  narration: 4.1.predict
+  narration: 8.1.predict
   pdf:
   - lec08-network2.pdf
   - 5
@@ -5346,9 +4751,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 4.1.answer
+- id: 8.1.answer
   stage: explanation
-  narration: 4.1.answer
+  narration: 8.1.answer
   pdf:
   - lec08-network2.pdf
   - 5
@@ -5412,7 +4817,7 @@ beats:
       text: Overlapping prefixes on every router. How does it choose?
   adjust: {}
 ---
-dish: '4.2'
+dish: '8.2'
 title: The longest match
 deck: lec08-network2.pdf
 target_min: 7
@@ -5424,9 +4829,9 @@ concepts:
 - Generalized Forwarding
 pad: 2.2
 beats:
-- id: 4.2.question
+- id: 8.2.question
   stage: question
-  narration: 4.2.question
+  narration: 8.2.question
   pdf:
   - lec08-network2.pdf
   - 13
@@ -5439,9 +4844,9 @@ beats:
   - q:
       text: One destination matches several routes. Which one wins?
   adjust: {}
-- id: 4.2.table
+- id: 8.2.table
   stage: animation
-  narration: 4.2.table
+  narration: 8.2.table
   pdf:
   - lec08-network2.pdf
   - 29
@@ -5482,9 +4887,9 @@ beats:
       name: note
       when: and the slash 0
   adjust: {}
-- id: 4.2.match
+- id: 8.2.match
   stage: state
-  narration: 4.2.match
+  narration: 8.2.match
   pdf:
   - lec08-network2.pdf
   - 29
@@ -5527,9 +4932,9 @@ beats:
       data: $lpm.lookup_table
       show: 1
   adjust: {}
-- id: 4.2.more
+- id: 8.2.more
   stage: state
-  narration: 4.2.more
+  narration: 8.2.more
   pdf:
   - lec08-network2.pdf
   - 29
@@ -5568,9 +4973,9 @@ beats:
       when: A route's position
   adjust: {}
   pre_roll: 1.1
-- id: 4.2.bitlevel
+- id: 8.2.bitlevel
   stage: state
-  narration: 4.2.bitlevel
+  narration: 8.2.bitlevel
   pdf:
   - lec08-network2.pdf
   - 15
@@ -5625,9 +5030,9 @@ beats:
       state: error
       when: They differ
   adjust: {}
-- id: 4.2.budget
+- id: 8.2.budget
   stage: animation
-  narration: 4.2.budget
+  narration: 8.2.budget
   pdf:
   - lec08-network2.pdf
   - 30
@@ -5653,9 +5058,9 @@ beats:
       text: No time for a linear scan.
       when: But the conclusion
   adjust: {}
-- id: 4.2.trie
+- id: 8.2.trie
   stage: state
-  narration: 4.2.trie
+  narration: 8.2.trie
   pdf:
   - lec08-network2.pdf
   - 31
@@ -5763,9 +5168,9 @@ beats:
       text: A Patricia trie compresses long chains with no branching.
       when: compresses long chains
   adjust: {}
-- id: 4.2.cam
+- id: 8.2.cam
   stage: state
-  narration: 4.2.cam
+  narration: 8.2.cam
   pdf:
   - lec08-network2.pdf
   - 32
@@ -5831,9 +5236,9 @@ beats:
       text: TCAM compares every entry at once. Priority must still favor the longest
         prefix.
   adjust: {}
-- id: 4.2.general
+- id: 8.2.general
   stage: rule
-  narration: 4.2.general
+  narration: 8.2.general
   pdf:
   - lec08-network2.pdf
   - 11
@@ -5868,9 +5273,9 @@ beats:
         a time.
       when: Control installs
   adjust: {}
-- id: 4.2.pitfall
+- id: 8.2.pitfall
   stage: rule
-  narration: 4.2.pitfall
+  narration: 8.2.pitfall
   pdf:
   - lec08-network2.pdf
   - 11
@@ -5882,9 +5287,9 @@ beats:
       wrong: Stop at the first matching route
       right: 'Keep looking: the longest match wins, wherever it''s listed'
   adjust: {}
-- id: 4.2.changed
+- id: 8.2.changed
   stage: changed_example
-  narration: 4.2.changed
+  narration: 8.2.changed
   pdf:
   - lec08-network2.pdf
   - 29
@@ -5914,9 +5319,9 @@ beats:
       state: now
       when: An operator installs
   adjust: {}
-- id: 4.2.predict
+- id: 8.2.predict
   stage: prediction
-  narration: 4.2.predict
+  narration: 8.2.predict
   pdf:
   - lec08-network2.pdf
   - 29
@@ -5929,9 +5334,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 4.2.answer
+- id: 8.2.answer
   stage: explanation
-  narration: 4.2.answer
+  narration: 8.2.answer
   pdf:
   - lec08-network2.pdf
   - 29
@@ -5965,9 +5370,10 @@ beats:
       when: Finding the output
   - q:
       text: The packet still has to physically cross the router.
+  - keep: {}
   adjust: {}
 ---
-dish: '4.3'
+dish: '8.3'
 title: Inside a router
 deck: lec08-network2.pdf
 target_min: 7.5
@@ -5980,9 +5386,9 @@ concepts:
 - Output Queuing and Scheduling
 pad: 2.2
 beats:
-- id: 4.3.question
+- id: 8.3.question
   stage: question
-  narration: 4.3.question
+  narration: 8.3.question
   pdf:
   - lec08-network2.pdf
   - 9
@@ -5994,10 +5400,11 @@ beats:
       text: 'Lecture 8: inside a router'
   - q:
       text: When a router is slow, which part is the bottleneck?
+  - keep: {}
   adjust: {}
-- id: 4.3.parts
+- id: 8.3.parts
   stage: animation
-  narration: 4.3.parts
+  narration: 8.3.parts
   pdf:
   - lec08-network2.pdf
   - 9
@@ -6084,9 +5491,9 @@ beats:
       - O
       t: 2
   adjust: {}
-- id: 4.3.fabrics
+- id: 8.3.fabrics
   stage: state
-  narration: 4.3.fabrics
+  narration: 8.3.fabrics
   pdf:
   - lec08-network2.pdf
   - 19
@@ -6105,9 +5512,9 @@ beats:
       text: If the fabric cannot carry N × R, inputs wait even when outputs are free.
       when: A fabric that
   adjust: {}
-- id: 4.3.memory
+- id: 8.3.memory
   stage: animation
-  narration: 4.3.memory
+  narration: 8.3.memory
   pdf:
   - lec08-network2.pdf
   - 20
@@ -6168,9 +5575,9 @@ beats:
         M: now
       when: so memory bandwidth
   adjust: {}
-- id: 4.3.memory-more
+- id: 8.3.memory-more
   stage: state
-  narration: 4.3.memory-more
+  narration: 8.3.memory-more
   pdf:
   - lec08-network2.pdf
   - 20
@@ -6192,9 +5599,9 @@ beats:
       - O
       when: each forwarded bit
   adjust: {}
-- id: 4.3.bus
+- id: 8.3.bus
   stage: animation
-  narration: 4.3.bus
+  narration: 8.3.bus
   pdf:
   - lec08-network2.pdf
   - 21
@@ -6293,9 +5700,9 @@ beats:
       nodes:
         C: null
   adjust: {}
-- id: 4.3.bus-more
+- id: 8.3.bus-more
   stage: state
-  narration: 4.3.bus-more
+  narration: 8.3.bus-more
   pdf:
   - lec08-network2.pdf
   - 21
@@ -6315,9 +5722,9 @@ beats:
         B: error
       when: The bus is
   adjust: {}
-- id: 4.3.crossbar
+- id: 8.3.crossbar
   stage: animation
-  narration: 4.3.crossbar
+  narration: 8.3.crossbar
   pdf:
   - lec08-network2.pdf
   - 22
@@ -6386,9 +5793,9 @@ beats:
       when: Those cells
   adjust: {}
   pre_roll: 1.4000000000000001
-- id: 4.3.crossbar-more
+- id: 8.3.crossbar-more
   stage: state
-  narration: 4.3.crossbar-more
+  narration: 8.3.crossbar-more
   pdf:
   - lec08-network2.pdf
   - 22
@@ -6427,9 +5834,9 @@ beats:
       text: Parallel paths create no extra capacity at a single output.
       when: Parallel paths
   adjust: {}
-- id: 4.3.hol
+- id: 8.3.hol
   stage: state
-  narration: 4.3.hol
+  narration: 8.3.hol
   pdf:
   - lec08-network2.pdf
   - 24
@@ -6486,9 +5893,9 @@ beats:
         is arranged.'
       when: This is head
   adjust: {}
-- id: 4.3.outq
+- id: 8.3.outq
   stage: state
-  narration: 4.3.outq
+  narration: 8.3.outq
   pdf:
   - lec08-network2.pdf
   - 25
@@ -6546,9 +5953,9 @@ beats:
       name: pol
       when: Priority shifts
   adjust: {}
-- id: 4.3.timescales
+- id: 8.3.timescales
   stage: state
-  narration: 4.3.timescales
+  narration: 8.3.timescales
   pdf:
   - lec08-network2.pdf
   - 34
@@ -6588,9 +5995,9 @@ beats:
       text: Static entries don't adapt to failures, new equipment, or load.
       when: Tables could
   adjust: {}
-- id: 4.3.macvsip
+- id: 8.3.macvsip
   stage: state
-  narration: 4.3.macvsip
+  narration: 8.3.macvsip
   pdf:
   - lec08-network2.pdf
   - 35
@@ -6637,9 +6044,9 @@ beats:
       name: mi
       when: And which keeps
   adjust: {}
-- id: 4.3.rule
+- id: 8.3.rule
   stage: rule
-  narration: 4.3.rule
+  narration: 8.3.rule
   pdf:
   - lec08-network2.pdf
   - 26
@@ -6666,9 +6073,9 @@ beats:
       text: 'Locate the contention first: lookup, fabric, input queue, or output.'
       when: Upgrading one
   adjust: {}
-- id: 4.3.pitfall
+- id: 8.3.pitfall
   stage: rule
-  narration: 4.3.pitfall
+  narration: 8.3.pitfall
   pdf:
   - lec08-network2.pdf
   - 26
@@ -6681,9 +6088,9 @@ beats:
       wrong: Memory switching forwards at the full memory bandwidth
       right: Each packet crosses twice, so throughput is half of it
   adjust: {}
-- id: 4.3.changed
+- id: 8.3.changed
   stage: changed_example
-  narration: 4.3.changed
+  narration: 8.3.changed
   pdf:
   - lec08-network2.pdf
   - 25
@@ -6696,9 +6103,9 @@ beats:
       text: Ten senders saturate one output. Double the fabric speed?
       zone: top
   adjust: {}
-- id: 4.3.predict
+- id: 8.3.predict
   stage: prediction
-  narration: 4.3.predict
+  narration: 8.3.predict
   pdf:
   - lec08-network2.pdf
   - 25
@@ -6710,9 +6117,9 @@ beats:
       text: does a faster fabric help? does a bigger buffer?
   adjust: {}
   hold: 6
-- id: 4.3.answer
+- id: 8.3.answer
   stage: explanation
-  narration: 4.3.answer
+  narration: 8.3.answer
   pdf:
   - lec08-network2.pdf
   - 25
@@ -6737,9 +6144,10 @@ beats:
   - rule:
       text: 'Next: how did the laptop learn its address at all?'
       when: We assumed
+  - keep: {}
   adjust: {}
 ---
-dish: '5.1'
+dish: '9.1'
 title: Getting an address and a neighbor
 deck: lec09-discovery.pdf
 target_min: 6
@@ -6751,9 +6159,9 @@ concepts:
 - ARP
 pad: 2.2
 beats:
-- id: 5.1.question
+- id: 9.1.question
   stage: question
-  narration: 5.1.question
+  narration: 9.1.question
   pdf:
   - lec09-discovery.pdf
   - 4
@@ -6770,9 +6178,9 @@ beats:
       text: The laptop wakes up knowing nothing. How does it begin?
       zone: bottom
   adjust: {}
-- id: 5.1.identifiers
+- id: 9.1.identifiers
   stage: animation
-  narration: 5.1.identifiers
+  narration: 9.1.identifiers
   pdf:
   - lec09-discovery.pdf
   - 5
@@ -6799,9 +6207,9 @@ beats:
         - a local interface
         - one link
   adjust: {}
-- id: 5.1.habit
+- id: 9.1.habit
   stage: rule
-  narration: 5.1.habit
+  narration: 9.1.habit
   pdf:
   - lec09-discovery.pdf
   - 6
@@ -6823,9 +6231,9 @@ beats:
       - - IP behind a name
         - DNS
   adjust: {}
-- id: 5.1.bootstrap
+- id: 9.1.bootstrap
   stage: animation
-  narration: 5.1.bootstrap
+  narration: 9.1.bootstrap
   pdf:
   - lec09-discovery.pdf
   - 14
@@ -6887,9 +6295,9 @@ beats:
   - packet.fade:
       name: dis
   adjust: {}
-- id: 5.1.dora
+- id: 9.1.dora
   stage: state
-  narration: 5.1.dora
+  narration: 9.1.dora
   pdf:
   - lec09-discovery.pdf
   - 17
@@ -6934,9 +6342,9 @@ beats:
       state: done
       when: 'ACK: that server'
   adjust: {}
-- id: 5.1.config
+- id: 9.1.config
   stage: state
-  narration: 5.1.config
+  narration: 9.1.config
   pdf:
   - lec09-discovery.pdf
   - 17
@@ -6961,9 +6369,9 @@ beats:
       - - Lease
         - limited time
   adjust: {}
-- id: 5.1.lease
+- id: 9.1.lease
   stage: state
-  narration: 5.1.lease
+  narration: 9.1.lease
   pdf:
   - lec09-discovery.pdf
   - 18
@@ -7012,9 +6420,9 @@ beats:
       state: done
       when: With a lease
   adjust: {}
-- id: 5.1.arp
+- id: 9.1.arp
   stage: animation
-  narration: 5.1.arp
+  narration: 9.1.arp
   pdf:
   - lec09-discovery.pdf
   - 24
@@ -7107,9 +6515,9 @@ beats:
       state: changed
       when: The laptop caches
   adjust: {}
-- id: 5.1.two-tables
+- id: 9.1.two-tables
   stage: rule
-  narration: 5.1.two-tables
+  narration: 9.1.two-tables
   pdf:
   - lec09-discovery.pdf
   - 25
@@ -7131,9 +6539,9 @@ beats:
       - - Switch
         - MAC to port
   adjust: {}
-- id: 5.1.pitfall
+- id: 9.1.pitfall
   stage: rule
-  narration: 5.1.pitfall
+  narration: 9.1.pitfall
   pdf:
   - lec09-discovery.pdf
   - 25
@@ -7145,9 +6553,9 @@ beats:
       wrong: ARP finds a host's address from its name
       right: DNS maps names to IPs. ARP maps IPs to MACs.
   adjust: {}
-- id: 5.1.changed
+- id: 9.1.changed
   stage: changed_example
-  narration: 5.1.changed
+  narration: 9.1.changed
   pdf:
   - lec09-discovery.pdf
   - 25
@@ -7163,9 +6571,9 @@ beats:
       - Laptop 192.0.2.10/24 → resolver 198.51.100.53
       - 192.0.2.0 is not 198.51.100.0
   adjust: {}
-- id: 5.1.predict
+- id: 9.1.predict
   stage: prediction
-  narration: 5.1.predict
+  narration: 9.1.predict
   pdf:
   - lec09-discovery.pdf
   - 25
@@ -7177,9 +6585,9 @@ beats:
       text: which IP address does the laptop ARP for?
   adjust: {}
   hold: 6
-- id: 5.1.answer
+- id: 9.1.answer
   stage: explanation
-  narration: 5.1.answer
+  narration: 9.1.answer
   pdf:
   - lec09-discovery.pdf
   - 25
@@ -7199,9 +6607,10 @@ beats:
         - 192.0.2.1
       - - 192.0.2.53 (local)
         - 192.0.2.53
+  - keep: {}
   adjust: {}
 ---
-dish: '5.2'
+dish: '9.2'
 title: Finding a name
 deck: lec09-discovery.pdf
 target_min: 5.5
@@ -7213,9 +6622,9 @@ concepts:
 - Negative DNS Caching
 pad: 2.2
 beats:
-- id: 5.2.question
+- id: 9.2.question
   stage: question
-  narration: 5.2.question
+  narration: 9.2.question
   pdf:
   - lec09-discovery.pdf
   - 26
@@ -7228,9 +6637,9 @@ beats:
   - q:
       text: Could one file, or one server, hold every name?
   adjust: {}
-- id: 5.2.rejected
+- id: 9.2.rejected
   stage: animation
-  narration: 5.2.rejected
+  narration: 9.2.rejected
   pdf:
   - lec09-discovery.pdf
   - 27
@@ -7251,9 +6660,9 @@ beats:
       - - One central server
         - fragile and overloaded
   adjust: {}
-- id: 5.2.hierarchy
+- id: 9.2.hierarchy
   stage: state
-  narration: 5.2.hierarchy
+  narration: 9.2.hierarchy
   pdf:
   - lec09-discovery.pdf
   - 30
@@ -7303,9 +6712,9 @@ beats:
       zone: top
       when: By the way
   adjust: {}
-- id: 5.2.lookup
+- id: 9.2.lookup
   stage: state
-  narration: 5.2.lookup
+  narration: 9.2.lookup
   pdf:
   - lec09-discovery.pdf
   - 36
@@ -7381,9 +6790,9 @@ beats:
       state: done
       when: The result returns
   adjust: {}
-- id: 5.2.rule-rec
+- id: 9.2.rule-rec
   stage: rule
-  narration: 5.2.rule-rec
+  narration: 9.2.rule-rec
   pdf:
   - lec09-discovery.pdf
   - 36
@@ -7395,9 +6804,9 @@ beats:
   - rule:
       text: 'Client to resolver: recursive. Resolver down the tree: iterative.'
   adjust: {}
-- id: 5.2.cache
+- id: 9.2.cache
   stage: state
-  narration: 5.2.cache
+  narration: 9.2.cache
   pdf:
   - lec09-discovery.pdf
   - 37
@@ -7449,9 +6858,9 @@ beats:
       text: 'Long TTL: less load, staler answers. Short TTL: fresher answers, more
         load.'
   adjust: {}
-- id: 5.2.negative
+- id: 9.2.negative
   stage: state
-  narration: 5.2.negative
+  narration: 9.2.negative
   pdf:
   - lec09-discovery.pdf
   - 38
@@ -7471,9 +6880,9 @@ beats:
       - - but then the name is added
         - hidden until expiry
   adjust: {}
-- id: 5.2.negative-more
+- id: 9.2.negative-more
   stage: state
-  narration: 5.2.negative-more
+  narration: 9.2.negative-more
   pdf:
   - lec09-discovery.pdf
   - 38
@@ -7490,9 +6899,9 @@ beats:
       text: No such name is an answer. A timeout is only silence.
       when: A timeout is
   adjust: {}
-- id: 5.2.pitfall
+- id: 9.2.pitfall
   stage: rule
-  narration: 5.2.pitfall
+  narration: 9.2.pitfall
   pdf:
   - lec09-discovery.pdf
   - 38
@@ -7504,9 +6913,9 @@ beats:
       wrong: DNS TTL counts hops, like IP TTL
       right: DNS TTL is a cache lifetime in seconds
   adjust: {}
-- id: 5.2.changed
+- id: 9.2.changed
   stage: changed_example
-  narration: 5.2.changed
+  narration: 9.2.changed
   pdf:
   - lec09-discovery.pdf
   - 38
@@ -7519,9 +6928,9 @@ beats:
       text: A second laptop asks 240 seconds later. The TTL is 300.
       zone: top
   adjust: {}
-- id: 5.2.predict
+- id: 9.2.predict
   stage: prediction
-  narration: 5.2.predict
+  narration: 9.2.predict
   pdf:
   - lec09-discovery.pdf
   - 38
@@ -7534,9 +6943,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 5.2.answer
+- id: 9.2.answer
   stage: explanation
-  narration: 5.2.answer
+  narration: 9.2.answer
   pdf:
   - lec09-discovery.pdf
   - 38
@@ -7556,9 +6965,10 @@ beats:
         - '0'
       - - 300 s
         - up to 3, fewer with cached referrals
+  - keep: {}
   adjust: {}
 ---
-dish: '5.3'
+dish: '9.3'
 title: Records and the whole journey
 deck: lec09-discovery.pdf
 target_min: 6.5
@@ -7571,9 +6981,9 @@ concepts:
 - DNS Reliability
 pad: 2.2
 beats:
-- id: 5.3.question
+- id: 9.3.question
   stage: question
-  narration: 5.3.question
+  narration: 9.3.question
   pdf:
   - lec09-discovery.pdf
   - 41
@@ -7586,9 +6996,9 @@ beats:
   - q:
       text: What else does DNS store, and what if a query is lost?
   adjust: {}
-- id: 5.3.records
+- id: 9.3.records
   stage: animation
-  narration: 5.3.records
+  narration: 9.3.records
   pdf:
   - lec09-discovery.pdf
   - 41
@@ -7638,9 +7048,9 @@ beats:
       text: NS, CNAME and MX values are hostnames. They may need another lookup.
       when: Notice that
   adjust: {}
-- id: 5.3.reliability
+- id: 9.3.reliability
   stage: state
-  narration: 5.3.reliability
+  narration: 9.3.reliability
   pdf:
   - lec09-discovery.pdf
   - 43
@@ -7658,9 +7068,9 @@ beats:
       - An ID matches replies to queries
       - UDP is common; TCP also works
   adjust: {}
-- id: 5.3.reliability-more
+- id: 9.3.reliability-more
   stage: state
-  narration: 5.3.reliability-more
+  narration: 9.3.reliability-more
   pdf:
   - lec09-discovery.pdf
   - 43
@@ -7722,9 +7132,9 @@ beats:
       when: and it accepts
       t: 1.1
   adjust: {}
-- id: 5.3.journey
+- id: 9.3.journey
   stage: animation
-  narration: 5.3.journey
+  narration: 9.3.journey
   pdf:
   - lec09-discovery.pdf
   - 49
@@ -7763,9 +7173,9 @@ beats:
       name: j
       when: a TCP connection
   adjust: {}
-- id: 5.3.insert
+- id: 9.3.insert
   stage: state
-  narration: 5.3.insert
+  narration: 9.3.insert
   pdf:
   - lec09-discovery.pdf
   - 44
@@ -7806,9 +7216,9 @@ beats:
       n: 2
       when: On its own server
   adjust: {}
-- id: 5.3.dig
+- id: 9.3.dig
   stage: state
-  narration: 5.3.dig
+  narration: 9.3.dig
   pdf:
   - lec09-discovery.pdf
   - 45
@@ -7835,9 +7245,9 @@ beats:
       text: dig +trace shows the walk from root to TLD to authoritative.
       when: Running dig
   adjust: {}
-- id: 5.3.arb
+- id: 9.3.arb
   stage: animation
-  narration: 5.3.arb
+  narration: 9.3.arb
   pdf:
   - lec09-discovery.pdf
   - 55
@@ -7894,9 +7304,9 @@ beats:
       name: p
       to: R
   adjust: {}
-- id: 5.3.arb-2
+- id: 9.3.arb-2
   stage: animation
-  narration: 5.3.arb-2
+  narration: 9.3.arb-2
   pdf:
   - lec09-discovery.pdf
   - 55
@@ -7916,9 +7326,9 @@ beats:
       to: B
       when: There it is
   adjust: {}
-- id: 5.3.rule
+- id: 9.3.rule
   stage: rule
-  narration: 5.3.rule
+  narration: 9.3.rule
   pdf:
   - lec09-discovery.pdf
   - 58
@@ -7929,9 +7339,9 @@ beats:
       text: What is missing right now decides the next step. Discovery traffic needs
         delivery too.
   adjust: {}
-- id: 5.3.pitfall
+- id: 9.3.pitfall
   stage: rule
-  narration: 5.3.pitfall
+  narration: 9.3.pitfall
   pdf:
   - lec09-discovery.pdf
   - 58
@@ -7942,9 +7352,9 @@ beats:
       wrong: A CNAME redirects your browser
       right: 'A CNAME is a DNS alias: no HTTP redirect happens'
   adjust: {}
-- id: 5.3.changed
+- id: 9.3.changed
   stage: changed_example
-  narration: 5.3.changed
+  narration: 9.3.changed
   pdf:
   - lec09-discovery.pdf
   - 58
@@ -7961,9 +7371,9 @@ beats:
       - The answer is already cached
       - The R1 to R2 link is cut
   adjust: {}
-- id: 5.3.predict
+- id: 9.3.predict
   stage: prediction
-  narration: 5.3.predict
+  narration: 9.3.predict
   pdf:
   - lec09-discovery.pdf
   - 58
@@ -7974,9 +7384,9 @@ beats:
       text: which steps disappear, and which remain?
   adjust: {}
   hold: 6
-- id: 5.3.answer
+- id: 9.3.answer
   stage: explanation
-  narration: 5.3.answer
+  narration: 9.3.answer
   pdf:
   - lec09-discovery.pdf
   - 58
@@ -7999,9 +7409,10 @@ beats:
   - rule:
       text: 'Next: who fills in the router''s table?'
       when: Who fills it
+  - keep: {}
   adjust: {}
 ---
-dish: '6.1'
+dish: '10.1'
 title: Dijkstra
 deck: lec10-routing.pdf
 target_min: 9.5
@@ -8013,9 +7424,9 @@ concepts:
 - IS-IS
 pad: 2.2
 beats:
-- id: 6.1.question
+- id: 10.1.question
   stage: question
-  narration: 6.1.question
+  narration: 10.1.question
   pdf:
   - lec10-routing.pdf
   - 19
@@ -8032,9 +7443,9 @@ beats:
       text: How do routers work out paths through a network none of them fully sees?
       zone: bottom
   adjust: {}
-- id: 6.1.laptop
+- id: 10.1.laptop
   stage: animation
-  narration: 6.1.laptop
+  narration: 10.1.laptop
   pdf:
   - lec10-routing.pdf
   - 19
@@ -8102,9 +7513,9 @@ beats:
       text: Who built that table?
       when: This chapter
   adjust: {}
-- id: 6.1.routing-forwarding
+- id: 10.1.routing-forwarding
   stage: animation
-  narration: 6.1.routing-forwarding
+  narration: 10.1.routing-forwarding
   pdf:
   - lec10-routing.pdf
   - 12
@@ -8167,9 +7578,9 @@ beats:
       text: Static routes don't adapt to failures, equipment or load
       when: Static routes
   adjust: {}
-- id: 6.1.model
+- id: 10.1.model
   stage: animation
-  narration: 6.1.model
+  narration: 10.1.model
   pdf:
   - lec10-routing.pdf
   - 19
@@ -8238,9 +7649,9 @@ beats:
         phrase: Our goal
         frame_offset: 162
   adjust: {}
-- id: 6.1.model-2
+- id: 10.1.model-2
   stage: animation
-  narration: 6.1.model-2
+  narration: 10.1.model-2
   pdf:
   - lec10-routing.pdf
   - 19
@@ -8273,9 +7684,9 @@ beats:
       text: This fits inside one organization
       when: This makes sense
   adjust: {}
-- id: 6.1.linkstate
+- id: 10.1.linkstate
   stage: animation
-  narration: 6.1.linkstate
+  narration: 10.1.linkstate
   pdf:
   - lec10-routing.pdf
   - 22
@@ -8335,9 +7746,9 @@ beats:
       text: OSPF and IS-IS are link-state protocols
       when: OSPF and IS-IS
   adjust: {}
-- id: 6.1.ospf
+- id: 10.1.ospf
   stage: state
-  narration: 6.1.ospf
+  narration: 10.1.ospf
   pdf:
   - lec10-routing.pdf
   - 22
@@ -8386,9 +7797,9 @@ beats:
       text: 'Next: Dijkstra''s computation'
       when: look at the computation
   adjust: {}
-- id: 6.1.idea
+- id: 10.1.idea
   stage: rule
-  narration: 6.1.idea
+  narration: 10.1.idea
   pdf:
   - lec10-routing.pdf
   - 22
@@ -8481,9 +7892,9 @@ beats:
       when: Why is it safe
   adjust: {}
   pre_roll: 0.9
-- id: 6.1.init
+- id: 10.1.init
   stage: state
-  narration: 6.1.init
+  narration: 10.1.init
   pdf:
   - lec10-routing.pdf
   - 27
@@ -8602,9 +8013,9 @@ beats:
       name: t
   adjust: {}
   pre_roll: 1.1
-- id: 6.1.settle-b
+- id: 10.1.settle-b
   stage: state
-  narration: 6.1.settle-b
+  narration: 10.1.settle-b
   pdf:
   - lec10-routing.pdf
   - 28
@@ -8680,9 +8091,9 @@ beats:
       name: t
       when: that beats infinity
   adjust: {}
-- id: 6.1.settle-c
+- id: 10.1.settle-c
   stage: state
-  narration: 6.1.settle-c
+  narration: 10.1.settle-c
   pdf:
   - lec10-routing.pdf
   - 30
@@ -8736,9 +8147,9 @@ beats:
         C: done
       when: until the moment it's settled
   adjust: {}
-- id: 6.1.settle-d
+- id: 10.1.settle-d
   stage: state
-  narration: 6.1.settle-d
+  narration: 10.1.settle-d
   pdf:
   - lec10-routing.pdf
   - 36
@@ -8781,9 +8192,9 @@ beats:
       size: 40
       when: and D is 5
   adjust: {}
-- id: 6.1.firsthop
+- id: 10.1.firsthop
   stage: rule
-  narration: 6.1.firsthop
+  narration: 10.1.firsthop
   pdf:
   - lec10-routing.pdf
   - 36
@@ -8868,9 +8279,9 @@ beats:
       text: A forwarding table stores the first hop, not the predecessor.
       when: Distance, predecessor
   adjust: {}
-- id: 6.1.slide
+- id: 10.1.slide
   stage: rule
-  narration: 6.1.slide
+  narration: 10.1.slide
   pdf:
   - lec10-routing.pdf
   - 26
@@ -9046,9 +8457,9 @@ beats:
       text: More hops, lower cost.
       when: More hops
   adjust: {}
-- id: 6.1.bigger
+- id: 10.1.bigger
   stage: state
-  narration: 6.1.bigger
+  narration: 10.1.bigger
   pdf:
   - lec10-routing.pdf
   - 36
@@ -9195,9 +8606,9 @@ beats:
       text: A tie can alter a predecessor, not a shortest distance
       when: Either may go
   adjust: {}
-- id: 6.1.bigger-2
+- id: 10.1.bigger-2
   stage: state
-  narration: 6.1.bigger-2
+  narration: 10.1.bigger-2
   pdf:
   - lec10-routing.pdf
   - 36
@@ -9284,9 +8695,9 @@ beats:
       text: Keep settled set, distances and tie policy explicit
       when: Keep your settled
   adjust: {}
-- id: 6.1.pitfall
+- id: 10.1.pitfall
   stage: rule
-  narration: 6.1.pitfall
+  narration: 10.1.pitfall
   pdf:
   - lec10-routing.pdf
   - 36
@@ -9298,9 +8709,9 @@ beats:
       wrong: Settled nodes can still improve
       right: A settled distance is final. Only tentative ones can improve.
   adjust: {}
-- id: 6.1.changed
+- id: 10.1.changed
   stage: changed_example
-  narration: 6.1.changed
+  narration: 10.1.changed
   pdf:
   - lec10-routing.pdf
   - 36
@@ -9333,9 +8744,9 @@ beats:
         - '?'
         - '?'
   adjust: {}
-- id: 6.1.predict
+- id: 10.1.predict
   stage: prediction
-  narration: 6.1.predict
+  narration: 10.1.predict
   pdf:
   - lec10-routing.pdf
   - 36
@@ -9348,9 +8759,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 6.1.answer
+- id: 10.1.answer
   stage: explanation
-  narration: 6.1.answer
+  narration: 10.1.answer
   pdf:
   - lec10-routing.pdf
   - 36
@@ -9452,7 +8863,7 @@ beats:
       when: Flooding carries
   adjust: {}
 ---
-dish: '6.2'
+dish: '10.2'
 title: Distance vector
 deck: lec10-routing.pdf
 target_min: 7
@@ -9463,9 +8874,9 @@ concepts:
 - EIGRP
 pad: 2.2
 beats:
-- id: 6.2.question
+- id: 10.2.question
   stage: question
-  narration: 6.2.question
+  narration: 10.2.question
   pdf:
   - lec10-routing.pdf
   - 37
@@ -9478,9 +8889,9 @@ beats:
   - q:
       text: Can a router find good paths just by asking its neighbors?
   adjust: {}
-- id: 6.2.idea
+- id: 10.2.idea
   stage: animation
-  narration: 6.2.idea
+  narration: 10.2.idea
   pdf:
   - lec10-routing.pdf
   - 37
@@ -9564,9 +8975,9 @@ beats:
       text: says 5 to Z
       side: down
   adjust: {}
-- id: 6.2.compute
+- id: 10.2.compute
   stage: state
-  narration: 6.2.compute
+  narration: 10.2.compute
   pdf:
   - lec10-routing.pdf
   - 40
@@ -9690,9 +9101,9 @@ beats:
         phrase: So A switches
         frame_offset: 47
   adjust: {}
-- id: 6.2.formula
+- id: 10.2.formula
   stage: rule
-  narration: 6.2.formula
+  narration: 10.2.formula
   pdf:
   - lec10-routing.pdf
   - 38
@@ -9767,9 +9178,9 @@ beats:
         phrase: Two terms
         frame_offset: 29
   adjust: {}
-- id: 6.2.setup-rounds
+- id: 10.2.setup-rounds
   stage: animation
-  narration: 6.2.setup-rounds
+  narration: 10.2.setup-rounds
   pdf:
   - lec10-routing.pdf
   - 42
@@ -9845,9 +9256,9 @@ beats:
       text: A has B 2, C 5, D ∞
       when: So A has
   adjust: {}
-- id: 6.2.round2
+- id: 10.2.round2
   stage: state
-  narration: 6.2.round2
+  narration: 10.2.round2
   pdf:
   - lec10-routing.pdf
   - 43
@@ -9892,9 +9303,9 @@ beats:
       text: After round two, A's table reflects paths of up to two edges.
       when: A's table now
   adjust: {}
-- id: 6.2.round3
+- id: 10.2.round3
   stage: state
-  narration: 6.2.round3
+  narration: 10.2.round3
   pdf:
   - lec10-routing.pdf
   - 44
@@ -9960,9 +9371,9 @@ beats:
         phrase: The next round
         frame_offset: 17
   adjust: {}
-- id: 6.2.real
+- id: 10.2.real
   stage: rule
-  narration: 6.2.real
+  narration: 10.2.real
   pdf:
   - lec10-routing.pdf
   - 38
@@ -9995,9 +9406,9 @@ beats:
       text: EIGRP's rules differ in detail
       when: Don't assume
   adjust: {}
-- id: 6.2.real-more
+- id: 10.2.real-more
   stage: state
-  narration: 6.2.real-more
+  narration: 10.2.real-more
   pdf:
   - lec10-routing.pdf
   - 38
@@ -10052,9 +9463,9 @@ beats:
       text: Don't carry RIP's limit over to EIGRP
       when: Only RIP
   adjust: {}
-- id: 6.2.compare
+- id: 10.2.compare
   stage: rule
-  narration: 6.2.compare
+  narration: 10.2.compare
   pdf:
   - lec10-routing.pdf
   - 46
@@ -10094,9 +9505,9 @@ beats:
       text: Link state shares a map. Distance vector shares neighbors' distances.
       when: The reusable
   adjust: {}
-- id: 6.2.robustness
+- id: 10.2.robustness
   stage: rule
-  narration: 6.2.robustness
+  narration: 10.2.robustness
   pdf:
   - lec10-routing.pdf
   - 46
@@ -10135,9 +9546,9 @@ beats:
       text: A family-level picture, not a universal benchmark.
       when: Real costs
   adjust: {}
-- id: 6.2.pitfall
+- id: 10.2.pitfall
   stage: rule
-  narration: 6.2.pitfall
+  narration: 10.2.pitfall
   pdf:
   - lec10-routing.pdf
   - 46
@@ -10149,9 +9560,9 @@ beats:
       wrong: Use this round's freshly updated values
       right: In a synchronous exercise, use only the previous round's values
   adjust: {}
-- id: 6.2.changed
+- id: 10.2.changed
   stage: changed_example
-  narration: 6.2.changed
+  narration: 10.2.changed
   pdf:
   - lec10-routing.pdf
   - 41
@@ -10183,9 +9594,9 @@ beats:
       text: x to Q costs 9; Q advertises 1
       when: Its link to Q
   adjust: {}
-- id: 6.2.predict
+- id: 10.2.predict
   stage: prediction
-  narration: 6.2.predict
+  narration: 10.2.predict
   pdf:
   - lec10-routing.pdf
   - 41
@@ -10198,9 +9609,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 6.2.answer
+- id: 10.2.answer
   stage: explanation
-  narration: 6.2.answer
+  narration: 10.2.answer
   pdf:
   - lec10-routing.pdf
   - 41
@@ -10243,9 +9654,10 @@ beats:
   - rule:
       text: 'Next: where neither approach works'
       when: First, there's one
+  - keep: {}
   adjust: {}
 ---
-dish: '6.3'
+dish: '10.3'
 title: Path vector
 deck: lec10-routing.pdf
 target_min: 3.5
@@ -10253,9 +9665,9 @@ concepts:
 - Path-Vector Routing
 pad: 2.2
 beats:
-- id: 6.3.question
+- id: 10.3.question
   stage: question
-  narration: 6.3.question
+  narration: 10.3.question
   pdf:
   - lec10-routing.pdf
   - 47
@@ -10268,9 +9680,9 @@ beats:
   - q:
       text: Would a network share its map, or trust a rival's number?
   adjust: {}
-- id: 6.3.limits
+- id: 10.3.limits
   stage: animation
-  narration: 6.3.limits
+  narration: 10.3.limits
   pdf:
   - lec10-routing.pdf
   - 48
@@ -10303,9 +9715,9 @@ beats:
       text: The number hides the route, so no preferences
       when: And the number hides
   adjust: {}
-- id: 6.3.fix
+- id: 10.3.fix
   stage: state
-  narration: 6.3.fix
+  narration: 10.3.fix
   pdf:
   - lec10-routing.pdf
   - 50
@@ -10404,9 +9816,9 @@ beats:
       - n3
       - n4
   adjust: {}
-- id: 6.3.loop
+- id: 10.3.loop
   stage: state
-  narration: 6.3.loop
+  narration: 10.3.loop
   pdf:
   - lec10-routing.pdf
   - 51
@@ -10433,9 +9845,9 @@ beats:
   - rule:
       text: A router rejects any path containing itself.
   adjust: {}
-- id: 6.3.policy
+- id: 10.3.policy
   stage: rule
-  narration: 6.3.policy
+  narration: 10.3.policy
   pdf:
   - lec10-routing.pdf
   - 52
@@ -10455,9 +9867,9 @@ beats:
       text: Loop-free doesn't mean the choices fit together
       when: But it also means
   adjust: {}
-- id: 6.3.pitfall
+- id: 10.3.pitfall
   stage: rule
-  narration: 6.3.pitfall
+  narration: 10.3.pitfall
   pdf:
   - lec10-routing.pdf
   - 52
@@ -10469,9 +9881,9 @@ beats:
       wrong: Path vector guarantees quick, stable routing
       right: It rejects loops. Convergence and stability are separate.
   adjust: {}
-- id: 6.3.changed
+- id: 10.3.changed
   stage: changed_example
-  narration: 6.3.changed
+  narration: 10.3.changed
   pdf:
   - lec10-routing.pdf
   - 51
@@ -10498,9 +9910,9 @@ beats:
         - 4, 1 or 3, 2, 6, 7, 1
         - '?'
   adjust: {}
-- id: 6.3.predict
+- id: 10.3.predict
   stage: prediction
-  narration: 6.3.predict
+  narration: 10.3.predict
   pdf:
   - lec10-routing.pdf
   - 51
@@ -10512,9 +9924,9 @@ beats:
       text: which are loops? must AS 5 pick the short path?
   adjust: {}
   hold: 6
-- id: 6.3.answer
+- id: 10.3.answer
   stage: explanation
-  narration: 6.3.answer
+  narration: 10.3.answer
   pdf:
   - lec10-routing.pdf
   - 52
@@ -10561,7 +9973,7 @@ beats:
       when: Once a path
   adjust: {}
 ---
-dish: '6.4'
+dish: '10.4'
 title: MPLS labels
 deck: lec10-routing.pdf
 target_min: 4.5
@@ -10570,9 +9982,9 @@ concepts:
 - RSVP Signaling
 pad: 2.2
 beats:
-- id: 6.4.question
+- id: 10.4.question
   stage: question
-  narration: 6.4.question
+  narration: 10.4.question
   pdf:
   - lec10-routing.pdf
   - 53
@@ -10585,9 +9997,9 @@ beats:
   - q:
       text: Could we set up a path in advance, and just follow it?
   adjust: {}
-- id: 6.4.label
+- id: 10.4.label
   stage: animation
-  narration: 6.4.label
+  narration: 10.4.label
   pdf:
   - lec10-routing.pdf
   - 54
@@ -10679,9 +10091,9 @@ beats:
       when: The last router
   adjust: {}
   pre_roll: 0.2
-- id: 6.4.swap
+- id: 10.4.swap
   stage: state
-  narration: 6.4.swap
+  narration: 10.4.swap
   pdf:
   - lec10-routing.pdf
   - 56
@@ -10731,9 +10143,9 @@ beats:
       name: p
       to: W
   adjust: {}
-- id: 6.4.signal
+- id: 10.4.signal
   stage: state
-  narration: 6.4.signal
+  narration: 10.4.signal
   pdf:
   - lec10-routing.pdf
   - 53
@@ -10771,9 +10183,9 @@ beats:
       text: An explicit path can steer traffic onto spare capacity
       when: Because the path
   adjust: {}
-- id: 6.4.te
+- id: 10.4.te
   stage: state
-  narration: 6.4.te
+  narration: 10.4.te
   pdf:
   - lec10-routing.pdf
   - 55
@@ -10804,9 +10216,9 @@ beats:
       text: 'Today: traffic engineering is the bigger reason'
       when: Today
   adjust: {}
-- id: 6.4.rule
+- id: 10.4.rule
   stage: rule
-  narration: 6.4.rule
+  narration: 10.4.rule
   pdf:
   - lec10-routing.pdf
   - 54
@@ -10824,9 +10236,9 @@ beats:
       text: The control plane decides what state to install
       when: Something must
   adjust: {}
-- id: 6.4.laptop
+- id: 10.4.laptop
   stage: rule
-  narration: 6.4.laptop
+  narration: 10.4.laptop
   pdf:
   - lec10-routing.pdf
   - 54
@@ -10847,9 +10259,9 @@ beats:
       text: The packet itself never knew
       when: The packet itself
   adjust: {}
-- id: 6.4.pitfall
+- id: 10.4.pitfall
   stage: rule
-  narration: 6.4.pitfall
+  narration: 10.4.pitfall
   pdf:
   - lec10-routing.pdf
   - 54
@@ -10861,9 +10273,9 @@ beats:
       wrong: An MPLS label reserves bandwidth
       right: A label only says how to forward. Reservation is separate.
   adjust: {}
-- id: 6.4.changed
+- id: 10.4.changed
   stage: changed_example
-  narration: 6.4.changed
+  narration: 10.4.changed
   pdf:
   - lec10-routing.pdf
   - 56
@@ -10890,9 +10302,9 @@ beats:
         - 99
         - '?'
   adjust: {}
-- id: 6.4.predict
+- id: 10.4.predict
   stage: prediction
-  narration: 6.4.predict
+  narration: 10.4.predict
   pdf:
   - lec10-routing.pdf
   - 56
@@ -10904,9 +10316,9 @@ beats:
       text: is reusing a label a conflict? what happens to 99?
   adjust: {}
   hold: 6
-- id: 6.4.answer
+- id: 10.4.answer
   stage: explanation
-  narration: 6.4.answer
+  narration: 10.4.answer
   pdf:
   - lec10-routing.pdf
   - 56
@@ -10926,9 +10338,10 @@ beats:
   - rule:
       text: 'Next: what happens in the seconds after a link fails?'
       when: We've treated
+  - keep: {}
   adjust: {}
 ---
-dish: '7.1'
+dish: '11.1'
 title: When a link fails
 deck: lec11-convergence.pdf
 target_min: 6
@@ -10939,9 +10352,9 @@ concepts:
 - Transient Forwarding Loops
 pad: 2.2
 beats:
-- id: 7.1.question
+- id: 11.1.question
   stage: question
-  narration: 7.1.question
+  narration: 11.1.question
   pdf:
   - lec11-convergence.pdf
   - 4
@@ -10958,9 +10371,9 @@ beats:
       text: Correct before, correct after. What about in between?
       zone: bottom
   adjust: {}
-- id: 7.1.laptop
+- id: 11.1.laptop
   stage: animation
-  narration: 7.1.laptop
+  narration: 11.1.laptop
   pdf:
   - lec11-convergence.pdf
   - 4
@@ -11045,9 +10458,9 @@ beats:
       when: So a failure
   adjust: {}
   pre_roll: 2.0
-- id: 7.1.causes
+- id: 11.1.causes
   stage: animation
-  narration: 7.1.causes
+  narration: 11.1.causes
   pdf:
   - lec11-convergence.pdf
   - 4
@@ -11070,9 +10483,9 @@ beats:
       - - ''
         - failed software
   adjust: {}
-- id: 7.1.detect
+- id: 11.1.detect
   stage: animation
-  narration: 7.1.detect
+  narration: 11.1.detect
   pdf:
   - lec11-convergence.pdf
   - 5
@@ -11138,9 +10551,9 @@ beats:
         - slow detection
     when: That leaves
   adjust: {}
-- id: 7.1.stages
+- id: 11.1.stages
   stage: state
-  narration: 7.1.stages
+  narration: 11.1.stages
   pdf:
   - lec11-convergence.pdf
   - 7
@@ -11200,9 +10613,9 @@ beats:
       tex: 30+10+5+15=60\text{ ms}
       size: 46
   adjust: {}
-- id: 7.1.blackhole
+- id: 11.1.blackhole
   stage: animation
-  narration: 7.1.blackhole
+  narration: 11.1.blackhole
   pdf:
   - lec11-convergence.pdf
   - 8
@@ -11282,9 +10695,9 @@ beats:
       - 'Blackhole: no working continuation'
       when: That's a forwarding
   adjust: {}
-- id: 7.1.loop
+- id: 11.1.loop
   stage: state
-  narration: 7.1.loop
+  narration: 11.1.loop
   pdf:
   - lec11-convergence.pdf
   - 9
@@ -11330,9 +10743,9 @@ beats:
       color: now
       when: The old configuration
   adjust: {}
-- id: 7.1.consequences
+- id: 11.1.consequences
   stage: state
-  narration: 7.1.consequences
+  narration: 11.1.consequences
   pdf:
   - lec11-convergence.pdf
   - 10
@@ -11347,9 +10760,9 @@ beats:
       text: TTL ends a looping packet. It does not recover it, and the loop consumes
         capacity first.
   adjust: {}
-- id: 7.1.improve
+- id: 11.1.improve
   stage: rule
-  narration: 7.1.improve
+  narration: 11.1.improve
   pdf:
   - lec11-convergence.pdf
   - 11
@@ -11371,9 +10784,9 @@ beats:
   - rule:
       text: Improve the slowest stage first.
   adjust: {}
-- id: 7.1.pitfall
+- id: 11.1.pitfall
   stage: rule
-  narration: 7.1.pitfall
+  narration: 11.1.pitfall
   pdf:
   - lec11-convergence.pdf
   - 11
@@ -11386,9 +10799,9 @@ beats:
       wrong: Correct tables before and after mean no packet loss
       right: During the transition, packets can still vanish or loop
   adjust: {}
-- id: 7.1.changed
+- id: 11.1.changed
   stage: changed_example
-  narration: 7.1.changed
+  narration: 11.1.changed
   pdf:
   - lec11-convergence.pdf
   - 9
@@ -11420,9 +10833,9 @@ beats:
       side: up
       state: done
   adjust: {}
-- id: 7.1.predict
+- id: 11.1.predict
   stage: prediction
-  narration: 7.1.predict
+  narration: 11.1.predict
   pdf:
   - lec11-convergence.pdf
   - 9
@@ -11434,9 +10847,9 @@ beats:
       text: does this install order create a loop or a blackhole?
   adjust: {}
   hold: 6
-- id: 7.1.answer
+- id: 11.1.answer
   stage: explanation
-  narration: 7.1.answer
+  narration: 11.1.answer
   pdf:
   - lec11-convergence.pdf
   - 9
@@ -11462,9 +10875,10 @@ beats:
       lines:
       - 'No loop: A avoids B'
       - B may still drop until it installs
+  - keep: {}
   adjust: {}
 ---
-dish: '7.2'
+dish: '11.2'
 title: Counting to infinity
 deck: lec11-convergence.pdf
 target_min: 7
@@ -11473,9 +10887,9 @@ concepts:
 - Poison Reverse
 pad: 2.2
 beats:
-- id: 7.2.question
+- id: 11.2.question
   stage: question
-  narration: 7.2.question
+  narration: 11.2.question
   pdf:
   - lec11-convergence.pdf
   - 12
@@ -11487,10 +10901,11 @@ beats:
       text: 'Lecture 11: counting to infinity'
   - q:
       text: Why does good news travel fast, and bad news crawl?
+  - keep: {}
   adjust: {}
-- id: 7.2.goodnews
+- id: 11.2.goodnews
   stage: animation
-  narration: 7.2.goodnews
+  narration: 11.2.goodnews
   pdf:
   - lec11-convergence.pdf
   - 14
@@ -11557,9 +10972,9 @@ beats:
         Z: done
       when: A real, better
   adjust: {}
-- id: 7.2.setup
+- id: 11.2.setup
   stage: state
-  narration: 7.2.setup
+  narration: 11.2.setup
   pdf:
   - lec11-convergence.pdf
   - 16
@@ -11618,9 +11033,9 @@ beats:
       side: up
       state: now
   adjust: {}
-- id: 7.2.trap
+- id: 11.2.trap
   stage: state
-  narration: 7.2.trap
+  narration: 11.2.trap
   pdf:
   - lec11-convergence.pdf
   - 17
@@ -11694,9 +11109,9 @@ beats:
       side: up
       state: error
   adjust: {}
-- id: 7.2.meaning
+- id: 11.2.meaning
   stage: rule
-  narration: 7.2.meaning
+  narration: 11.2.meaning
   pdf:
   - lec11-convergence.pdf
   - 17
@@ -11765,9 +11180,9 @@ beats:
       state: error
       when: They just count
   adjust: {}
-- id: 7.2.rip
+- id: 11.2.rip
   stage: state
-  narration: 7.2.rip
+  narration: 11.2.rip
   pdf:
   - lec11-convergence.pdf
   - 19
@@ -11808,9 +11223,9 @@ beats:
       state: error
       when: But any network
   adjust: {}
-- id: 7.2.poison
+- id: 11.2.poison
   stage: state
-  narration: 7.2.poison
+  narration: 11.2.poison
   pdf:
   - lec11-convergence.pdf
   - 18
@@ -11858,9 +11273,9 @@ beats:
       text: If you route through a neighbor, tell that neighbor your distance is infinite.
       when: Z keeps its true
   adjust: {}
-- id: 7.2.poisoned
+- id: 11.2.poisoned
   stage: state
-  narration: 7.2.poisoned
+  narration: 11.2.poisoned
   pdf:
   - lec11-convergence.pdf
   - 18
@@ -11913,9 +11328,9 @@ beats:
       side: up
       state: done
   adjust: {}
-- id: 7.2.slide-good
+- id: 11.2.slide-good
   stage: state
-  narration: 7.2.slide-good
+  narration: 11.2.slide-good
   pdf:
   - lec11-convergence.pdf
   - 15
@@ -12001,9 +11416,9 @@ beats:
       when: Z tells Y
       t: 1.0
   adjust: {}
-- id: 7.2.slide-bad
+- id: 11.2.slide-bad
   stage: state
-  narration: 7.2.slide-bad
+  narration: 11.2.slide-bad
   pdf:
   - lec11-convergence.pdf
   - 17
@@ -12059,9 +11474,9 @@ beats:
       when: Y hears 7
       t: 0.8
   adjust: {}
-- id: 7.2.slide-bad-2
+- id: 11.2.slide-bad-2
   stage: state
-  narration: 7.2.slide-bad-2
+  narration: 11.2.slide-bad-2
   pdf:
   - lec11-convergence.pdf
   - 17
@@ -12101,9 +11516,9 @@ beats:
       state: done
       when: That took
   adjust: {}
-- id: 7.2.pitfall
+- id: 11.2.pitfall
   stage: rule
-  narration: 7.2.pitfall
+  narration: 11.2.pitfall
   pdf:
   - lec11-convergence.pdf
   - 17
@@ -12115,9 +11530,9 @@ beats:
       wrong: A smaller infinity fixes count to infinity
       right: It only bounds the counting, and limits the network's width
   adjust: {}
-- id: 7.2.changed
+- id: 11.2.changed
   stage: changed_example
-  narration: 7.2.changed
+  narration: 11.2.changed
   pdf:
   - lec11-convergence.pdf
   - 18
@@ -12166,9 +11581,9 @@ beats:
       - - Z
         - W
   adjust: {}
-- id: 7.2.predict
+- id: 11.2.predict
   stage: prediction
-  narration: 7.2.predict
+  narration: 11.2.predict
   pdf:
   - lec11-convergence.pdf
   - 18
@@ -12180,9 +11595,9 @@ beats:
       text: what does Z tell W? can a longer cycle still count up?
   adjust: {}
   hold: 6
-- id: 7.2.answer
+- id: 11.2.answer
   stage: explanation
-  narration: 7.2.answer
+  narration: 11.2.answer
   pdf:
   - lec11-convergence.pdf
   - 18
@@ -12230,9 +11645,10 @@ beats:
       when: So what if
   - q:
       text: What if routers just sent the path?
+  - keep: {}
   adjust: {}
 ---
-dish: '7.3'
+dish: '11.3'
 title: BGP that won't settle
 deck: lec11-convergence.pdf
 target_min: 7.5
@@ -12243,9 +11659,9 @@ concepts:
 - Policy Oscillation
 pad: 2.2
 beats:
-- id: 7.3.question
+- id: 11.3.question
   stage: question
-  narration: 7.3.question
+  narration: 11.3.question
   pdf:
   - lec11-convergence.pdf
   - 25
@@ -12258,9 +11674,9 @@ beats:
   - q:
       text: Paths prevent counting. Does that solve convergence?
   adjust: {}
-- id: 7.3.liveness
+- id: 11.3.liveness
   stage: animation
-  narration: 7.3.liveness
+  narration: 11.3.liveness
   pdf:
   - lec11-convergence.pdf
   - 24
@@ -12308,9 +11724,9 @@ beats:
       text: 'Example timers: keepalive 60 s, hold 180 s. Then every route from that
         peer is invalid.'
   adjust: {}
-- id: 7.3.explore
+- id: 11.3.explore
   stage: state
-  narration: 7.3.explore
+  narration: 11.3.explore
   pdf:
   - lec11-convergence.pdf
   - 27
@@ -12400,9 +11816,9 @@ beats:
       name: seq
       when: Only after all
   adjust: {}
-- id: 7.3.exploration-cost
+- id: 11.3.exploration-cost
   stage: state
-  narration: 7.3.exploration-cost
+  narration: 11.3.exploration-cost
   pdf:
   - lec11-convergence.pdf
   - 28
@@ -12423,9 +11839,9 @@ beats:
       text: 'Not all route changes are failures: policy changes and session resets
         count too.'
   adjust: {}
-- id: 7.3.spp
+- id: 11.3.spp
   stage: rule
-  narration: 7.3.spp
+  narration: 11.3.spp
   pdf:
   - lec11-convergence.pdf
   - 30
@@ -12517,9 +11933,9 @@ beats:
   - rule:
       text: A path is available only if the next hop is using exactly its remainder.
   adjust: {}
-- id: 7.3.solve
+- id: 11.3.solve
   stage: state
-  narration: 7.3.solve
+  narration: 11.3.solve
   pdf:
   - lec11-convergence.pdf
   - 31
@@ -12562,9 +11978,9 @@ beats:
       state: done
       when: node 2 falls back
   adjust: {}
-- id: 7.3.solve-2
+- id: 11.3.solve-2
   stage: state
-  narration: 7.3.solve-2
+  narration: 11.3.solve-2
   pdf:
   - lec11-convergence.pdf
   - 31
@@ -12595,9 +12011,9 @@ beats:
       state: error
       when: So node 5
   adjust: {}
-- id: 7.3.multi
+- id: 11.3.multi
   stage: state
-  narration: 7.3.multi
+  narration: 11.3.multi
   pdf:
   - lec11-convergence.pdf
   - 32
@@ -12652,9 +12068,9 @@ beats:
         - $convergence.disagree_solutions.1.2
     when: There are two
   adjust: {}
-- id: 7.3.gadget
+- id: 11.3.gadget
   stage: state
-  narration: 7.3.gadget
+  narration: 11.3.gadget
   pdf:
   - lec11-convergence.pdf
   - 34
@@ -12759,9 +12175,9 @@ beats:
       zone: right_bottom
       when: An exhaustive check
   adjust: {}
-- id: 7.3.laptop
+- id: 11.3.laptop
   stage: rule
-  narration: 7.3.laptop
+  narration: 11.3.laptop
   pdf:
   - lec11-convergence.pdf
   - 34
@@ -12773,9 +12189,9 @@ beats:
       text: To the laptop, this is just a stall. The network was changing its mind.
       when: For our laptop
   adjust: {}
-- id: 7.3.pitfall
+- id: 11.3.pitfall
   stage: rule
-  narration: 7.3.pitfall
+  narration: 11.3.pitfall
   pdf:
   - lec11-convergence.pdf
   - 34
@@ -12787,9 +12203,9 @@ beats:
       wrong: No AS loop means the path still works
       right: A loop-free path may already be gone
   adjust: {}
-- id: 7.3.changed
+- id: 11.3.changed
   stage: changed_example
-  narration: 7.3.changed
+  narration: 11.3.changed
   pdf:
   - lec11-convergence.pdf
   - 34
@@ -12810,9 +12226,9 @@ beats:
       v: 320
       state: now
   adjust: {}
-- id: 7.3.predict
+- id: 11.3.predict
   stage: prediction
-  narration: 7.3.predict
+  narration: 11.3.predict
   pdf:
   - lec11-convergence.pdf
   - 34
@@ -12825,9 +12241,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 7.3.answer
+- id: 11.3.answer
   stage: explanation
-  narration: 7.3.answer
+  narration: 11.3.answer
   pdf:
   - lec11-convergence.pdf
   - 36
@@ -12857,9 +12273,10 @@ beats:
   - rule:
       text: 'Stability depends on how rankings combine. Next: what shapes real rankings?'
       when: So the trouble
+  - keep: {}
   adjust: {}
 ---
-dish: '8.1'
+dish: '12.1'
 title: What BGP carries
 deck: lec12-bgp.pdf
 target_min: 5.5
@@ -12869,9 +12286,9 @@ concepts:
 - AS Path
 pad: 2.2
 beats:
-- id: 8.1.question
+- id: 12.1.question
   stage: question
-  narration: 8.1.question
+  narration: 12.1.question
   pdf:
   - lec12-bgp.pdf
   - 3
@@ -12889,9 +12306,9 @@ beats:
       text: How do rival networks cooperate to deliver one packet?
       zone: bottom
   adjust: {}
-- id: 8.1.laptop
+- id: 12.1.laptop
   stage: animation
-  narration: 8.1.laptop
+  narration: 12.1.laptop
   pdf:
   - lec12-bgp.pdf
   - 3
@@ -12949,9 +12366,9 @@ beats:
       when: So who tells
   adjust: {}
   pre_roll: 2.0
-- id: 8.1.history
+- id: 12.1.history
   stage: animation
-  narration: 8.1.history
+  narration: 12.1.history
   pdf:
   - lec12-bgp.pdf
   - 3
@@ -12967,9 +12384,9 @@ beats:
       - 'BGP: the Internet''s interdomain routing protocol'
       - A path-vector protocol, as in chapter 6
   adjust: {}
-- id: 8.1.as
+- id: 12.1.as
   stage: animation
-  narration: 8.1.as
+  narration: 12.1.as
   pdf:
   - lec12-bgp.pdf
   - 4
@@ -13013,9 +12430,9 @@ beats:
       - 'Internals stay private: outsiders see a cloud'
       when: Inside, it may
   adjust: {}
-- id: 8.1.session
+- id: 12.1.session
   stage: animation
-  narration: 8.1.session
+  narration: 12.1.session
   pdf:
   - lec12-bgp.pdf
   - 5
@@ -13068,9 +12485,9 @@ beats:
       - 203.0.113.0/24
       when: It's also prefix
   adjust: {}
-- id: 8.1.route
+- id: 12.1.route
   stage: state
-  narration: 8.1.route
+  narration: 12.1.route
   pdf:
   - lec12-bgp.pdf
   - 7
@@ -13133,9 +12550,9 @@ beats:
       side: up
       when: AS 200 adds
   adjust: {}
-- id: 8.1.loopcheck
+- id: 12.1.loopcheck
   stage: rule
-  narration: 8.1.loopcheck
+  narration: 12.1.loopcheck
   pdf:
   - lec12-bgp.pdf
   - 8
@@ -13146,9 +12563,9 @@ beats:
   - rule:
       text: See your own AS number in the path? Reject the route.
   adjust: {}
-- id: 8.1.abstraction
+- id: 12.1.abstraction
   stage: state
-  narration: 8.1.abstraction
+  narration: 12.1.abstraction
   pdf:
   - lec12-bgp.pdf
   - 10
@@ -13175,9 +12592,9 @@ beats:
   - rule:
       text: AS path length counts organizations, not routers and not delay.
   adjust: {}
-- id: 8.1.pitfall
+- id: 12.1.pitfall
   stage: rule
-  narration: 8.1.pitfall
+  narration: 12.1.pitfall
   pdf:
   - lec12-bgp.pdf
   - 10
@@ -13190,9 +12607,9 @@ beats:
       wrong: A shorter AS path means fewer routers or lower delay
       right: AS length counts networks, not routers, latency, or capacity
   adjust: {}
-- id: 8.1.changed
+- id: 12.1.changed
   stage: changed_example
-  narration: 8.1.changed
+  narration: 12.1.changed
   pdf:
   - lec12-bgp.pdf
   - 8
@@ -13207,9 +12624,9 @@ beats:
       - 'AS 200 received: 300, 500'
       - AS 100 will advertise to AS 500
   adjust: {}
-- id: 8.1.predict
+- id: 12.1.predict
   stage: prediction
-  narration: 8.1.predict
+  narration: 12.1.predict
   pdf:
   - lec12-bgp.pdf
   - 8
@@ -13221,9 +12638,9 @@ beats:
       text: what path does AS 500 receive, and what does it do?
   adjust: {}
   hold: 6
-- id: 8.1.answer
+- id: 12.1.answer
   stage: explanation
-  narration: 8.1.answer
+  narration: 12.1.answer
   pdf:
   - lec12-bgp.pdf
   - 8
@@ -13240,9 +12657,10 @@ beats:
       - It sees 500 and rejects the route
   - rule:
       text: 'Next: how does an AS choose, and whom does it tell?'
+  - keep: {}
   adjust: {}
 ---
-dish: '8.2'
+dish: '12.2'
 title: Import and export
 deck: lec12-bgp.pdf
 target_min: 5.5
@@ -13253,9 +12671,9 @@ concepts:
 - AS Path Prepending
 pad: 2.2
 beats:
-- id: 8.2.question
+- id: 12.2.question
   stage: question
-  narration: 8.2.question
+  narration: 12.2.question
   pdf:
   - lec12-bgp.pdf
   - 12
@@ -13269,9 +12687,9 @@ beats:
   - q:
       text: Must you believe, use, or repeat a route you're given?
   adjust: {}
-- id: 8.2.pipeline
+- id: 12.2.pipeline
   stage: animation
-  narration: 8.2.pipeline
+  narration: 12.2.pipeline
   pdf:
   - lec12-bgp.pdf
   - 13
@@ -13349,9 +12767,9 @@ beats:
       text: Import, selection, and export are three separate decisions.
       when: Because the stages
   adjust: {}
-- id: 8.2.import
+- id: 12.2.import
   stage: state
-  narration: 8.2.import
+  narration: 12.2.import
   pdf:
   - lec12-bgp.pdf
   - 15
@@ -13397,9 +12815,9 @@ beats:
       text: An advertisement is data to evaluate, not an order.
       when: An advertisement
   adjust: {}
-- id: 8.2.lp
+- id: 12.2.lp
   stage: state
-  narration: 8.2.lp
+  narration: 12.2.lp
   pdf:
   - lec12-bgp.pdf
   - 14
@@ -13436,9 +12854,9 @@ beats:
       - 1
       when: The customer route wins
   adjust: {}
-- id: 8.2.export
+- id: 12.2.export
   stage: state
-  narration: 8.2.export
+  narration: 12.2.export
   pdf:
   - lec12-bgp.pdf
   - 16
@@ -13501,9 +12919,9 @@ beats:
         B: candidate
       when: So a network
   adjust: {}
-- id: 8.2.prepend
+- id: 12.2.prepend
   stage: state
-  narration: 8.2.prepend
+  narration: 12.2.prepend
   pdf:
   - lec12-bgp.pdf
   - 18
@@ -13574,9 +12992,9 @@ beats:
         B: now
       when: A remote network's
   adjust: {}
-- id: 8.2.rule
+- id: 12.2.rule
   stage: rule
-  narration: 8.2.rule
+  narration: 12.2.rule
   pdf:
   - lec12-bgp.pdf
   - 18
@@ -13604,9 +13022,9 @@ beats:
         incoming traffic.
       when: One is a decision
   adjust: {}
-- id: 8.2.config
+- id: 12.2.config
   stage: rule
-  narration: 8.2.config
+  narration: 12.2.config
   pdf:
   - lec12-bgp.pdf
   - 19
@@ -13631,9 +13049,9 @@ beats:
       name: cfg
       when: A configuration error
   adjust: {}
-- id: 8.2.pitfall
+- id: 12.2.pitfall
   stage: rule
-  narration: 8.2.pitfall
+  narration: 12.2.pitfall
   pdf:
   - lec12-bgp.pdf
   - 19
@@ -13646,9 +13064,9 @@ beats:
       wrong: Trade one unit of preference for one AS hop
       right: 'Compare in order: preference first, length only on a tie'
   adjust: {}
-- id: 8.2.changed
+- id: 12.2.changed
   stage: changed_example
-  narration: 8.2.changed
+  narration: 12.2.changed
   pdf:
   - lec12-bgp.pdf
   - 14
@@ -13708,9 +13126,9 @@ beats:
       state: now
       when: But a far-off
   adjust: {}
-- id: 8.2.predict
+- id: 12.2.predict
   stage: prediction
-  narration: 8.2.predict
+  narration: 12.2.predict
   pdf:
   - lec12-bgp.pdf
   - 18
@@ -13722,9 +13140,9 @@ beats:
       text: which way does Z's traffic reach A?
   adjust: {}
   hold: 6
-- id: 8.2.answer
+- id: 12.2.answer
   stage: explanation
-  narration: 8.2.answer
+  narration: 12.2.answer
   pdf:
   - lec12-bgp.pdf
   - 18
@@ -13752,9 +13170,10 @@ beats:
       when: So that's the outside
   - q:
       text: An AS isn't one node. How do its routers agree?
+  - keep: {}
   adjust: {}
 ---
-dish: '8.3'
+dish: '12.3'
 title: Inside an AS
 deck: lec12-bgp.pdf
 target_min: 6
@@ -13766,9 +13185,9 @@ concepts:
 - Default Routes
 pad: 2.2
 beats:
-- id: 8.3.question
+- id: 12.3.question
   stage: question
-  narration: 8.3.question
+  narration: 12.3.question
   pdf:
   - lec12-bgp.pdf
   - 21
@@ -13782,9 +13201,9 @@ beats:
   - q:
       text: An AS is not one node. How do its routers pick an exit?
   adjust: {}
-- id: 8.3.ibgp
+- id: 12.3.ibgp
   stage: animation
-  narration: 8.3.ibgp
+  narration: 12.3.ibgp
   pdf:
   - lec12-bgp.pdf
   - 22
@@ -13855,9 +13274,9 @@ beats:
       - R3
       when: It passes this
   adjust: {}
-- id: 8.3.igp
+- id: 12.3.igp
   stage: state
-  narration: 8.3.igp
+  narration: 12.3.igp
   pdf:
   - lec12-bgp.pdf
   - 23
@@ -13885,9 +13304,9 @@ beats:
       text: BGP names the exit. The internal protocol finds the way to that exit.
       when: BGP and the IGP
   adjust: {}
-- id: 8.3.nexthop
+- id: 12.3.nexthop
   stage: state
-  narration: 8.3.nexthop
+  narration: 12.3.nexthop
   pdf:
   - lec12-bgp.pdf
   - 29
@@ -13931,9 +13350,9 @@ beats:
       text: Resolve the BGP next hop through internal routing before forwarding.
       when: A BGP next hop
   adjust: {}
-- id: 8.3.order
+- id: 12.3.order
   stage: rule
-  narration: 8.3.order
+  narration: 12.3.order
   pdf:
   - lec12-bgp.pdf
   - 24
@@ -13998,9 +13417,9 @@ beats:
       - Never added into a score
       when: These are not
   adjust: {}
-- id: 8.3.decide
+- id: 12.3.decide
   stage: state
-  narration: 8.3.decide
+  narration: 12.3.decide
   pdf:
   - lec12-bgp.pdf
   - 26
@@ -14126,9 +13545,9 @@ beats:
       when: and its higher
   adjust: {}
   pre_roll: 0.6
-- id: 8.3.hot
+- id: 12.3.hot
   stage: state
-  narration: 8.3.hot
+  narration: 12.3.hot
   pdf:
   - lec12-bgp.pdf
   - 25
@@ -14211,9 +13630,9 @@ beats:
         may be asymmetric.'
       when: Internet paths
   adjust: {}
-- id: 8.3.default
+- id: 12.3.default
   stage: state
-  narration: 8.3.default
+  narration: 12.3.default
   pdf:
   - lec12-bgp.pdf
   - 30
@@ -14247,9 +13666,9 @@ beats:
       state: done
       when: Any longer prefix
   adjust: {}
-- id: 8.3.pitfall
+- id: 12.3.pitfall
   stage: rule
-  narration: 8.3.pitfall
+  narration: 12.3.pitfall
   pdf:
   - lec12-bgp.pdf
   - 30
@@ -14261,9 +13680,9 @@ beats:
       wrong: The BGP next hop is always the next router
       right: 'It may be several hops away: resolve it first'
   adjust: {}
-- id: 8.3.changed
+- id: 12.3.changed
   stage: changed_example
-  narration: 8.3.changed
+  narration: 12.3.changed
   pdf:
   - lec12-bgp.pdf
   - 25
@@ -14282,9 +13701,9 @@ beats:
       nodes:
         R: now
   adjust: {}
-- id: 8.3.predict
+- id: 12.3.predict
   stage: prediction
-  narration: 8.3.predict
+  narration: 12.3.predict
   pdf:
   - lec12-bgp.pdf
   - 25
@@ -14296,9 +13715,9 @@ beats:
       text: does R's exit change? who outside notices?
   adjust: {}
   hold: 6
-- id: 8.3.answer
+- id: 12.3.answer
   stage: explanation
-  narration: 8.3.answer
+  narration: 12.3.answer
   pdf:
   - lec12-bgp.pdf
   - 25
@@ -14328,9 +13747,10 @@ beats:
   - rule:
       text: An internal cost change can move traffic to a different neighbor.
       when: An internal change
+  - keep: {}
   adjust: {}
 ---
-dish: '8.4'
+dish: '12.4'
 title: Money shapes paths
 deck: lec12-bgp.pdf
 target_min: 7
@@ -14341,9 +13761,9 @@ concepts:
 - Valley-Free Paths
 pad: 2.2
 beats:
-- id: 8.4.question
+- id: 12.4.question
   stage: question
-  narration: 8.4.question
+  narration: 12.4.question
   pdf:
   - lec12-bgp.pdf
   - 34
@@ -14355,10 +13775,11 @@ beats:
       text: 'Lecture 12: money shapes paths'
   - q:
       text: If you ran a network, whose traffic would you carry for free?
+  - keep: {}
   adjust: {}
-- id: 8.4.rel
+- id: 12.4.rel
   stage: animation
-  narration: 8.4.rel
+  narration: 12.4.rel
   pdf:
   - lec12-bgp.pdf
   - 35
@@ -14424,9 +13845,9 @@ beats:
       text: Customer pays provider. Peers exchange only their own and their customers'
         traffic.
   adjust: {}
-- id: 8.4.export
+- id: 12.4.export
   stage: rule
-  narration: 8.4.export
+  narration: 12.4.export
   pdf:
   - lec12-bgp.pdf
   - 41
@@ -14459,9 +13880,9 @@ beats:
       state: now
       when: Telling a provider
   adjust: {}
-- id: 8.4.tiers
+- id: 12.4.tiers
   stage: state
-  narration: 8.4.tiers
+  narration: 12.4.tiers
   pdf:
   - lec12-bgp.pdf
   - 36
@@ -14574,9 +13995,9 @@ beats:
       state: done
       when: If u is a customer
   adjust: {}
-- id: 8.4.valley
+- id: 12.4.valley
   stage: state
-  narration: 8.4.valley
+  narration: 12.4.valley
   pdf:
   - lec12-bgp.pdf
   - 43
@@ -14713,9 +14134,9 @@ beats:
       state: error
       when: Going down
   adjust: {}
-- id: 8.4.classify
+- id: 12.4.classify
   stage: state
-  narration: 8.4.classify
+  narration: 12.4.classify
   pdf:
   - lec12-bgp.pdf
   - 46
@@ -14807,9 +14228,9 @@ beats:
   - table.reveal:
       name: vt
   adjust: {}
-- id: 8.4.reverse
+- id: 12.4.reverse
   stage: rule
-  narration: 8.4.reverse
+  narration: 12.4.reverse
   pdf:
   - lec12-bgp.pdf
   - 47
@@ -14845,9 +14266,9 @@ beats:
       text: Validity depends on direction. Build the sequence of relationships.
       when: So direction
   adjust: {}
-- id: 8.4.gao
+- id: 12.4.gao
   stage: rule
-  narration: 8.4.gao
+  narration: 12.4.gao
   pdf:
   - lec12-bgp.pdf
   - 39
@@ -14904,9 +14325,9 @@ beats:
         - n1
       when: Why does the bad
   adjust: {}
-- id: 8.4.gao-2
+- id: 12.4.gao-2
   stage: rule
-  narration: 8.4.gao-2
+  narration: 12.4.gao-2
   pdf:
   - lec12-bgp.pdf
   - 39
@@ -14939,9 +14360,9 @@ beats:
         n2: done
         n3: done
   adjust: {}
-- id: 8.4.laptop
+- id: 12.4.laptop
   stage: rule
-  narration: 8.4.laptop
+  narration: 12.4.laptop
   pdf:
   - lec12-bgp.pdf
   - 39
@@ -14953,9 +14374,9 @@ beats:
       text: 'Up, across one peer link, and down: contracts set the laptop''s path.'
       when: Look
   adjust: {}
-- id: 8.4.pitfall
+- id: 12.4.pitfall
   stage: rule
-  narration: 8.4.pitfall
+  narration: 12.4.pitfall
   pdf:
   - lec12-bgp.pdf
   - 39
@@ -14967,9 +14388,9 @@ beats:
       wrong: A physically connected path is always usable
       right: Export policy can forbid a short, connected route
   adjust: {}
-- id: 8.4.changed
+- id: 12.4.changed
   stage: changed_example
-  narration: 8.4.changed
+  narration: 12.4.changed
   pdf:
   - lec12-bgp.pdf
   - 41
@@ -15029,9 +14450,9 @@ beats:
       text: route
       when: And it learns
   adjust: {}
-- id: 8.4.predict
+- id: 12.4.predict
   stage: prediction
-  narration: 8.4.predict
+  narration: 12.4.predict
   pdf:
   - lec12-bgp.pdf
   - 41
@@ -15043,9 +14464,9 @@ beats:
       text: who hears P's route? who hears C's route?
   adjust: {}
   hold: 7
-- id: 8.4.answer
+- id: 12.4.answer
   stage: explanation
-  narration: 8.4.answer
+  narration: 12.4.answer
   pdf:
   - lec12-bgp.pdf
   - 41
@@ -15108,10 +14529,11 @@ beats:
   - q:
       text: What if one address means several servers, or a thousand receivers want
         one stream?
+  - keep: {}
   adjust: {}
   pre_roll: 1.0
 ---
-dish: '9.1'
+dish: '13.1'
 title: One address, many servers
 deck: lec13-multicast.pdf
 target_min: 4.5
@@ -15119,9 +14541,9 @@ concepts:
 - IP Anycast
 pad: 2.2
 beats:
-- id: 9.1.question
+- id: 13.1.question
   stage: question
-  narration: 9.1.question
+  narration: 13.1.question
   pdf:
   - lec13-multicast.pdf
   - 5
@@ -15138,9 +14560,9 @@ beats:
       text: Could one address lead to several servers?
       zone: bottom
   adjust: {}
-- id: 9.1.laptop
+- id: 13.1.laptop
   stage: animation
-  narration: 9.1.laptop
+  narration: 13.1.laptop
   pdf:
   - lec13-multicast.pdf
   - 5
@@ -15205,9 +14627,9 @@ beats:
       when: The destination
   adjust: {}
   pre_roll: 2.0
-- id: 9.1.dnslimits
+- id: 13.1.dnslimits
   stage: animation
-  narration: 9.1.dnslimits
+  narration: 13.1.dnslimits
   pdf:
   - lec13-multicast.pdf
   - 4
@@ -15239,9 +14661,9 @@ beats:
       state: error
       when: If a server fails
   adjust: {}
-- id: 9.1.announce
+- id: 13.1.announce
   stage: animation
-  narration: 9.1.announce
+  narration: 13.1.announce
   pdf:
   - lec13-multicast.pdf
   - 7
@@ -15342,9 +14764,9 @@ beats:
   - packet.fade:
       name: p
   adjust: {}
-- id: 9.1.failover
+- id: 13.1.failover
   stage: state
-  narration: 9.1.failover
+  narration: 13.1.failover
   pdf:
   - lec13-multicast.pdf
   - 11
@@ -15385,9 +14807,9 @@ beats:
   - packet.fade:
       name: p2
   adjust: {}
-- id: 9.1.rule
+- id: 13.1.rule
   stage: rule
-  narration: 9.1.rule
+  narration: 13.1.rule
   pdf:
   - lec13-multicast.pdf
   - 9
@@ -15398,9 +14820,9 @@ beats:
   - rule:
       text: 'Anycast: one address, many instances. Routing selects exactly one.'
   adjust: {}
-- id: 9.1.pitfall
+- id: 13.1.pitfall
   stage: rule
-  narration: 9.1.pitfall
+  narration: 13.1.pitfall
   pdf:
   - lec13-multicast.pdf
   - 9
@@ -15412,9 +14834,9 @@ beats:
       wrong: Anycast can never work with TCP
       right: The risk is a flow moving to an instance without its state
   adjust: {}
-- id: 9.1.changed
+- id: 13.1.changed
   stage: changed_example
-  narration: 9.1.changed
+  narration: 13.1.changed
   pdf:
   - lec13-multicast.pdf
   - 14
@@ -15439,9 +14861,9 @@ beats:
       - R3
       - B
   adjust: {}
-- id: 9.1.predict
+- id: 13.1.predict
   stage: prediction
-  narration: 9.1.predict
+  narration: 13.1.predict
   pdf:
   - lec13-multicast.pdf
   - 14
@@ -15453,9 +14875,9 @@ beats:
       text: what does B do with a packet from A's connection?
   adjust: {}
   hold: 6
-- id: 9.1.answer
+- id: 13.1.answer
   stage: explanation
-  narration: 9.1.answer
+  narration: 13.1.answer
   pdf:
   - lec13-multicast.pdf
   - 14
@@ -15472,9 +14894,10 @@ beats:
       zone: bottom
   - rule:
       text: 'Next: delivery to every interested receiver.'
+  - keep: {}
   adjust: {}
 ---
-dish: '9.2'
+dish: '13.2'
 title: Who wants the stream?
 deck: lec13-multicast.pdf
 target_min: 7.5
@@ -15489,9 +14912,9 @@ concepts:
 - IGMP Snooping
 pad: 2.2
 beats:
-- id: 9.2.question
+- id: 13.2.question
   stage: question
-  narration: 9.2.question
+  narration: 13.2.question
   pdf:
   - lec13-multicast.pdf
   - 16
@@ -15503,10 +14926,11 @@ beats:
       text: 'Lecture 13: who wants the stream?'
   - q:
       text: Three receivers, one first link. Must it carry three copies?
+  - keep: {}
   adjust: {}
-- id: 9.2.unicast
+- id: 13.2.unicast
   stage: animation
-  narration: 9.2.unicast
+  narration: 13.2.unicast
   pdf:
   - lec13-multicast.pdf
   - 22
@@ -15584,9 +15008,9 @@ beats:
       tex: 3\times 10\ \text{Mb/s}=30\ \text{Mb/s}
       size: 44
   adjust: {}
-- id: 9.2.unicast-more
+- id: 13.2.unicast-more
   stage: state
-  narration: 9.2.unicast-more
+  narration: 13.2.unicast-more
   pdf:
   - lec13-multicast.pdf
   - 22
@@ -15608,9 +15032,9 @@ beats:
       - X
       when: If every copy
   adjust: {}
-- id: 9.2.multicast
+- id: 13.2.multicast
   stage: state
-  narration: 9.2.multicast
+  narration: 13.2.multicast
   pdf:
   - lec13-multicast.pdf
   - 18
@@ -15643,9 +15067,9 @@ beats:
       tex: 1\times 10\ \text{Mb/s}=10\ \text{Mb/s}
       size: 44
   adjust: {}
-- id: 9.2.address
+- id: 13.2.address
   stage: state
-  narration: 9.2.address
+  narration: 13.2.address
   pdf:
   - lec13-multicast.pdf
   - 19
@@ -15671,9 +15095,9 @@ beats:
       - Names an audience, not a machine
       - A sender need not be a member
   adjust: {}
-- id: 9.2.address-more
+- id: 13.2.address-more
   stage: state
-  narration: 9.2.address-more
+  narration: 13.2.address-more
   pdf:
   - lec13-multicast.pdf
   - 19
@@ -15706,9 +15130,9 @@ beats:
       state: done
       when: The source never
   adjust: {}
-- id: 9.2.overlay
+- id: 13.2.overlay
   stage: state
-  narration: 9.2.overlay
+  narration: 13.2.overlay
   pdf:
   - lec13-multicast.pdf
   - 22
@@ -15734,9 +15158,9 @@ beats:
         - end hosts
         - repeated links and host upload
   adjust: {}
-- id: 9.2.overlay-more
+- id: 13.2.overlay-more
   stage: state
-  narration: 9.2.overlay-more
+  narration: 13.2.overlay-more
   pdf:
   - lec13-multicast.pdf
   - 22
@@ -15827,9 +15251,9 @@ beats:
       - G
       when: Seven recipients
   adjust: {}
-- id: 9.2.igmp1
+- id: 13.2.igmp1
   stage: animation
-  narration: 9.2.igmp1
+  narration: 13.2.igmp1
   pdf:
   - lec13-multicast.pdf
   - 28
@@ -15879,9 +15303,9 @@ beats:
       text: The router needs to know whether anyone wants the group, not who.
       when: Because the router
   adjust: {}
-- id: 9.2.dest
+- id: 13.2.dest
   stage: rule
-  narration: 9.2.dest
+  narration: 13.2.dest
   pdf:
   - lec13-multicast.pdf
   - 27
@@ -15896,9 +15320,9 @@ beats:
         TTL 1.
       zone: right_bottom
   adjust: {}
-- id: 9.2.igmp23
+- id: 13.2.igmp23
   stage: state
-  narration: 9.2.igmp23
+  narration: 13.2.igmp23
   pdf:
   - lec13-multicast.pdf
   - 32
@@ -15952,9 +15376,9 @@ beats:
       - - v3
         - source filters
   adjust: {}
-- id: 9.2.timer
+- id: 13.2.timer
   stage: state
-  narration: 9.2.timer
+  narration: 13.2.timer
   pdf:
   - lec13-multicast.pdf
   - 33
@@ -15978,9 +15402,9 @@ beats:
         - 2 × 125 + 10
         - $multicast.timers.rfc2236
   adjust: {}
-- id: 9.2.snoop
+- id: 13.2.snoop
   stage: rule
-  narration: 9.2.snoop
+  narration: 13.2.snoop
   pdf:
   - lec13-multicast.pdf
   - 33
@@ -16031,9 +15455,9 @@ beats:
   - rule:
       text: IGMP covers one local network. It does not build the tree between routers.
   adjust: {}
-- id: 9.2.snoop-more
+- id: 13.2.snoop-more
   stage: state
-  narration: 9.2.snoop-more
+  narration: 13.2.snoop-more
   pdf:
   - lec13-multicast.pdf
   - 33
@@ -16055,9 +15479,9 @@ beats:
       text: Snooping reads membership messages. It isn't unicast MAC learning.
       when: This is separate
   adjust: {}
-- id: 9.2.pitfall
+- id: 13.2.pitfall
   stage: rule
-  narration: 9.2.pitfall
+  narration: 13.2.pitfall
   pdf:
   - lec13-multicast.pdf
   - 33
@@ -16069,9 +15493,9 @@ beats:
       wrong: IGMP connects the multicast routers
       right: IGMP is the LAN's membership. Routing protocols build the tree.
   adjust: {}
-- id: 9.2.changed
+- id: 13.2.changed
   stage: changed_example
-  narration: 9.2.changed
+  narration: 13.2.changed
   pdf:
   - lec13-multicast.pdf
   - 30
@@ -16088,9 +15512,9 @@ beats:
       - Stream 5 Mb/s, three receivers on a shared link
       - 'Report delays: 2 s, 5 s, 8 s'
   adjust: {}
-- id: 9.2.predict
+- id: 13.2.predict
   stage: prediction
-  narration: 9.2.predict
+  narration: 13.2.predict
   pdf:
   - lec13-multicast.pdf
   - 30
@@ -16103,9 +15527,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 9.2.answer
+- id: 13.2.answer
   stage: explanation
-  narration: 9.2.answer
+  narration: 13.2.answer
   pdf:
   - lec13-multicast.pdf
   - 30
@@ -16127,9 +15551,10 @@ beats:
         - 5 Mb/s
       - - Reports heard
         - 1, at 2 s
+  - keep: {}
   adjust: {}
 ---
-dish: '9.3'
+dish: '13.3'
 title: Choosing a tree
 deck: lec13-multicast.pdf
 target_min: 4
@@ -16142,9 +15567,9 @@ concepts:
 - Core-Based Trees
 pad: 2.2
 beats:
-- id: 9.3.question
+- id: 13.3.question
   stage: question
-  narration: 9.3.question
+  narration: 13.3.question
   pdf:
   - lec13-multicast.pdf
   - 36
@@ -16157,10 +15582,11 @@ beats:
       text: 'Lecture 13: choosing a tree'
   - q:
       text: What does 'best' even mean for a tree?
+  - keep: {}
   adjust: {}
-- id: 9.3.kinds
+- id: 13.3.kinds
   stage: animation
-  narration: 9.3.kinds
+  narration: 13.3.kinds
   pdf:
   - lec13-multicast.pdf
   - 36
@@ -16185,9 +15611,9 @@ beats:
         - (*,G)
         - less state
   adjust: {}
-- id: 9.3.mst
+- id: 13.3.mst
   stage: state
-  narration: 9.3.mst
+  narration: 13.3.mst
   pdf:
   - lec13-multicast.pdf
   - 37
@@ -16252,9 +15678,9 @@ beats:
       style: tree
       when: Both algorithms
   adjust: {}
-- id: 9.3.objectives
+- id: 13.3.objectives
   stage: rule
-  narration: 9.3.objectives
+  narration: 13.3.objectives
   pdf:
   - lec13-multicast.pdf
   - 37
@@ -16277,9 +15703,9 @@ beats:
       - - Shortest path
         - least distance from source
   adjust: {}
-- id: 9.3.core
+- id: 13.3.core
   stage: state
-  narration: 9.3.core
+  narration: 13.3.core
   pdf:
   - lec13-multicast.pdf
   - 38
@@ -16370,9 +15796,9 @@ beats:
   - packet.fade:
       name: j2
   adjust: {}
-- id: 9.3.core-more
+- id: 13.3.core-more
   stage: state
-  narration: 9.3.core-more
+  narration: 13.3.core-more
   pdf:
   - lec13-multicast.pdf
   - 38
@@ -16399,9 +15825,9 @@ beats:
   - packet.fade:
       name: d
   adjust: {}
-- id: 9.3.pitfall
+- id: 13.3.pitfall
   stage: rule
-  narration: 9.3.pitfall
+  narration: 13.3.pitfall
   pdf:
   - lec13-multicast.pdf
   - 38
@@ -16413,9 +15839,9 @@ beats:
       wrong: Prim relaxes accumulated distances, like Dijkstra
       right: Prim adds the cheapest edge reaching the tree
   adjust: {}
-- id: 9.3.changed
+- id: 13.3.changed
   stage: changed_example
-  narration: 9.3.changed
+  narration: 13.3.changed
   pdf:
   - lec13-multicast.pdf
   - 37
@@ -16457,9 +15883,9 @@ beats:
         - C
         - c: '0.5'
   adjust: {}
-- id: 9.3.predict
+- id: 13.3.predict
   stage: prediction
-  narration: 9.3.predict
+  narration: 13.3.predict
   pdf:
   - lec13-multicast.pdf
   - 37
@@ -16472,9 +15898,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 9.3.answer
+- id: 13.3.answer
   stage: explanation
-  narration: 9.3.answer
+  narration: 13.3.answer
   pdf:
   - lec13-multicast.pdf
   - 37
@@ -16503,9 +15929,10 @@ beats:
       - 'MST total: 0.5 + 1 = 1.5'
       - 'Tie: A–B or B–C'
       - 'Next: reuse the unicast table'
+  - keep: {}
   adjust: {}
 ---
-dish: '9.4'
+dish: '13.4'
 title: RPF and PIM
 deck: lec13-multicast.pdf
 target_min: 7
@@ -16520,9 +15947,9 @@ concepts:
 - PIM SPT Switchover
 pad: 2.2
 beats:
-- id: 9.4.question
+- id: 13.4.question
   stage: question
-  narration: 9.4.question
+  narration: 13.4.question
   pdf:
   - lec13-multicast.pdf
   - 40
@@ -16535,9 +15962,9 @@ beats:
   - q:
       text: How can a router reject duplicates without a computed tree?
   adjust: {}
-- id: 9.4.rpf
+- id: 13.4.rpf
   stage: animation
-  narration: 9.4.rpf
+  narration: 13.4.rpf
   pdf:
   - lec13-multicast.pdf
   - 40
@@ -16662,9 +16089,9 @@ beats:
   - packet.drop:
       name: g2
   adjust: {}
-- id: 9.4.prune
+- id: 13.4.prune
   stage: state
-  narration: 9.4.prune
+  narration: 13.4.prune
   pdf:
   - lec13-multicast.pdf
   - 41
@@ -16773,9 +16200,9 @@ beats:
       when: so entire uninterested
   adjust: {}
   pre_roll: 2.0
-- id: 9.4.dense
+- id: 13.4.dense
   stage: state
-  narration: 9.4.dense
+  narration: 13.4.dense
   pdf:
   - lec13-multicast.pdf
   - 44
@@ -16829,9 +16256,9 @@ beats:
       - L1
       when: Prunes also expire
   adjust: {}
-- id: 9.4.sparse
+- id: 13.4.sparse
   stage: state
-  narration: 9.4.sparse
+  narration: 13.4.sparse
   pdf:
   - lec13-multicast.pdf
   - 46
@@ -16920,9 +16347,9 @@ beats:
       zone: bottom
       when: The slide's phrase
   adjust: {}
-- id: 9.4.register
+- id: 13.4.register
   stage: state
-  narration: 9.4.register
+  narration: 13.4.register
   pdf:
   - lec13-multicast.pdf
   - 47
@@ -16965,9 +16392,9 @@ beats:
       style: tree
       when: Then the RP
   adjust: {}
-- id: 9.4.register-more
+- id: 13.4.register-more
   stage: state
-  narration: 9.4.register-more
+  narration: 13.4.register-more
   pdf:
   - lec13-multicast.pdf
   - 47
@@ -16997,9 +16424,9 @@ beats:
       text: 'Register is a bootstrap: not a join, and not an IGMP report.'
       when: A Register is
   adjust: {}
-- id: 9.4.spt
+- id: 13.4.spt
   stage: state
-  narration: 9.4.spt
+  narration: 13.4.spt
   pdf:
   - lec13-multicast.pdf
   - 49
@@ -17069,9 +16496,9 @@ beats:
       - H
       when: The group address
   adjust: {}
-- id: 9.4.rule
+- id: 13.4.rule
   stage: rule
-  narration: 9.4.rule
+  narration: 13.4.rule
   pdf:
   - lec13-multicast.pdf
   - 50
@@ -17101,9 +16528,9 @@ beats:
         pruning trims downstream.
       when: IGMP tells
   adjust: {}
-- id: 9.4.compare
+- id: 13.4.compare
   stage: rule
-  narration: 9.4.compare
+  narration: 13.4.compare
   pdf:
   - lec13-multicast.pdf
   - 50
@@ -17144,9 +16571,9 @@ beats:
       text: Multicast stays best effort in both modes.
       when: IP multicast is
   adjust: {}
-- id: 9.4.laptop
+- id: 13.4.laptop
   stage: rule
-  narration: 9.4.laptop
+  narration: 13.4.laptop
   pdf:
   - lec13-multicast.pdf
   - 50
@@ -17159,9 +16586,9 @@ beats:
       text: The laptop sends one IGMP report. Routers do the rest.
       when: For our laptop
   adjust: {}
-- id: 9.4.pitfall
+- id: 13.4.pitfall
   stage: rule
-  narration: 9.4.pitfall
+  narration: 13.4.pitfall
   pdf:
   - lec13-multicast.pdf
   - 50
@@ -17174,9 +16601,9 @@ beats:
       wrong: RPF checks the path toward the group
       right: RPF checks the path back toward the source
   adjust: {}
-- id: 9.4.changed
+- id: 13.4.changed
   stage: changed_example
-  narration: 9.4.changed
+  narration: 13.4.changed
   pdf:
   - lec13-multicast.pdf
   - 49
@@ -17203,9 +16630,9 @@ beats:
       name: c
       when: and the direct
   adjust: {}
-- id: 9.4.predict
+- id: 13.4.predict
   stage: prediction
-  narration: 9.4.predict
+  narration: 13.4.predict
   pdf:
   - lec13-multicast.pdf
   - 49
@@ -17218,9 +16645,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 9.4.answer
+- id: 13.4.answer
   stage: explanation
-  narration: 9.4.answer
+  narration: 13.4.answer
   pdf:
   - lec13-multicast.pdf
   - 49
@@ -17242,9 +16669,10 @@ beats:
       when: But now the laptop
   - q:
       text: Unplug the laptop. Who can hear whom now?
+  - keep: {}
   adjust: {}
 ---
-dish: '10.1'
+dish: '14.1'
 title: What radio does to bits
 deck: lec14-wireless.pdf
 target_min: 5
@@ -17257,9 +16685,9 @@ concepts:
 - Rate Adaptation
 pad: 2.2
 beats:
-- id: 10.1.question
+- id: 14.1.question
   stage: question
-  narration: 10.1.question
+  narration: 14.1.question
   pdf:
   - lec14-wireless.pdf
   - 2
@@ -17276,9 +16704,9 @@ beats:
       text: What actually changes when the wire goes away?
       zone: bottom
   adjust: {}
-- id: 10.1.two
+- id: 14.1.two
   stage: animation
-  narration: 10.1.two
+  narration: 14.1.two
   pdf:
   - lec14-wireless.pdf
   - 2
@@ -17302,9 +16730,9 @@ beats:
         - changing attachment
         - laptop moved between wired subnets
   adjust: {}
-- id: 10.1.types
+- id: 14.1.types
   stage: animation
-  narration: 10.1.types
+  narration: 14.1.types
   pdf:
   - lec14-wireless.pdf
   - 10
@@ -17327,9 +16755,9 @@ beats:
         - Bluetooth, ad hoc
         - MANET, VANET
   adjust: {}
-- id: 10.1.rates
+- id: 14.1.rates
   stage: animation
-  narration: 10.1.rates
+  narration: 14.1.rates
   pdf:
   - lec14-wireless.pdf
   - 7
@@ -17350,9 +16778,9 @@ beats:
       text: 'Rates on the chart are era-specific. The pattern lasts: higher rate,
         usually shorter range.'
   adjust: {}
-- id: 10.1.impair
+- id: 14.1.impair
   stage: animation
-  narration: 10.1.impair
+  narration: 14.1.impair
   pdf:
   - lec14-wireless.pdf
   - 11
@@ -17425,9 +16853,9 @@ beats:
       - 'Interference: competing energy'
       - 'Multipath: delayed reflected copies'
   adjust: {}
-- id: 10.1.snr
+- id: 14.1.snr
   stage: state
-  narration: 10.1.snr
+  narration: 14.1.snr
   pdf:
   - lec14-wireless.pdf
   - 12
@@ -17495,9 +16923,9 @@ beats:
       state: error
       when: while a high-rate
   adjust: {}
-- id: 10.1.adapt
+- id: 14.1.adapt
   stage: state
-  narration: 10.1.adapt
+  narration: 14.1.adapt
   pdf:
   - lec14-wireless.pdf
   - 36
@@ -17512,9 +16940,9 @@ beats:
       - 'SNR falls: lower the rate'
       - Raw rate is not goodput
   adjust: {}
-- id: 10.1.rule
+- id: 14.1.rule
   stage: rule
-  narration: 10.1.rule
+  narration: 14.1.rule
   pdf:
   - lec14-wireless.pdf
   - 12
@@ -17526,9 +16954,9 @@ beats:
       text: A radio link's usable rate changes with distance, surroundings, and other
         transmitters.
   adjust: {}
-- id: 10.1.pitfall
+- id: 14.1.pitfall
   stage: rule
-  narration: 10.1.pitfall
+  narration: 14.1.pitfall
   pdf:
   - lec14-wireless.pdf
   - 12
@@ -17540,9 +16968,9 @@ beats:
       wrong: More power is a free fix
       right: It costs battery, and raises interference for others
   adjust: {}
-- id: 10.1.changed
+- id: 14.1.changed
   stage: changed_example
-  narration: 10.1.changed
+  narration: 14.1.changed
   pdf:
   - lec14-wireless.pdf
   - 12
@@ -17565,9 +16993,9 @@ beats:
       - - '10'
         - '?'
   adjust: {}
-- id: 10.1.predict
+- id: 14.1.predict
   stage: prediction
-  narration: 10.1.predict
+  narration: 14.1.predict
   pdf:
   - lec14-wireless.pdf
   - 12
@@ -17580,9 +17008,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 10.1.answer
+- id: 14.1.answer
   stage: explanation
-  narration: 10.1.answer
+  narration: 14.1.answer
   pdf:
   - lec14-wireless.pdf
   - 12
@@ -17604,9 +17032,10 @@ beats:
       state: done
   - rule:
       text: 'Next: can two senders use the same channel at the same time?'
+  - keep: {}
   adjust: {}
 ---
-dish: '10.2'
+dish: '14.2'
 title: CDMA
 deck: lec14-wireless.pdf
 target_min: 4
@@ -17614,9 +17043,9 @@ concepts:
 - CDMA
 pad: 2.2
 beats:
-- id: 10.2.question
+- id: 14.2.question
   stage: question
-  narration: 10.2.question
+  narration: 14.2.question
   pdf:
   - lec14-wireless.pdf
   - 14
@@ -17629,9 +17058,9 @@ beats:
   - q:
       text: Can two senders share a channel at the same moment?
   adjust: {}
-- id: 10.2.codes
+- id: 14.2.codes
   stage: animation
-  narration: 10.2.codes
+  narration: 14.2.codes
   pdf:
   - lec14-wireless.pdf
   - 14
@@ -17662,9 +17091,9 @@ beats:
       size: 48
       when: Multiply them
   adjust: {}
-- id: 10.2.send
+- id: 14.2.send
   stage: state
-  narration: 10.2.send
+  narration: 14.2.send
   pdf:
   - lec14-wireless.pdf
   - 15
@@ -17703,9 +17132,9 @@ beats:
       text: The sum on the air looks like neither sender.
       when: This sum
   adjust: {}
-- id: 10.2.decode
+- id: 14.2.decode
   stage: state
-  narration: 10.2.decode
+  narration: 14.2.decode
   pdf:
   - lec14-wireless.pdf
   - 16
@@ -17746,9 +17175,9 @@ beats:
       text: Correlating with c1 multiplies sender two by c1 · c2, and that's zero.
       when: Why does this
   adjust: {}
-- id: 10.2.rule
+- id: 14.2.rule
   stage: rule
-  narration: 10.2.rule
+  narration: 14.2.rule
   pdf:
   - lec14-wireless.pdf
   - 16
@@ -17774,9 +17203,9 @@ beats:
       when: This is an ideal
   adjust: {}
   pre_roll: 0.7
-- id: 10.2.pitfall
+- id: 14.2.pitfall
   stage: rule
-  narration: 10.2.pitfall
+  narration: 14.2.pitfall
   pdf:
   - lec14-wireless.pdf
   - 16
@@ -17788,9 +17217,9 @@ beats:
       wrong: Orthogonal codes never interfere
       right: Only with synchronized chips and balanced powers
   adjust: {}
-- id: 10.2.changed
+- id: 14.2.changed
   stage: changed_example
-  narration: 10.2.changed
+  narration: 14.2.changed
   pdf:
   - lec14-wireless.pdf
   - 16
@@ -17811,9 +17240,9 @@ beats:
         values: $wireless.second.z
       show: 2
   adjust: {}
-- id: 10.2.predict
+- id: 14.2.predict
   stage: prediction
-  narration: 10.2.predict
+  narration: 14.2.predict
   pdf:
   - lec14-wireless.pdf
   - 16
@@ -17826,9 +17255,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 10.2.answer
+- id: 14.2.answer
   stage: explanation
-  narration: 10.2.answer
+  narration: 14.2.answer
   pdf:
   - lec14-wireless.pdf
   - 16
@@ -17854,9 +17283,10 @@ beats:
   - rule:
       text: 'Both decode to −1. Next: joining a Wi-Fi network.'
       when: Both bits
+  - keep: {}
   adjust: {}
 ---
-dish: '10.3'
+dish: '14.3'
 title: Joining and moving
 deck: lec14-wireless.pdf
 target_min: 5
@@ -17869,9 +17299,9 @@ concepts:
 - Same-Subnet Roaming
 pad: 2.2
 beats:
-- id: 10.3.question
+- id: 14.3.question
   stage: question
-  narration: 10.3.question
+  narration: 14.3.question
   pdf:
   - lec14-wireless.pdf
   - 18
@@ -17884,9 +17314,9 @@ beats:
   - q:
       text: You click a Wi-Fi network. Are you on the Internet yet?
   adjust: {}
-- id: 10.3.channels
+- id: 14.3.channels
   stage: animation
-  narration: 10.3.channels
+  narration: 14.3.channels
   pdf:
   - lec14-wireless.pdf
   - 17
@@ -17911,9 +17341,9 @@ beats:
       - - BSSID
         - one particular BSS
   adjust: {}
-- id: 10.3.scan
+- id: 14.3.scan
   stage: animation
-  narration: 10.3.scan
+  narration: 14.3.scan
   pdf:
   - lec14-wireless.pdf
   - 20
@@ -17984,9 +17414,9 @@ beats:
       text: association reply
       kind: radio
   adjust: {}
-- id: 10.3.assoc
+- id: 14.3.assoc
   stage: rule
-  narration: 10.3.assoc
+  narration: 14.3.assoc
   pdf:
   - lec14-wireless.pdf
   - 20
@@ -17997,9 +17427,9 @@ beats:
   - rule:
       text: Association is link-layer attachment. DHCP, ARP, and DNS still come afterward.
   adjust: {}
-- id: 10.3.addressing
+- id: 14.3.addressing
   stage: state
-  narration: 10.3.addressing
+  narration: 14.3.addressing
   pdf:
   - lec14-wireless.pdf
   - 31
@@ -18077,9 +17507,9 @@ beats:
   - table.reveal:
       name: ad
   adjust: {}
-- id: 10.3.four
+- id: 14.3.four
   stage: state
-  narration: 10.3.four
+  narration: 14.3.four
   pdf:
   - lec14-wireless.pdf
   - 32
@@ -18093,9 +17523,9 @@ beats:
       text: Four-address frames are a bridging case, not an ad hoc rule.
       zone: right_bottom
   adjust: {}
-- id: 10.3.roam
+- id: 14.3.roam
   stage: state
-  narration: 10.3.roam
+  narration: 14.3.roam
   pdf:
   - lec14-wireless.pdf
   - 35
@@ -18180,9 +17610,9 @@ beats:
       when: the switch's table
   adjust: {}
   pre_roll: 1.4000000000000001
-- id: 10.3.pitfall
+- id: 14.3.pitfall
   stage: rule
-  narration: 10.3.pitfall
+  narration: 14.3.pitfall
   pdf:
   - lec14-wireless.pdf
   - 35
@@ -18194,9 +17624,9 @@ beats:
       wrong: Associating with an AP gives you an IP address
       right: Association attaches the radio link. DHCP comes after.
   adjust: {}
-- id: 10.3.changed
+- id: 14.3.changed
   stage: changed_example
-  narration: 10.3.changed
+  narration: 14.3.changed
   pdf:
   - lec14-wireless.pdf
   - 35
@@ -18209,9 +17639,9 @@ beats:
       text: Same SSID, but a different router and subnet.
       zone: right_bottom
   adjust: {}
-- id: 10.3.predict
+- id: 14.3.predict
   stage: prediction
-  narration: 10.3.predict
+  narration: 14.3.predict
   pdf:
   - lec14-wireless.pdf
   - 35
@@ -18223,9 +17653,9 @@ beats:
       text: does the old address still work? what does the SSID guarantee?
   adjust: {}
   hold: 6
-- id: 10.3.answer
+- id: 14.3.answer
   stage: explanation
-  narration: 10.3.answer
+  narration: 14.3.answer
   pdf:
   - lec14-wireless.pdf
   - 35
@@ -18235,9 +17665,10 @@ beats:
   moves:
   - rule:
       text: Matching SSIDs are just matching names. Subnet continuity is what counts.
+  - keep: {}
   adjust: {}
 ---
-dish: '10.4'
+dish: '14.4'
 title: Contention and reservations
 deck: lec14-wireless.pdf
 target_min: 8.5
@@ -18252,9 +17683,9 @@ concepts:
 - Wireless Error Recovery
 pad: 2.2
 beats:
-- id: 10.4.question
+- id: 14.4.question
   stage: question
-  narration: 10.4.question
+  narration: 14.4.question
   pdf:
   - lec14-wireless.pdf
   - 21
@@ -18266,10 +17697,11 @@ beats:
       text: 'Lecture 14: contention and reservations'
   - q:
       text: Why can't Wi-Fi simply detect collisions like Ethernet?
+  - keep: {}
   adjust: {}
-- id: 10.4.why
+- id: 14.4.why
   stage: animation
-  narration: 10.4.why
+  narration: 14.4.why
   pdf:
   - lec14-wireless.pdf
   - 22
@@ -18292,9 +17724,9 @@ beats:
       name: y
       when: Second, and more
   adjust: {}
-- id: 10.4.hidden
+- id: 14.4.hidden
   stage: animation
-  narration: 10.4.hidden
+  narration: 14.4.hidden
   pdf:
   - lec14-wireless.pdf
   - 13
@@ -18386,9 +17818,9 @@ beats:
       text: 'Hidden terminals: inaudible to each other, yet they collide at the receiver.'
       when: This is the hidden
   adjust: {}
-- id: 10.4.exposed
+- id: 14.4.exposed
   stage: animation
-  narration: 10.4.exposed
+  narration: 14.4.exposed
   pdf:
   - lec14-wireless.pdf
   - 27
@@ -18477,9 +17909,9 @@ beats:
       zone: bottom
       when: A note of care
   adjust: {}
-- id: 10.4.csmaca
+- id: 14.4.csmaca
   stage: state
-  narration: 10.4.csmaca
+  narration: 14.4.csmaca
   pdf:
   - lec14-wireless.pdf
   - 28
@@ -18541,9 +17973,9 @@ beats:
       text: CSMA/CA avoids collisions. A shorter gap lets the ACK go first.
       when: So the ACK goes
   adjust: {}
-- id: 10.4.counter
+- id: 14.4.counter
   stage: state
-  narration: 10.4.counter
+  narration: 14.4.counter
   pdf:
   - lec14-wireless.pdf
   - 28
@@ -18658,9 +18090,9 @@ beats:
       kind: radio
       when: and we can send
   adjust: {}
-- id: 10.4.noack
+- id: 14.4.noack
   stage: rule
-  narration: 10.4.noack
+  narration: 14.4.noack
   pdf:
   - lec14-wireless.pdf
   - 40
@@ -18691,9 +18123,9 @@ beats:
         the whole path.
       when: Local repair
   adjust: {}
-- id: 10.4.rts
+- id: 14.4.rts
   stage: state
-  narration: 10.4.rts
+  narration: 14.4.rts
   pdf:
   - lec14-wireless.pdf
   - 24
@@ -18782,9 +18214,9 @@ beats:
       kind: ip
       when: and B acknowledges
   adjust: {}
-- id: 10.4.nav
+- id: 14.4.nav
   stage: state
-  narration: 10.4.nav
+  narration: 14.4.nav
   pdf:
   - lec14-wireless.pdf
   - 25
@@ -18852,9 +18284,9 @@ beats:
       kind: ip
       when: Even during
   adjust: {}
-- id: 10.4.tradeoff
+- id: 14.4.tradeoff
   stage: rule
-  narration: 10.4.tradeoff
+  narration: 14.4.tradeoff
   pdf:
   - lec14-wireless.pdf
   - 26
@@ -18885,9 +18317,9 @@ beats:
         contention.
       when: So choose
   adjust: {}
-- id: 10.4.power
+- id: 14.4.power
   stage: state
-  narration: 10.4.power
+  narration: 14.4.power
   pdf:
   - lec14-wireless.pdf
   - 37
@@ -18951,9 +18383,9 @@ beats:
       state: idle
       when: Otherwise it
   adjust: {}
-- id: 10.4.idlelisten
+- id: 14.4.idlelisten
   stage: rule
-  narration: 10.4.idlelisten
+  narration: 14.4.idlelisten
   pdf:
   - lec14-wireless.pdf
   - 39
@@ -18966,9 +18398,9 @@ beats:
         what''s waiting.'
       when: The AP holds
   adjust: {}
-- id: 10.4.bluetooth
+- id: 14.4.bluetooth
   stage: state
-  narration: 10.4.bluetooth
+  narration: 14.4.bluetooth
   pdf:
   - lec14-wireless.pdf
   - 38
@@ -19045,9 +18477,9 @@ beats:
       text: 625 µs slot
       side: down
   adjust: {}
-- id: 10.4.bluetooth-more
+- id: 14.4.bluetooth-more
   stage: state
-  narration: 10.4.bluetooth-more
+  narration: 14.4.bluetooth-more
   pdf:
   - lec14-wireless.pdf
   - 38
@@ -19068,9 +18500,9 @@ beats:
       - B
       when: The controller grants
   adjust: {}
-- id: 10.4.pitfall
+- id: 14.4.pitfall
   stage: rule
-  narration: 10.4.pitfall
+  narration: 14.4.pitfall
   pdf:
   - lec14-wireless.pdf
   - 38
@@ -19082,9 +18514,9 @@ beats:
       wrong: A hidden terminal just has a weak signal
       right: Two senders can't hear each other, yet interfere at the receiver
   adjust: {}
-- id: 10.4.changed
+- id: 14.4.changed
   stage: changed_example
-  narration: 10.4.changed
+  narration: 14.4.changed
   pdf:
   - lec14-wireless.pdf
   - 26
@@ -19155,9 +18587,9 @@ beats:
       when: Separately
   adjust: {}
   pre_roll: 0.30000000000000004
-- id: 10.4.predict
+- id: 14.4.predict
   stage: prediction
-  narration: 10.4.predict
+  narration: 14.4.predict
   pdf:
   - lec14-wireless.pdf
   - 26
@@ -19169,9 +18601,9 @@ beats:
       text: who defers on the CTS? who hears only the RTS?
   adjust: {}
   hold: 7
-- id: 10.4.answer
+- id: 14.4.answer
   stage: explanation
-  narration: 10.4.answer
+  narration: 14.4.answer
   pdf:
   - lec14-wireless.pdf
   - 27
@@ -19204,10 +18636,11 @@ beats:
   - rule:
       text: 'Next: a moving phone, and how anyone finds it.'
       when: So the radio link
+  - keep: {}
   adjust: {}
   pre_roll: 1.0
 ---
-dish: '11.1'
+dish: '15.1'
 title: The cellular core
 deck: lec15-mobile.pdf
 target_min: 6.5
@@ -19223,9 +18656,9 @@ concepts:
 - LTE Packet Gateway
 pad: 2.2
 beats:
-- id: 11.1.question
+- id: 15.1.question
   stage: question
-  narration: 11.1.question
+  narration: 15.1.question
   pdf:
   - lec15-mobile.pdf
   - 2
@@ -19242,9 +18675,9 @@ beats:
       text: What network can follow a phone across a whole country?
       zone: bottom
   adjust: {}
-- id: 11.1.g2
+- id: 15.1.g2
   stage: animation
-  narration: 11.1.g2
+  narration: 15.1.g2
   pdf:
   - lec15-mobile.pdf
   - 3
@@ -19298,9 +18731,9 @@ beats:
       - - M
         - G
   adjust: {}
-- id: 11.1.g3
+- id: 15.1.g3
   stage: state
-  narration: 11.1.g3
+  narration: 15.1.g3
   pdf:
   - lec15-mobile.pdf
   - 4
@@ -19332,9 +18765,9 @@ beats:
   - rule:
       text: '3G: a packet-data core running beside the old voice core.'
   adjust: {}
-- id: 11.1.g3-more
+- id: 15.1.g3-more
   stage: state
-  narration: 11.1.g3-more
+  narration: 15.1.g3-more
   pdf:
   - lec15-mobile.pdf
   - 4
@@ -19376,9 +18809,9 @@ beats:
   - packet.fade:
       name: dt
   adjust: {}
-- id: 11.1.g4
+- id: 15.1.g4
   stage: state
-  narration: 11.1.g4
+  narration: 15.1.g4
   pdf:
   - lec15-mobile.pdf
   - 5
@@ -19456,9 +18889,9 @@ beats:
         - M
         - s: control
   adjust: {}
-- id: 11.1.ue
+- id: 15.1.ue
   stage: state
-  narration: 11.1.ue
+  narration: 15.1.ue
   pdf:
   - lec15-mobile.pdf
   - 10
@@ -19477,9 +18910,9 @@ beats:
       zone: left_bottom
       when: The slide calls
   adjust: {}
-- id: 11.1.enb
+- id: 15.1.enb
   stage: state
-  narration: 11.1.enb
+  narration: 15.1.enb
   pdf:
   - lec15-mobile.pdf
   - 11
@@ -19495,9 +18928,9 @@ beats:
         U: null
         E: now
   adjust: {}
-- id: 11.1.enb-more
+- id: 15.1.enb-more
   stage: state
-  narration: 11.1.enb-more
+  narration: 15.1.enb-more
   pdf:
   - lec15-mobile.pdf
   - 11
@@ -19519,9 +18952,9 @@ beats:
       - S
       when: The core's tunnel
   adjust: {}
-- id: 11.1.hss
+- id: 15.1.hss
   stage: state
-  narration: 11.1.hss
+  narration: 15.1.hss
   pdf:
   - lec15-mobile.pdf
   - 12
@@ -19535,9 +18968,9 @@ beats:
         E: null
         H: now
   adjust: {}
-- id: 11.1.hss-more
+- id: 15.1.hss-more
   stage: state
-  narration: 11.1.hss-more
+  narration: 15.1.hss-more
   pdf:
   - lec15-mobile.pdf
   - 12
@@ -19564,9 +18997,9 @@ beats:
       text: The HSS is a database and control role, not a packet hop.
       when: That's a database
   adjust: {}
-- id: 11.1.mme
+- id: 15.1.mme
   stage: state
-  narration: 11.1.mme
+  narration: 15.1.mme
   pdf:
   - lec15-mobile.pdf
   - 14
@@ -19580,9 +19013,9 @@ beats:
         H: null
         M: now
   adjust: {}
-- id: 11.1.gw
+- id: 15.1.gw
   stage: state
-  narration: 11.1.gw
+  narration: 15.1.gw
   pdf:
   - lec15-mobile.pdf
   - 13
@@ -19613,9 +19046,9 @@ beats:
       - I
       t: 2.5
   adjust: {}
-- id: 11.1.pgw-more
+- id: 15.1.pgw-more
   stage: state
-  narration: 11.1.pgw-more
+  narration: 15.1.pgw-more
   pdf:
   - lec15-mobile.pdf
   - 13
@@ -19642,9 +19075,9 @@ beats:
       when: But NAT
   adjust: {}
   pre_roll: 0.5
-- id: 11.1.rule
+- id: 15.1.rule
   stage: rule
-  narration: 11.1.rule
+  narration: 15.1.rule
   pdf:
   - lec15-mobile.pdf
   - 15
@@ -19663,9 +19096,9 @@ beats:
       text: HSS and MME are in the control story. S-GW and P-GW are in the payload
         story.
   adjust: {}
-- id: 11.1.pitfall
+- id: 15.1.pitfall
   stage: rule
-  narration: 11.1.pitfall
+  narration: 15.1.pitfall
   pdf:
   - lec15-mobile.pdf
   - 15
@@ -19677,9 +19110,9 @@ beats:
       wrong: User data flows through the HSS or MME
       right: HSS and MME handle control. The gateways carry the data.
   adjust: {}
-- id: 11.1.changed
+- id: 15.1.changed
   stage: changed_example
-  narration: 11.1.changed
+  narration: 15.1.changed
   pdf:
   - lec15-mobile.pdf
   - 14
@@ -19692,9 +19125,9 @@ beats:
       nodes:
         M: error
   adjust: {}
-- id: 11.1.predict
+- id: 15.1.predict
   stage: prediction
-  narration: 11.1.predict
+  narration: 15.1.predict
   pdf:
   - lec15-mobile.pdf
   - 14
@@ -19707,9 +19140,9 @@ beats:
       text: which failure stops the packets right away?
   adjust: {}
   hold: 6
-- id: 11.1.answer
+- id: 15.1.answer
   stage: explanation
-  narration: 11.1.answer
+  narration: 15.1.answer
   pdf:
   - lec15-mobile.pdf
   - 13
@@ -19725,9 +19158,10 @@ beats:
         S: error
   - rule:
       text: Data-path failure stops packets. Control failure stops changes.
+  - keep: {}
   adjust: {}
 ---
-dish: '11.2'
+dish: '15.2'
 title: Radio stack and tunnels
 deck: lec15-mobile.pdf
 target_min: 6
@@ -19743,9 +19177,9 @@ concepts:
 - MIMO
 pad: 2.2
 beats:
-- id: 11.2.question
+- id: 15.2.question
   stage: question
-  narration: 11.2.question
+  narration: 15.2.question
   pdf:
   - lec15-mobile.pdf
   - 16
@@ -19758,10 +19192,11 @@ beats:
       text: 'Lecture 15: radio stack and tunnels'
   - q:
       text: How does a packet cross all this without having to know?
+  - keep: {}
   adjust: {}
-- id: 11.2.stack
+- id: 15.2.stack
   stage: animation
-  narration: 11.2.stack
+  narration: 15.2.stack
   pdf:
   - lec15-mobile.pdf
   - 16
@@ -19805,9 +19240,9 @@ beats:
       zone: right
       when: Note that RLC
   adjust: {}
-- id: 11.2.sched
+- id: 15.2.sched
   stage: state
-  narration: 11.2.sched
+  narration: 15.2.sched
   pdf:
   - lec15-mobile.pdf
   - 17
@@ -19855,9 +19290,9 @@ beats:
       text: The base station schedules time-frequency blocks. No contention on the
         downlink.
   adjust: {}
-- id: 11.2.gtp
+- id: 15.2.gtp
   stage: animation
-  narration: 11.2.gtp
+  narration: 15.2.gtp
   pdf:
   - lec15-mobile.pdf
   - 18
@@ -19963,9 +19398,9 @@ beats:
       name: p
       to: I
   adjust: {}
-- id: 11.2.why
+- id: 15.2.why
   stage: rule
-  narration: 11.2.why
+  narration: 15.2.why
   pdf:
   - lec15-mobile.pdf
   - 18
@@ -19976,9 +19411,9 @@ beats:
   - rule:
       text: The inner packet stays fixed. Only the tunnel's outer destination moves.
   adjust: {}
-- id: 11.2.attach
+- id: 15.2.attach
   stage: state
-  narration: 11.2.attach
+  narration: 15.2.attach
   pdf:
   - lec15-mobile.pdf
   - 19
@@ -19997,9 +19432,9 @@ beats:
       - Authenticate through MME and HSS
       - Build the user data path
   adjust: {}
-- id: 11.2.sleep
+- id: 15.2.sleep
   stage: state
-  narration: 11.2.sleep
+  narration: 15.2.sleep
   pdf:
   - lec15-mobile.pdf
   - 20
@@ -20040,9 +19475,9 @@ beats:
       kind: ip
       when: When it wakes
   adjust: {}
-- id: 11.2.sleep-more
+- id: 15.2.sleep-more
   stage: state
-  narration: 11.2.sleep-more
+  narration: 15.2.sleep-more
   pdf:
   - lec15-mobile.pdf
   - 20
@@ -20062,9 +19497,9 @@ beats:
       state: now
       when: so it may need
   adjust: {}
-- id: 11.2.interconnect
+- id: 15.2.interconnect
   stage: state
-  narration: 11.2.interconnect
+  narration: 15.2.interconnect
   pdf:
   - lec15-mobile.pdf
   - 22
@@ -20101,9 +19536,9 @@ beats:
       - - I
         - H
   adjust: {}
-- id: 11.2.fiveg
+- id: 15.2.fiveg
   stage: state
-  narration: 11.2.fiveg
+  narration: 15.2.fiveg
   pdf:
   - lec15-mobile.pdf
   - 23
@@ -20130,9 +19565,9 @@ beats:
   - rule:
       text: Numbers on these slides are era-specific. The trade-off is what lasts.
   adjust: {}
-- id: 11.2.pitfall
+- id: 15.2.pitfall
   stage: rule
-  narration: 11.2.pitfall
+  narration: 15.2.pitfall
   pdf:
   - lec15-mobile.pdf
   - 23
@@ -20145,9 +19580,9 @@ beats:
       wrong: OFDM separates users by code, like CDMA
       right: OFDM separates by frequency and time
   adjust: {}
-- id: 11.2.changed
+- id: 15.2.changed
   stage: changed_example
-  narration: 11.2.changed
+  narration: 15.2.changed
   pdf:
   - lec15-mobile.pdf
   - 18
@@ -20168,9 +19603,9 @@ beats:
       - t: 'Inner IP: UE → web server'
         k: ip
   adjust: {}
-- id: 11.2.predict
+- id: 15.2.predict
   stage: prediction
-  narration: 11.2.predict
+  narration: 15.2.predict
   pdf:
   - lec15-mobile.pdf
   - 18
@@ -20182,9 +19617,9 @@ beats:
       text: which address does a core router read?
   adjust: {}
   hold: 6
-- id: 11.2.answer
+- id: 15.2.answer
   stage: explanation
-  narration: 11.2.answer
+  narration: 15.2.answer
   pdf:
   - lec15-mobile.pdf
   - 18
@@ -20198,9 +19633,10 @@ beats:
       state: done
   - rule:
       text: 'Core routers follow the outer header. Next: finding a phone that moved.'
+  - keep: {}
   adjust: {}
 ---
-dish: '11.3'
+dish: '15.3'
 title: Finding a moving phone
 deck: lec15-mobile.pdf
 target_min: 6.5
@@ -20214,9 +19650,9 @@ concepts:
 - Direct Mobile Routing
 pad: 2.2
 beats:
-- id: 11.3.question
+- id: 15.3.question
   stage: question
-  narration: 11.3.question
+  narration: 15.3.question
   pdf:
   - lec15-mobile.pdf
   - 25
@@ -20228,10 +19664,11 @@ beats:
       text: 'Lecture 15: finding a moving phone'
   - q:
       text: An address says where you are. What happens when you move?
+  - keep: {}
   adjust: {}
-- id: 11.3.naive
+- id: 15.3.naive
   stage: animation
-  narration: 11.3.naive
+  narration: 15.3.naive
   pdf:
   - lec15-mobile.pdf
   - 26
@@ -20258,9 +19695,9 @@ beats:
         at the edge.
       when: So we push
   adjust: {}
-- id: 11.3.homevisited
+- id: 15.3.homevisited
   stage: state
-  narration: 11.3.homevisited
+  narration: 15.3.homevisited
   pdf:
   - lec15-mobile.pdf
   - 29
@@ -20321,9 +19758,9 @@ beats:
       side: up
       when: In cellular
   adjust: {}
-- id: 11.3.register
+- id: 15.3.register
   stage: state
-  narration: 11.3.register
+  narration: 15.3.register
   pdf:
   - lec15-mobile.pdf
   - 31
@@ -20408,9 +19845,9 @@ beats:
       zone: right_bottom
       when: The drawing has
   adjust: {}
-- id: 11.3.tunnel
+- id: 15.3.tunnel
   stage: animation
-  narration: 11.3.tunnel
+  narration: 15.3.tunnel
   pdf:
   - lec15-mobile.pdf
   - 34
@@ -20461,9 +19898,9 @@ beats:
       name: d
       to: P
   adjust: {}
-- id: 11.3.size
+- id: 15.3.size
   stage: state
-  narration: 11.3.size
+  narration: 15.3.size
   pdf:
   - lec15-mobile.pdf
   - 34
@@ -20503,9 +19940,9 @@ beats:
       text: NAT rewrites addresses. A tunnel adds an envelope.
       when: And don't confuse
   adjust: {}
-- id: 11.3.move
+- id: 15.3.move
   stage: state
-  narration: 11.3.move
+  narration: 15.3.move
   pdf:
   - lec15-mobile.pdf
   - 34
@@ -20557,9 +19994,9 @@ beats:
       text: Identity in blue stays the same. Location, in the outer header, changes.
       when: That's the visual
   adjust: {}
-- id: 11.3.triangle
+- id: 15.3.triangle
   stage: state
-  narration: 11.3.triangle
+  narration: 15.3.triangle
   pdf:
   - lec15-mobile.pdf
   - 35
@@ -20641,9 +20078,9 @@ beats:
         - active
       when: a direct path
   adjust: {}
-- id: 11.3.direct
+- id: 15.3.direct
   stage: rule
-  narration: 11.3.direct
+  narration: 15.3.direct
   pdf:
   - lec15-mobile.pdf
   - 36
@@ -20685,9 +20122,9 @@ beats:
         F: now
       when: And when the mobile
   adjust: {}
-- id: 11.3.pitfall
+- id: 15.3.pitfall
   stage: rule
-  narration: 11.3.pitfall
+  narration: 15.3.pitfall
   pdf:
   - lec15-mobile.pdf
   - 36
@@ -20699,9 +20136,9 @@ beats:
       wrong: A tunnel changes the packet's source and destination
       right: 'Always say inner or outer: the inner header stays put'
   adjust: {}
-- id: 11.3.changed
+- id: 15.3.changed
   stage: changed_example
-  narration: 11.3.changed
+  narration: 15.3.changed
   pdf:
   - lec15-mobile.pdf
   - 35
@@ -20716,9 +20153,9 @@ beats:
       tex: 60,\ 70,\ \text{direct }5
       size: 46
   adjust: {}
-- id: 11.3.predict
+- id: 15.3.predict
   stage: prediction
-  narration: 11.3.predict
+  narration: 15.3.predict
   pdf:
   - lec15-mobile.pdf
   - 35
@@ -20731,9 +20168,9 @@ beats:
       long: true
   adjust: {}
   hold: 12
-- id: 11.3.answer
+- id: 15.3.answer
   stage: explanation
-  narration: 11.3.answer
+  narration: 15.3.answer
   pdf:
   - lec15-mobile.pdf
   - 35
@@ -20756,9 +20193,10 @@ beats:
   - rule:
       text: 'Next: the moment of moving itself.'
       when: What about the moment
+  - keep: {}
   adjust: {}
 ---
-dish: '11.4'
+dish: '15.4'
 title: Handover
 deck: lec15-mobile.pdf
 target_min: 4.5
@@ -20767,9 +20205,9 @@ concepts:
 - Wireless Effects on Transport
 pad: 2.2
 beats:
-- id: 11.4.question
+- id: 15.4.question
   stage: question
-  narration: 11.4.question
+  narration: 15.4.question
   pdf:
   - lec15-mobile.pdf
   - 38
@@ -20782,9 +20220,9 @@ beats:
   - q:
       text: How do you move a live session between towers?
   adjust: {}
-- id: 11.4.before
+- id: 15.4.before
   stage: animation
-  narration: 11.4.before
+  narration: 15.4.before
   pdf:
   - lec15-mobile.pdf
   - 39
@@ -20881,9 +20319,9 @@ beats:
       when: Base station A notices
       t: 1.1
   adjust: {}
-- id: 11.4.prepare
+- id: 15.4.prepare
   stage: state
-  narration: 11.4.prepare
+  narration: 15.4.prepare
   pdf:
   - lec15-mobile.pdf
   - 40
@@ -20929,9 +20367,9 @@ beats:
   - packet.fade:
       name: p2
   adjust: {}
-- id: 11.4.switch
+- id: 15.4.switch
   stage: state
-  narration: 11.4.switch
+  narration: 15.4.switch
   pdf:
   - lec15-mobile.pdf
   - 40
@@ -20996,9 +20434,9 @@ beats:
   - packet.fade:
       name: q
   adjust: {}
-- id: 11.4.pathswitch
+- id: 15.4.pathswitch
   stage: state
-  narration: 11.4.pathswitch
+  narration: 15.4.pathswitch
   pdf:
   - lec15-mobile.pdf
   - 40
@@ -21064,9 +20502,9 @@ beats:
   - packet.fade:
       name: r
   adjust: {}
-- id: 11.4.rule
+- id: 15.4.rule
   stage: rule
-  narration: 11.4.rule
+  narration: 15.4.rule
   pdf:
   - lec15-mobile.pdf
   - 40
@@ -21106,9 +20544,9 @@ beats:
   - rule:
       text: Prepare, move the radio, forward temporarily, switch the core path, release.
   adjust: {}
-- id: 11.4.transport
+- id: 15.4.transport
   stage: state
-  narration: 11.4.transport
+  narration: 15.4.transport
   pdf:
   - lec15-mobile.pdf
   - 41
@@ -21137,9 +20575,9 @@ beats:
       text: TCP may read these effects as congestion, even when no queue is full.
       when: But TCP might
   adjust: {}
-- id: 11.4.pitfall
+- id: 15.4.pitfall
   stage: rule
-  narration: 11.4.pitfall
+  narration: 15.4.pitfall
   pdf:
   - lec15-mobile.pdf
   - 41
@@ -21151,9 +20589,9 @@ beats:
       wrong: The MME carries packets during handover
       right: The MME sends control messages. The data goes through the towers.
   adjust: {}
-- id: 11.4.changed
+- id: 15.4.changed
   stage: changed_example
-  narration: 11.4.changed
+  narration: 15.4.changed
   pdf:
   - lec15-mobile.pdf
   - 40
@@ -21173,9 +20611,9 @@ beats:
         - B
         - tunnel
   adjust: {}
-- id: 11.4.predict
+- id: 15.4.predict
   stage: prediction
-  narration: 11.4.predict
+  narration: 15.4.predict
   pdf:
   - lec15-mobile.pdf
   - 40
@@ -21187,9 +20625,9 @@ beats:
       text: what happens to packets during that gap?
   adjust: {}
   hold: 6
-- id: 11.4.answer
+- id: 15.4.answer
   stage: explanation
-  narration: 11.4.answer
+  narration: 15.4.answer
   pdf:
   - lec15-mobile.pdf
   - 40
@@ -21237,18 +20675,19 @@ beats:
   - spine:
       current: Move
       zone: top
+  - keep: {}
   adjust: {}
 ---
-dish: '12.1'
+dish: '16.1'
 title: The whole story, then mixed problems
 deck: lec10-routing.pdf
 target_min: 8.5
 concepts: []
 pad: 2.2
 beats:
-- id: 12.1.question
+- id: 16.1.question
   stage: question
-  narration: 12.1.question
+  narration: 16.1.question
   pdf:
   - lec10-routing.pdf
   - 3
@@ -21264,9 +20703,9 @@ beats:
       text: How does a packet arrive when no device knows the whole path?
       zone: bottom
   adjust: {}
-- id: 12.1.story1
+- id: 16.1.story1
   stage: animation
-  narration: 12.1.story1
+  narration: 16.1.story1
   pdf:
   - lec09-discovery.pdf
   - 9
@@ -21321,9 +20760,9 @@ beats:
       when: The resolver walks
   adjust: {}
   pre_roll: 0.2
-- id: 12.1.story2
+- id: 16.1.story2
   stage: animation
-  narration: 12.1.story2
+  narration: 16.1.story2
   pdf:
   - lec06-lan.pdf
   - 30
@@ -21343,9 +20782,9 @@ beats:
       name: s
       when: and BGP between
   adjust: {}
-- id: 12.1.story3
+- id: 16.1.story3
   stage: animation
-  narration: 12.1.story3
+  narration: 16.1.story3
   pdf:
   - lec11-convergence.pdf
   - 10
@@ -21379,12 +20818,12 @@ beats:
         of any mechanism.'
   adjust: {}
   pre_roll: 1.5
-- id: 12.1.pitfall
+- id: 16.1.pitfall
   stage: rule
-  narration: 12.1.pitfall
+  narration: 16.1.pitfall
   pdf:
-  - lec02-layering.pdf
-  - 3
+  - lec10-routing.pdf
+  - 15
   concepts: []
   clarifications: []
   moves:
@@ -21392,9 +20831,9 @@ beats:
       wrong: Discovery, routing, and forwarding are one big step
       right: Each mechanism supplies one missing fact
   adjust: {}
-- id: 12.1.p1
+- id: 16.1.p1
   stage: rule
-  narration: 12.1.p1
+  narration: 16.1.p1
   pdf:
   - lec08-network2.pdf
   - 5
@@ -21410,9 +20849,9 @@ beats:
       - Sends to 10.10.0.200, then to 10.10.2.5
       - ARP for what?
   adjust: {}
-- id: 12.1.a1
+- id: 16.1.a1
   stage: explanation
-  narration: 12.1.a1
+  narration: 16.1.a1
   pdf:
   - lec08-network2.pdf
   - 5
@@ -21435,9 +20874,9 @@ beats:
         - 10.10.0.1
   adjust: {}
   hold: 5
-- id: 12.1.p2
+- id: 16.1.p2
   stage: rule
-  narration: 12.1.p2
+  narration: 16.1.p2
   pdf:
   - lec11-convergence.pdf
   - 16
@@ -21463,9 +20902,9 @@ beats:
         - 1
         - '?'
   adjust: {}
-- id: 12.1.a2
+- id: 16.1.a2
   stage: explanation
-  narration: 12.1.a2
+  narration: 16.1.a2
   pdf:
   - lec11-convergence.pdf
   - 16
@@ -21488,9 +20927,9 @@ beats:
         feedback.
   adjust: {}
   hold: 5
-- id: 12.1.p3
+- id: 16.1.p3
   stage: rule
-  narration: 12.1.p3
+  narration: 16.1.p3
   pdf:
   - lec12-bgp.pdf
   - 14
@@ -21513,9 +20952,9 @@ beats:
         - 100
         - 5
   adjust: {}
-- id: 12.1.a3
+- id: 16.1.a3
   stage: explanation
-  narration: 12.1.a3
+  narration: 16.1.a3
   pdf:
   - lec12-bgp.pdf
   - 14
@@ -21530,9 +20969,9 @@ beats:
       text: Preference before length. Provider routes go only to customers.
   adjust: {}
   hold: 5
-- id: 12.1.p5
+- id: 16.1.p5
   stage: rule
-  narration: 12.1.p5
+  narration: 16.1.p5
   pdf:
   - lec07-network1.pdf
   - 37
@@ -21548,9 +20987,9 @@ beats:
       - Fragment payloads and offsets?
       - 'Destination 201.10.6.200: which output?'
   adjust: {}
-- id: 12.1.a5
+- id: 16.1.a5
   stage: explanation
-  narration: 12.1.a5
+  narration: 16.1.a5
   pdf:
   - lec07-network1.pdf
   - 37
@@ -21576,9 +21015,9 @@ beats:
         - 0
   adjust: {}
   hold: 5
-- id: 12.1.p6
+- id: 16.1.p6
   stage: rule
-  narration: 12.1.p6
+  narration: 16.1.p6
   pdf:
   - lec13-multicast.pdf
   - 32
@@ -21594,9 +21033,9 @@ beats:
       - Packet arrives on port 4, then on port 2
       - The LAN's only member leaves
   adjust: {}
-- id: 12.1.a6
+- id: 16.1.a6
   stage: explanation
-  narration: 12.1.a6
+  narration: 16.1.a6
   pdf:
   - lec13-multicast.pdf
   - 32
@@ -21618,9 +21057,9 @@ beats:
         - group query; prune if silent
   adjust: {}
   hold: 5
-- id: 12.1.p4
+- id: 16.1.p4
   stage: changed_example
-  narration: 12.1.p4
+  narration: 16.1.p4
   pdf:
   - lec15-mobile.pdf
   - 7
@@ -21640,9 +21079,9 @@ beats:
       - t: 'Inner IP: correspondent → phone'
         k: ip
   adjust: {}
-- id: 12.1.predict
+- id: 16.1.predict
   stage: prediction
-  narration: 12.1.predict
+  narration: 16.1.predict
   pdf:
   - lec15-mobile.pdf
   - 7
@@ -21653,9 +21092,9 @@ beats:
       text: which fields change after the handover?
   adjust: {}
   hold: 6
-- id: 12.1.a4
+- id: 16.1.a4
   stage: explanation
-  narration: 12.1.a4
+  narration: 16.1.a4
   pdf:
   - lec15-mobile.pdf
   - 7
@@ -21676,6 +21115,7 @@ beats:
   - rule:
       text: Ask what's missing, who knows it, what state is kept, and what happens
         when it goes stale.
+  - keep: {}
   adjust: {}
 
 ```

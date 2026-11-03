@@ -114,7 +114,8 @@ beats:
   - rule:
       text: The last router pops the label
       when: The last router
-  adjust: {}
+  adjust:
+    pace: 0.89
   pre_roll: 0.2
 - id: 10.4.swap
   stage: state

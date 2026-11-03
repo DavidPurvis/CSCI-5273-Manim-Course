@@ -1,7 +1,9 @@
-# The narration voice. Changing this re-synthesizes and re-times everything; the cache keeps each voice's clips apart.
-engine: say       # say or kokoro
-voice: Samantha
-rate: 140         # say: words per minute. kokoro uses speed instead.
-speed: 1.0        # kokoro: 1.0 is the natural pace; Heart at 1.0 matches Samantha's measured pace
-sentence_pause: 600
 clause_pause: 160
+engine: elevenlabs
+model_id: eleven_flash_v2_5
+sentence_pause: 600
+voice: nPczCjzI2devNBz1zQrb
+voice_settings:
+  similarity_boost: 0.75
+  speed: 1.0
+  stability: 0.5

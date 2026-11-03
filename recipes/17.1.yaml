@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 1: switch learning'
+      text: Practice midterm, question 1
   - net.show:
       name: sw
       zone: left

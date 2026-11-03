@@ -8,7 +8,10 @@ def fits_lines(words,width=42):
     return any(len(' '.join(words[:i]))<=width and len(' '.join(words[i:]))<=width for i in range(1,len(words)))
 
 
-def aligned_cues(text,speech,times,max_cps=19.5):
+def aligned_cues(text,speech,times,max_cps=None):
+    from course.stage.card import MAX_CPS
+    if max_cps is None:
+        max_cps = MAX_CPS
     words=text.split();n=len(words)
     if len(times)!=n:raise ValueError('caption word mapping does not match text')
     starts=[round(t[0]*30) for t in times]+[math.ceil(speech*30)]

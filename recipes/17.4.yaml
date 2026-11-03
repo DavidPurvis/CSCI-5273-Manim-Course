@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 4: fragmentation'
+      text: Practice midterm, question 4
   - bar.show:
       name: b
       zone: full

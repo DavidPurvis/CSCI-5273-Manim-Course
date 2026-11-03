@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 7: the bootstrap trace'
+      text: Practice midterm, question 7
   - table.show:
       name: c
       zone: top

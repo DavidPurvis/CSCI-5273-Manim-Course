@@ -1,5 +1,6 @@
 """Frame-exact membership for chapters, the main course, and independent supplements."""
 from dataclasses import asdict
+from course.catalog import is_main
 import json
 from course.stage.card import ROOT,load_card,load_manifest,load_timing,narration_text
 from course.stage.timeline import compile_dish,build_assembly_plan
@@ -11,7 +12,7 @@ def course_plans():
     manifest,timing,texts=load_manifest(),load_timing(),narration_text()
     defaults={k:v['t'] for k,v in REGISTRY.items()}
     members=[compile_dish(load_card(d),manifest,timing,texts,defaults) for d in dishes()]
-    plans={name:build_assembly_plan([d for d in members if (int(d.dish_id.split('.')[0])<=16)==main],name)
+    plans={name:build_assembly_plan([d for d in members if is_main(d.dish_id)==main],name)
            for name,main in [('main',True),('supplements',False)]}
     for ch in sorted({d.dish_id.split('.')[0] for d in members},key=int):
         plans['chapter-'+ch]=build_assembly_plan([d for d in members if d.dish_id.split('.')[0]==ch],'chapter-'+ch)

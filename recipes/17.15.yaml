@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 15: audience and bandwidth'
+      text: Practice midterm, question 15
   - net.show:
       name: n
       zone: top

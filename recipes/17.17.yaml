@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 17: hidden terminals'
+      text: Practice midterm, question 17
   - net.show:
       name: h
       zone: full

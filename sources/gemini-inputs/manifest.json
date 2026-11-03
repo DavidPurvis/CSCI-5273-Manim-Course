@@ -3,11 +3,11 @@
   "inputs": [
     {
       "path": "transcript/transcript.md",
-      "sha256": "20c63c55f447f6cd54530f7e4300d393acbaac0e53f22d2bf8eaea5a5213a617"
+      "sha256": "48524d266bb87a3634bac2068b558822ede4e9107be1a9ff3a16fd277a40a39c"
     },
     {
       "path": "transcript/supplements.md",
-      "sha256": "5f1f3cc20a053c3dc1d9c2c0ff19b9c449d622fb907e5a8d0693e8da89c8f65e"
+      "sha256": "1330fefc4bd280c060356b27611067f020744c0809081a03ca3f70a1dec0ea82"
     }
   ]
 }

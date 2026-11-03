@@ -110,11 +110,12 @@ def build_captions(text,alignment,policy=None):
 
 
 def validate_captions(cues,timeline):
+    from course.stage.card import MAX_CPS
     errors=[];end=0
     for c in cues:
         if c['start']<end or c['end']<=c['start'] or c['end']>timeline.frames:errors.append('caption interval invalid')
         if len(c['text'])>84:errors.append('caption exceeds two-line text budget')
-        if len(c['text'])/max((c['end']-c['start'])/30,.001)>19.5:errors.append('caption reading speed exceeds policy')
+        if len(c['text'])/max((c['end']-c['start'])/30,.001)>MAX_CPS:errors.append('caption reading speed exceeds policy')
         end=c['end']
     return errors
 

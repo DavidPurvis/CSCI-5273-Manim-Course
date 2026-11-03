@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 6: queues'
+      text: Practice midterm, question 6
   - queue.show:
       name: x
       zone: left_top
@@ -159,7 +159,8 @@ beats:
         L: error
       when: The output link's
   - keep: {}
-  adjust: {}
+  adjust:
+    pace: 0.89
 - id: 17.6.trap
   stage: rule
   narration: 17.6.trap

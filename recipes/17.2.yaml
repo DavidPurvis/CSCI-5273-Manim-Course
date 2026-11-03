@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 2: collisions and loops'
+      text: Practice midterm, question 2
   - bullets:
       name: q
       zone: top

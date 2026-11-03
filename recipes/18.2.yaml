@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Wednesday warm-up: mask, match, fragment'
+      text: 'Exam warm-up: mask, match, fragment'
   - q:
       text: '192.168.37.200/21: mask, network, broadcast, usable count?'
   adjust: {}

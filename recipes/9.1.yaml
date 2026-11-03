@@ -21,7 +21,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Lecture 9: getting an address and a neighbor'
+      text: 'Lecture 9: addresses and neighbors'
   - spine:
       current: Discover
       zone: top

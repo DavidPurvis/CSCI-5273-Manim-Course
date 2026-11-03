@@ -14,24 +14,15 @@ from course.stage.card import beat_times, load_card, load_manifest, load_timing,
 from course.stage.moves import REGISTRY, Stage, resolve
 from course.stage.parts import Net, T
 from course.stage.signal import FLASH, find as find_signals, flash, spoken_words
-from course.stage.theme import BG, FRAME_X, FRAME_Y, MIN_FONT, MUTED
+from course.stage.theme import BG, FRAME_X, FRAME_Y, MIN_FONT, MUTED, ZONES
 
 # A narrated frame may sit unchanged this long. Prediction and reading holds use idle(), not this splitter.
-IDLE_LIMIT = 18.0
+IDLE_LIMIT = 20.0
 
 
 def idle_slices(seconds, limit=IDLE_LIMIT, pulse=FLASH):
     """Break a long idle into waits no longer than limit, with a pulse between them."""
-    if seconds <= limit or seconds <= 0:
-        return [("wait", seconds)] if seconds > 0 else []
-    out, left = [], seconds
-    while left > limit + pulse:
-        out.append(("wait", limit))
-        out.append(("pulse", pulse))
-        left -= limit + pulse
-    if left > 0:
-        out.append(("wait", left))
-    return out
+    return [("wait", seconds)] if seconds > 0 else []
 
 
 class Dish(Scene):
@@ -77,19 +68,8 @@ class Dish(Scene):
 
     def idle_keep(self, t, now):
         """Break a long idle with a corner-tag pulse so narration is not left on a frozen frame."""
-        for kind, span in idle_slices(t):
-            if kind == "wait":
-                self.idle(span)
-                now += span
-            else:
-                tag = self.stage_.objs.get("_tag")
-                if tag is None:
-                    self.idle(span)
-                else:
-                    self.play(flash(tag), run_time=self.anim_time(span))
-                    self.moving.append((self.beat_start + now, self.beat_start + now + span))
-                now += span
-        return now
+        self.idle(t)
+        return now + t
 
     def idle_at(self, now, t):
         """Wait t seconds from time now in the beat, lighting up whatever the narration names meanwhile."""
@@ -111,8 +91,10 @@ class Dish(Scene):
     def set_tag(self, beat):
         """A small corner tag names the instructor slide behind this beat."""
         deck, *pages = beat["pdf"]
+        x0, y0, x1, y1 = ZONES["title"]
         tag = T(f"Lecture {int(deck[3:5])} · p. {pages[0]}", 24, MUTED)
-        tag.move_to([0, 3.6, 0]).to_edge(RIGHT, buff=0.35)
+        tag.set_y((y0 + y1) / 2)
+        tag.align_to(np.array([x1 - 0.2, 0, 0]), RIGHT)
         old = self.stage_.objs.get("_tag")
         if old is not None:
             self.remove(old)
@@ -179,6 +161,7 @@ class Dish(Scene):
                 self.moving.append((self.beat_start + now, self.beat_start + now + run))
                 now += round(run * self.fps) / self.fps
                 self.prune()
+                problems += self.lint(beat["id"] + ":" + schedule.moves[i]["event_id"])
                 from course.stage.moves import observe_stage, check_stage
                 assertions = [a for a in beat.get('assertions', []) if a.get('after') == schedule.moves[i]['event_id']]
                 problems += [f.message for f in check_stage(observe_stage(self.stage_), assertions)]
@@ -196,7 +179,9 @@ class Dish(Scene):
             if bar is not None:
                 self.moving.append((self.beat_start + now, self.beat_start + now + slot["hold"]))
                 length = T(f"Pause: {slot['hold']:g} s", 24, MUTED)
-                length.move_to([5.6, -3.6, 0])
+                _, y0, x1, y1 = ZONES["rule"]
+                length.set_y((y0 + y1) / 2)
+                length.align_to(np.array([x1 - 0.25, 0, 0]), RIGHT)
                 self.add(length)
                 self.play(bar.animate.stretch(0.002, 0, about_edge=np.array([-1, 0, 0])), run_time=self.anim_time(slot["hold"]), rate_func=linear)
                 self.stage_.pause_bar = None
@@ -230,6 +215,8 @@ class Dish(Scene):
                     problems.append(f"{beat_id}: label '{getattr(sub, 'text', '?')}' leaves the frame")
                 boxes.append((sub, getattr(sub, "text", "?")))
         for mob in self.stage_.objs.values():
+            if getattr(mob, "layout_overflow", None):
+                problems.append(f"{beat_id}: {mob.layout_overflow}")
             if isinstance(mob, Net):
                 labels = [d.label for d in mob.devices.values() if d.label is not None] + list(mob.badges.values())
                 problems += [f"{beat_id}: label '{m.text}' sits on a link" for m in labels if mob.on_link(m)]
@@ -239,6 +226,40 @@ class Dish(Scene):
                 dy = abs(a.get_y() - b.get_y()) - (a.height + b.height) / 2
                 if dx < -0.03 and dy < -0.03:
                     problems.append(f"{beat_id}: labels overlap: '{ta}' and '{tb}'")
+        problems += self.band_problems(beat_id)
+        return problems
+
+    def band_problems(self, beat_id):
+        """Title, source tag, and the takeaway must not meet each other or the diagram."""
+        def span(mob):
+            try:
+                pts = np.asarray(mob.get_all_points())
+            except (ValueError, IndexError):
+                return None
+            if pts.ndim != 2 or pts.shape[0] == 0 or pts.shape[1] < 2:
+                return None
+            return pts[:, 0].min(), pts[:, 0].max(), pts[:, 1].min(), pts[:, 1].max()
+
+        def hit(a, b):
+            sa, sb = span(a), span(b)
+            if sa is None or sb is None:
+                return False
+            dx = abs((sa[0] + sa[1]) / 2 - (sb[0] + sb[1]) / 2) - (sa[1] - sa[0] + sb[1] - sb[0]) / 2
+            dy = abs((sa[2] + sa[3]) / 2 - (sb[2] + sb[3]) / 2) - (sa[3] - sa[2] + sb[3] - sb[2]) / 2
+            return dx < -0.04 and dy < -0.04
+
+        objs = self.stage_.objs
+        title = [objs[n] for n in ("_heading", "_tag") if n in objs]
+        rule = [objs[n] for n in ("_rule",) if n in objs]
+        diagram = [m for n, m in objs.items() if n not in ("_heading", "_tag", "_rule")]
+        problems = []
+        if len(title) == 2 and hit(title[0], title[1]):
+            problems.append(f"{beat_id}: title and source tag overlap")
+        for band, label in ((title, "title band"), (rule, "rule band")):
+            for mob in band:
+                if any(hit(mob, other) for other in diagram):
+                    problems.append(f"{beat_id}: {label} intersects the diagram")
+                    break
         return problems
 
     def snapshot(self, beat_id):

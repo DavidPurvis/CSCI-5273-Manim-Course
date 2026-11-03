@@ -250,13 +250,13 @@ class ResourceCatalog:
 - `stage/captioning.py:11`: `aligned_cues(text, speech, times, max_cps=19.5)` — See implementation and tests.
 - `stage/card.py:13`: `load_card(dish)` — See implementation and tests.
 - `stage/card.py:17`: `load_manifest()` — See implementation and tests.
-- `stage/card.py:22`: `split_cues(text, max_chars=84)` — Break a beat's written text into caption cues of at most two lines.
-- `stage/card.py:38`: `load_timing()` — See implementation and tests.
-- `stage/card.py:43`: `word_times(beat_id, manifest, timing)` — Measured [start, end] for each written word, or None if this exact clip hasn't been measured.
-- `stage/card.py:56`: `phrase_time(text, phrase, speech, times)` — When the narration reaches a phrase of the written text, or None if the phrase isn't there.
-- `stage/card.py:70`: `timed_cues(text, speech, times)` — Caption cues as (text, offset, duration). A cue stays up until the next one starts.
-- `stage/card.py:85`: `beat_times(card, manifest)` — Beats play back to back: narration, then the dish's pad, then any beat-specific hold.
-- `stage/card.py:101`: `narration_text()` — See implementation and tests.
+- `stage/card.py:23`: `split_cues(text, max_chars=84)` — Break a beat's written text into caption cues of at most two lines.
+- `stage/card.py:39`: `load_timing()` — See implementation and tests.
+- `stage/card.py:45`: `word_times(beat_id, manifest, timing)` — Measured [start, end] for each written word, or None if this exact clip hasn't been measured.
+- `stage/card.py:58`: `phrase_time(text, phrase, speech, times)` — When the narration reaches a phrase of the written text, or None if the phrase isn't there.
+- `stage/card.py:72`: `timed_cues(text, speech, times)` — Caption cues as (text, offset, duration). A cue stays up until the next one starts.
+- `stage/card.py:87`: `beat_times(card, manifest)` — Beats play back to back: narration, then the dish's pad, then any beat-specific hold.
+- `stage/card.py:103`: `narration_text()` — See implementation and tests.
 - `stage/gallery.py:62`: `class Gallery` — See implementation and tests.
 - `stage/moves.py:19`: `move(name, t=1.0)` — See implementation and tests.
 - `stage/moves.py:26`: `resolve(value)` — Replace "$module.key.sub" with the frozen trace value.
@@ -268,122 +268,124 @@ class ResourceCatalog:
 - `stage/moves.py:138`: `question(s, text, zone='full', name='_q')` — See implementation and tests.
 - `stage/moves.py:146`: `rule(s, text, name='_rule')` — See implementation and tests.
 - `stage/moves.py:153`: `trap(s, wrong, right, name='_rule')` — The answer that sounds right, struck through, then the correction.
-- `stage/moves.py:165`: `pause(s, text, long=False)` — See implementation and tests.
-- `stage/moves.py:175`: `text_block(s, name, zone, lines, size=30, color=None)` — See implementation and tests.
-- `stage/moves.py:185`: `bullets(s, name, zone, items, show=1, size=30, gap=0.24)` — See implementation and tests.
-- `stage/moves.py:204`: `reveal(s, name, n=1)` — See implementation and tests.
-- `stage/moves.py:215`: `card(s, kind, text, zone='right_bottom', name='_card')` — See implementation and tests.
-- `stage/moves.py:228`: `tex(s, name, zone, tex, size=44, color=None)` — See implementation and tests.
-- `stage/moves.py:237`: `net_show(s, name, zone, nodes, links=(), spread=None)` — See implementation and tests.
-- `stage/moves.py:244`: `net_add(s, name, nodes=None, links=())` — See implementation and tests.
-- `stage/moves.py:254`: `relink(net, key, style)` — See implementation and tests.
-- `stage/moves.py:266`: `find_link(net, a, b)` — See implementation and tests.
-- `stage/moves.py:275`: `net_state(s, name, nodes=None, links=())` — See implementation and tests.
-- `stage/moves.py:286`: `net_path(s, name, path, style='now')` — See implementation and tests.
-- `stage/moves.py:292`: `net_badge(s, name, node, text, side='right', state=None)` — See implementation and tests.
-- `stage/moves.py:308`: `net_cost(s, name, a, b, cost)` — See implementation and tests.
-- `stage/moves.py:316`: `net_move(s, name, node, to)` — See implementation and tests.
-- `stage/moves.py:339`: `net_relink(s, name, a, b, style='solid')` — Redraw a link after its endpoint has moved, or add it if new.
-- `stage/moves.py:349`: `net_unlink(s, name, a, b)` — See implementation and tests.
-- `stage/moves.py:359`: `net_unbadge(s, name, node)` — See implementation and tests.
-- `stage/moves.py:369`: `net_pulse(s, name, path, state='now')` — A signal runs along links.
-- `stage/moves.py:379`: `net_walk(s, name, path, state='now')` — Trace a path hop by hop, in the direction data travels. It stays until the next walk.
-- `stage/moves.py:392`: `net_unwalk(s, name)` — See implementation and tests.
-- `stage/moves.py:397`: `msg_send(s, name, a, b, text, kind='label')` — A message with readable contents travels along a link.
-- `stage/moves.py:408`: `dock(dev)` — Where a packet rests: on the icon, or just above a labelled box so the label stays readable.
-- `stage/moves.py:416`: `packet_spawn(s, name, net, at, layers=('eth', 'ip'))` — See implementation and tests.
-- `stage/moves.py:426`: `packet_hop(s, name, to)` — See implementation and tests.
-- `stage/moves.py:438`: `packet_both(s, moves)` — Several packets move at the same moment.
-- `stage/moves.py:447`: `packet_peel(s, name)` — See implementation and tests.
-- `stage/moves.py:455`: `packet_wrap(s, name, kind='eth')` — See implementation and tests.
-- `stage/moves.py:467`: `packet_swap(s, name, kind='eth')` — See implementation and tests.
-- `stage/moves.py:481`: `packet_flood(s, name, to, keep=False)` — See implementation and tests.
-- `stage/moves.py:494`: `packet_drop(s, name)` — See implementation and tests.
-- `stage/moves.py:503`: `packet_fade(s, name)` — See implementation and tests.
-- `stage/moves.py:509`: `switch_learn(s, table, mac, port, net=None, node=None)` — See implementation and tests.
-- `stage/moves.py:517`: `graph_promote(s, name, node, via=None)` — See implementation and tests.
-- `stage/moves.py:526`: `graph_relax(s, name, via, node, text, side='right', state='now')` — Try a route through a settled node: a signal crosses the edge, and the neighbor's distance updates.
-- `stage/moves.py:544`: `tunnel_re(s, stack, outer, kind='tunnel')` — See implementation and tests.
-- `stage/moves.py:550`: `radio_zone(s, net, node, radius=1.6, name=None, kind='radio')` — See implementation and tests.
-- `stage/moves.py:559`: `radio_pulse(s, net, node, radius=1.8, kind='radio')` — See implementation and tests.
-- `stage/moves.py:566`: `burst(s, net, node=None, between=None)` — See implementation and tests.
-- `stage/moves.py:575`: `table_show(s, name, zone, data=None, cols=None, rows=None, show=None, size=30, ghost=(), row_h=0.52)` — See implementation and tests.
-- `stage/moves.py:591`: `table_reveal(s, name, n=1)` — See implementation and tests.
-- `stage/moves.py:603`: `table_add(s, name, row, state=None)` — See implementation and tests.
-- `stage/moves.py:626`: `table_set(s, name, r, c, v, state=None)` — See implementation and tests.
-- `stage/moves.py:638`: `table_mark(s, name, r, state='now')` — See implementation and tests.
-- `stage/moves.py:644`: `table_flash(s, name, rows, state='candidate')` — Mark several rows in the same instant, the way parallel hardware compares them.
-- `stage/moves.py:655`: `bits_show(s, name, zone, rows, reserve=None)` — See implementation and tests.
-- `stage/moves.py:665`: `bits_add(s, name, label, value)` — See implementation and tests.
-- `stage/moves.py:676`: `bits_mask(s, name, prefix, rows=None)` — See implementation and tests.
-- `stage/moves.py:695`: `bits_scan(s, name, label, value)` — Work out a new row one bit at a time: a line sweeps across, and each result bit lands under it.
-- `stage/moves.py:710`: `bits_mark(s, name, row, start, end, state='now')` — See implementation and tests.
-- `stage/moves.py:717`: `seq_show(s, name, zone, lanes, steps=6)` — See implementation and tests.
-- `stage/moves.py:723`: `seq_msg(s, name, a, b, text, kind='ip', state=None)` — See implementation and tests.
-- `stage/moves.py:737`: `tl_show(s, name, zone, tracks, span, ticks=None)` — See implementation and tests.
-- `stage/moves.py:743`: `tl_block(s, name, track, start, end, text='', kind='data', state=None)` — See implementation and tests.
-- `stage/moves.py:759`: `sieve_show(s, name, zone, rungs, routes, size=30)` — See implementation and tests.
-- `stage/moves.py:765`: `sieve_step(s, name, rung, keep)` — Compare one row. Whoever loses stops being considered.
-- `stage/moves.py:780`: `sieve_win(s, name, route, unused=())` — The survivor wins. Later rows never get looked at.
-- `stage/moves.py:791`: `bar_show(s, name, zone, total, header=20, unit=8, rows=3)` — See implementation and tests.
-- `stage/moves.py:797`: `bar_ruler(s, name)` — See implementation and tests.
-- `stage/moves.py:806`: `bar_cut_mark(m, at, color)` — See implementation and tests.
-- `stage/moves.py:812`: `bar_cut(s, name, at, state='now')` — A cut sweeps along the data and lands at a byte position.
-- `stage/moves.py:825`: `bar_zoom(s, name, at, state='now')` — See implementation and tests.
-- `stage/moves.py:833`: `bar_snap(s, name, at, state='done')` — The zoomed cut moves to a legal position.
-- `stage/moves.py:844`: `bar_info_text(m, i, frag)` — See implementation and tests.
-- `stage/moves.py:856`: `bar_slice(s, name, i, frag, info=True)` — One fragment drops out of the original and gains its own header.
-- `stage/moves.py:892`: `bar_info(s, name, i, frag)` — See implementation and tests.
-- `stage/moves.py:902`: `bar_join(s, name)` — The data slides back together, proving nothing was lost. The extra headers stay behind.
-- `stage/moves.py:912`: `bar_mark(s, name, what, state='now')` — Outline the headers, the whole data bar, or one row's header.
-- `stage/moves.py:924`: `bar_span(s, name, to, text)` — A measure from the start of the data to a byte position: this is what an offset means.
-- `stage/moves.py:936`: `bar_note(s, name, tex=None, text=None, side='center', state=None)` — See implementation and tests.
-- `stage/moves.py:950`: `tl_ghost(s, name, track, start, end, text='', state='error')` — A trial block, which a later tl.slide can move.
-- `stage/moves.py:964`: `tl_slide(s, name, start, end, text='', state='done')` — The trial block slides to where it belongs.
-- `stage/moves.py:981`: `stack_show(s, name, zone, layers, width=None, reserve=0)` — reserve leaves room above for layers that will be pushed later.
-- `stage/moves.py:992`: `stack_set(s, name, layer, text, kind=None)` — See implementation and tests.
-- `stage/moves.py:1003`: `stack_push(s, name, text, kind='eth')` — See implementation and tests.
-- `stage/moves.py:1012`: `stack_pop(s, name)` — See implementation and tests.
-- `stage/moves.py:1020`: `stack_mark(s, name, layer, state='now')` — See implementation and tests.
-- `stage/moves.py:1026`: `fields_show(s, name, zone, rows, unit=0.2)` — See implementation and tests.
-- `stage/moves.py:1033`: `fields_mark(s, name, label, state='now')` — See implementation and tests.
-- `stage/moves.py:1039`: `queue_show(s, name, zone, items, kind='data', title=None, cell_w=1.0)` — See implementation and tests.
-- `stage/moves.py:1048`: `queue_pop(s, name)` — See implementation and tests.
-- `stage/moves.py:1055`: `queue_mark(s, name, i, state='error')` — See implementation and tests.
-- `stage/moves.py:1061`: `chips_show(s, name, zone, rows, show=None)` — Chip signals, one row each. Rows past show are placed now and appear later.
-- `stage/moves.py:1074`: `chips_reveal(s, name)` — See implementation and tests.
-- `stage/moves.py:1082`: `chips_flip(s, name, row, values, label)` — A sender's bit of minus one turns its code upside down.
-- `stage/moves.py:1095`: `chips_sum(s, name)` — On the air the signals simply add: the waves slide together into the next row.
-- `stage/moves.py:1109`: `chips_dot(s, name, a, b, products, total, result)` — Correlate two rows: walk the chips, multiply each pair, add them up, divide by the code length.
-- `stage/moves.py:1139`: `plot_show(s, name, zone, xlabel, ylabel, curves, xr=(0, 1), yr=(0, 1))` — See implementation and tests.
-- `stage/moves.py:1145`: `plot_mark(s, name, x, y, text='', state='now')` — See implementation and tests.
-- `stage/moves.py:1156`: `net_port_state(s, name, device, peer, state)` — See implementation and tests.
-- `stage/moves.py:1165`: `observe_stage(stage)` — See implementation and tests.
-- `stage/moves.py:1172`: `check_stage(observation, assertions)` — See implementation and tests.
+- `stage/moves.py:165`: `keep_awake(s)` — Pulse the corner tag. It adds motion during a narrated still without changing the diagram.
+- `stage/moves.py:175`: `pause(s, text, long=False)` — See implementation and tests.
+- `stage/moves.py:185`: `text_block(s, name, zone, lines, size=30, color=None)` — See implementation and tests.
+- `stage/moves.py:195`: `bullets(s, name, zone, items, show=1, size=30, gap=0.24)` — See implementation and tests.
+- `stage/moves.py:214`: `reveal(s, name, n=1)` — See implementation and tests.
+- `stage/moves.py:225`: `card(s, kind, text, zone='right_bottom', name='_card')` — See implementation and tests.
+- `stage/moves.py:238`: `tex(s, name, zone, tex, size=44, color=None)` — See implementation and tests.
+- `stage/moves.py:247`: `net_show(s, name, zone, nodes, links=(), spread=None)` — See implementation and tests.
+- `stage/moves.py:254`: `net_add(s, name, nodes=None, links=())` — See implementation and tests.
+- `stage/moves.py:264`: `relink(net, key, style)` — See implementation and tests.
+- `stage/moves.py:276`: `find_link(net, a, b)` — See implementation and tests.
+- `stage/moves.py:285`: `net_state(s, name, nodes=None, links=())` — See implementation and tests.
+- `stage/moves.py:296`: `net_path(s, name, path, style='now')` — See implementation and tests.
+- `stage/moves.py:302`: `net_badge(s, name, node, text, side='right', state=None)` — See implementation and tests.
+- `stage/moves.py:318`: `net_cost(s, name, a, b, cost)` — See implementation and tests.
+- `stage/moves.py:326`: `net_move(s, name, node, to)` — See implementation and tests.
+- `stage/moves.py:349`: `net_relink(s, name, a, b, style='solid')` — Redraw a link after its endpoint has moved, or add it if new.
+- `stage/moves.py:359`: `net_unlink(s, name, a, b)` — See implementation and tests.
+- `stage/moves.py:369`: `net_unbadge(s, name, node)` — See implementation and tests.
+- `stage/moves.py:379`: `net_pulse(s, name, path, state='now')` — A signal runs along links.
+- `stage/moves.py:389`: `net_walk(s, name, path, state='now')` — Trace a path hop by hop, in the direction data travels. It stays until the next walk.
+- `stage/moves.py:402`: `net_unwalk(s, name)` — See implementation and tests.
+- `stage/moves.py:407`: `msg_send(s, name, a, b, text, kind='label')` — A message with readable contents travels along a link.
+- `stage/moves.py:418`: `dock(dev)` — Where a packet rests: on the icon, or just above a labelled box so the label stays readable.
+- `stage/moves.py:426`: `packet_spawn(s, name, net, at, layers=('eth', 'ip'))` — See implementation and tests.
+- `stage/moves.py:436`: `packet_hop(s, name, to)` — See implementation and tests.
+- `stage/moves.py:448`: `packet_both(s, moves)` — Several packets move at the same moment.
+- `stage/moves.py:457`: `packet_peel(s, name)` — See implementation and tests.
+- `stage/moves.py:465`: `packet_wrap(s, name, kind='eth')` — See implementation and tests.
+- `stage/moves.py:477`: `packet_swap(s, name, kind='eth')` — See implementation and tests.
+- `stage/moves.py:491`: `packet_flood(s, name, to, keep=False)` — See implementation and tests.
+- `stage/moves.py:504`: `packet_drop(s, name)` — See implementation and tests.
+- `stage/moves.py:513`: `packet_fade(s, name)` — See implementation and tests.
+- `stage/moves.py:519`: `switch_learn(s, table, mac, port, net=None, node=None)` — See implementation and tests.
+- `stage/moves.py:527`: `graph_promote(s, name, node, via=None)` — See implementation and tests.
+- `stage/moves.py:536`: `graph_relax(s, name, via, node, text, side='right', state='now')` — Try a route through a settled node: a signal crosses the edge, and the neighbor's distance updates.
+- `stage/moves.py:554`: `tunnel_re(s, stack, outer, kind='tunnel')` — See implementation and tests.
+- `stage/moves.py:560`: `radio_zone(s, net, node, radius=1.6, name=None, kind='radio')` — See implementation and tests.
+- `stage/moves.py:569`: `radio_pulse(s, net, node, radius=1.8, kind='radio')` — See implementation and tests.
+- `stage/moves.py:576`: `burst(s, net, node=None, between=None)` — See implementation and tests.
+- `stage/moves.py:585`: `table_show(s, name, zone, data=None, cols=None, rows=None, show=None, size=30, ghost=(), row_h=0.52)` — See implementation and tests.
+- `stage/moves.py:601`: `table_reveal(s, name, n=1)` — See implementation and tests.
+- `stage/moves.py:613`: `table_add(s, name, row, state=None)` — See implementation and tests.
+- `stage/moves.py:636`: `table_set(s, name, r, c, v, state=None)` — See implementation and tests.
+- `stage/moves.py:648`: `table_mark(s, name, r, state='now')` — See implementation and tests.
+- `stage/moves.py:654`: `table_flash(s, name, rows, state='candidate')` — Mark several rows in the same instant, the way parallel hardware compares them.
+- `stage/moves.py:665`: `bits_show(s, name, zone, rows, reserve=None)` — See implementation and tests.
+- `stage/moves.py:675`: `bits_add(s, name, label, value)` — See implementation and tests.
+- `stage/moves.py:686`: `bits_mask(s, name, prefix, rows=None)` — See implementation and tests.
+- `stage/moves.py:705`: `bits_scan(s, name, label, value)` — Work out a new row one bit at a time: a line sweeps across, and each result bit lands under it.
+- `stage/moves.py:720`: `bits_mark(s, name, row, start, end, state='now')` — See implementation and tests.
+- `stage/moves.py:727`: `seq_show(s, name, zone, lanes, steps=6)` — See implementation and tests.
+- `stage/moves.py:733`: `seq_msg(s, name, a, b, text, kind='ip', state=None)` — See implementation and tests.
+- `stage/moves.py:747`: `tl_show(s, name, zone, tracks, span, ticks=None)` — See implementation and tests.
+- `stage/moves.py:753`: `tl_block(s, name, track, start, end, text='', kind='data', state=None)` — See implementation and tests.
+- `stage/moves.py:769`: `sieve_show(s, name, zone, rungs, routes, size=30)` — See implementation and tests.
+- `stage/moves.py:775`: `sieve_step(s, name, rung, keep)` — Compare one row. Whoever loses stops being considered.
+- `stage/moves.py:790`: `sieve_win(s, name, route, unused=())` — The survivor wins. Later rows never get looked at.
+- `stage/moves.py:801`: `bar_show(s, name, zone, total, header=20, unit=8, rows=3)` — See implementation and tests.
+- `stage/moves.py:807`: `bar_ruler(s, name)` — See implementation and tests.
+- `stage/moves.py:816`: `bar_cut_mark(m, at, color)` — See implementation and tests.
+- `stage/moves.py:822`: `bar_cut(s, name, at, state='now')` — A cut sweeps along the data and lands at a byte position.
+- `stage/moves.py:835`: `bar_zoom(s, name, at, state='now')` — See implementation and tests.
+- `stage/moves.py:843`: `bar_snap(s, name, at, state='done')` — The zoomed cut moves to a legal position.
+- `stage/moves.py:854`: `bar_info_text(m, i, frag)` — See implementation and tests.
+- `stage/moves.py:866`: `bar_slice(s, name, i, frag, info=True)` — One fragment drops out of the original and gains its own header.
+- `stage/moves.py:902`: `bar_info(s, name, i, frag)` — See implementation and tests.
+- `stage/moves.py:912`: `bar_join(s, name)` — The data slides back together, proving nothing was lost. The extra headers stay behind.
+- `stage/moves.py:922`: `bar_mark(s, name, what, state='now')` — Outline the headers, the whole data bar, or one row's header.
+- `stage/moves.py:934`: `bar_span(s, name, to, text)` — A measure from the start of the data to a byte position: this is what an offset means.
+- `stage/moves.py:946`: `bar_note(s, name, tex=None, text=None, side='center', state=None)` — See implementation and tests.
+- `stage/moves.py:960`: `tl_ghost(s, name, track, start, end, text='', state='error')` — A trial block, which a later tl.slide can move.
+- `stage/moves.py:974`: `tl_slide(s, name, start, end, text='', state='done')` — The trial block slides to where it belongs.
+- `stage/moves.py:991`: `stack_show(s, name, zone, layers, width=None, reserve=0)` — reserve leaves room above for layers that will be pushed later.
+- `stage/moves.py:1002`: `stack_set(s, name, layer, text, kind=None)` — See implementation and tests.
+- `stage/moves.py:1013`: `stack_push(s, name, text, kind='eth')` — See implementation and tests.
+- `stage/moves.py:1022`: `stack_pop(s, name)` — See implementation and tests.
+- `stage/moves.py:1030`: `stack_mark(s, name, layer, state='now')` — See implementation and tests.
+- `stage/moves.py:1036`: `fields_show(s, name, zone, rows, unit=0.2)` — See implementation and tests.
+- `stage/moves.py:1043`: `fields_mark(s, name, label, state='now')` — See implementation and tests.
+- `stage/moves.py:1049`: `queue_show(s, name, zone, items, kind='data', title=None, cell_w=1.0)` — See implementation and tests.
+- `stage/moves.py:1058`: `queue_pop(s, name)` — See implementation and tests.
+- `stage/moves.py:1065`: `queue_mark(s, name, i, state='error')` — See implementation and tests.
+- `stage/moves.py:1071`: `chips_show(s, name, zone, rows, show=None)` — Chip signals, one row each. Rows past show are placed now and appear later.
+- `stage/moves.py:1084`: `chips_reveal(s, name)` — See implementation and tests.
+- `stage/moves.py:1092`: `chips_flip(s, name, row, values, label)` — A sender's bit of minus one turns its code upside down.
+- `stage/moves.py:1105`: `chips_sum(s, name)` — On the air the signals simply add: the waves slide together into the next row.
+- `stage/moves.py:1119`: `chips_dot(s, name, a, b, products, total, result)` — Correlate two rows: walk the chips, multiply each pair, add them up, divide by the code length.
+- `stage/moves.py:1149`: `plot_show(s, name, zone, xlabel, ylabel, curves, xr=(0, 1), yr=(0, 1))` — See implementation and tests.
+- `stage/moves.py:1155`: `plot_mark(s, name, x, y, text='', state='now')` — See implementation and tests.
+- `stage/moves.py:1166`: `net_port_state(s, name, device, peer, state)` — See implementation and tests.
+- `stage/moves.py:1175`: `observe_stage(stage)` — See implementation and tests.
+- `stage/moves.py:1182`: `check_stage(observation, assertions)` — See implementation and tests.
 - `stage/parts.py:9`: `T(text, size=28, color=INK, weight='NORMAL')` — See implementation and tests.
 - `stage/parts.py:15`: `wrap_lines(text, width, size)` — See implementation and tests.
-- `stage/parts.py:28`: `paragraph(text, width, size=30, color=INK, center=False)` — See implementation and tests.
-- `stage/parts.py:34`: `zone_box(zone)` — See implementation and tests.
-- `stage/parts.py:39`: `place(mob, zone, grow=False)` — See implementation and tests.
-- `stage/parts.py:48`: `outline(mob, state, buff=0.09)` — See implementation and tests.
-- `stage/parts.py:58`: `icon(kind, text='')` — See implementation and tests.
-- `stage/parts.py:105`: `segment_hits_box(p0, p1, center, w, h, pad=0.02)` — Does a straight segment touch a box? Liang-Barsky clipping.
-- `stage/parts.py:128`: `class Device` — See implementation and tests.
-- `stage/parts.py:149`: `class Net` — A diagram of devices and links. Coordinates are stretched to fill a zone; glyphs keep their size.
-- `stage/parts.py:260`: `class Grid` — See implementation and tests.
-- `stage/parts.py:300`: `class BitRow` — See implementation and tests.
-- `stage/parts.py:323`: `class Ladder` — See implementation and tests.
-- `stage/parts.py:346`: `class Tracks` — See implementation and tests.
-- `stage/parts.py:373`: `layer_block(text, kind, width=4.6, height=0.62)` — See implementation and tests.
-- `stage/parts.py:379`: `class Stack` — See implementation and tests.
-- `stage/parts.py:389`: `class Fields` — A header drawn by rows, with cells sized by their share of the row.
-- `stage/parts.py:411`: `class Slots` — A FIFO drawn left to right; the head is on the right.
-- `stage/parts.py:433`: `class StepWave` — Chip values drawn as a step signal, for code-division sums.
-- `stage/parts.py:452`: `class Curves` — See implementation and tests.
-- `stage/parts.py:479`: `class Sieve` — Candidates in columns, decision steps in rows. A candidate drops out at the first row it loses.
-- `stage/parts.py:515`: `class ByteBar` — A datagram drawn to scale. Slices keep their place under the original, so an offset is visibly a distance.
-- `stage/parts.py:596`: `class PacketToken` — See implementation and tests.
-- `stage/player.py:20`: `class Dish` — See implementation and tests.
+- `stage/parts.py:27`: `paragraph(text, width, size=30, color=INK, center=False)` — See implementation and tests.
+- `stage/parts.py:33`: `zone_box(zone)` — See implementation and tests.
+- `stage/parts.py:38`: `place(mob, zone, grow=False)` — See implementation and tests.
+- `stage/parts.py:52`: `outline(mob, state, buff=0.09)` — See implementation and tests.
+- `stage/parts.py:62`: `icon(kind, text='')` — See implementation and tests.
+- `stage/parts.py:109`: `segment_hits_box(p0, p1, center, w, h, pad=0.02)` — Does a straight segment touch a box? Liang-Barsky clipping.
+- `stage/parts.py:132`: `class Device` — See implementation and tests.
+- `stage/parts.py:153`: `class Net` — A diagram of devices and links. Coordinates are stretched to fill a zone; glyphs keep their size.
+- `stage/parts.py:264`: `class Grid` — See implementation and tests.
+- `stage/parts.py:304`: `class BitRow` — See implementation and tests.
+- `stage/parts.py:327`: `class Ladder` — See implementation and tests.
+- `stage/parts.py:350`: `class Tracks` — See implementation and tests.
+- `stage/parts.py:377`: `layer_block(text, kind, width=4.6, height=0.62)` — See implementation and tests.
+- `stage/parts.py:383`: `class Stack` — See implementation and tests.
+- `stage/parts.py:393`: `class Fields` — A header drawn by rows, with cells sized by their share of the row.
+- `stage/parts.py:415`: `class Slots` — A FIFO drawn left to right; the head is on the right.
+- `stage/parts.py:437`: `class StepWave` — Chip values drawn as a step signal, for code-division sums.
+- `stage/parts.py:456`: `class Curves` — See implementation and tests.
+- `stage/parts.py:483`: `class Sieve` — Candidates in columns, decision steps in rows. A candidate drops out at the first row it loses.
+- `stage/parts.py:519`: `class ByteBar` — A datagram drawn to scale. Slices keep their place under the original, so an offset is visibly a distance.
+- `stage/parts.py:600`: `class PacketToken` — See implementation and tests.
+- `stage/player.py:23`: `idle_slices(seconds, limit=IDLE_LIMIT, pulse=FLASH)` — Break a long idle into waits no longer than limit, with a pulse between them.
+- `stage/player.py:28`: `class Dish` — See implementation and tests.
 - `stage/signal.py:18`: `tokens(text)` — See implementation and tests.
 - `stage/signal.py:28`: `fold(tok)` — See implementation and tests.
 - `stage/signal.py:36`: `spoken_words(text, times)` — See implementation and tests.
@@ -400,9 +402,11 @@ class ResourceCatalog:
 - `stage/timeline.py:105`: `build_captions(text, alignment, policy=None)` — See implementation and tests.
 - `stage/timeline.py:112`: `validate_captions(cues, timeline)` — See implementation and tests.
 - `stage/timeline.py:122`: `export_transcript(plan, catalog)` — See implementation and tests.
-- `tools/assembly.py:8`: `course_plans()` — See implementation and tests.
-- `tools/assembly.py:21`: `write_plans(destination=None)` — See implementation and tests.
-- `tools/audition.py:17`: `main()` — See implementation and tests.
+- `tools/assembly.py:9`: `course_plans()` — See implementation and tests.
+- `tools/assembly.py:22`: `write_plans(destination=None)` — See implementation and tests.
+- `tools/audio_continuity.py:5`: `inspect(path)` — See implementation and tests.
+- `tools/audition.py:21`: `eleven_audition(limit=3, model_id='eleven_multilingual_v2', voice_ids=None)` — Speak the audition paragraph in a few account voices. Does not change voice.yaml or any dish.
+- `tools/audition.py:52`: `main()` — See implementation and tests.
 - `tools/bank.py:14`: `clean(text)` — See implementation and tests.
 - `tools/bank.py:22`: `links(text)` — See implementation and tests.
 - `tools/bank.py:26`: `recipe_maps()` — Which dishes teach each concept, and the dishes of each chapter.
@@ -431,10 +435,11 @@ class ResourceCatalog:
 - `tools/ears.py:60`: `fold_numbers(tokens)` — Turn runs of number words into digits, keeping for each output token the index of the input token it came from.
 - `tools/ears.py:76`: `norm_with_map(tokens_by_source)` — Normalize a list of source tokens; return the flat tokens and, for each, its source index.
 - `tools/ears.py:87`: `transcribe(beat, entry)` — See implementation and tests.
-- `tools/ears.py:113`: `align(written, heard, duration, rules)` — A [start, end] time for each written word, plus the share of it that matched and the mismatched segments.
-- `tools/ears.py:160`: `expected_differences(rules_data)` — Differences that only reflect spelling: the transcriber wrote the real word where the script holds a respelling.
-- `tools/ears.py:169`: `real_differences(seen, rules_data)` — See implementation and tests.
-- `tools/ears.py:187`: `main()` — See implementation and tests.
+- `tools/ears.py:122`: `class AlignmentResult` — See implementation and tests.
+- `tools/ears.py:130`: `align(written, heard, duration, rules)` — A [start, end] time for each written word, plus the share of it that matched and the mismatched segments.
+- `tools/ears.py:176`: `expected_differences(rules_data)` — Differences that only reflect spelling: the transcriber wrote the real word where the script holds a respelling.
+- `tools/ears.py:185`: `real_differences(seen, rules_data)` — See implementation and tests.
+- `tools/ears.py:203`: `main()` — See implementation and tests.
 - `tools/evidence.py:9`: `hash_files(paths)` — See implementation and tests.
 - `tools/evidence.py:16`: `fingerprint_dish(dish_id, context=None)` — See implementation and tests.
 - `tools/evidence.py:33`: `fingerprint_assembly(plan, context=None)` — See implementation and tests.
@@ -444,80 +449,103 @@ class ResourceCatalog:
 - `tools/evidence.py:71`: `artifact_matches(path, recorded)` — Read schema-1 path-salted receipts while writing portable SHA-256 identities.
 - `tools/gemini.py:24`: `packaged_output(root=ROOT)` — See implementation and tests.
 - `tools/gemini.py:28`: `default_output(root=ROOT)` — See implementation and tests.
-- `tools/gemini.py:34`: `transcript_path(root, name)` — See implementation and tests.
-- `tools/gemini.py:39`: `sha(text)` — See implementation and tests.
-- `tools/gemini.py:43`: `read_json(path)` — See implementation and tests.
-- `tools/gemini.py:54`: `source_documents(root=ROOT)` — Return ordered (portable label, exact UTF-8 text) pairs; fail closed.
-- `tools/gemini.py:97`: `manifest_for(brief, documents)` — See implementation and tests.
-- `tools/gemini.py:105`: `render(root=ROOT)` — See implementation and tests.
-- `tools/gemini.py:156`: `validate_freshness(root=ROOT, output=None)` — Read-only audit of selected handoff, packaged copy, and portable inputs.
+- `tools/gemini.py:40`: `transcript_path(root, name)` — See implementation and tests.
+- `tools/gemini.py:45`: `sha(text)` — See implementation and tests.
+- `tools/gemini.py:49`: `read_json(path)` — See implementation and tests.
+- `tools/gemini.py:60`: `source_documents(root=ROOT)` — Return ordered (portable label, exact UTF-8 text) pairs; fail closed.
+- `tools/gemini.py:103`: `manifest_for(brief, documents)` — See implementation and tests.
+- `tools/gemini.py:111`: `render(root=ROOT)` — See implementation and tests.
+- `tools/gemini.py:162`: `validate_freshness(root=ROOT, output=None)` — Read-only audit of selected handoff, packaged copy, and portable inputs.
 
 Parent transcript/handoff directories take precedence when present. Only
 absent parent directories enable standalone fallbacks; missing files within
 a present parent directory must be repaired. No preparation imports.
-- `tools/gemini.py:185`: `export(root=ROOT, output=None)` — See implementation and tests.
-- `tools/gemini.py:205`: `main()` — See implementation and tests.
+- `tools/gemini.py:191`: `export(root=ROOT, output=None)` — See implementation and tests.
+- `tools/gemini.py:211`: `main()` — See implementation and tests.
 - `tools/handoff.py:18`: `clone(source, target)` — See implementation and tests.
-- `tools/handoff.py:34`: `read_status(source, course)` — Consume refresh()'s shared status without changing release evidence.
-- `tools/handoff.py:51`: `validate_handoff(target, status)` — Validate the staged copy before its name can become the destination.
-- `tools/handoff.py:74`: `promote(staged, target)` — Rename only validated trees; retain old output and roll back a failed rename.
+- `tools/handoff.py:34`: `validate_live_status(source, status)` — See implementation and tests.
+- `tools/handoff.py:40`: `read_status(source, course)` — Consume refresh()'s shared status without changing release evidence.
+- `tools/handoff.py:58`: `validate_handoff(target, status)` — Validate the staged copy before its name can become the destination.
+- `tools/handoff.py:94`: `promote(staged, target)` — Rename only validated trees; retain old output and roll back a failed rename.
 
 Each rename is atomic on the shared filesystem. Replacing an existing nonempty
 directory takes two renames, so readers can briefly see the destination absent.
-- `tools/handoff.py:93`: `bundle_snapshot(snapshot, source_manifest, staged)` — Bundle vault notes and required decks; other provenance stays in the source ZIP.
-- `tools/handoff.py:132`: `build_handoff(course, source, destination)` — See implementation and tests.
-- `tools/handoff.py:185`: `main(destination=None)` — See implementation and tests.
-- `tools/kitchen.py:29`: `dishes()` — See implementation and tests.
-- `tools/kitchen.py:33`: `chapter_of(d)` — See implementation and tests.
-- `tools/kitchen.py:37`: `run(cmd, **kw)` — See implementation and tests.
-- `tools/kitchen.py:41`: `probe_duration(path, stream=None)` — See implementation and tests.
-- `tools/kitchen.py:50`: `free_gib()` — See implementation and tests.
-- `tools/kitchen.py:54`: `manim(dish, res, media, *extra, env=None)` — See implementation and tests.
-- `tools/kitchen.py:61`: `dry_run(dish)` — See implementation and tests.
-- `tools/kitchen.py:77`: `fingerprint(dish)` — See implementation and tests.
-- `tools/kitchen.py:82`: `fp_path(dish)` — See implementation and tests.
-- `tools/kitchen.py:86`: `is_fresh(dish)` — See implementation and tests.
-- `tools/kitchen.py:99`: `group_fp(members)` — See implementation and tests.
-- `tools/kitchen.py:106`: `check_static()` — Everything that can be verified without running Manim.
-- `tools/kitchen.py:189`: `write_coverage(used)` — See implementation and tests.
-- `tools/kitchen.py:199`: `cmd_check(args)` — See implementation and tests.
-- `tools/kitchen.py:238`: `video_path(dish, quality)` — See implementation and tests.
-- `tools/kitchen.py:242`: `cmd_cook(args)` — See implementation and tests.
-- `tools/kitchen.py:278`: `fmt(t, sep=',')` — See implementation and tests.
-- `tools/kitchen.py:287`: `cues_for(dish, offset=0.0)` — See implementation and tests.
-- `tools/kitchen.py:302`: `two_lines(text, width=42)` — See implementation and tests.
-- `tools/kitchen.py:311`: `write_subs(cues, srt, vtt)` — See implementation and tests.
-- `tools/kitchen.py:319`: `caption_problems(cues)` — See implementation and tests.
-- `tools/kitchen.py:332`: `cmd_taste(args)` — See implementation and tests.
-- `tools/kitchen.py:393`: `concat(files, out, extra=())` — See implementation and tests.
-- `tools/kitchen.py:401`: `verify_playback(path, expected=None)` — See implementation and tests.
-- `tools/kitchen.py:419`: `chapter_title(ch)` — See implementation and tests.
-- `tools/kitchen.py:426`: `chapter_cues(ch)` — See implementation and tests.
-- `tools/kitchen.py:435`: `cmd_plate(args)` — See implementation and tests.
-- `tools/kitchen.py:492`: `transcript(chapter_start, output_id='main')` — See implementation and tests.
-- `tools/kitchen.py:522`: `pending_reviews()` — Explicit category reviews still missing for the current final renders: four per dish.
-- `tools/kitchen.py:538`: `guide(rows, total)` — See implementation and tests.
-- `tools/kitchen.py:572`: `cmd_serve(args)` — See implementation and tests.
-- `tools/kitchen.py:678`: `second_video(chapters, files, caps)` — The practice walkthrough and warm-up, in their own file with their own markers and captions.
-- `tools/kitchen.py:701`: `reproduce(dish='1.1')` — Render a dish from a clean copy of the package, using only supplied source and audio.
-- `tools/kitchen.py:724`: `stop(where)` — See implementation and tests.
-- `tools/kitchen.py:729`: `cook_everything()` — See implementation and tests.
-- `tools/kitchen.py:774`: `freeze()` — Cook from a snapshot, so prep can keep working while a release cooks.
-- `tools/kitchen.py:788`: `cmd_run(args)` — See implementation and tests.
-- `tools/kitchen.py:803`: `cmd_review(args)` — See implementation and tests.
-- `tools/kitchen.py:813`: `cmd_open(args)` — See implementation and tests.
-- `tools/kitchen.py:824`: `main()` — See implementation and tests.
+- `tools/handoff.py:113`: `bundle_snapshot(snapshot, source_manifest, staged)` — Bundle vault notes and required decks; other provenance stays in the source ZIP.
+- `tools/handoff.py:152`: `build_handoff(course, source, destination)` — See implementation and tests.
+- `tools/handoff.py:205`: `main(destination=None)` — See implementation and tests.
+- `tools/kitchen.py:30`: `dishes()` — See implementation and tests.
+- `tools/kitchen.py:34`: `chapter_of(d)` — See implementation and tests.
+- `tools/kitchen.py:38`: `run(cmd, **kw)` — See implementation and tests.
+- `tools/kitchen.py:42`: `probe_duration(path, stream=None)` — See implementation and tests.
+- `tools/kitchen.py:51`: `free_gib()` — See implementation and tests.
+- `tools/kitchen.py:55`: `manim(dish, res, media, *extra, env=None)` — See implementation and tests.
+- `tools/kitchen.py:62`: `dry_run(dish)` — See implementation and tests.
+- `tools/kitchen.py:74`: `schedule_problems(only=None, include_stillness=False)` — Catch a broken timeline before Manim draws a frame.
+
+Narrated waits are judged after the corner-tag pulse splits them. Prediction
+and reading holds are allowed to stay still.
+- `tools/kitchen.py:127`: `fingerprint(dish)` — See implementation and tests.
+- `tools/kitchen.py:132`: `fp_path(dish)` — See implementation and tests.
+- `tools/kitchen.py:136`: `taste_is_current(dish)` — A taste file counts only when it was written after the video it claims to describe.
+- `tools/kitchen.py:147`: `is_fresh(dish)` — See implementation and tests.
+- `tools/kitchen.py:160`: `group_fp(members)` — See implementation and tests.
+- `tools/kitchen.py:167`: `check_static()` — Everything that can be verified without running Manim.
+- `tools/kitchen.py:250`: `write_coverage(used)` — See implementation and tests.
+- `tools/kitchen.py:260`: `cmd_check(args)` — See implementation and tests.
+- `tools/kitchen.py:299`: `video_path(dish, quality)` — See implementation and tests.
+- `tools/kitchen.py:303`: `cmd_cook(args)` — See implementation and tests.
+- `tools/kitchen.py:347`: `fmt(t, sep=',')` — See implementation and tests.
+- `tools/kitchen.py:356`: `cues_for(dish, offset=0.0)` — See implementation and tests.
+- `tools/kitchen.py:371`: `two_lines(text, width=42)` — See implementation and tests.
+- `tools/kitchen.py:380`: `write_subs(cues, srt, vtt)` — See implementation and tests.
+- `tools/kitchen.py:388`: `caption_problems(cues)` — See implementation and tests.
+- `tools/kitchen.py:401`: `cmd_taste(args)` — See implementation and tests.
+- `tools/kitchen.py:470`: `concat(files, out, extra=())` — See implementation and tests.
+- `tools/kitchen.py:479`: `verify_playback(path, expected=None)` — See implementation and tests.
+- `tools/kitchen.py:497`: `chapter_title(ch)` — See implementation and tests.
+- `tools/kitchen.py:501`: `chapter_cues(ch)` — See implementation and tests.
+- `tools/kitchen.py:510`: `cmd_plate(args)` — See implementation and tests.
+- `tools/kitchen.py:567`: `transcript(chapter_start, output_id='main')` — See implementation and tests.
+- `tools/kitchen.py:597`: `pending_reviews()` — Explicit category reviews still missing for the current final renders: four per dish.
+- `tools/kitchen.py:613`: `guide(rows, total)` — See implementation and tests.
+- `tools/kitchen.py:647`: `cmd_serve(args)` — See implementation and tests.
+- `tools/kitchen.py:758`: `second_video(chapters, files, caps)` — The practice walkthrough and warm-up, in their own file with their own markers and captions.
+- `tools/kitchen.py:781`: `reproduce(dish='6.1')` — Render a dish from a clean copy of the package, using only supplied source and audio.
+- `tools/kitchen.py:804`: `stop(where)` — See implementation and tests.
+- `tools/kitchen.py:809`: `cook_everything()` — See implementation and tests.
+- `tools/kitchen.py:859`: `freeze()` — Cook from a snapshot, so prep can keep working while a release cooks.
+- `tools/kitchen.py:873`: `cmd_run(args)` — See implementation and tests.
+- `tools/kitchen.py:888`: `cmd_review(args)` — See implementation and tests.
+- `tools/kitchen.py:898`: `cmd_open(args)` — See implementation and tests.
+- `tools/kitchen.py:909`: `main()` — See implementation and tests.
 - `tools/local_server.py:16`: `make_handler(mounts, on_post=None)` — mounts maps a URL prefix to a folder; the longest matching prefix wins.
 - `tools/local_server.py:104`: `create_server(mounts, on_post=None, port=PORT)` — Bind loopback; let the OS choose a free port if the preferred one is busy.
 - `tools/local_server.py:115`: `serve(mounts, start='/', on_post=None, port=PORT, open_browser=True)` — See implementation and tests.
 - `tools/media_audit.py:9`: `sha256(path)` — See implementation and tests.
 - `tools/media_audit.py:16`: `inspect_media(path)` — See implementation and tests.
-- `tools/media_audit.py:35`: `verification_identity()` — See implementation and tests.
-- `tools/media_audit.py:40`: `main()` — See implementation and tests.
+- `tools/media_audit.py:39`: `verification_identity()` — See implementation and tests.
+- `tools/media_audit.py:44`: `main()` — See implementation and tests.
 - `tools/narration_assets.py:9`: `catalog_assets()` — See implementation and tests.
-- `tools/narration_assets.py:32`: `write_catalog()` — See implementation and tests.
-- `tools/narration_assets.py:39`: `export_alignment_evidence()` — Preserve used cached transcriptions; reuse packaged evidence for unchanged assets.
-- `tools/narration_assets.py:56`: `validate_alignment_evidence()` — See implementation and tests.
+- `tools/narration_assets.py:35`: `write_catalog()` — See implementation and tests.
+- `tools/narration_assets.py:42`: `export_alignment_evidence()` — Preserve used cached transcriptions; reuse packaged evidence for unchanged assets.
+- `tools/narration_assets.py:59`: `validate_alignment_evidence()` — See implementation and tests.
+- `tools/narration_pipeline.py:27`: `atomic_json(path, value)` — See implementation and tests.
+- `tools/narration_pipeline.py:35`: `get_elevenlabs_key()` — Never include credential output in exceptions or logs.
+- `tools/narration_pipeline.py:54`: `piece_body(text, config)` — See implementation and tests.
+- `tools/narration_pipeline.py:59`: `piece_path(text, config)` — See implementation and tests.
+- `tools/narration_pipeline.py:65`: `validate_alignment(alignment, duration)` — See implementation and tests.
+- `tools/narration_pipeline.py:80`: `validate_payload(payload)` — See implementation and tests.
+- `tools/narration_pipeline.py:91`: `retry_delay(header, attempt)` — See implementation and tests.
+- `tools/narration_pipeline.py:102`: `request_piece(text, config)` — See implementation and tests.
+- `tools/narration_pipeline.py:136`: `raw_provider(spoken, path, config)` — See implementation and tests.
+- `tools/narration_pipeline.py:157`: `heard_words(sidecar)` — See implementation and tests.
+- `tools/narration_pipeline.py:179`: `file_hash(path)` — See implementation and tests.
+- `tools/narration_pipeline.py:183`: `valid_clip(path)` — See implementation and tests.
+- `tools/narration_pipeline.py:192`: `synthesize(text, config)` — See implementation and tests.
+- `tools/narration_pipeline.py:212`: `selected(args)` — See implementation and tests.
+- `tools/narration_pipeline.py:221`: `narrate(args)` — See implementation and tests.
+- `tools/narration_pipeline.py:253`: `align_selected(args)` — See implementation and tests.
+- `tools/narration_pipeline.py:286`: `add_commands(sub)` — See implementation and tests.
 - `tools/package.py:8`: `main()` — See implementation and tests.
 - `tools/playback.py:18`: `mounts(root)` — See implementation and tests.
 - `tools/playback.py:24`: `asset_path(root, url)` — Resolve a local player URL, rejecting escapes and remote dependencies.
@@ -525,46 +553,48 @@ directory takes two renames, so readers can briefly see the destination absent.
 - `tools/playback.py:49`: `validate_assets(root)` — Return missing/corrupt playback dependencies, without importing the kitchen.
 - `tools/playback.py:96`: `write_launcher(destination)` — Install the two stdlib Python files and macOS double-click entry point.
 - `tools/playback.py:109`: `main(argv=None)` — See implementation and tests.
-- `tools/player_build.py:29`: `assessment_date(root=ROOT)` — Read optional study metadata; absent/null/blank means an undated player.
-- `tools/player_build.py:49`: `dish_order(d)` — See implementation and tests.
-- `tools/player_build.py:53`: `note_url(relative)` — See implementation and tests.
-- `tools/player_build.py:57`: `route(all_dishes)` — The vault's Sunday-to-Wednesday route as a list of boxes, one thing at a time.
-- `tools/player_build.py:86`: `slide_name(deck, page)` — See implementation and tests.
-- `tools/player_build.py:90`: `render_slides(needed, folder)` — See implementation and tests.
-- `tools/player_build.py:103`: `readiness()` — See implementation and tests.
-- `tools/player_build.py:113`: `build_data()` — See implementation and tests.
-- `tools/player_build.py:155`: `main()` — See implementation and tests.
+- `tools/player_build.py:28`: `prediction_pause_time(beat, slot, pad, fps=30)` — Absolute second when the video's prediction hold starts, on the same frame grid as compile_beat.
+- `tools/player_build.py:37`: `assessment_date(root=ROOT)` — Read optional study metadata; absent/null/blank means an undated player.
+- `tools/player_build.py:57`: `dish_order(d)` — See implementation and tests.
+- `tools/player_build.py:61`: `note_url(relative)` — See implementation and tests.
+- `tools/player_build.py:65`: `route(all_dishes)` — The vault's Sunday-to-Wednesday route as a list of boxes, one thing at a time.
+- `tools/player_build.py:94`: `slide_name(deck, page)` — See implementation and tests.
+- `tools/player_build.py:98`: `render_slides(needed, folder)` — See implementation and tests.
+- `tools/player_build.py:111`: `readiness()` — See implementation and tests.
+- `tools/player_build.py:121`: `build_data()` — See implementation and tests.
+- `tools/player_build.py:163`: `main()` — See implementation and tests.
 - `tools/portion.py:7`: `load_authoring(root: Path)` — See implementation and tests.
 - `tools/portion.py:12`: `load_overrides(path: Path)` — See implementation and tests.
 - `tools/portion.py:16`: `portion_dish(dish: dict, overrides: dict)` — Pure conversion: preserve authored event metadata and merge explicit layout overrides.
 - `tools/portion.py:36`: `main()` — See implementation and tests.
 - `tools/predictions.py:8`: `load_prediction_contracts()` — See implementation and tests.
 - `tools/predictions.py:13`: `validate_prediction_contracts(timelines)` — See implementation and tests.
-- `tools/preparation.py:14`: `digest(path)` — See implementation and tests.
-- `tools/preparation.py:18`: `discover_vault(root)` — See implementation and tests.
-- `tools/preparation.py:23`: `snapshot_sources(inventory, destination)` — See implementation and tests.
-- `tools/preparation.py:34`: `write_source_manifest(records)` — See implementation and tests.
-- `tools/preparation.py:48`: `parse_note(path)` — See implementation and tests.
-- `tools/preparation.py:54`: `audit()` — See implementation and tests.
-- `tools/preparation.py:92`: `record_review(decision, store)` — See implementation and tests.
-- `tools/preparation.py:99`: `prepare()` — See implementation and tests.
-- `tools/preparation.py:116`: `generate_docs(cards, bindings)` — See implementation and tests.
-- `tools/preparation.py:164`: `cmd_prepare(args)` — See implementation and tests.
-- `tools/preparation.py:180`: `timeline_findings()` — See implementation and tests.
-- `tools/preparation.py:201`: `cmd_audit(args)` — See implementation and tests.
-- `tools/preparation.py:210`: `cmd_verify(args)` — See implementation and tests.
-- `tools/preparation.py:218`: `load_course_resources(snapshot=SNAPSHOT)` — See implementation and tests.
-- `tools/preparation.py:233`: `resolve_wikilink(link, catalog)` — See implementation and tests.
-- `tools/preparation.py:258`: `validate_resources(catalog)` — See implementation and tests.
-- `tools/preparation.py:279`: `load_bindings(path)` — See implementation and tests.
-- `tools/preparation.py:283`: `validate_bindings(catalog, dishes, bindings)` — See implementation and tests.
-- `tools/preparation.py:306`: `build_coverage_report(catalog, bindings)` — See implementation and tests.
-- `tools/preparation.py:310`: `verify_release(context=None)` — See implementation and tests.
+- `tools/preparation.py:15`: `digest(path)` — See implementation and tests.
+- `tools/preparation.py:19`: `discover_vault(root)` — See implementation and tests.
+- `tools/preparation.py:24`: `snapshot_sources(inventory, destination)` — See implementation and tests.
+- `tools/preparation.py:35`: `write_source_manifest(records)` — See implementation and tests.
+- `tools/preparation.py:49`: `parse_note(path)` — See implementation and tests.
+- `tools/preparation.py:55`: `audit()` — See implementation and tests.
+- `tools/preparation.py:93`: `record_review(decision, store)` — See implementation and tests.
+- `tools/preparation.py:100`: `prepare()` — See implementation and tests.
+- `tools/preparation.py:117`: `generate_docs(cards, bindings)` — See implementation and tests.
+- `tools/preparation.py:165`: `cmd_prepare(args)` — See implementation and tests.
+- `tools/preparation.py:181`: `timeline_findings()` — See implementation and tests.
+- `tools/preparation.py:202`: `cmd_audit(args)` — See implementation and tests.
+- `tools/preparation.py:211`: `cmd_verify(args)` — See implementation and tests.
+- `tools/preparation.py:219`: `load_course_resources(snapshot=SNAPSHOT)` — See implementation and tests.
+- `tools/preparation.py:234`: `resolve_wikilink(link, catalog)` — See implementation and tests.
+- `tools/preparation.py:259`: `validate_resources(catalog)` — See implementation and tests.
+- `tools/preparation.py:280`: `load_bindings(path)` — See implementation and tests.
+- `tools/preparation.py:284`: `validate_bindings(catalog, dishes, bindings)` — See implementation and tests.
+- `tools/preparation.py:307`: `build_coverage_report(catalog, bindings)` — See implementation and tests.
+- `tools/preparation.py:311`: `verify_release(context=None)` — See implementation and tests.
 - `tools/reference_integrity.py:8`: `collect(root=ROOT)` — See implementation and tests.
 - `tools/reference_integrity.py:21`: `validate_reference_integrity(root=ROOT)` — See implementation and tests.
 - `tools/release_status.py:8`: `class ReleaseStatus` — See implementation and tests.
 - `tools/release_status.py:22`: `calculate(findings, input_findings, revision, current, expected)` — See implementation and tests.
 - `tools/release_status.py:36`: `refresh()` — See implementation and tests.
+- `tools/release_status.py:53`: `live_proof(root)` — Bind publication to current source and review/build evidence, excluding status copies.
 - `tools/reproduction.py:21`: `sha256(path)` — See implementation and tests.
 - `tools/reproduction.py:29`: `source_content_identity(root)` — Hash packaged authored/runtime inputs, excluding generated status and docs.
 
@@ -589,9 +619,9 @@ entries and excessive expanded size. Never overlay an earlier source tree.
 - `tools/review_queue.py:127`: `pending_reviews(artifact_hash)` — See implementation and tests.
 - `tools/review_queue.py:133`: `artifact_info(path, receipt=None)` — See implementation and tests.
 - `tools/review_queue.py:141`: `build_queue(root=ROOT)` — See implementation and tests.
-- `tools/review_queue.py:203`: `write_queue(queue, destination)` — See implementation and tests.
-- `tools/review_queue.py:224`: `prepare_pilot(root, queue, destination, max_seconds=90)` — Concatenate complete flagged clips with silence; never upload anything.
-- `tools/review_queue.py:280`: `main(argv=None)` — See implementation and tests.
+- `tools/review_queue.py:205`: `write_queue(queue, destination)` — See implementation and tests.
+- `tools/review_queue.py:226`: `prepare_pilot(root, queue, destination, max_seconds=90)` — Concatenate complete flagged clips with silence; never upload anything.
+- `tools/review_queue.py:282`: `main(argv=None)` — See implementation and tests.
 - `tools/snap.py:14`: `run(dish, sheet=True)` — See implementation and tests.
 - `tools/snap.py:44`: `main()` — See implementation and tests.
 - `tools/snap.py:61`: `still_report(dishes)` — Where the picture stays still, estimated from every animation's scheduled time.
@@ -606,11 +636,19 @@ entries and excessive expanded size. Never overlay an earlier source tree.
 - `tools/tts.py:36`: `spoken_form(text, rules, config=CONFIG)` — See implementation and tests.
 - `tools/tts.py:43`: `plain_form(spoken)` — Remove Kokoro's phoneme notation, leaving the word.
 - `tools/tts.py:48`: `clip_key(spoken, config=CONFIG)` — See implementation and tests.
-- `tools/tts.py:56`: `raw_say(spoken, path, config)` — See implementation and tests.
-- `tools/tts.py:63`: `raw_kokoro(spoken, path, config)` — Kokoro speaks each stretch between pause marks; the pauses go in as silence.
-- `tools/tts.py:93`: `render_clip(spoken, wav, config=CONFIG)` — Speak the text, then bring it to the course's level and format.
-- `tools/tts.py:108`: `synth(job)` — See implementation and tests.
-- `tools/tts.py:118`: `main(only=None)` — See implementation and tests.
+- `tools/tts.py:58`: `pause_pieces(spoken)` — Split say/Kokoro pause marks into text and silence. ElevenLabs does not speak those marks.
+- `tools/tts.py:69`: `raw_say(spoken, path, config)` — See implementation and tests.
+- `tools/tts.py:76`: `raw_kokoro(spoken, path, config)` — Kokoro speaks each stretch between pause marks; the pauses go in as silence.
+- `tools/tts.py:106`: `raw_elevenlabs(spoken, path, config)` — Speak with ElevenLabs timestamps. Pause marks become silence so they are not read aloud.
+- `tools/tts.py:112`: `render_clip(spoken, wav, config=CONFIG)` — Speak the text, then bring it to the course's level and format.
+- `tools/tts.py:131`: `synth(job)` — See implementation and tests.
+- `tools/tts.py:141`: `main(only=None)` — See implementation and tests.
+- `tools/voice_pilot.py:26`: `heard_words(alignment)` — Words and their times from ElevenLabs character timestamps, including inserted silence.
+- `tools/voice_pilot.py:50`: `word_timing(written, alignment, duration, rules)` — Map synthesizer times onto the written words. Scale if loudnorm changed the length.
+- `tools/voice_pilot.py:61`: `synthesize_dish(dish=DISH, voice=VOICE_ID, model=MODEL)` — One take of each beat. A second run reuses the hash cache and does not call the API.
+- `tools/voice_pilot.py:89`: `write_pilot(dish=DISH, voice=VOICE_ID, model=MODEL)` — See implementation and tests.
+- `tools/voice_pilot.py:113`: `render_preview(dish=DISH)` — Render a 720p preview. Leaves narration/audio and the Samantha 1.1 file in place.
+- `tools/voice_pilot.py:148`: `main()` — See implementation and tests.
 
 ## Prepared prediction records
 

@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 11: bad news'
+      text: Practice midterm, question 11
   - net.show:
       name: g
       zone: top

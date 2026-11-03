@@ -183,8 +183,10 @@ def build_queue(root=ROOT):
         assemblies.append({'assembly': name, 'artifact': info, 'members': plan['members'],
                            'reviews': pending_reviews(info['sha256']), 'joins': joins,
                            'duration_basis': 'assembly plan when receipt has no duration'})
-    if len(dishes) != 64:
-        issues.append(f'Expected 64 dishes; found {len(dishes)}')
+    from course.tools.portion import load_authoring
+    expected = len(load_authoring(root))
+    if len(dishes) != expected:
+        issues.append(f'Expected {expected} authored lessons; found {len(dishes)}')
     if len(audits) != 176:
         issues.append(f'Expected 176 concept bindings; found {len(audits)}')
     return {'schema_version': 1, 'reviewer': None, 'release_verified': False,

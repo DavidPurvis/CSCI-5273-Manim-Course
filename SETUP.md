@@ -138,7 +138,7 @@ python3 play.py
 the frozen snapshot. Non-vault provenance records such as `review.txt` and
 `vault-source-manifest.json` remain preserved in the source ZIP. Vault records
 are hash-validated as bundled notes; all explicitly required PDFs, including
-`lec02-layering.pdf`, are copied to `decks/`. The launcher validates referenced assets and the recorded
+`lec06-lan.pdf`, are copied to `decks/`. The launcher validates referenced assets and the recorded
 SHA-256 hashes before opening the player; validation can take time for large
 videos. It listens on `127.0.0.1` only. If port 5273 is busy, it chooses a free
 port and prints the actual URL. Keep the Terminal window open during playback;

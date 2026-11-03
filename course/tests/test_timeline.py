@@ -128,14 +128,10 @@ def test_player_pause_matches_compiled_prediction_hold():
     assert checked == 3
 
 
-def test_long_idle_is_split_so_a_frame_cannot_freeze_for_ten_seconds():
+def test_long_idle_preserves_reading_time_without_artificial_motion():
     from course.stage.player import idle_slices
-    slices = idle_slices(42)
-    waits = [span for kind, span in slices if kind == "wait"]
-    assert max(waits) <= 18
-    assert any(kind == "pulse" for kind, _ in slices)
-    assert abs(sum(span for _, span in slices) - 42) < 1e-9
-    assert idle_slices(18) == [("wait", 18)]
+    assert idle_slices(42) == [("wait", 42)]
+    assert idle_slices(0) == []
 
 
 def test_elevenlabs_pause_marks_are_not_spoken_text():

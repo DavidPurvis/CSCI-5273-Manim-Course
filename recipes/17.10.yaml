@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 10: Bellman-Ford'
+      text: Practice midterm, question 10
   - net.show:
       name: a
       zone: left

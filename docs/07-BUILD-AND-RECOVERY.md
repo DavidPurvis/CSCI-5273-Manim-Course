@@ -7,7 +7,7 @@ Rendering captures its input fingerprint before dry run and compares it after re
 
 ## Reproduction
 
-Use a new Python 3.12 environment at build/reproduction/.venv and install requirements.lock with uv pip sync. Run python -m course.tools.reproduction. It copies source and cached assets, excludes environments/caches, runs tests and renders 1.1 and 3.4 sequentially. Results are in build/reproduction/report.json. Package with python -m course.tools.package.
+Use a new Python 3.12 environment at build/reproduction/.venv and install requirements.lock with uv pip sync. Run python -m course.tools.reproduction. It copies source and cached assets, excludes environments/caches, runs tests and renders 6.1 and 7.4 sequentially. Results are in build/reproduction/report.json. Package with python -m course.tools.package.
 
 ## Artifact dependency and reuse rules
 

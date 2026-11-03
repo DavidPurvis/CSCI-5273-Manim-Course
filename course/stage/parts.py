@@ -13,15 +13,14 @@ def T(text, size=28, color=INK, weight="NORMAL"):
 
 
 def wrap_lines(text, width, size):
-    per_char = size / 48 * 0.27
-    limit = max(8, int(width / per_char))
     lines, cur = [], ""
     for word in str(text).split():
-        if cur and len(cur) + 1 + len(word) > limit:
+        candidate = (cur + " " + word).strip()
+        if cur and T(candidate, size).width > width:
             lines.append(cur)
             cur = word
         else:
-            cur = (cur + " " + word).strip()
+            cur = candidate
     return lines + ([cur] if cur else [])
 
 
@@ -40,7 +39,12 @@ def place(mob, zone, grow=False):
     center, w, h = zone_box(zone)
     factor = min(w / max(mob.width, 1e-3), h / max(mob.height, 1e-3))
     if factor < 1 or grow:
-        mob.scale(min(factor, 1.25) if grow else factor)
+        fonts = [m.kfont * m.height / max(m.kheight, 1e-6)
+                 for m in mob.get_family() if hasattr(m, "kfont")]
+        floor = MIN_FONT / min(fonts) if fonts else 0
+        mob.scale(max(floor, min(factor, 1.25) if grow else factor))
+        if mob.width > w + .03 or mob.height > h + .03:
+            mob.layout_overflow = f"{zone}: content needs reflow or staged disclosure"
     mob.move_to(center)
     return mob
 
@@ -256,44 +260,142 @@ class Net(VGroup):
         return group
 
 
+def wrapped_text(text, size, width, color=INK):
+    """Wrap to a column width. A single long word stays one line and may still be wider than width."""
+    raw = str(text)
+    if not raw.strip():
+        # A blank cell has no glyphs. One invisible point keeps placement from asking an empty curve for a box.
+        mark = Dot(radius=0.01, fill_opacity=0, stroke_width=0)
+        mark.text = ""
+        return mark
+    lines = wrap_lines(raw, width, size) or [raw]
+    if len(lines) == 1:
+        return T(lines[0], size, color)
+    group = VGroup(*[T(line, size, color) for line in lines])
+    group.arrange(DOWN, buff=0.05, aligned_edge=LEFT)
+    group.text = str(text)
+    return group
+
+
+def column_content_widths(cols, rows, size, max_width=None):
+    """Natural column widths. Extra-wide columns wrap, but never narrower than their longest word."""
+    samples = [list(cols)] + [list(r) for r in rows]
+    natural = [0.0] * len(cols)
+    floors = [0.6] * len(cols)
+    for row in samples:
+        for i, cell in enumerate(row):
+            natural[i] = max(natural[i], T(cell, size).width)
+            words = str(cell).split() or [""]
+            floors[i] = max(floors[i], max(T(word, size).width for word in words))
+    pad = 0.34
+    if not max_width or sum(natural) + pad * len(cols) <= max_width:
+        return natural
+    budget = max_width - pad * len(cols)
+    widths = natural[:]
+    for _ in range(24):
+        extra = sum(widths) - budget
+        if extra <= 0.01:
+            break
+        slack = [widths[i] - floors[i] for i in range(len(cols))]
+        i = max(range(len(cols)), key=lambda n: slack[n])
+        if slack[i] <= 0.01:
+            break
+        widths[i] = max(floors[i], widths[i] - extra)
+    return widths
+
+
 # Tables -------------------------------------------------------------------
 class Grid(VGroup):
-    def __init__(self, cols, rows, size=26, ghost=(), row_h=0.52):
+    def __init__(self, cols, rows, size=26, ghost=(), row_h=0.52, max_width=None):
         super().__init__()
         self.size = size
         self.cols, self.data = [str(c) for c in cols], [[str(c) for c in r] for r in rows]
+        ghosts = [[str(c) for c in g] for g in ghost]
+        self.content_w = column_content_widths(self.cols, self.data + ghosts, size, max_width)
         self.row_h = row_h
-        widths = [T(c, size, MUTED).width for c in self.cols]
-        for row in list(self.data) + [[str(c) for c in g] for g in ghost]:
-            for i, cell in enumerate(row):
-                widths[i] = max(widths[i], T(cell, size).width)
-        self.widths = [w + 0.34 for w in widths]
+        self.widths = [w + 0.34 for w in self.content_w]
         self.total_w = sum(self.widths)
         self.head = VGroup()
         self.rows, self.cells = [], []
+        self.window = 0
+        self.knext = 0
+        self.kzone = None
+        self.bright_rows = None
         x = -self.total_w / 2
         self.xs = []
         for w in self.widths:
             self.xs.append(x + w / 2)
             x += w
         for i, c in enumerate(self.cols):
-            self.head.add(T(c, size, MUTED).move_to([self.xs[i], 0, 0]))
-        rule = Line([-self.total_w / 2, -self.row_h / 2, 0], [self.total_w / 2, -self.row_h / 2, 0], stroke_color=LINE, stroke_width=2)
+            self.head.add(wrapped_text(c, size, self.content_w[i], MUTED).move_to([self.xs[i], 0, 0]))
+        rule_y = -max(self.head.height, row_h) / 2 - 0.06
+        rule = Line([-self.total_w / 2, rule_y, 0], [self.total_w / 2, rule_y, 0], stroke_color=LINE, stroke_width=2)
         self.add(self.head, rule)
         self.rule = rule
-        for r, row in enumerate(self.data):
-            self._make_row(r, row)
+        self._cursor = rule_y
+        for row in self.data:
+            self._make_row(row)
 
-    def row_y(self, r):
-        return -(r + 1) * self.row_h
-
-    def _make_row(self, r, row):
-        cells = [T(cell, self.size).move_to([self.xs[i], self.row_y(r), 0]) for i, cell in enumerate(row)]
+    def _make_row(self, row):
+        cells = [wrapped_text(cell, self.size, self.content_w[i]).move_to([self.xs[i], 0, 0]) for i, cell in enumerate(row)]
+        pitch = max(self.row_h, max(c.height for c in cells) + 0.16)
+        y = self._cursor - pitch / 2 - 0.04
+        for cell in cells:
+            cell.set_y(y)
+        self._cursor = y - pitch / 2
+        self.row_h = max(self.row_h, pitch)
         group = VGroup(*cells)
         self.cells.append(cells)
         self.rows.append(group)
         self.add(group)
         return group
+
+
+def shift_grid(grid, delta):
+    """Move a table, including rows that were detached for a later reveal."""
+    grid.shift(delta)
+    for row in grid.rows:
+        if row not in grid.submobjects:
+            row.shift(delta)
+
+
+def seat_grid(grid, zone, pin_top=False):
+    """Put a table in its zone without scaling it. Overflow stays a finding."""
+    center, w, h = zone_box(zone)
+    if pin_top:
+        delta = np.array([center[0] - grid.get_center()[0], (center[1] + h / 2 - 0.08) - grid.get_top()[1], 0])
+    else:
+        delta = np.array([center[0] - grid.get_center()[0], center[1] - grid.get_center()[1], 0])
+    shift_grid(grid, delta)
+    if grid.width > w + 0.03 or grid.height > h + 0.03:
+        grid.layout_overflow = f"{zone}: content needs reflow or staged disclosure"
+    return grid
+
+
+def scroll_grid(grid, zone):
+    """Drop the oldest visible data rows until the table sits inside the zone. Positions update immediately."""
+    center, _, h = zone_box(zone)
+    bottom = center[1] - h / 2 + 0.06
+    dropped = []
+    for _ in range(len(grid.rows) + 1):
+        if grid.get_bottom()[1] >= bottom:
+            break
+        if grid.window >= grid.knext - 1:
+            grid.layout_overflow = f"{zone}: content needs reflow or staged disclosure"
+            break
+        oldest = grid.rows[grid.window]
+        successor = grid.rows[grid.window + 1]
+        gap = oldest.get_y() - successor.get_y()
+        if gap <= 0.01:
+            grid.layout_overflow = f"{zone}: content needs reflow or staged disclosure"
+            break
+        grid.window += 1
+        if oldest in grid.submobjects:
+            grid.remove(oldest)
+            dropped.append(oldest)
+        for later in grid.rows[grid.window:]:
+            later.shift(UP * gap)
+    return dropped
 
 
 # Address bits -------------------------------------------------------------

@@ -11,8 +11,11 @@ def catalog_assets():
     config_hash=hashlib.sha256(json.dumps(CONFIG,sort_keys=True).encode()).hexdigest()
     records={};findings=[]
     for bid,text in texts.items():
-        spoken=spoken_form(text,rules);entry=manifest.get(bid,{})
-        if entry.get('sha')!=clip_key(spoken):
+        entry=manifest.get(bid,{})
+        config=entry.get('config', CONFIG)
+        _, asset_rules=load_rules(config)
+        spoken=spoken_form(text,asset_rules,config)
+        if entry.get('sha')!=clip_key(spoken,config):
             findings.append(Finding('NARRATION_TEXT','error',bid,'narration/manifest.json','written text, pronunciation or voice no longer matches cached speech','Regenerate narration and word alignment'));continue
         wav=ROOT/entry['wav']
         if not wav.exists():
@@ -25,7 +28,7 @@ def catalog_assets():
             findings.append(Finding('NARRATION_FORMAT','error',bid,str(wav),'WAV format or measured duration differs','Regenerate narration and timing'))
         if timing.get(bid,{}).get('wav_hash')!=actual_hash:
             findings.append(Finding('NARRATION_ALIGNMENT','error',bid,str(wav),'word timing describes different WAV bytes','Rebuild word alignment'))
-        records[bid]=asdict(NarrationAsset(bid,hashlib.sha256(text.encode()).hexdigest(),hashlib.sha256(spoken.encode()).hexdigest(),config_hash,actual_hash,rate,count))
+        records[bid]=asdict(NarrationAsset(bid,hashlib.sha256(text.encode()).hexdigest(),hashlib.sha256(spoken.encode()).hexdigest(),hashlib.sha256(json.dumps(config,sort_keys=True).encode()).hexdigest(),actual_hash,rate,count))
     return records,findings
 
 
@@ -49,7 +52,7 @@ def export_alignment_evidence():
             raise ValueError(f'{beat}: transcribe this new asset before exporting alignment evidence')
         records[key]={'file':target.name,'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),
                       'wav_hash':timing[beat]['wav_hash'],'aligner':timing[beat]['aligner']}
-    index.write_text(json.dumps({'schema_version':1,'scope':'Exported cached ASR transcription; no new listening review is implied.','clips':records},indent=2))
+    index.write_text(json.dumps({'schema_version':1,'scope':'Provider-labelled word alignment evidence; no listening review is implied.','clips':records},indent=2))
     return records
 
 

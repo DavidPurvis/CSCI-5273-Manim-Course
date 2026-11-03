@@ -26,7 +26,7 @@ def test_notes_do_not_implicitly_pass_review(tmp_path):
 def test_portioning_preserves_metadata_and_overrides_without_mutation():
     from copy import deepcopy
     from course.tools.portion import portion_dish
-    dish={'dish':'1.1','title':'x','deck':'lec02-layering.pdf','target_min':1,'beats':[
+    dish={'dish':'1.1','title':'x','deck':'lec06-lan.pdf','target_min':1,'beats':[
         {'id':'a','stage':'animation','pdf':1,'say':'A packet moves.', 'pre_roll':1,
          'reading_hold':2,'prediction':{'pair':'b'},'answer_objects':['answer'],
          'assertions':[{'after':'event-A','kind':'present','object':'p'}],

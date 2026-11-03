@@ -16,9 +16,7 @@ from course.tools import bank, drills
 from course.tools.sources import DECKS, VAULT
 
 PACK = Path(os.environ.get("KITCHEN_PACK", ROOT.parent))
-CHAPTERS = {"6": "Lecture 6: LANs and switching", "7": "Lecture 7: IP packets", "8": "Lecture 8: Subnets and forwarding",
-            "9": "Lecture 9: Discovery", "10": "Lecture 10: Routing", "11": "Lecture 11: Convergence", "12": "Lecture 12: BGP", "13": "Lecture 13: Anycast and multicast",
-            "14": "Lecture 14: Wireless", "15": "Lecture 15: Cellular and mobility", "16": "Synthesis", "17": "Practice midterm walkthrough", "18": "Wednesday warm-up"}
+from course.catalog import CHAPTERS, COURSE_VERSION
 EXPRESS = ["6.1", "7.4", "8.1", "8.2", "10.1", "10.2", "11.1", "11.2", "12.2", "12.4", "13.4", "14.4", "15.4"]
 READY_LINKS = [(["6.3"], ["switch"]), (["6.3", "13.3"], []), (["7.2", "8.1"], ["addr", "size"]), (["8.2"], ["lpm"]), (["7.3", "7.4"], ["frag"]), (["9.1", "9.2"], []),
                (["10.1", "10.2"], ["dijkstra", "bf"]), (["11.1", "11.2", "11.3"], []), (["12.2", "12.4"], ["bgp"]), (["13.1", "13.2", "13.3", "13.4"], ["rpf"]), (["14.2", "14.4"], ["cdma"]),
@@ -170,6 +168,7 @@ def main():
             shutil.copy(f, out / f.name)
     data, needed = build_data()
     made = render_slides(needed, out / "slides")
+    data["courseVersion"] = COURSE_VERSION
     (out / "data.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")))
     print(f"Player built: {len(data['dishes'])} dishes, {len(data['bank'])} questions, {len(data['drills'])} drills, {len(needed)} slides ({made} new)")
 

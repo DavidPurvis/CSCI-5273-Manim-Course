@@ -1,7 +1,9 @@
 "use strict";
 // The study player: one box at a time. All networking math was done ahead of time by tested models; this page only compares answers.
 
-const KEY = "csci5273-player-v1";
+const KEY = "csci5273-player-brian-v1";
+const LEGACY_KEY = "csci5273-player-v1";
+let pendingProgress = null;
 const MIDTERM_SECONDS = 75 * 60;
 const CAUSES = ["Wrong scope", "Wrong table", "Wrong unit", "Wrong order", "Stale information", "Confused role"];
 let D = null;       // course data
@@ -13,10 +15,13 @@ function defaults() {
 }
 function load() {
   let saved = {};
-  try { saved = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { saved = {}; }
+  try { saved = JSON.parse(localStorage.getItem(KEY) || localStorage.getItem(LEGACY_KEY)) || {}; } catch (e) { saved = {}; }
   S = Object.assign(defaults(), saved);
+  if (Object.keys(saved).length && !saved.courseVersion) pendingProgress = saved;
 }
 function save() {
+  if (pendingProgress) return;
+  if (D) S.courseVersion = D.courseVersion;
   try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* progress lasts only for this visit */ }
   renderScore();
 }
@@ -277,15 +282,19 @@ function importProgress(event, status) {
   const reject = () => fill(status, h("div", { class: "notice notice--danger", role: "alert" }, "That file isn't a progress export."));
   file.text().then(text => {
     input.value = "";
-    let saved;
-    try { saved = JSON.parse(text); } catch (e) { return reject(); }
-    if (!isProgressExport(saved)) return reject();
+    let imported;
+    try { imported = JSON.parse(text); } catch (e) { return reject(); }
+    if (!isProgressExport(imported)) return reject();
     confirmFirst({
       title: "Replace your progress?",
       body: "This replaces the progress saved in this browser with the imported file.",
       action: "Replace progress",
       tone: "danger",
-      onConfirm: () => { S = Object.assign(defaults(), saved); save(); viewHome(); },
+      onConfirm: () => {
+        S = Object.assign(defaults(), imported);
+        if (!imported.courseVersion) { pendingProgress = imported; migrationView(); }
+        else { if (imported.courseVersion !== D.courseVersion) S.pos = {}; save(); route(); }
+      },
     });
   });
 }
@@ -320,7 +329,7 @@ function runTest(dish, test, box) {
     if (right < test.length) return go(`#dish/${dish.id}/watch`);
     show(h("div", { class: "measure" }, h("section", { class: "card card--feature" },
       h("h1", {}, "You got both."),
-      h("p", { class: "text-muted" }, "You can skip this dish, or watch it anyway."),
+      h("p", { class: "text-muted" }, "You can skip this lesson, or watch it anyway."),
       h("div", { class: "cluster" },
         h("button", { type: "button", class: "btn btn--primary", onclick: () => { S.tested[dish.id] = true; complete(box); go("#home"); } }, "Skip it"),
         h("a", { class: "btn", href: `#dish/${dish.id}/watch` }, "Watch anyway")))));
@@ -359,19 +368,27 @@ function viewWatch(dish, startAt) {
   const tabSlide = h("button", { type: "button", class: "btn", role: "tab", id: "tab-slide", "aria-controls": "pane-slide", "aria-selected": "true", onclick: () => pick(true) }, "Slide");
   const tabText = h("button", { type: "button", class: "btn", role: "tab", id: "tab-text", "aria-controls": "pane-text", "aria-selected": "false", onclick: () => pick(false) }, "Transcript");
   function pick(slide) {
+    tabSlide.tabIndex = slide ? 0 : -1; tabText.tabIndex = slide ? -1 : 0;
     slidePane.hidden = !slide; transPane.hidden = slide;
     tabSlide.setAttribute("aria-selected", String(slide));
     tabText.setAttribute("aria-selected", String(!slide));
   }
+  tabText.tabIndex = -1;
+  for (const tab of [tabSlide,tabText]) tab.addEventListener("keydown",e=>{
+    if (["ArrowLeft","ArrowRight","Home","End"].includes(e.key)) {
+      e.preventDefault(); const slide=e.key==="Home" || (e.key!=="End" && tab===tabText);
+      pick(slide); (slide?tabSlide:tabText).focus();
+    }
+  });
   let video = null, alive = true, current = -1;
   const passed = new Set();
   const stage = h("div", { class: "video-frame" });
   if (dish.cooked) {
-    video = h("video", { controls: true, playsinline: true, preload: "auto", src: dish.video },
+    video = h("video", { controls: true, playsinline: true, preload: "metadata", src: dish.video },
       h("track", { kind: "captions", src: dish.vtt, srclang: "en", label: "English", default: true }));
     stage.append(video);
   } else {
-    stage.append(h("div", { class: "empty-state" }, "This dish isn't cooked yet. You can read its transcript and slides now, then check yourself."));
+    stage.append(h("div", { class: "empty-state" }, "This video is not in the pilot yet. Explore the transcript and slides, or check your understanding."));
     pick(false);
   }
   function seekTo(t) {
@@ -392,10 +409,13 @@ function viewWatch(dish, startAt) {
   function pausePrompt(p) {
     video.pause();
     passed.add(p.t);
-    const layer = h("div", { class: "prompt", role: "dialog", "aria-labelledby": "prompt-text" },
+    const layer = h("div", { class: "prompt", role: "dialog", "aria-modal": "true", "aria-labelledby": "prompt-text" },
       h("div", { class: "eyebrow" }, "Pause and predict"),
       h("p", { id: "prompt-text" }, p.prompt),
-      h("button", { type: "button", class: "btn btn--primary", id: "continue", onclick: () => { layer.remove(); video.currentTime = p.resume; video.play().catch(() => {}); } }, "Continue"));
+      h("button", { type: "button", class: "btn btn--primary", id: "continue", onclick: () => { layer.remove(); video.focus(); video.currentTime = p.resume; video.play().catch(() => {}); } }, "Continue"));
+    layer.addEventListener("keydown",e=>{
+      if(e.key==="Tab") {e.preventDefault();layer.querySelector("button").focus();}
+    });
     stage.append(layer);
     layer.querySelector("button").focus();
   }
@@ -425,24 +445,34 @@ function viewWatch(dish, startAt) {
   function applyCaptions() {
     if (video && video.textTracks[0]) video.textTracks[0].mode = S.captions ? "showing" : "hidden";
   }
+  const lessonIndex=D.order.indexOf(dish.id);
+  const companion=h("details", {class:"side-panel stack",open:true},
+    h("summary",{},"Slides and transcript"),
+    h("div", { class: "segmented", role: "tablist", "aria-label": "Study material" }, tabSlide, tabText), slidePane, transPane);
+  const watch=h("div",{class:"watch"});
+  const focusButton=h("button",{class:"btn", "aria-pressed":"false",onclick:()=>{
+    const focused=watch.classList.toggle("watch--focus");
+    focusButton.setAttribute("aria-pressed",String(focused)); companion.hidden=focused;
+  }},"Focus view");
   show(
     h("div", { class: "page-head" },
       h("div", {}, h("div", { class: "eyebrow" }, `${dish.chapterTitle} · ${dish.minutes} min`), h("h1", {}, `${dish.id} ${dish.title}`)),
       h("a", { class: "btn btn--primary", href: `#dish/${dish.id}/check` }, "Finish and check me")),
-    h("div", { class: "watch" },
-      h("div", {}, stage,
+    watch);
+  watch.append(h("div", {}, stage,
         h("div", { class: "cluster watch__controls" },
           h("div", { class: "segmented", role: "group", "aria-label": "Playback speed" }, speeds),
-          capBtn)),
-      h("div", { class: "side-panel stack" },
-        h("div", { class: "segmented", role: "tablist", "aria-label": "Study material" }, tabSlide, tabText),
-        slidePane, transPane)));
+          capBtn, focusButton),
+        h("nav",{class:"lesson-navigation", "aria-label":"Lesson navigation"},
+          lessonIndex>0 ? h("a",{class:"btn",href:`#dish/${D.order[lessonIndex-1]}/watch`},"← Previous lesson") : null,
+          h("a",{class:"btn btn--ghost",href:"#contents"},"All lectures"),
+          lessonIndex<D.order.length-1 ? h("a",{class:"btn",href:`#dish/${D.order[lessonIndex+1]}/watch`},"Next lesson →") : null)),companion);
   showBeat(beatIndexAt(dish, startAt || 0));
   if (video) {
     video.addEventListener("loadedmetadata", () => {
       video.playbackRate = S.speed;
       applyCaptions();
-      if (startAt) video.currentTime = startAt;
+      video.currentTime = startAt || S.pos[dish.id] || 0;
       video.play().catch(() => {});
     });
     video.addEventListener("ended", () => go(`#dish/${dish.id}/check`));
@@ -666,7 +696,7 @@ function viewDrill(type, wantedId) {
       h("p", { class: "text-sm text-muted" }, "Answers: " + problem.fields.map(f => `${f.label}: ${f.answer}`).join(" · ")),
       h("div", { class: "cluster" },
         !(S.drills[problem.id] && S.drills[problem.id].right) ? h("button", { type: "button", class: "btn btn--primary", onclick: () => { const k = items.indexOf(problem); viewDrill(type, items[(k + 1) % items.length].id); } }, "Next problem") : null,
-        h("a", { class: "text-sm", href: `#dish/${info.dish}/watch` }, `Rewatch dish ${info.dish}`)));
+        h("a", { class: "text-sm", href: `#dish/${info.dish}/watch` }, `Rewatch lesson ${info.dish}`)));
   }
   const solved = items.filter(p => S.drills[p.id] && S.drills[p.id].right).length;
   show(h("div", { class: "measure" },
@@ -691,12 +721,51 @@ function viewReady() {
         r.drills.map(k => h("a", { href: `#drills/${k}` }, `Drill: ${D.drillTypes.find(t => t.key === k).title}`)))))));
 }
 
+
+function migrationView() {
+  const convert = original => {
+    const remap = key => key.replace(/^(dish:)?(\d+)(\.\d+)(.*)$/, (whole, prefix, chapter, rest, tail) => {
+      if (!original) return whole;
+      if (Number(chapter) === 1) return "";
+      return (prefix || "") + (Number(chapter) + 4) + rest + tail;
+    });
+    S = Object.assign(defaults(), pendingProgress);
+    for (const field of ["done", "tested"]) {
+      S[field] = Object.fromEntries(Object.entries(S[field] || {}).map(([k,v]) => [remap(k),v]).filter(([k]) => k));
+    }
+    // Question identifiers are content identities, not chapter numbers.
+    S.pos = {}; S.courseVersion = D.courseVersion;
+    pendingProgress = null; save(); route();
+  };
+  show(h("section", {class:"card measure stack"}, h("h1",{},"Bring your progress forward"),
+    h("p",{},"Which course did you use? Lesson numbers overlap, so choose the numbering shown in your previous player. Listening positions will reset for the new narration."),
+    h("button",{class:"btn",onclick:exportProgress},"Export a backup first"),
+    h("button",{class:"btn btn--primary",onclick:()=>convert(true)},"Original: Lecture 6 was chapter 2"),
+    h("button",{class:"btn",onclick:()=>convert(false)},"Renumbered: Lecture 6 was chapter 6")));
+}
+
+function viewContents() {
+  const chapters = [...new Set(D.order.map(id => D.dishes[id].chapter))];
+  show(h("div", {class:"page-head"}, h("div",{},h("div",{class:"eyebrow"},"MIDTERM 2 · LECTURES 6–15"),
+    h("h1",{},"Your course"),h("p",{class:"text-muted"},"Follow a lecture, revisit a diagram, or pick up where you left off."))),
+    ...chapters.map(ch => h("section",{class:"card lecture-group"},
+      h("h2",{},D.dishes[D.order.find(id=>D.dishes[id].chapter===ch)].chapterTitle),
+      ...D.order.filter(id=>D.dishes[id].chapter===ch).map(id=>{
+        const d=D.dishes[id]; const pos=S.pos[id]||0;
+        return h("a",{class:"lesson-row",href:`#dish/${id}/watch/${pos}`},
+          h("span",{class:"lesson-number"},id),h("span",{class:"lesson-title"},d.title),
+          h("span",{class:"text-sm text-muted"},`${d.minutes} min`),
+          h("span",{class:"tag"},d.cooked ? (pos ? "Resume" : "Watch") : "Transcript"));
+      }))));
+}
+
 // Page frame -----------------------------------------------------------------
 function renderScore() {
   const el = document.getElementById("score");
   if (el) el.replaceChildren(h("b", {}, S.right), " right");
 }
 function route() {
+  if (pendingProgress) return migrationView();
   if (cleanup) { cleanup(); cleanup = null; }
   const [view, a, b, c] = location.hash.replace(/^#/, "").split("/");
   const section = view || "home";
@@ -706,6 +775,7 @@ function route() {
   });
   if (section === "dish") viewDish(a, b, c ? Number(c) : 0);
   else if (section === "review") viewReview();
+  else if (section === "contents") viewContents();
   else if (section === "find") viewFind();
   else if (section === "midterm") viewMidterm();
   else if (section === "drills") a ? viewDrill(a) : viewDrills();
@@ -718,9 +788,10 @@ async function start() {
   try {
     D = await (await fetch("/data.json", { cache: "no-cache" })).json();
   } catch (e) {
-    show(h("div", { class: "notice notice--danger", role: "alert" }, "The course data didn't load. Start the player with ./kitchen open."));
+    show(h("div", { class: "notice notice--danger", role: "alert" }, "The course data didn't load. Open the course launcher and try again."));
     return;
   }
+  if (S.courseVersion && S.courseVersion !== D.courseVersion) { S.pos = {}; save(); }
   window.addEventListener("hashchange", route);
   route();
 }

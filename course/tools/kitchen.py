@@ -21,6 +21,7 @@ BUILD = Path(os.environ.get("KITCHEN_BUILD", ROOT / "build"))
 PACK = Path(os.environ.get("KITCHEN_PACK", ROOT.parent))  # outputs/CSCI-5273-Manim-Course
 STAGES = ["question", "animation", "state", "rule", "changed_example", "prediction", "explanation"]
 MIN_FREE_GIB = 8
+from course.catalog import CHAPTERS, MAIN, SUPPLEMENTS, is_main
 DRIFT_PER_DISH = 0.05  # A dish's container may outrun its compiled frames by this much; more means a broken render.
 MAIN_CHAPTERS = 16  # Later chapters are the practice walkthrough and warm-up, which get their own video.
 QUALITY = {"preview": ("1280,720", "720p30"), "final": ("1920,1080", "1080p30")}
@@ -175,7 +176,7 @@ def check_static():
     for d in dishes():
         card = load_card(d)
         stages = [b["stage"] for b in card["beats"]]
-        for st in STAGES if int(chapter_of(d)) <= MAIN_CHAPTERS else ():
+        for st in STAGES if is_main(d) else ():
             if st not in stages and not (d == "16.1" and st == "state"):
                 errors.append(f"{d}: no {st} beat")
         seen = set()
@@ -262,7 +263,7 @@ def cmd_check(args):
         failures.append(f"Manim is {_m.__version__}, expected 0.22.1")
     if sys.version_info[:2] != (3, 12):
         failures.append("Python is not 3.12")
-    for tool in ("ffmpeg", "ffprobe", "say", "dvisvgm"):
+    for tool in ("ffmpeg", "ffprobe", "dvisvgm"):
         if not shutil.which(tool):
             failures.append(f"{tool} is missing")
     from course.tools import sources
@@ -391,7 +392,8 @@ def caption_problems(cues):
     for c in cues:
         if len(two_lines(c["text"]).splitlines()) > 2:
             bad.append(f"{c['beat']}: caption is over two lines")
-        if len(c["text"]) / max(c["end"] - c["start"], 0.01) > 20:
+        from course.stage.card import MAX_CPS
+        if len(c["text"]) / max(c["end"] - c["start"], 0.01) > MAX_CPS:
             bad.append(f"{c['beat']}: caption reads over 20 characters per second")
     return bad
 
@@ -494,10 +496,7 @@ def verify_playback(path, expected=None, tolerance=None):
 
 
 def chapter_title(ch):
-    return {"6": "Lecture 6: LANs and switching", "7": "Lecture 7: IP packets", "8": "Lecture 8: Subnets and forwarding",
-            "9": "Lecture 9: Discovery", "10": "Lecture 10: Routing", "11": "Lecture 11: Convergence", "12": "Lecture 12: BGP",
-            "13": "Lecture 13: Anycast and multicast", "14": "Lecture 14: Wireless", "15": "Lecture 15: Cellular and mobility",
-            "16": "Synthesis", "17": "Practice midterm walkthrough", "18": "Wednesday warm-up"}[str(ch)]
+    return CHAPTERS[str(ch)]
 
 
 def measured_starts(paths):
@@ -666,8 +665,12 @@ def cmd_serve(args):
     assembly_plans=write_plans()
     missing = []
     every = sorted({chapter_of(d) for d in dishes()}, key=int)
-    chapters = [c for c in every if int(c) <= MAIN_CHAPTERS]
-    extras = [c for c in every if int(c) > MAIN_CHAPTERS]
+    unknown = set(every) - set(CHAPTERS)
+    if unknown:
+        print("STOP: chapters outside the course catalog:", sorted(unknown))
+        return 1
+    chapters = [c for c in every if c in MAIN]
+    extras = [c for c in every if c in SUPPLEMENTS]
     files, extra_files = [], []
     for ch in every:
         found = sorted((PACK / "video" / "chapters").glob(f"ch{int(ch):02}-*.mp4"))
@@ -694,9 +697,8 @@ def cmd_serve(args):
     meta = [";FFMETADATA1", "title=CSCI 5273 Lectures 6-15"]
     all_cues, starts, rows, t = [], {}, [], 0.0
     for ch, f in zip(chapters, files):
-        plan = assembly_plans["chapter-"+ch]
         d = probe_duration(f)
-        if not matches_plan(d, plan):
+        if not matches_plan(d, assembly_plans["chapter-"+ch]):
             print(f"STOP: chapter {ch} does not match its compiled timeline")
             return 1
         starts[ch] = t
@@ -767,6 +769,10 @@ def cmd_serve(args):
     print("Report: final-report.json")
     print("FAIL" if fails else "PASS")
     return 1 if fails else 0
+
+
+def matches_plan(seconds, plan):
+    return abs(seconds - plan.total_frames/30) <= DRIFT_PER_DISH * len(plan.members) + 1/30
 
 
 def second_video(chapters, files, caps):
@@ -912,10 +918,6 @@ def cmd_review(args):
     return 0
 
 
-def matches_plan(seconds, plan):
-    return abs(seconds - plan.total_frames/30) <= DRIFT_PER_DISH * len(plan.members) + 1/30
-
-
 def cmd_open(args):
     from course.tools.local_server import serve
     player = PACK / "player"
@@ -948,7 +950,7 @@ def main():
     c.add_argument("--no-browser", action="store_true")
     c.set_defaults(fn=cmd_open)
     c = sub.add_parser("check")
-    c.add_argument("--quick", action="store_true", help="skip the 40-card dry run")
+    c.add_argument("--quick", action="store_true", help="skip scene rendering checks")
     c.set_defaults(fn=cmd_check)
     c = sub.add_parser("cook")
     c.add_argument("dish")
@@ -964,6 +966,8 @@ def main():
     c.set_defaults(fn=cmd_plate)
     c = sub.add_parser("serve")
     c.set_defaults(fn=cmd_serve)
+    from course.tools.narration_pipeline import add_commands
+    add_commands(sub)
     args = p.parse_args()
     sys.exit(args.fn(args))
 

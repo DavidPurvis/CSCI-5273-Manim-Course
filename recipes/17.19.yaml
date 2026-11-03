@@ -17,7 +17,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 19: LTE roles'
+      text: Practice midterm, question 19
   - net.show:
       name: l
       zone: top

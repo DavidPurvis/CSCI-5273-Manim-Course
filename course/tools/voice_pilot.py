@@ -52,8 +52,9 @@ def word_timing(written, alignment, duration, rules):
     raw = float(alignment.get("duration") or 0) or duration
     scale = duration / raw if raw else 1.0
     heard = [[w, s * scale, e * scale] for w, s, e in heard_words(alignment)]
-    times, ratio, bad = align(written.split(), heard, duration, rules)
-    provenance = ["synthesizer_aligned" if item == "asr_aligned" else item for item in align.last_provenance]
+    result = align(written.split(), heard, duration, rules)
+    times, ratio, bad = result
+    provenance = ["synthesizer_aligned" if item == "asr_aligned" else item for item in result.provenance]
     return times, provenance, ratio, bad
 
 

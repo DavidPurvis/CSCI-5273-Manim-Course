@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 9: Dijkstra'
+      text: Practice midterm, question 9
   - net.show:
       name: g
       zone: left

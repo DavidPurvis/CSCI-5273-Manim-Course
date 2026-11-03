@@ -1,5 +1,6 @@
 """The fixed vocabulary of animations that recipe cards may call."""
 import json
+import re
 from pathlib import Path
 
 import numpy as np
@@ -8,8 +9,10 @@ from manim import (DOWN, LEFT, RIGHT, UP, Arrow, Circle, Create, DashedVMobject,
                    VGroup, VMobject, Write, linear, rate_functions, AnimationGroup, DashedLine)
 
 from .parts import (BitRow, ByteBar, Curves, Device, Fields, Grid, Ladder, Net, PacketToken, Sieve, Slots, Stack, StepWave, T, Tracks, layer_block,
-                    outline, paragraph, place, zone_box)
-from .theme import BG, FRAME_X, INK, LAYER, LINE, MUTED, PANEL, STATE, ZONES, zones_overlap
+                    outline, paragraph, place, scroll_grid, seat_grid, wrapped_text, zone_box)
+from .theme import BG, FRAME_X, INK, LAYER, LINE, MIN_FONT, MUTED, PANEL, PAUSE_Y, STATE, TITLE_TAG_SLOT, ZONES, zones_overlap
+
+DIM = 0.32
 
 ROOT = Path(__file__).resolve().parents[2]
 REGISTRY = {}
@@ -89,11 +92,23 @@ class Stage:
         return out
 
 
+def drawn_title(text):
+    """The corner tag already names the lecture, so the heading keeps the lesson name."""
+    shortened = re.sub(r"^Lecture\s+\d+\s*:\s*", "", str(text)).strip()
+    return shortened or str(text)
+
+
 # General --------------------------------------------------------------------
 @move("heading", 0.6)
 def heading(s, text):
-    m = T(text, 30, MUTED).move_to([0, 3.6, 0]).to_edge(LEFT, buff=0.35)
-    return s.register("_heading", m) + [FadeIn(m)]
+    """Lesson title stays in the title band, left of the source tag."""
+    x0, y0, x1, y1 = ZONES["title"]
+    m = paragraph(drawn_title(text), (x1 - TITLE_TAG_SLOT) - x0 - 0.35, 36, INK)
+    m.align_to(np.array([x0 + 0.2, 0, 0]), LEFT)
+    m.set_y((y0 + y1) / 2)
+    if m.get_right()[0] > x1 - TITLE_TAG_SLOT or m.get_top()[1] > y1 + 0.02 or m.get_bottom()[1] < y0 - 0.02:
+        m.layout_overflow = "title: content needs reflow or staged disclosure"
+    return s.register("_heading", m, "title") + [FadeIn(m)]
 
 
 SPINE = ["LAN", "IP", "Forward", "Discover", "Route", "Failure", "Policy", "Groups", "Radio", "Move"]
@@ -112,7 +127,10 @@ def spine(s, current, zone="full"):
     group = VGroup(links, dots, labels)
     title = T("One laptop's journey: you are here", 30, INK).next_to(group, UP, buff=0.7)
     whole = VGroup(title, group)
-    place(whole, zone)
+    x0, y0, x1, y1 = ZONES[zone]
+    whole.shift(np.array([(x0 + x1) / 2 - whole.get_center()[0], (y1 - 0.08) - whole.get_top()[1], 0]))
+    if whole.width > (x1 - x0) + 0.03 or whole.get_bottom()[1] < y0 - 0.02:
+        whole.layout_overflow = f"{zone}: content needs reflow or staged disclosure"
     return s.register("_spine", whole, zone) + [FadeIn(whole)]
 
 
@@ -144,7 +162,8 @@ def question(s, text, zone="full", name="_q"):
 
 @move("rule", 0.9)
 def rule(s, text, name="_rule"):
-    m = paragraph(text, 13.2, 30, STATE["now"], center=True)
+    x0, _, x1, _ = ZONES["rule"]
+    m = paragraph(text, x1 - x0 - 0.5, 30, STATE["now"], center=True)
     place(m, "rule")
     return s.register(name, m, "rule") + [FadeIn(m)]
 
@@ -173,10 +192,18 @@ def keep_awake(s):
 
 @move("pause", 0.6)
 def pause(s, text, long=False):
-    words = paragraph(("Pause the video and work it out: " if long else "Pause and predict: ") + text, 13.2, 30, INK, center=True)
-    place(words, "rule")
-    bar = Rectangle(width=13.2, height=0.07, stroke_width=0, fill_color=STATE["now"], fill_opacity=1).move_to([0, -3.92, 0])
+    """Prompt uses the rule band left of the duration label. The countdown spans that band."""
+    x0, y0, x1, y1 = ZONES["rule"]
+    label_w = T("Pause: 40.2 s", 24, MUTED).width + 0.35
+    left, right = x0 + 0.25, x1 - 0.25 - label_w
+    words = paragraph(("Pause the video and work it out: " if long else "Pause and predict: ") + text, right - left, 30, INK, center=True)
+    words.move_to([(left + right) / 2, (y0 + y1) / 2, 0])
+    if words.get_right()[0] > right + 0.02 or words.height > (y1 - y0) + 0.03:
+        words.layout_overflow = "rule: content needs reflow or staged disclosure"
+    bar = Rectangle(width=(x1 - x0) - 0.4, height=0.07, stroke_width=0, fill_color=STATE["now"], fill_opacity=1).move_to([(x0 + x1) / 2, PAUSE_Y, 0])
     group = VGroup(words, bar)
+    if getattr(words, "layout_overflow", None):
+        group.layout_overflow = words.layout_overflow
     s.pause_bar = bar
     return s.register("_rule", group, "rule") + [FadeIn(group)]
 
@@ -385,6 +412,29 @@ def net_pulse(s, name, path, state="now"):
     return [Succession(MoveAlongPath(dot, route, rate_func=rate_functions.smooth), FadeOut(dot, run_time=0.15))]
 
 
+def net_emphasis(net, path):
+    """Opacity for each device, link, and badge. The walked path stays bright; everything else recedes."""
+    keep_nodes = set(path)
+    keep_links = {find_link(net, a, b) for a, b in zip(path, path[1:])}
+    opacity = {("node", name): 1.0 if name in keep_nodes else DIM for name in net.devices}
+    opacity.update({("link", key): 1.0 if key in keep_links else DIM for key in net.links})
+    opacity.update({("badge", node): 1.0 if node in keep_nodes else DIM for node in net.badges})
+    return opacity
+
+
+def apply_opacity(opacity, lookup):
+    return [mob.animate.set_opacity(value) for key, value in opacity.items() if (mob := lookup(key)) is not None]
+
+
+def net_lookup(net, key):
+    kind, ident = key
+    if kind == "node":
+        return net.devices.get(ident)
+    if kind == "link":
+        return net.links.get(ident)
+    return net.badges.get(ident)
+
+
 @move("net.walk", 1.0)
 def net_walk(s, name, path, state="now"):
     """Trace a path hop by hop, in the direction data travels. It stays until the next walk."""
@@ -395,12 +445,19 @@ def net_walk(s, name, path, state="now"):
         arrows.add(Arrow(start, end, buff=0, stroke_color=STATE[state], stroke_width=8, tip_length=0.24, max_tip_length_to_length_ratio=0.3, max_stroke_width_to_length_ratio=30))
     out = s.set_mark((name, "walk"), None)
     s.marks[(name, "walk")] = arrows
-    return out + [Succession(*[Create(a, rate_func=linear) for a in arrows])]
+    n.emphasized = True
+    steps = [Create(a, rate_func=linear) for a in arrows]
+    return out + apply_opacity(net_emphasis(n, path), lambda key: net_lookup(n, key)) + ([Succession(*steps)] if steps else [])
 
 
 @move("net.unwalk", 0.4)
 def net_unwalk(s, name):
-    return s.set_mark((name, "walk"), None)
+    n = s.get(name)
+    restore = []
+    if getattr(n, "emphasized", False):
+        restore = [mob.animate.set_opacity(1) for mob in list(n.devices.values()) + list(n.links.values()) + list(n.badges.values())]
+        n.emphasized = False
+    return s.set_mark((name, "walk"), None) + restore
 
 
 @move("msg.send", 1.3)
@@ -585,15 +642,24 @@ def burst(s, net, node=None, between=None):
 def table_show(s, name, zone, data=None, cols=None, rows=None, show=None, size=30, ghost=(), row_h=0.52):
     if data:
         cols, rows = data["cols"], data["rows"]
+    _, width, height = zone_box(zone)
     grid = Grid(cols, rows or [], size, ghost, row_h)
-    before = grid.height
-    place(grid, zone)
-    grid.kscale = grid.height / max(before, 1e-3)
-    grid.knext = len(grid.rows)
+    factor = min(width / max(grid.width, 1e-3), height / max(grid.height, 1e-3), 1.0)
+    # A legal shrink stays at or above the type floor. Below that, wrap instead of shrinking.
+    if factor + 1e-3 < MIN_FONT / max(size, 1):
+        grid = Grid(cols, rows or [], size, ghost, row_h, max_width=width - 0.24)
+        factor = 1.0
+    if factor < 0.999:
+        grid.scale(factor, about_point=grid.get_center())
+    grid.kscale = factor
+    grid.kzone = zone
     if show is not None:
         for row in grid.rows[show:]:
             grid.remove(row)
         grid.knext = show
+    else:
+        grid.knext = len(grid.rows)
+    seat_grid(grid, zone, pin_top=show is not None)
     return s.register(name, grid, zone) + [FadeIn(grid)]
 
 
@@ -605,7 +671,11 @@ def table_reveal(s, name, n=1):
         row = grid.rows[grid.knext]
         grid.knext += 1
         grid.add(row)
+        if grid.bright_rows is not None:
+            row.set_opacity(1 if (grid.knext - 1) in grid.bright_rows else DIM)
         out.append(FadeIn(row, shift=DOWN * 0.08))
+        for dropped in scroll_grid(grid, grid.kzone):
+            out.append(FadeOut(dropped))
     return out
 
 
@@ -614,14 +684,16 @@ def table_add(s, name, row, state=None):
     grid = s.get(name)
     r = len(grid.rows)
     anchor = grid.rule.get_center()
-    spacing = grid.row_h * grid.kscale
     cells = []
     for i, cell in enumerate(row):
-        t = T(cell, grid.size).scale(grid.kscale)
-        x = anchor[0] + (grid.xs[i]) * grid.kscale
-        t.move_to([x, anchor[1] - spacing * (r + 0.5), 0])
+        t = wrapped_text(str(cell), grid.size, grid.content_w[i]).scale(grid.kscale)
+        x = anchor[0] + grid.xs[i] * grid.kscale
         cells.append(t)
     group = VGroup(*cells)
+    pitch = max(grid.row_h, group.height + 0.16) * grid.kscale
+    y = (grid.rows[-1].get_bottom()[1] - 0.08 - group.height / 2) if grid.rows else (anchor[1] - pitch)
+    for i, t in enumerate(cells):
+        t.move_to([anchor[0] + grid.xs[i] * grid.kscale, y, 0])
     grid.cells.append(cells)
     grid.rows.append(group)
     grid.add(group)
@@ -629,6 +701,9 @@ def table_add(s, name, row, state=None):
     out = [FadeIn(group, shift=DOWN * 0.08)]
     if state:
         out += s.set_mark((name, "row", r), outline(group, state))
+        out += emphasize_rows(grid, {r})
+    for dropped in scroll_grid(grid, grid.kzone or "full"):
+        out.append(FadeOut(dropped))
     return out
 
 
@@ -644,10 +719,24 @@ def table_set(s, name, r, c, v, state=None):
     return [FadeOut(old), FadeIn(new)]
 
 
+def emphasize_rows(grid, bright):
+    """Dim every visible row that is not the current one. None restores the whole table."""
+    grid.bright_rows = bright
+    anims = []
+    for i, row in enumerate(grid.rows):
+        if row not in grid.submobjects:
+            continue
+        anims.append(row.animate.set_opacity(1 if bright is None or i in bright else DIM))
+    if grid.head in grid.submobjects:
+        anims.append(grid.head.animate.set_opacity(1 if bright is None else 0.7))
+    return anims
+
+
 @move("table.mark", 0.5)
 def table_mark(s, name, r, state="now"):
     grid = s.get(name)
-    return s.set_mark((name, "row", r), outline(grid.rows[r], state) if state else None)
+    bright = None if not state else {r}
+    return s.set_mark((name, "row", r), outline(grid.rows[r], state) if state else None) + emphasize_rows(grid, bright)
 
 
 @move("table.flash", 0.6)
@@ -657,7 +746,7 @@ def table_flash(s, name, rows, state="candidate"):
     out = []
     for r in rows:
         out += s.set_mark((name, "row", r), outline(grid.rows[r], state) if state else None)
-    return out
+    return out + emphasize_rows(grid, set(rows) if state else None)
 
 
 # Bits -----------------------------------------------------------------------
@@ -716,10 +805,22 @@ def bits_scan(s, name, label, value):
             Succession(line.animate.shift(RIGHT * (x1 - x0)), FadeOut(line, run_time=0.1))]
 
 
+def emphasize_bits(group, row, start, end, active):
+    anims = []
+    for i, bitrow in enumerate(group):
+        anims.append(bitrow.title.animate.set_opacity(1 if not active or i == row else DIM))
+        for b, cell in enumerate(bitrow.bits):
+            on = active and i == row and start <= b < end
+            anims.append(cell.animate.set_opacity(1 if on or not active else DIM))
+    return anims
+
+
 @move("bits.mark", 0.6)
 def bits_mark(s, name, row, start, end, state="now"):
-    cells = s.get(name)[row].bits[start:end]
-    return s.set_mark((name, "range", row), outline(VGroup(*cells), state, buff=0.02) if state else None)
+    group = s.get(name)
+    cells = group[row].bits[start:end]
+    active = bool(state)
+    return s.set_mark((name, "range", row), outline(VGroup(*cells), state, buff=0.02) if state else None) + emphasize_bits(group, row, start, end, active)
 
 
 # Sequence and timelines ------------------------------------------------------
@@ -1034,7 +1135,11 @@ def stack_mark(s, name, layer, state="now"):
 
 @move("fields.show", 1.0)
 def fields_show(s, name, zone, rows, unit=0.2):
-    m = Fields(rows, unit)
+    _, _, height = zone_box(zone)
+    # A 24 pt label needs this much cell. Any extra pitch is used only while the stack fits the zone.
+    glyph = 0.46
+    row_h = min(0.56, max(glyph, (height - 0.08) / max(len(rows), 1)))
+    m = Fields(rows, unit, row_h)
     place(m, zone)
     return s.register(name, m, zone) + [FadeIn(m)]
 

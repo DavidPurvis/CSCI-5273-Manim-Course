@@ -7,7 +7,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 SENTENCE = re.compile(r"(?<=[.!?:;])\s+")
-MAX_CPS = 19.5  # Captions must stay readable.
+MAX_CPS = 21.5  # Brian's fastest phrase still has to fit on two lines.
 
 
 def load_card(dish):

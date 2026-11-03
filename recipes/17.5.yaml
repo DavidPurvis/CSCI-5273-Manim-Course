@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 5: longest match'
+      text: Practice midterm, question 5
   - table.show:
       name: rt
       zone: left_top

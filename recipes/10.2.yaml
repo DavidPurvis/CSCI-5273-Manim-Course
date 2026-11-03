@@ -109,7 +109,8 @@ beats:
       node: C
       text: says 5 to Z
       side: down
-  adjust: {}
+  adjust:
+    pace: 0.85
 - id: 10.2.compute
   stage: state
   narration: 10.2.compute
@@ -390,7 +391,8 @@ beats:
   - rule:
       text: A has B 2, C 5, D ∞
       when: So A has
-  adjust: {}
+  adjust:
+    pace: 0.97
 - id: 10.2.round2
   stage: state
   narration: 10.2.round2

@@ -516,7 +516,8 @@ beats:
   - rule:
       text: 'Head of line blocking: a free output sits unused because of how the queue is arranged.'
       when: This is head
-  adjust: {}
+  adjust:
+    pace: 0.97
 - id: 8.3.outq
   stage: state
   narration: 8.3.outq

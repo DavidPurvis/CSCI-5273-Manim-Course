@@ -16,16 +16,22 @@ STATE = {"now": "#FF8A3D", "done": "#4CD07D", "error": "#FF5A5A", "idle": "#6B75
 MIN_FONT = 24
 FRAME_X, FRAME_Y = 7.11, 4.0
 
+# Three bands, with a gap between each so a title, a diagram, and a takeaway cannot touch.
+# Title also keeps its right side free for the source tag.
 ZONES = {
-    "full": (-6.8, -2.05, 6.8, 3.2), "left": (-6.8, -2.05, -0.15, 3.2), "right": (0.15, -2.05, 6.8, 3.2),
-    "top": (-6.8, 0.35, 6.8, 3.2), "bottom": (-6.8, -2.05, 6.8, 0.1),
-    "left_top": (-6.8, 0.35, -0.15, 3.2), "left_bottom": (-6.8, -2.05, -0.15, 0.1),
-    "right_top": (0.15, 0.35, 6.8, 3.2), "right_bottom": (0.15, -2.05, 6.8, 0.1),
-    "upper": (-6.8, -1.1, 6.8, 3.2), "lower": (-6.8, -2.05, 6.8, -1.3),
-    "mobility_bottom": (-6.8, -2.05, 6.8, 0.75),
-    "story_upper": (-6.8, -0.2, 6.8, 3.2), "story_lower": (-6.8, -2.05, 6.8, -0.45),
-    "rule": (-6.8, -2.95, 6.8, -2.15),
+    "title": (-6.9, 3.12, 6.9, 3.86),
+    "full": (-6.8, -2.28, 6.8, 2.96), "left": (-6.8, -2.28, -0.15, 2.96), "right": (0.15, -2.28, 6.8, 2.96),
+    "top": (-6.8, 0.20, 6.8, 2.96), "bottom": (-6.8, -2.28, 6.8, 0.0),
+    "left_top": (-6.8, 0.20, -0.15, 2.96), "left_bottom": (-6.8, -2.28, -0.15, 0.0),
+    "right_top": (0.15, 0.20, 6.8, 2.96), "right_bottom": (0.15, -2.28, 6.8, 0.0),
+    "upper": (-6.8, -1.30, 6.8, 2.96), "lower": (-6.8, -2.28, 6.8, -1.40),
+    "mobility_bottom": (-6.8, -2.28, 6.8, 0.70),
+    "story_upper": (-6.8, -0.30, 6.8, 2.96), "story_lower": (-6.8, -2.28, 6.8, -0.50),
+    "rule": (-6.8, -3.52, 6.8, -2.48),
 }
+# Countdown sits under the rule band, clear of the prompt.
+PAUSE_Y = -3.78
+TITLE_TAG_SLOT = 3.45
 
 
 def zones_overlap(a, b):

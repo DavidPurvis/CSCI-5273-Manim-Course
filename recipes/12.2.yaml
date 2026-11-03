@@ -461,7 +461,8 @@ beats:
       side: down
       state: now
       when: But a far-off
-  adjust: {}
+  adjust:
+    pace: 0.86
 - id: 12.2.predict
   stage: prediction
   narration: 12.2.predict

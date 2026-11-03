@@ -6,13 +6,13 @@ beats:
 - id: open
   stage: question
   pdf: 49
-  say: It's Wednesday. Don't reread anything. Get a blank page, and draw the connected
-    packet story from memory, one question at a time. I'll ask, you draw, and then
-    I'll show you the answer. A laptop wakes up, and wants to reach a web server.
-    Start at the very beginning. What does it need before it can send anything?
+  say: It's Wednesday. Don't reread anything. Get a blank page, and draw the connected packet story from
+    memory, one question at a time. I'll ask, you draw, and then I'll show you the answer. A laptop wakes
+    up, and wants to reach a web server. Start at the very beginning. What does it need before it can
+    send anything?
   moves:
   - heading:
-      text: 'Wednesday warm-up: the packet story'
+      text: 'Exam warm-up: the packet story'
   - spine:
       current: LAN
       zone: top
@@ -23,8 +23,7 @@ beats:
   stage: prediction
   pdf: 49
   hold: 12
-  say: Draw the host, the switch, the gateway, the DNS resolver, and the server. Then
-    name what's missing.
+  say: Draw the host, the switch, the gateway, the DNS resolver, and the server. Then name what's missing.
   moves:
   - pause:
       text: draw the devices, and name the missing facts
@@ -33,8 +32,8 @@ beats:
   pdf: 22
   c:
   - DHCP
-  say: 'It needs an address, a mask, a gateway, and a resolver. DHCP supplies all
-    four, in four messages: Discover, Offer, Request, ACK.'
+  say: 'It needs an address, a mask, a gateway, and a resolver. DHCP supplies all four, in four messages:
+    Discover, Offer, Request, ACK.'
   moves:
   - clear: {}
   - net.show:
@@ -114,8 +113,8 @@ beats:
   stage: prediction
   pdf: 54
   hold: 10
-  say: The laptop wants the server's name resolved, and the resolver is on another
-    network. What does it send first, and to whom?
+  say: The laptop wants the server's name resolved, and the resolver is on another network. What does
+    it send first, and to whom?
   moves:
   - pause:
       text: what goes out first, and to whom?
@@ -124,10 +123,9 @@ beats:
   pdf: 54
   c:
   - ARP
-  say: Its mask says the resolver is remote, so the first thing out is an ARP for
-    the gateway. Then the DNS query leaves, with the gateway's MAC on the frame, and
-    the resolver's address in the packet. The frame crosses one link. The packet crosses
-    the network.
+  say: Its mask says the resolver is remote, so the first thing out is an ARP for the gateway. Then the
+    DNS query leaves, with the gateway's MAC on the frame, and the resolver's address in the packet. The
+    frame crosses one link. The packet crosses the network.
   moves:
   - msg.send:
       name: n
@@ -165,8 +163,8 @@ beats:
   stage: prediction
   pdf: 33
   hold: 10
-  say: The switch along the way had an empty table. What did it just learn, and what
-    did it do with the frame?
+  say: The switch along the way had an empty table. What did it just learn, and what did it do with the
+    frame?
   moves:
   - pause:
       text: what did the switch learn, and do?
@@ -175,9 +173,8 @@ beats:
   pdf: 31
   c:
   - Self-Learning Switch Tables
-  say: It learned the laptop's port from the source address. If the destination was
-    unknown, it flooded. Once known, it forwards out one port. Source teaches. Destination
-    decides.
+  say: It learned the laptop's port from the source address. If the destination was unknown, it flooded.
+    Once known, it forwards out one port. Source teaches. Destination decides.
   deck: lec06-lan.pdf
   moves:
   - net.state:
@@ -203,8 +200,8 @@ beats:
   stage: prediction
   pdf: 13
   hold: 10
-  say: The packet reaches the gateway, headed for the server. What does the router
-    look at, and what changes in the packet?
+  say: The packet reaches the gateway, headed for the server. What does the router look at, and what changes
+    in the packet?
   moves:
   - net.state:
       name: n
@@ -217,9 +214,8 @@ beats:
   pdf: 13
   c:
   - Longest Prefix Matching
-  say: It reads the destination IP, and picks the longest matching prefix. It replaces
-    the Ethernet frame, and decrements TTL. The source and destination IP addresses
-    stay put.
+  say: It reads the destination IP, and picks the longest matching prefix. It replaces the Ethernet frame,
+    and decrements TTL. The source and destination IP addresses stay put.
   deck: lec08-network2.pdf
   moves:
   - table.show:
@@ -257,8 +253,7 @@ beats:
   stage: prediction
   pdf: 19
   hold: 10
-  say: Where did that forwarding table come from, inside one network, and between
-    networks?
+  say: Where did that forwarding table come from, inside one network, and between networks?
   moves:
   - pause:
       text: who builds the table, inside and between networks?
@@ -268,9 +263,9 @@ beats:
   c:
   - Link-State Routing
   - Distance-Vector Routing
-  say: Inside one AS, link state floods facts and runs Dijkstra, or distance vector
-    trades distances with neighbors. Between ASes, BGP carries paths, shaped by policy
-    and money. The chosen BGP next hop is resolved through internal routing.
+  say: Inside one AS, link state floods facts and runs Dijkstra, or distance vector trades distances with
+    neighbors. Between ASes, BGP carries paths, shaped by policy and money. The chosen BGP next hop is
+    resolved through internal routing.
   deck: lec10-routing.pdf
   moves:
   - table.show:
@@ -304,8 +299,8 @@ beats:
   stage: prediction
   pdf: 8
   hold: 10
-  say: A link fails between the two routers. What goes wrong while the news spreads?
-    Name two failure shapes.
+  say: A link fails between the two routers. What goes wrong while the news spreads? Name two failure
+    shapes.
   moves:
   - pause:
       text: name two things that go wrong during convergence
@@ -315,9 +310,9 @@ beats:
   c:
   - Forwarding Blackholes
   - Transient Forwarding Loops
-  say: A blackhole, when a router holds an old route with no working continuation.
-    And a transient loop, when routers install their changes at different times. Detect,
-    disseminate, compute, install. Each stage takes time.
+  say: A blackhole, when a router holds an old route with no working continuation. And a transient loop,
+    when routers install their changes at different times. Detect, disseminate, compute, install. Each
+    stage takes time.
   deck: lec11-convergence.pdf
   moves:
   - net.unwalk:
@@ -354,8 +349,8 @@ beats:
   stage: prediction
   pdf: 39
   hold: 10
-  say: Last one. The laptop leaves its wire and becomes a moving phone. What stays
-    the same in the packet, and what changes?
+  say: Last one. The laptop leaves its wire and becomes a moving phone. What stays the same in the packet,
+    and what changes?
   moves:
   - net.state:
       name: n
@@ -371,10 +366,9 @@ beats:
   c:
   - Cellular Handover
   - IP Tunneling
-  say: 'The inner packet stays the same, with its stable address. The outer destination
-    changes, as a tunnel follows the phone. That''s the picture from the very start,
-    at a new scale: a local envelope, changing, around a global packet that isn''t.
-    If you could draw all of that, you have the story.'
+  say: 'The inner packet stays the same, with its stable address. The outer destination changes, as a
+    tunnel follows the phone. That''s the picture from the very start, at a new scale: a local envelope,
+    changing, around a global packet that isn''t. If you could draw all of that, you have the story.'
   deck: lec15-mobile.pdf
   moves:
   - clear: {}
@@ -431,8 +425,7 @@ prediction_contracts:
     effect: msg.send
     selector: {}
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 - prediction_beat: 18.1.p2
   answer_beat: 18.1.a2
   answer_events:
@@ -474,8 +467,7 @@ prediction_contracts:
     effect: rule
     selector: {}
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 - prediction_beat: 18.1.p3
   answer_beat: 18.1.a3
   answer_events:
@@ -500,8 +492,7 @@ prediction_contracts:
     effect: rule
     selector: {}
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 - prediction_beat: 18.1.p4
   answer_beat: 18.1.a4
   answer_events:
@@ -533,8 +524,7 @@ prediction_contracts:
     effect: packet.hop
     selector: {}
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 - prediction_beat: 18.1.p5
   answer_beat: 18.1.a5
   answer_events:
@@ -564,8 +554,7 @@ prediction_contracts:
     effect: net.walk
     selector: {}
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 - prediction_beat: 18.1.p6
   answer_beat: 18.1.a6
   answer_events:
@@ -602,8 +591,7 @@ prediction_contracts:
     effect: rule
     selector: {}
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 - prediction_beat: 18.1.p7
   answer_beat: 18.1.a7
   answer_events:
@@ -635,8 +623,7 @@ prediction_contracts:
     effect: rule
     selector: {}
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 ---
 dish: '18.2'
 title: One mask, one match, one fragment
@@ -648,12 +635,11 @@ beats:
   pdf: 23
   c:
   - Subnet Masks
-  say: A quick recompute, with new numbers, on your own paper. First, a mask. A host
-    has address 192.168.37.200/21. Give the mask, the network, the broadcast address,
-    and the usable count.
+  say: A quick recompute, with new numbers, on your own paper. First, a mask. A host has address 192.168.37.200/21.
+    Give the mask, the network, the broadcast address, and the usable count.
   moves:
   - heading:
-      text: 'Wednesday warm-up: mask, match, fragment'
+      text: 'Exam warm-up: mask, match, fragment'
   - q:
       text: '192.168.37.200/21: mask, network, broadcast, usable count?'
 - id: p1
@@ -669,9 +655,9 @@ beats:
   pdf: 23
   c:
   - Network and Broadcast Addresses
-  say: A slash 21 is 255.255.248.0. Third-byte blocks have size 8, and 37 lies in
-    32 through 39. So the network is 192.168.32.0, and the broadcast is 192.168.39.255.
-    That's 11 host bits, so 2 to the 11th, minus 2, gives 2,046 usable addresses.
+  say: A slash 21 is 255.255.248.0. Third-byte blocks have size 8, and 37 lies in 32 through 39. So the
+    network is 192.168.32.0, and the broadcast is 192.168.39.255. That's 11 host bits, so 2 to the 11th,
+    minus 2, gives 2,046 usable addresses.
   moves:
   - clear: {}
   - bits.show:
@@ -698,7 +684,7 @@ beats:
       value: $practice.warm.broadcast
       when: and the broadcast
   - rule:
-      text: "2^11 \u2212 2 = 2046 usable addresses"
+      text: 2^11 − 2 = 2046 usable addresses
       when: That's 11
   pre_roll: 1.7000000000000002
 - id: q2
@@ -706,8 +692,8 @@ beats:
   pdf: 13
   c:
   - Longest Prefix Matching
-  say: A match. A router holds 192.168.0.0/16 to A, 192.168.32.0/21 to B, 192.168.36.0/24
-    to C, and slash 0 to D. Which output does that same address, 192.168.37.200, use?
+  say: A match. A router holds 192.168.0.0/16 to A, 192.168.32.0/21 to B, 192.168.36.0/24 to C, and slash
+    0 to D. Which output does that same address, 192.168.37.200, use?
   deck: lec08-network2.pdf
   moves:
   - clear: {}
@@ -728,9 +714,8 @@ beats:
   pdf: 29
   c:
   - Longest Prefix Matching
-  say: 'It matches the slash 16, the slash 21, and the slash 0. It doesn''t match
-    the slash 24, because that covers only third byte 36. So the longest match is
-    the slash 21: output B.'
+  say: 'It matches the slash 16, the slash 21, and the slash 0. It doesn''t match the slash 24, because
+    that covers only third byte 36. So the longest match is the slash 21: output B.'
   deck: lec08-network2.pdf
   moves:
   - table.flash:
@@ -762,9 +747,8 @@ beats:
   pdf: 36
   c:
   - IPv4 Fragmentation
-  say: Finally, a fragment. An 1,800 byte datagram, with a 20 byte header, crosses
-    an MTU of 600. Give the largest nonfinal payload, the fragment count, and the
-    offsets.
+  say: Finally, a fragment. An 1,800 byte datagram, with a 20 byte header, crosses an MTU of 600. Give
+    the largest nonfinal payload, the fragment count, and the offsets.
   moves:
   - clear: {}
   - bar.show:
@@ -786,10 +770,9 @@ beats:
   pdf: 37
   c:
   - IPv4 Fragmentation
-  say: '600 minus 20 is 580, and 580 rounds down to 576. The data is 1,780 bytes,
-    so the payloads are 576, 576, 576, and 52. That''s four fragments. The offsets
-    go up in steps of 72: 0, 72, 144, and 216. Only the last has its more fragments
-    flag at 0.'
+  say: '600 minus 20 is 580, and 580 rounds down to 576. The data is 1,780 bytes, so the payloads are
+    576, 576, 576, and 52. That''s four fragments. The offsets go up in steps of 72: 0, 72, 144, and 216.
+    Only the last has its more fragments flag at 0.'
   moves:
   - bar.ruler:
       name: b
@@ -886,8 +869,7 @@ prediction_contracts:
     effect: rule
     selector: {}
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 - prediction_beat: 18.2.p2
   answer_beat: 18.2.a2
   answer_events:
@@ -920,8 +902,7 @@ prediction_contracts:
     selector:
       r: 1
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 - prediction_beat: 18.2.p3
   answer_beat: 18.2.a3
   answer_events:
@@ -992,8 +973,7 @@ prediction_contracts:
     effect: bar.info
     selector: {}
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 ---
 dish: '18.3'
 title: Say it out loud
@@ -1005,11 +985,11 @@ beats:
   pdf: 24
   c:
   - Local Preference
-  say: 'Recite. Say each answer out loud before I do. First: the BGP selection order,
-    in the lecture''s simplified version.'
+  say: 'Recite. Say each answer out loud before I do. First: the BGP selection order, in the lecture''s
+    simplified version.'
   moves:
   - heading:
-      text: 'Wednesday warm-up: say it out loud'
+      text: 'Exam warm-up: say it out loud'
   - q:
       text: Say the BGP selection order out loud.
 - id: p1
@@ -1026,9 +1006,8 @@ beats:
   c:
   - Local Preference
   - Hot-Potato Routing
-  say: Highest local preference. Then shortest AS path. Then lowest internal cost
-    to the exit. Then a tie break. Compare in order, and stop as soon as one route
-    remains.
+  say: Highest local preference. Then shortest AS path. Then lowest internal cost to the exit. Then a
+    tie break. Compare in order, and stop as soon as one route remains.
   moves:
   - clear: {}
   - stack.show:
@@ -1077,8 +1056,8 @@ beats:
   stage: prediction
   pdf: 41
   hold: 8
-  say: 'Next: the commercial export rule. Who hears a route learned from a customer?
-    Who hears a route learned from a peer or a provider?'
+  say: 'Next: the commercial export rule. Who hears a route learned from a customer? Who hears a route
+    learned from a peer or a provider?'
   moves:
   - pause:
       text: the export rule
@@ -1088,9 +1067,9 @@ beats:
   c:
   - BGP Export Policy
   - Valley-Free Paths
-  say: 'Own and customer routes go to everyone. Peer and provider routes go only to
-    customers. Would this make me carry traffic between two non-customers? Then don''t
-    advertise it. That gives valley-free paths: up, at most one peer link, then down.'
+  say: 'Own and customer routes go to everyone. Peer and provider routes go only to customers. Would this
+    make me carry traffic between two non-customers? Then don''t advertise it. That gives valley-free
+    paths: up, at most one peer link, then down.'
   moves:
   - stack.mark:
       name: o
@@ -1134,9 +1113,9 @@ beats:
   c:
   - PIM Dense Mode
   - PIM Sparse Mode
-  say: Dense mode forwards unless pruned. Sparse mode sends nothing until joined,
-    starting with a shared star comma G tree through the RP, and it may switch to
-    S comma G. IGMP learns local interest, and PIM connects the routers.
+  say: Dense mode forwards unless pruned. Sparse mode sends nothing until joined, starting with a shared
+    star comma G tree through the RP, and it may switch to S comma G. IGMP learns local interest, and
+    PIM connects the routers.
   deck: lec13-multicast.pdf
   moves:
   - table.show:
@@ -1178,9 +1157,8 @@ beats:
   pdf: 40
   c:
   - Cellular Handover
-  say: 'Before: S-GW, A, phone. During: S-GW, A, B, phone, through temporary forwarding.
-    After: S-GW, B, phone. Prepare, move the radio, forward, switch the core path,
-    release.'
+  say: 'Before: S-GW, A, phone. During: S-GW, A, B, phone, through temporary forwarding. After: S-GW,
+    B, phone. Prepare, move the radio, forward, switch the core path, release.'
   deck: lec15-mobile.pdf
   moves:
   - clear: {}
@@ -1272,8 +1250,7 @@ prediction_contracts:
     selector:
       layer: 3
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 - prediction_beat: 18.3.p2
   answer_beat: 18.3.a2
   answer_events:
@@ -1310,8 +1287,7 @@ prediction_contracts:
     effect: rule
     selector: {}
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 - prediction_beat: 18.3.p3
   answer_beat: 18.3.a3
   answer_events:
@@ -1341,8 +1317,7 @@ prediction_contracts:
     effect: rule
     selector: {}
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 - prediction_beat: 18.3.p4
   answer_beat: 18.3.a4
   answer_events:
@@ -1379,8 +1354,7 @@ prediction_contracts:
     effect: rule
     selector: {}
     before_answer: hidden_or_neutral
-  review_scope: Inspect the listed answer objects for neutral or hidden state during
-    the prediction hold.
+  review_scope: Inspect the listed answer objects for neutral or hidden state during the prediction hold.
 ---
 dish: '18.4'
 title: The slide clarifications
@@ -1390,20 +1364,18 @@ beats:
 - id: open
   stage: question
   pdf: 30
-  say: Finally, the places where the slides need a careful reading. These are the
-    corrections and scope notes we met along the way. No new material. For each one,
-    keep the corrected version in mind.
+  say: Finally, the places where the slides need a careful reading. These are the corrections and scope
+    notes we met along the way. No new material. For each one, keep the corrected version in mind.
   moves:
   - heading:
-      text: 'Wednesday warm-up: the slide clarifications'
+      text: 'Exam warm-up: the slide clarifications'
   - q:
       text: Where do the slides need a careful reading?
 - id: lan
   stage: state
   pdf: 30
-  say: On LANs. The slide's table TTL is a local aging timer in the switch, not a
-    hop count in the frame. And spanning tree, shortest-path trees, and minimum spanning
-    trees have different objectives.
+  say: On LANs. The slide's table TTL is a local aging timer in the switch, not a hop count in the frame.
+    And spanning tree, shortest-path trees, and minimum spanning trees have different objectives.
   moves:
   - clear: {}
   - bullets:
@@ -1422,10 +1394,10 @@ beats:
 - id: ip
   stage: state
   pdf: 35
-  say: On IP. The maximum IPv4 total length is 65,535 bytes, not the 63,535 printed
-    on the slide, because the field has 16 bits. In the subnet example, 128.101.5.0/23
-    normalizes to 128.101.4.0/23, and the 31-host department needs a slash 26. And
-    the 51.2 nanosecond budget leaves out Ethernet's physical overhead.
+  say: On IP. The maximum IPv4 total length is 65,535 bytes, not the 63,535 printed on the slide, because
+    the field has 16 bits. In the subnet example, 128.101.5.0/23 normalizes to 128.101.4.0/23, and the
+    31-host department needs a slash 26. And the 51.2 nanosecond budget leaves out Ethernet's physical
+    overhead.
   deck: lec07-network1.pdf
   moves:
   - clear: {}
@@ -1451,9 +1423,8 @@ beats:
 - id: dns
   stage: state
   pdf: 31
-  say: On discovery. DNS has 13 root identities, A through M, and each is deployed
-    as many physical instances. And the slide's quick TCP recap leaves out the final
-    ACK of the handshake.
+  say: On discovery. DNS has 13 root identities, A through M, and each is deployed as many physical instances.
+    And the slide's quick TCP recap leaves out the final ACK of the handshake.
   deck: lec09-discovery.pdf
   moves:
   - clear: {}
@@ -1474,11 +1445,10 @@ beats:
 - id: mc
   stage: state
   pdf: 14
-  say: On anycast and multicast. Anycast's problem with TCP is lost connection state,
-    not a blanket incompatibility. IGMP queries go to all hosts, while a report goes
-    to the group being reported. The slide's membership timer computes 270 seconds,
-    while the RFC's default formula gives 260. And sparse mode begins with a shared
-    tree through the RP, whatever the slide's shorthand says.
+  say: On anycast and multicast. Anycast's problem with TCP is lost connection state, not a blanket incompatibility.
+    IGMP queries go to all hosts, while a report goes to the group being reported. The slide's membership
+    timer computes 270 seconds, while the RFC's default formula gives 260. And sparse mode begins with
+    a shared tree through the RP, whatever the slide's shorthand says.
   deck: lec13-multicast.pdf
   moves:
   - clear: {}
@@ -1506,10 +1476,9 @@ beats:
 - id: radio
   stage: state
   pdf: 32
-  say: On wireless and mobility. Four-address Wi-Fi is a bridging case, not an ad
-    hoc rule. The exposed-terminal shortcut is idealized. IMSI is a decimal subscriber
-    identity of at most 15 digits, not a MAC address. And the foreign-agent drawing
-    is one Mobile IPv4 arrangement, separate from LTE.
+  say: On wireless and mobility. Four-address Wi-Fi is a bridging case, not an ad hoc rule. The exposed-terminal
+    shortcut is idealized. IMSI is a decimal subscriber identity of at most 15 digits, not a MAC address.
+    And the foreign-agent drawing is one Mobile IPv4 arrangement, separate from LTE.
   deck: lec14-wireless.pdf
   moves:
   - clear: {}
@@ -1537,9 +1506,9 @@ beats:
 - id: close
   stage: explanation
   pdf: 32
-  say: One last thing. A correct answer you can't defend is still a gap, and a mistake
-    you can name is one you won't repeat. Good luck today. You've traced this packet
-    from one wire to a moving phone. Go show them.
+  say: One last thing. A correct answer you can't defend is still a gap, and a mistake you can name is
+    one you won't repeat. Good luck today. You've traced this packet from one wire to a moving phone.
+    Go show them.
   deck: lec14-wireless.pdf
   moves:
   - clear: {}
@@ -1547,7 +1516,6 @@ beats:
       current: Move
       zone: top
   - q:
-      text: If you can trace one packet through it with real addresses, you understand
-        it.
+      text: If you can trace one packet through it with real addresses, you understand it.
       zone: bottom
 prediction_contracts: []

@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 18: CDMA'
+      text: Practice midterm, question 18
   - chips.show:
       name: c
       zone: top

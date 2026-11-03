@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 13: BGP selection'
+      text: Practice midterm, question 13
   - sieve.show:
       name: s
       zone: top

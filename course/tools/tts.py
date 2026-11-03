@@ -49,7 +49,7 @@ def clip_key(spoken, config=CONFIG):
     if config["engine"] == "say":
         label = f"{config['voice']}|{config['rate']}"
     elif config["engine"] == "elevenlabs":
-        label = f"elevenlabs|{config['voice']}|{config.get('model_id', 'eleven_multilingual_v2')}"
+        label = json.dumps(dict(config, processing_version="pcm-loudnorm-v2"), sort_keys=True)
     else:
         label = f"{config['engine']}|{config['voice']}|{config['speed']}"
     return hashlib.sha256(f"{label}|{config['sentence_pause']}|{config['clause_pause']}|{spoken}".encode()).hexdigest()[:20]
@@ -105,44 +105,8 @@ def raw_kokoro(spoken, path, config):
 
 def raw_elevenlabs(spoken, path, config):
     """Speak with ElevenLabs timestamps. Pause marks become silence so they are not read aloud."""
-    import base64
-    import os
-    import urllib.request
-    key = os.environ.get("ELEVENLABS_API_KEY")
-    if not key:
-        raise RuntimeError("ELEVENLABS_API_KEY is not set")
-    voice = config["voice"]
-    model = config.get("model_id", "eleven_multilingual_v2")
-    # pcm_44100 is limited to Pro. pcm_24000 is the highest PCM this subscription accepts.
-    rate = 24000
-    frames = bytearray()
-    pieces = []
-    cursor = 0.0
-    for kind, value in pause_pieces(spoken):
-        if kind == "silence":
-            frames.extend(b"\x00\x00" * int(rate * value / 1000))
-            cursor += value / 1000
-            continue
-        url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice}/with-timestamps?output_format=pcm_24000"
-        body = json.dumps({"text": value, "model_id": model}).encode()
-        req = urllib.request.Request(url, data=body, method="POST", headers={
-            "xi-api-key": key, "Content-Type": "application/json", "Accept": "application/json"})
-        with urllib.request.urlopen(req, timeout=180) as resp:
-            payload = json.loads(resp.read().decode())
-        pcm = base64.b64decode(payload["audio_base64"])
-        frames.extend(pcm)
-        alignment = payload.get("alignment") or {}
-        pieces.append({"offset": round(cursor, 4), "characters": alignment.get("characters") or [],
-                       "starts": alignment.get("character_start_times_seconds") or [],
-                       "ends": alignment.get("character_end_times_seconds") or []})
-        cursor += len(pcm) / 2 / rate
-    with wave.open(str(path), "wb") as handle:
-        handle.setnchannels(1)
-        handle.setsampwidth(2)
-        handle.setframerate(rate)
-        handle.writeframes(bytes(frames))
-    Path(path).with_suffix(".alignment.json").write_text(json.dumps({
-        "sample_rate": rate, "duration": round(cursor, 4), "pieces": pieces}))
+    from course.tools.narration_pipeline import raw_provider
+    raw_provider(spoken, path, config)
 
 
 def render_clip(spoken, wav, config=CONFIG):
@@ -192,11 +156,7 @@ def main(only=None):
     for beat, entry in manifest.items():
         entry["words"] = len(texts[beat].split())
     mpath.write_text(json.dumps(manifest, indent=0, sort_keys=True))
-    keep = {e["sha"] for e in manifest.values()}
-    if not only:
-        for wav in OUT.glob("*.wav"):
-            if wav.stem not in keep:
-                wav.unlink()
+    # Retain alternate voices for rollback.
     print(f"{len(results)} clips; {sum(e['duration'] for e in results.values()) / 60:.1f} min of speech")
 
 

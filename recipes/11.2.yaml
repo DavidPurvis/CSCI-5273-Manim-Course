@@ -91,7 +91,8 @@ beats:
         Y: done
         Z: done
       when: A real, better
-  adjust: {}
+  adjust:
+    pace: 0.75
 - id: 11.2.setup
   stage: state
   narration: 11.2.setup
@@ -299,7 +300,8 @@ beats:
       - Y
       state: error
       when: They just count
-  adjust: {}
+  adjust:
+    pace: 0.92
 - id: 11.2.rip
   stage: state
   narration: 11.2.rip

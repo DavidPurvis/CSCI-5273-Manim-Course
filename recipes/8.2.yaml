@@ -496,7 +496,8 @@ beats:
       r: 2
       state: now
       when: An operator installs
-  adjust: {}
+  adjust:
+    pace: 0.98
 - id: 8.2.predict
   stage: prediction
   narration: 8.2.predict

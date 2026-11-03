@@ -16,10 +16,10 @@ def sha256(path):
 def inspect_media(path):
     identity=sha256(path)
     findings,seconds=verify_playback(path)
+    data=json.loads(run(['ffprobe','-v','error','-count_packets','-show_streams','-show_chapters','-of','json',str(path)]).stdout)
     from course.tools.audio_continuity import inspect
     continuity=inspect(path)
     findings.extend(continuity['findings'])
-    data=json.loads(run(['ffprobe','-v','error','-count_packets','-show_streams','-show_chapters','-of','json',str(path)]).stdout)
     streams=data.get('streams',[])
     video=next((s for s in streams if s['codec_type']=='video'),{})
     if (video.get('width'),video.get('height'),video.get('r_frame_rate'))!=(1920,1080,'30/1'):findings.append('expected 1080p/30 fps')
@@ -28,7 +28,8 @@ def inspect_media(path):
     if path.parent.name!='dishes':
         captions=next((s for s in streams if s['codec_type']=='subtitle'),{})
         if not captions or int(captions.get('nb_read_packets','0'))<=0:findings.append('missing or empty selectable caption stream')
-    markers=11 if path.name=='CSCI-5273-Lectures-06-15.mp4' else 2 if path.name=='CSCI-5273-Practice-and-Warm-up.mp4' else None
+    from course.catalog import MAIN, SUPPLEMENTS
+    markers=len(MAIN) if path.name=='CSCI-5273-Lectures-06-15.mp4' else len(SUPPLEMENTS) if path.name=='CSCI-5273-Practice-and-Warm-up.mp4' else None
     if markers is not None and len(data.get('chapters',[]))!=markers:findings.append(f'expected {markers} chapter markers')
     if sha256(path)!=identity:findings.append('artifact changed during verification')
     return {'path':str(path.relative_to(PACK)),'sha256':identity,'seconds':seconds,'findings':findings,'verified_at':time.time(),'audio_continuity':continuity}

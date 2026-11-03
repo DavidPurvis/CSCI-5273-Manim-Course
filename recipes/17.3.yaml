@@ -16,7 +16,7 @@ beats:
   clarifications: []
   moves:
   - heading:
-      text: 'Practice midterm, question 3: prefix arithmetic'
+      text: Practice midterm, question 3
   - bullets:
       name: q
       zone: top

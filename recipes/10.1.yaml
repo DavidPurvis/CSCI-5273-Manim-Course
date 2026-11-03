@@ -163,7 +163,8 @@ beats:
   - rule:
       text: Static routes don't adapt to failures, equipment or load
       when: Static routes
-  adjust: {}
+  adjust:
+    pace: 0.8
 - id: 10.1.model
   stage: animation
   narration: 10.1.model
@@ -382,7 +383,8 @@ beats:
   - rule:
       text: 'Next: Dijkstra''s computation'
       when: look at the computation
-  adjust: {}
+  adjust:
+    pace: 0.64
 - id: 10.1.idea
   stage: rule
   narration: 10.1.idea
@@ -596,7 +598,8 @@ beats:
       when: D is not
   - table.reveal:
       name: t
-  adjust: {}
+  adjust:
+    pace: 0.71
   pre_roll: 1.1
 - id: 10.1.settle-b
   stage: state
@@ -675,7 +678,8 @@ beats:
   - table.reveal:
       name: t
       when: that beats infinity
-  adjust: {}
+  adjust:
+    pace: 0.68
 - id: 10.1.settle-c
   stage: state
   narration: 10.1.settle-c
@@ -1055,7 +1059,7 @@ beats:
   - clear: {}
   - net.show:
       name: big
-      zone: upper
+      zone: top
       nodes:
         A:
           k: node
@@ -1150,7 +1154,7 @@ beats:
         - c: 7
   - table.show:
       name: bigt
-      zone: lower
+      zone: bottom
       data: $routing.slide27_table
       size: 28
       show: 0
@@ -1279,7 +1283,8 @@ beats:
   - rule:
       text: Keep settled set, distances and tie policy explicit
       when: Keep your settled
-  adjust: {}
+  adjust:
+    pace: 0.61
 - id: 10.1.pitfall
   stage: rule
   narration: 10.1.pitfall

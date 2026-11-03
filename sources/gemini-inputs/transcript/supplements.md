@@ -312,35 +312,35 @@ Timecodes are positions in the supplements video. Page numbers are 1-based instr
 
 [00:37:41] (lec15-mobile.pdf p40) On marks: one point per inner or outer destination, and one per path phase. That's the whole test. For each point you lost, write down the actual cause: wrong scope, wrong table, wrong unit, wrong order, stale dependency, or confused role. Then try a changed example, with new numbers.
 
-## Chapter 18: Wednesday warm-up
+## Chapter 18: Exam-day warm-up
 
 ### 18.1 The packet story, from memory
 
-[00:38:07] (lec09-discovery.pdf p49) It's Wednesday. Don't reread anything. Get a blank page, and draw the connected packet story from memory, one question at a time. I'll ask, you draw, and then I'll show you the answer. A laptop wakes up, and wants to reach a web server. Start at the very beginning. What does it need before it can send anything?
+[00:38:06] (lec09-discovery.pdf p49) It's Wednesday. Don't reread anything. Get a blank page, and draw the connected packet story from memory, one question at a time. I'll ask, you draw, and then I'll show you the answer. A laptop wakes up, and wants to reach a web server. Start at the very beginning. What does it need before it can send anything?
 
 [00:38:33] (lec09-discovery.pdf p49) Draw the host, the switch, the gateway, the DNS resolver, and the server. Then name what's missing.
 
-[00:38:56] (lec09-discovery.pdf p22) It needs an address, a mask, a gateway, and a resolver. DHCP supplies all four, in four messages: Discover, Offer, Request, ACK.
+[00:38:55] (lec09-discovery.pdf p22) It needs an address, a mask, a gateway, and a resolver. DHCP supplies all four, in four messages: Discover, Offer, Request, ACK.
 
-[00:39:10] (lec09-discovery.pdf p54) The laptop wants the server's name resolved, and the resolver is on another network. What does it send first, and to whom?
+[00:39:09] (lec09-discovery.pdf p54) The laptop wants the server's name resolved, and the resolver is on another network. What does it send first, and to whom?
 
 [00:39:30] (lec09-discovery.pdf p54) Its mask says the resolver is remote, so the first thing out is an ARP for the gateway. Then the DNS query leaves, with the gateway's MAC on the frame, and the resolver's address in the packet. The frame crosses one link. The packet crosses the network.
 
-[00:39:51] (lec09-discovery.pdf p33) The switch along the way had an empty table. What did it just learn, and what did it do with the frame?
+[00:39:50] (lec09-discovery.pdf p33) The switch along the way had an empty table. What did it just learn, and what did it do with the frame?
 
-[00:40:10] (lec06-lan.pdf p31) It learned the laptop's port from the source address. If the destination was unknown, it flooded. Once known, it forwards out one port. Source teaches. Destination decides.
+[00:40:09] (lec06-lan.pdf p31) It learned the laptop's port from the source address. If the destination was unknown, it flooded. Once known, it forwards out one port. Source teaches. Destination decides.
 
 [00:40:26] (lec09-discovery.pdf p13) The packet reaches the gateway, headed for the server. What does the router look at, and what changes in the packet?
 
-[00:40:48] (lec08-network2.pdf p13) It reads the destination IP, and picks the longest matching prefix. It replaces the Ethernet frame, and decrements TTL. The source and destination IP addresses stay put.
+[00:40:47] (lec08-network2.pdf p13) It reads the destination IP, and picks the longest matching prefix. It replaces the Ethernet frame, and decrements TTL. The source and destination IP addresses stay put.
 
-[00:41:03] (lec09-discovery.pdf p19) Where did that forwarding table come from, inside one network, and between networks?
+[00:41:02] (lec09-discovery.pdf p19) Where did that forwarding table come from, inside one network, and between networks?
 
 [00:41:22] (lec10-routing.pdf p37) Inside one AS, link state floods facts and runs Dijkstra, or distance vector trades distances with neighbors. Between ASes, BGP carries paths, shaped by policy and money. The chosen BGP next hop is resolved through internal routing.
 
-[00:41:43] (lec09-discovery.pdf p8) A link fails between the two routers. What goes wrong while the news spreads? Name two failure shapes.
+[00:41:42] (lec09-discovery.pdf p8) A link fails between the two routers. What goes wrong while the news spreads? Name two failure shapes.
 
-[00:42:04] (lec11-convergence.pdf p8) A blackhole, when a router holds an old route with no working continuation. And a transient loop, when routers install their changes at different times. Detect, disseminate, compute, install. Each stage takes time.
+[00:42:03] (lec11-convergence.pdf p8) A blackhole, when a router holds an old route with no working continuation. And a transient loop, when routers install their changes at different times. Detect, disseminate, compute, install. Each stage takes time.
 
 [00:42:23] (lec09-discovery.pdf p39) Last one. The laptop leaves its wire and becomes a moving phone. What stays the same in the packet, and what changes?
 
@@ -350,39 +350,39 @@ Timecodes are positions in the supplements video. Page numbers are 1-based instr
 
 [00:43:09] (lec07-network1.pdf p23) A quick recompute, with new numbers, on your own paper. First, a mask. A host has address 192.168.37.200/21. Give the mask, the network, the broadcast address, and the usable count.
 
-[00:43:32] (lec07-network1.pdf p23) Do it from a blank page.
+[00:43:31] (lec07-network1.pdf p23) Do it from a blank page.
 
 [00:43:52] (lec07-network1.pdf p23) A slash 21 is 255.255.248.0. Third-byte blocks have size 8, and 37 lies in 32 through 39. So the network is 192.168.32.0, and the broadcast is 192.168.39.255. That's 11 host bits, so 2 to the 11th, minus 2, gives 2,046 usable addresses.
 
-[00:44:29] (lec08-network2.pdf p13) A match. A router holds 192.168.0.0/16 to A, 192.168.32.0/21 to B, 192.168.36.0/24 to C, and slash 0 to D. Which output does that same address, 192.168.37.200, use?
+[00:44:28] (lec08-network2.pdf p13) A match. A router holds 192.168.0.0/16 to A, 192.168.32.0/21 to B, 192.168.36.0/24 to C, and slash 0 to D. Which output does that same address, 192.168.37.200, use?
 
-[00:45:03] (lec07-network1.pdf p13) Check each prefix, then choose.
+[00:45:02] (lec07-network1.pdf p13) Check each prefix, then choose.
 
-[00:45:18] (lec08-network2.pdf p29) It matches the slash 16, the slash 21, and the slash 0. It doesn't match the slash 24, because that covers only third byte 36. So the longest match is the slash 21: output B.
+[00:45:17] (lec08-network2.pdf p29) It matches the slash 16, the slash 21, and the slash 0. It doesn't match the slash 24, because that covers only third byte 36. So the longest match is the slash 21: output B.
 
-[00:45:36] (lec07-network1.pdf p36) Finally, a fragment. An 1,800 byte datagram, with a 20 byte header, crosses an MTU of 600. Give the largest nonfinal payload, the fragment count, and the offsets.
+[00:45:35] (lec07-network1.pdf p36) Finally, a fragment. An 1,800 byte datagram, with a 20 byte header, crosses an MTU of 600. Give the largest nonfinal payload, the fragment count, and the offsets.
 
-[00:45:53] (lec07-network1.pdf p37) Round down to a multiple of 8.
+[00:45:52] (lec07-network1.pdf p37) Round down to a multiple of 8.
 
 [00:46:13] (lec07-network1.pdf p37) 600 minus 20 is 580, and 580 rounds down to 576. The data is 1,780 bytes, so the payloads are 576, 576, 576, and 52. That's four fragments. The offsets go up in steps of 72: 0, 72, 144, and 216. Only the last has its more fragments flag at 0.
 
 ### 18.3 Say it out loud
 
-[00:46:50] (lec12-bgp.pdf p24) Recite. Say each answer out loud before I do. First: the BGP selection order, in the lecture's simplified version.
+[00:46:49] (lec12-bgp.pdf p24) Recite. Say each answer out loud before I do. First: the BGP selection order, in the lecture's simplified version.
 
-[00:47:02] (lec12-bgp.pdf p24) Go ahead.
+[00:47:01] (lec12-bgp.pdf p24) Go ahead.
 
-[00:47:15] (lec12-bgp.pdf p24) Highest local preference. Then shortest AS path. Then lowest internal cost to the exit. Then a tie break. Compare in order, and stop as soon as one route remains.
+[00:47:14] (lec12-bgp.pdf p24) Highest local preference. Then shortest AS path. Then lowest internal cost to the exit. Then a tie break. Compare in order, and stop as soon as one route remains.
 
-[00:47:31] (lec12-bgp.pdf p41) Next: the commercial export rule. Who hears a route learned from a customer? Who hears a route learned from a peer or a provider?
+[00:47:30] (lec12-bgp.pdf p41) Next: the commercial export rule. Who hears a route learned from a customer? Who hears a route learned from a peer or a provider?
 
-[00:47:52] (lec12-bgp.pdf p41) Own and customer routes go to everyone. Peer and provider routes go only to customers. Would this make me carry traffic between two non-customers? Then don't advertise it. That gives valley-free paths: up, at most one peer link, then down.
+[00:47:51] (lec12-bgp.pdf p41) Own and customer routes go to everyone. Peer and provider routes go only to customers. Would this make me carry traffic between two non-customers? Then don't advertise it. That gives valley-free paths: up, at most one peer link, then down.
 
-[00:48:13] (lec13-multicast.pdf p45) Next: multicast defaults. What does dense mode do by default? And sparse mode?
+[00:48:12] (lec13-multicast.pdf p45) Next: multicast defaults. What does dense mode do by default? And sparse mode?
 
-[00:48:32] (lec13-multicast.pdf p45) Dense mode forwards unless pruned. Sparse mode sends nothing until joined, starting with a shared star comma G tree through the RP, and it may switch to S comma G. IGMP learns local interest, and PIM connects the routers.
+[00:48:31] (lec13-multicast.pdf p45) Dense mode forwards unless pruned. Sparse mode sends nothing until joined, starting with a shared star comma G tree through the RP, and it may switch to S comma G. IGMP learns local interest, and PIM connects the routers.
 
-[00:48:50] (lec15-mobile.pdf p39) Last: the handover stages. What are the data paths before, during, and after?
+[00:48:49] (lec15-mobile.pdf p39) Last: the handover stages. What are the data paths before, during, and after?
 
 [00:49:08] (lec15-mobile.pdf p40) Before: S-GW, A, phone. During: S-GW, A, B, phone, through temporary forwarding. After: S-GW, B, phone. Prepare, move the radio, forward, switch the core path, release.
 
@@ -390,14 +390,14 @@ Timecodes are positions in the supplements video. Page numbers are 1-based instr
 
 [00:49:29] (lec06-lan.pdf p30) Finally, the places where the slides need a careful reading. These are the corrections and scope notes we met along the way. No new material. For each one, keep the corrected version in mind.
 
-[00:49:46] (lec06-lan.pdf p30) On LANs. The slide's table TTL is a local aging timer in the switch, not a hop count in the frame. And spanning tree, shortest-path trees, and minimum spanning trees have different objectives.
+[00:49:45] (lec06-lan.pdf p30) On LANs. The slide's table TTL is a local aging timer in the switch, not a hop count in the frame. And spanning tree, shortest-path trees, and minimum spanning trees have different objectives.
 
 [00:50:02] (lec07-network1.pdf p35) On IP. The maximum IPv4 total length is 65,535 bytes, not the 63,535 printed on the slide, because the field has 16 bits. In the subnet example, 128.101.5.0/23 normalizes to 128.101.4.0/23, and the 31-host department needs a slash 26. And the 51.2 nanosecond budget leaves out Ethernet's physical overhead.
 
 [00:50:42] (lec09-discovery.pdf p31) On discovery. DNS has 13 root identities, A through M, and each is deployed as many physical instances. And the slide's quick TCP recap leaves out the final ACK of the handshake.
 
-[00:50:59] (lec13-multicast.pdf p14) On anycast and multicast. Anycast's problem with TCP is lost connection state, not a blanket incompatibility. IGMP queries go to all hosts, while a report goes to the group being reported. The slide's membership timer computes 270 seconds, while the RFC's default formula gives 260. And sparse mode begins with a shared tree through the RP, whatever the slide's shorthand says.
+[00:50:58] (lec13-multicast.pdf p14) On anycast and multicast. Anycast's problem with TCP is lost connection state, not a blanket incompatibility. IGMP queries go to all hosts, while a report goes to the group being reported. The slide's membership timer computes 270 seconds, while the RFC's default formula gives 260. And sparse mode begins with a shared tree through the RP, whatever the slide's shorthand says.
 
-[00:51:31] (lec14-wireless.pdf p32) On wireless and mobility. Four-address Wi-Fi is a bridging case, not an ad hoc rule. The exposed-terminal shortcut is idealized. IMSI is a decimal subscriber identity of at most 15 digits, not a MAC address. And the foreign-agent drawing is one Mobile IPv4 arrangement, separate from LTE.
+[00:51:30] (lec14-wireless.pdf p32) On wireless and mobility. Four-address Wi-Fi is a bridging case, not an ad hoc rule. The exposed-terminal shortcut is idealized. IMSI is a decimal subscriber identity of at most 15 digits, not a MAC address. And the foreign-agent drawing is one Mobile IPv4 arrangement, separate from LTE.
 
 [00:51:56] (lec14-wireless.pdf p32) One last thing. A correct answer you can't defend is still a gap, and a mistake you can name is one you won't repeat. Good luck today. You've traced this packet from one wire to a moving phone. Go show them.

@@ -85,6 +85,12 @@ def norm_with_map(tokens_by_source):
 
 
 def transcribe(beat, entry):
+    if entry.get('config', {}).get('engine') == 'elevenlabs':
+        from course.tools.narration_pipeline import valid_clip, heard_words
+        wav = ROOT / entry['wav']
+        if not valid_clip(wav):
+            raise ValueError(f'{beat}: missing synthesizer evidence; run kitchen align, not Whisper')
+        return heard_words(json.loads(wav.with_suffix('.alignment.json').read_text()))
     import hashlib
     cached = CACHE / f"{entry['sha']}.json"
     identity=hashlib.sha256((ROOT/entry['wav']).read_bytes()).hexdigest()
@@ -109,6 +115,17 @@ def transcribe(beat, entry):
     meta_path.write_text(json.dumps({'wav_hash':identity,'aligner':MODEL},indent=2))
     return words
 
+
+from dataclasses import dataclass
+
+@dataclass
+class AlignmentResult:
+    times: list
+    ratio: float
+    mismatches: list
+    provenance: list
+    def __iter__(self):
+        return iter((self.times, self.ratio, self.mismatches))
 
 def align(written, heard, duration, rules):
     """A [start, end] time for each written word, plus the share of it that matched and the mismatched segments."""
@@ -153,8 +170,7 @@ def align(written, heard, duration, rules):
     for block in matcher.get_matching_blocks():
         for k in range(block.size):
             provenance[want_owner[block.a+k]] = 'asr_aligned'
-    align.last_provenance = provenance
-    return [[s, e] for s, e in zip(starts, ends)], matcher.ratio(), bad
+    return AlignmentResult([[s,e] for s,e in zip(starts,ends)], matcher.ratio(), bad, provenance)
 
 
 def expected_differences(rules_data):
@@ -193,10 +209,11 @@ def main():
     for n, beat in enumerate(beats, 1):
         heard = transcribe(beat, manifest[beat])
         written = texts[beat].split()
-        times, ratio, bad = align(written, heard, manifest[beat]["duration"], rules)
+        result = align(written, heard, manifest[beat]["duration"], rules)
+        times, ratio, bad = result
         from course.tools.preparation import digest
-        timing[beat] = {"sha": manifest[beat]["sha"], "t": times, "provenance": align.last_provenance,
-                        "wav_hash": digest(ROOT / manifest[beat]["wav"]), "aligner": MODEL,
+        timing[beat] = {"sha": manifest[beat]["sha"], "t": times, "provenance": ["synthesizer_aligned" if p == "asr_aligned" and manifest[beat].get("model") else p for p in result.provenance],
+                        "wav_hash": digest(ROOT / manifest[beat]["wav"]), "aligner": "elevenlabs:" + manifest[beat]["model"] if manifest[beat].get("model") else MODEL,
                         "mismatch_spans": bad, "corrections": []}
         ratios[beat] = ratio
         for said, got in bad:

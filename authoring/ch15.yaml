@@ -307,7 +307,7 @@ beats:
   c:
   - LTE Home Subscriber Server
   say: The home subscriber server, the HSS, lives in the subscriber's home network.
-    It stores who you are and what you're allowed to do, and it cooperates in authentication.
+    It stores subscriber profiles and authentication keys, and it cooperates in authentication.
     It isn't on the path of your data at all.
   moves:
   - net.state:
