@@ -1,13 +1,14 @@
 """Regressions for the code-review fixes: caption offsets, the write endpoint, the freeze report, the manifest."""
 import http.client
 import json
+import subprocess
 import threading
 from types import SimpleNamespace
 from unittest import mock
 
 import pytest
 
-from course.tools import deliverables, kitchen
+from course.tools import audio_continuity, deliverables, kitchen
 from course.tools.local_server import create_server
 from course.tools.review_page import save_notes
 
@@ -137,3 +138,22 @@ def test_player_validates_imports_and_asks_first():
     body = body[:body.index("\nfunction ", 10)]
     assert "isProgressExport(saved)" in body and "confirmFirst(" in body
     assert "Object.assign(defaults(), JSON.parse" not in body
+
+
+def tone(path):
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "sine=frequency=440:duration=1", "-c:a", "aac", str(path)], check=True)
+
+
+def test_audio_check_passes_continuous_audio(tmp_path):
+    path = tmp_path / "tone.mp4"
+    tone(path)
+    assert audio_continuity.inspect(path)["findings"] == []
+
+
+def test_audio_check_reports_a_packet_gap(tmp_path):
+    path = tmp_path / "tone.mp4"
+    tone(path)
+    probe = {"streams": [{"sample_rate": "44100", "duration": "1.0"}],
+             "packets": [{"pts_time": "0.0", "duration_time": "0.1"}, {"pts_time": "0.5", "duration_time": "0.1"}]}
+    with mock.patch.object(audio_continuity.subprocess, "run", return_value=mock.Mock(stdout=json.dumps(probe))):
+        assert any("packet gaps" in finding for finding in audio_continuity.inspect(path)["findings"])

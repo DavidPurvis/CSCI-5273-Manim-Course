@@ -103,6 +103,10 @@ The first uncached transcription downloads the configured `mlx-community/whisper
 - **Taste:** check a rendered dish with the automatic checks.
 - **Plate:** assemble a chapter from its finished dishes.
 
+## Clean clones
+
+The Git repository holds code, authoring and narration text. It leaves out `sources/snapshot/` (slides and notes), `narration/audio/`, video and `build/`, so a fresh clone cannot render. Its tests still run: those needing the absent files skip and say why. Rendering needs the full working folder.
+
 ## Hand off the deliverables
 
 After `./kitchen run` and the media audit and reproduction, refresh the shared status, write the source ZIP, record the test and release evidence, then intentionally build the handoff folder. `verify-release` exits non-zero while reviews are pending; it still writes the evidence the next step needs:

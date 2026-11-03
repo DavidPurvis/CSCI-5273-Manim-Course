@@ -16,6 +16,9 @@ def sha256(path):
 def inspect_media(path):
     identity=sha256(path)
     findings,seconds=verify_playback(path)
+    from course.tools.audio_continuity import inspect
+    continuity=inspect(path)
+    findings.extend(continuity['findings'])
     data=json.loads(run(['ffprobe','-v','error','-count_packets','-show_streams','-show_chapters','-of','json',str(path)]).stdout)
     streams=data.get('streams',[])
     video=next((s for s in streams if s['codec_type']=='video'),{})
@@ -28,7 +31,7 @@ def inspect_media(path):
     markers=11 if path.name=='CSCI-5273-Lectures-06-15.mp4' else 2 if path.name=='CSCI-5273-Practice-and-Warm-up.mp4' else None
     if markers is not None and len(data.get('chapters',[]))!=markers:findings.append(f'expected {markers} chapter markers')
     if sha256(path)!=identity:findings.append('artifact changed during verification')
-    return {'path':str(path.relative_to(PACK)),'sha256':identity,'seconds':seconds,'findings':findings,'verified_at':time.time()}
+    return {'path':str(path.relative_to(PACK)),'sha256':identity,'seconds':seconds,'findings':findings,'verified_at':time.time(),'audio_continuity':continuity}
 
 
 
