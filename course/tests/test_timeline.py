@@ -154,3 +154,39 @@ def test_waveform_identity_is_required():
     timing=deepcopy(load_timing());timing['6.1.question']['wav_hash']='wrong'
     with pytest.raises(ValueError,match='waveform bytes changed'):
         word_times('6.1.question',load_manifest(),timing)
+
+
+def compile_moves(moves, say='one two three four five six seven eight', speech=20.0, stage='animation'):
+    beat={'id':'x.1.a','stage':stage,'moves':moves}
+    words=say.split();times=[[i*speech/len(words),(i+1)*speech/len(words)] for i in range(len(words))]
+    return compile_beat(beat,{'duration':speech,'sha':'s'},times,say,defaults={'clear':.6,'table.show':.9,'rule':.9}).moves
+
+
+def test_clear_is_followed_at_once_by_what_replaces_it():
+    moves=compile_moves([{'clear':{}},{'rule':{'text':'x'}}])
+    assert moves[1]['start']==moves[0]['start']+moves[0]['frames']
+
+
+def test_clear_waits_for_an_anchored_replacement():
+    moves=compile_moves([{'clear':{}},{'rule':{'text':'x'},'when':'seven'}])
+    assert moves[0]['start']+moves[0]['frames']==moves[1]['start']
+
+
+def test_long_table_builds_across_the_narration_but_not_in_predictions():
+    table={'table.show':{'name':'t','zone':'top','cols':['a'],'rows':[['1'],['2'],['3']]}}
+    assert compile_moves([table])[0]['frames']>27
+    assert compile_moves([table],stage='prediction')[0]['frames']==27
+
+
+def test_no_beat_narrates_over_an_empty_screen():
+    from course.stage.card import load_card,load_manifest,load_timing,narration_text,word_times
+    from course.stage.moves import REGISTRY
+    from course.tools.kitchen import dishes
+    manifest,timing,texts=load_manifest(),load_timing(),narration_text();defaults={k:v['t'] for k,v in REGISTRY.items()}
+    gaps=[]
+    for dish in dishes():
+        for beat in load_card(dish)['beats']:
+            moves=compile_beat(beat,manifest[beat['id']],word_times(beat['id'],manifest,timing),texts[beat['id']],defaults=defaults).moves
+            for a,b in zip(moves,moves[1:]):
+                if a['name']=='clear' and b['start']-a['start']-a['frames']>30:gaps.append(beat['id'])
+    assert not gaps

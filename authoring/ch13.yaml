@@ -150,7 +150,7 @@ beats:
         R1:
           k: router
           at:
-          - 3
+          - 3.25
           - 0.8
           l: R1
         R2:

@@ -9,6 +9,9 @@ ABSENT = (ROOT / "sources/snapshot", ROOT / "narration/audio")
 CLEAN_CLONE = not ABSENT[0].exists()
 # These read the vault when imported, so they cannot even be collected.
 collect_ignore = ["test_practice.py", "test_bank.py"] if CLEAN_CLONE else []
+# PS2 is the instructor's material, so a clean clone leaves it out too.
+if not (ROOT / "sources/ps2.yaml").exists():
+    collect_ignore.append("test_ps2.py")
 # Without the vault or audio these fail on an empty catalog or a clip check, not on FileNotFoundError.
 NEEDS_ABSENT = {
     "test_packaged_catalog_resolves_alias",

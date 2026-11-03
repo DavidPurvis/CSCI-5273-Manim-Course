@@ -11,6 +11,7 @@ from urllib.parse import quote
 
 import yaml
 
+from course.model import ps2
 from course.stage.card import ROOT, beat_times, load_card, load_manifest, narration_text
 from course.tools import bank, drills
 from course.tools.sources import DECKS, VAULT
@@ -22,7 +23,10 @@ READY_LINKS = [(["6.3"], ["switch"]), (["6.3", "13.3"], []), (["7.2", "8.1"], ["
                (["10.1", "10.2"], ["dijkstra", "bf"]), (["11.1", "11.2", "11.3"], []), (["12.2", "12.4"], ["bgp"]), (["13.1", "13.2", "13.3", "13.4"], ["rpf"]), (["14.2", "14.4"], ["cdma"]),
                (["15.1", "15.3", "15.4"], [])]
 # A practice question's drill with new numbers, where one exists.
-PM_DRILL = {1: "switch", 3: "addr", 4: "frag", 5: "lpm", 9: "dijkstra", 10: "bf", 13: "bgp", 14: "bgp", 16: "rpf", 18: "cdma"}
+PM_DRILL = {1: "switch", 4: "frag", 5: "lpm", 16: "rpf", 18: "cdma"}
+# PS2 replaces these generated practice questions and drill types.
+REPLACED_QUESTIONS = {3, 9, 10, 11, 14}
+REPLACED_DRILLS = {"addr": "ps2host", "size": "ps2carve", "dijkstra": "ps2grid", "bf": "ps2grid", "bgp": "ps2valley"}
 
 
 def prediction_pause_time(beat, slot, pad, fps=30):
@@ -149,15 +153,39 @@ def build_data():
     items = json.loads((ROOT / "sources" / "bank.json").read_text()) if (ROOT / "sources" / "bank.json").exists() else bank.build()
     problems = json.loads((ROOT / "sources" / "drills.json").read_text()) if (ROOT / "sources" / "drills.json").exists() else drills.build()
     walkthroughs = {int(d.split(".")[1]): d for d in all_dishes if d.startswith("17.")}
+    items = [i for i in items if not (i["kind"] == "midterm" and i["n"] in REPLACED_QUESTIONS)]
     for item in items:
         if item["kind"] == "midterm":
             item["walkthrough"] = walkthroughs.get(item["n"])
             item["drill"] = PM_DRILL.get(item["n"])
-    types = []
+            item["source"] = "generated"
+    items += ps2_items()
+    types = [{"key": key, "title": title, "dish": dish, "source": "ps2"} for key, title, dish in ps2.TYPES]
     for key, title, dish, _ in drills.TYPES:
-        types.append({"key": key, "title": title, "dish": dish})
+        if key not in REPLACED_DRILLS:
+            types.append({"key": key, "title": title, "dish": dish, "source": "generated"})
+    titles = {key: (title, dish) for key, title, dish in ps2.TYPES}
+    extra = [dict(p, title=titles[p["type"]][0], dish=titles[p["type"]][1]) for p in ps2.drills()]
+    problems = extra + [p for p in problems if p["type"] not in REPLACED_DRILLS]
     return {"dishes": dishes, "order": all_dishes, "route": route(all_dishes), "express": [d for d in EXPRESS if d in dishes], "concepts": concepts, "bank": items,
-            "drills": problems, "drillTypes": types, "ready": readiness(), "examDate": assessment_date()}, needed
+            "drills": problems, "drillTypes": types, "ready": ready_board(), "examDate": assessment_date()}, needed
+
+
+def ps2_items():
+    """The student's own Problem Set 2, numbered from 101 so saved answers can't collide with generated questions."""
+    questions = yaml.safe_load((ROOT / "sources" / "ps2.yaml").read_text())["questions"]
+    return [{"id": f"PS2.{q['n']}", "kind": "midterm", "source": "ps2", "n": 100 + q["n"], "label": f"PS2 question {q['n']}", "lecture": q["lecture"], "title": q["title"],
+             "q": q["q"].strip(), "a": q["a"].strip(), "concepts": [], "dishes": q["dishes"], "points": q["points"], "drill": q.get("drill"),
+             "figure": f"ps2/{q['figure']}" if q.get("figure") else None, "alt": q.get("alt")} for q in questions]
+
+
+def ready_board():
+    """The readiness board's drill links, pointing at PS2's drills where those replaced a generated type."""
+    board = readiness()
+    for row in board:
+        if row.get("drills"):
+            row["drills"] = list(dict.fromkeys(REPLACED_DRILLS.get(k, k) for k in row["drills"]))
+    return board
 
 
 def main():
@@ -166,6 +194,9 @@ def main():
     for f in (ROOT / "course" / "player").iterdir():
         if f.is_file():
             shutil.copy(f, out / f.name)
+    (out / "ps2").mkdir(exist_ok=True)
+    for f in (ROOT / "sources" / "ps2").glob("*.png"):
+        shutil.copy(f, out / "ps2" / f.name)
     data, needed = build_data()
     made = render_slides(needed, out / "slides")
     data["courseVersion"] = COURSE_VERSION

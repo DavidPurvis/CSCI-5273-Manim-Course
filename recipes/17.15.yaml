@@ -42,7 +42,7 @@ beats:
         B:
           k: host
           at:
-          - 8
+          - 7.0
           - 0.8
           l: R2
         C:

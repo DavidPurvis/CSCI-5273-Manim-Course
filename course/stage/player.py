@@ -8,13 +8,14 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 import numpy as np
-from manim import FadeOut, RIGHT, Scene, linear
+from manim import AnimationGroup, FadeOut, LEFT, RIGHT, Scene, Succession, VGroup, linear
 
 from course.stage.card import beat_times, load_card, load_manifest, load_timing, narration_text, phrase_time, timed_cues, word_times
+from course.stage.context import last_sentence, lesson_question, step_name
 from course.stage.moves import REGISTRY, Stage, resolve
 from course.stage.parts import Net, T
 from course.stage.signal import FLASH, find as find_signals, flash, spoken_words
-from course.stage.theme import BG, FRAME_X, FRAME_Y, MIN_FONT, MUTED, ZONES
+from course.stage.theme import BG, FRAME_X, FRAME_Y, FULL_HEIGHT_LESSONS, MIN_FONT, MUTED, STATE, ZONES, use_full_height
 
 # A narrated frame may sit unchanged this long. Prediction and reading holds use idle(), not this splitter.
 IDLE_LIMIT = 20.0
@@ -23,6 +24,23 @@ IDLE_LIMIT = 20.0
 def idle_slices(seconds, limit=IDLE_LIMIT, pulse=FLASH):
     """Break a long idle into waits no longer than limit, with a pulse between them."""
     return [("wait", seconds)] if seconds > 0 else []
+
+
+def keep_live(mobjects, live):
+    """Drop what the stage no longer owns. A temporary animation group is dropped but what's inside it stays, in place."""
+    out, seen = [], set()
+
+    def visit(mob):
+        if id(mob) in live:
+            if id(mob) not in seen:
+                seen.add(id(mob))
+                out.append(mob)
+            return
+        for part in mob.submobjects:
+            visit(part)
+    for mob in mobjects:
+        visit(mob)
+    return out
 
 
 class Dish(Scene):
@@ -40,6 +58,10 @@ class Dish(Scene):
         compile_dish(card,manifest,self.timing,texts,{k:v['t'] for k,v in REGISTRY.items()})
         times, total = beat_times(card, manifest)
         self.stage_ = Stage(self)
+        self.card_ = card
+        self.strip_on = dish not in FULL_HEIGHT_LESSONS
+        if not self.strip_on:
+            use_full_height()
         problems = []
         self.moving = []
         for beat, slot in zip(card["beats"], times):
@@ -83,7 +105,8 @@ class Dish(Scene):
             if start < pos or start + need > total:
                 continue
             self.idle_keep((start - pos) / self.fps, now + pos / self.fps)
-            self.play(flash(mob), run_time=self.anim_time(need / self.fps))
+            self.play(flash(mob, self.stage_), run_time=self.anim_time(need / self.fps))
+            self.prune()
             self.moving.append((self.beat_start + now + start / self.fps, self.beat_start + now + (start + need) / self.fps))
             pos = start + need
         self.idle_keep((total - pos) / self.fps, now + pos / self.fps)
@@ -102,9 +125,36 @@ class Dish(Scene):
         self.stage_.zone_of["_tag"] = None
         self.add(tag)
 
+    def set_context(self, beat):
+        """The strip under the title says which question this lesson is answering and which step this beat is."""
+        x0, y0, x1, y1 = ZONES["context"]
+        step = T(step_name(beat["stage"]), 24, STATE["now"])
+        step.set_y((y0 + y1) / 2)
+        step.align_to(np.array([x1 - 0.2, 0, 0]), RIGHT)
+        strip = VGroup(step)
+        question = lesson_question(self.card_)
+        # While the question beat is asking it on the big stage, the strip doesn't repeat it.
+        if question and beat["stage"] != "question":
+            room = step.get_left()[0] - 0.3 - (x0 + 0.2)
+            for form in (question, last_sentence(question)):
+                text = T(form, 24, MUTED)
+                if text.width <= room:
+                    text.set_y((y0 + y1) / 2)
+                    text.align_to(np.array([x0 + 0.2, 0, 0]), LEFT)
+                    strip.add(text)
+                    break
+        old = self.stage_.objs.get("_context")
+        if old is not None:
+            self.remove(old)
+        self.stage_.objs["_context"] = strip
+        self.stage_.zone_of["_context"] = None
+        self.add(strip)
+
     def play_beat(self, beat, slot, manifest, texts):
         problems = []
         self.set_tag(beat)
+        if self.strip_on:
+            self.set_context(beat)
         adj = beat.get("adjust") or {}
         self.stage_.adjust = adj
         pace = adj.get("pace", 1.0)
@@ -135,7 +185,8 @@ class Dish(Scene):
                 continue
             when = args.pop("when", None)
             args.pop("occurrence", None)
-            run = args.pop("t", REGISTRY[name]["t"]) * pace
+            args.pop("t", None)
+            run = schedule.moves[len(moves)]["frames"] / self.fps
             moves.append((name, args, when, run))
         busy = sum(m[3] for m in moves)
         budget = total - slot["hold"]
@@ -151,12 +202,19 @@ class Dish(Scene):
             if targets[i] is not None and wait:
                 self.idle_at(now, wait)
                 now += round(wait * self.fps) / self.fps
+            self.stage_.move_run = run
             try:
                 anims = REGISTRY[name]["fn"](self.stage_, **resolve(args))
             except Exception as exc:
                 problems.append(f"{beat['id']}: {name} failed: {exc}")
                 raise
             if anims:
+                fades = [a for a in anims if isinstance(a, FadeOut)]
+                rest = [a for a in anims if not isinstance(a, FadeOut)]
+                if fades and rest:
+                    # Old leaves before new arrives, so text never sits on top of text. Total time is unchanged.
+                    out = min(0.4, run / 2)
+                    anims = [Succession(AnimationGroup(*fades, run_time=out), AnimationGroup(*rest, run_time=run - out))]
                 self.play(*anims, run_time=self.anim_time(run))
                 self.moving.append((self.beat_start + now, self.beat_start + now + run))
                 now += round(run * self.fps) / self.fps
@@ -196,9 +254,7 @@ class Dish(Scene):
         live = set()
         for mob in list(self.stage_.objs.values()) + list(self.stage_.marks.values()):
             live.update(id(m) for m in mob.get_family())
-        dead = [m for m in self.mobjects if id(m) not in live]
-        if dead:
-            self.remove(*dead)
+        self.mobjects[:] = keep_live(self.mobjects, live)
 
     def lint(self, beat_id):
         problems, boxes = [], []

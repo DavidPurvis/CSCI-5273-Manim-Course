@@ -205,7 +205,7 @@ beats:
         L3:
           k: host
           at:
-          - 7.5
+          - 6.75
           - 0
           l: Members
       links:
@@ -356,7 +356,7 @@ beats:
           - 5.8
           - 1.6
           l: RP
-          lp: up
+          lp: right
         DR:
           k: router
           at:

@@ -1091,7 +1091,7 @@ beats:
         E:
           k: node
           at:
-          - 7
+          - 5.5
           - 1.2
           l: E
         F:
@@ -2812,8 +2812,8 @@ beats:
       zone: right_bottom
       cols:
       - Router
-      - In
-      - Out
+      - In label
+      - Out label
       rows:
       - - R2
         - 17

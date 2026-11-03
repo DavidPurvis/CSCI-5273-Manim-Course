@@ -365,6 +365,8 @@ beats:
       - R1's MAC
       state: changed
       when: The laptop caches
+  - rule:
+      text: Broadcast who-has. Only the owner replies. Cache it, then send.
   adjust: {}
 - id: 9.1.two-tables
   stage: rule

@@ -37,12 +37,24 @@ def compile_beat(beat,asset,alignment,text='',pad=2.2,fps=30,defaults=None):
         moves.append(dict(event_id=raw.get('event_id',f"{beat['id']}:move:{i}"),name=name,args=args,start=start,frames=max(1,round(duration*pace*fps))))
     now=0
     for i,m in enumerate(moves):
+        following=moves[i+1] if i+1<len(moves) else None
+        # A clear is not a step. It runs right before what replaces it, so narration never plays over an empty screen.
+        if m['name']=='clear' and m['start'] is None and following and following['start'] is not None:
+            m['start']=max(now,following['start']-m['frames'])
         anchored=m['start'] is not None
         if anchored:
             if m['start']<now:raise ValueError(f"{beat['id']}: anchor {m['event_id']} overlaps preceding animation by {(now-m['start'])/fps:.2f}s")
             now=m['start']
+        source=m['args'].get('data') if isinstance(m['args'].get('data'),dict) else m['args']
+        rows=source.get('rows')
+        # A table with nothing competing for the time builds row by row as the narration reads it.
+        if m['name']=='table.show' and isinstance(rows,list) and len(rows)>=3 and m['args'].get('show') is None and beat['stage']!='prediction':
+            later=[x for x in moves[i+1:] if x['name']!='keep']
+            if not later or later[0]['start'] is not None:
+                end=later[0]['start'] if later else pre_roll+speech_frames
+                m['frames']=max(m['frames'],min(round(2.5*fps*len(rows)),round(.8*(end-now))))
         m['start']=now;now+=m['frames']
-        if not anchored:
+        if not anchored and m['name']!='clear':
             j=next((j for j in range(i+1,len(moves)) if moves[j]['start'] is not None),len(moves))
             end=moves[j]['start'] if j<len(moves) else pre_roll+speech_frames
             need=sum(x['frames'] for x in moves[i+1:j])

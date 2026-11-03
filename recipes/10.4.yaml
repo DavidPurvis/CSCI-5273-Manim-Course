@@ -134,8 +134,8 @@ beats:
       zone: right_bottom
       cols:
       - Router
-      - In
-      - Out
+      - In label
+      - Out label
       rows:
       - - R2
         - 17

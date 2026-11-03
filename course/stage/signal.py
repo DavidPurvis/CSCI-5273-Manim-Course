@@ -1,12 +1,12 @@
 """Light up what the narration names, at the moment it names it. No card asks for this; it reads the stage and the word timing."""
 import re
 
-from manim import FadeIn, VGroup, there_and_back_with_pause
+from manim import AnimationGroup, FadeIn, UpdateFromAlphaFunc, VGroup, there_and_back_with_pause
 
-from .parts import Fields, Grid, Ladder, Net, Slots, Stack, Tracks, outline
+from .parts import Fields, Grid, Ladder, Net, Slots, Stack, Tracks, scale_opacity, opacity_state, outline
 
-FLASH = 0.7     # seconds a highlight lasts
-MIN_GAP = 1.3   # seconds between highlights, so the screen doesn't flicker
+FLASH = 1.2     # seconds a highlight lasts
+MIN_GAP = 1.6   # seconds between highlights, so the screen doesn't flicker
 AGAIN = 7.0     # seconds before the same item can light up again
 SKIP = {"yes", "no", "the", "a", "an", "of", "to", "in", "on", "and", "or", "is", "it", "at", "by", "for", "?", "-", "none", "all", "one", "two", "from", "with", "as",
         "not", "but", "its", "this", "that", "be", "are", "was", "if", "so", "then", "when", "only", "each", "every", "same", "new", "old", "first", "next", "can", "may"}
@@ -99,7 +99,33 @@ def find(words, start, end, stage, used):
     return chosen
 
 
-def flash(mob):
+SPOTLIGHT_DIM = 0.32
+
+
+def flash(mob, stage=None):
+    """Ring what the narration names. Given the stage, its neighbours also step back, so one thing is bright at a time."""
     ring = outline(mob, "now", buff=0.07)
     ring.set_z_index(7)
-    return FadeIn(ring, rate_func=there_and_back_with_pause, remover=True)
+    glow = FadeIn(ring, rate_func=there_and_back_with_pause, remover=True)
+    owner = spotlight_owner(mob, stage) if stage is not None else None
+    if owner is None:
+        return glow
+    state = opacity_state(owner, skip=mob.get_family())
+
+    def update(_, alpha):
+        # Ease down, hold, ease back up, ending at exactly the opacities it started with.
+        edge = min(alpha, 1 - alpha) / 0.15
+        scale_opacity(state, 1 - (1 - SPOTLIGHT_DIM) * min(1.0, max(0.0, edge)))
+    return AnimationGroup(glow, UpdateFromAlphaFunc(owner, update))
+
+
+def spotlight_owner(mob, stage):
+    """The diagram or table on stage holding this item, if it has anything else in it."""
+    parts = {id(part) for part in mob.get_family()}
+    for name, other in stage.objs.items():
+        if str(name).startswith("_"):
+            continue
+        family = other.get_family()
+        if parts & {id(part) for part in family} and len(family) > len(parts):
+            return other
+    return None

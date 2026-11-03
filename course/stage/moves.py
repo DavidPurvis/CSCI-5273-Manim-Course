@@ -4,11 +4,11 @@ import re
 from pathlib import Path
 
 import numpy as np
-from manim import (DOWN, LEFT, RIGHT, UP, Arrow, Circle, Create, DashedVMobject, Dot, FadeIn, FadeOut, GrowFromCenter, LaggedStart,
+from manim import (DOWN, LEFT, RIGHT, UP, Arrow, Circle, Create, DashedVMobject, Dot, FadeIn, FadeOut, GrowFromCenter, LaggedStart, UpdateFromAlphaFunc,
                    Line, MathTex, MoveAlongPath, Rectangle, RoundedRectangle, Star, Succession, Text, Transform,
                    VGroup, VMobject, Write, linear, rate_functions, AnimationGroup, DashedLine)
 
-from .parts import (BitRow, ByteBar, Curves, Device, Fields, Grid, Ladder, Net, PacketToken, Sieve, Slots, Stack, StepWave, T, Tracks, layer_block,
+from .parts import (opacity_state, scale_opacity, BitRow, ByteBar, Curves, Device, Fields, Grid, Ladder, Net, PacketToken, Sieve, Slots, Stack, StepWave, T, Tracks, layer_block,
                     outline, paragraph, place, scroll_grid, seat_grid, wrapped_text, zone_box)
 from .theme import BG, FRAME_X, INK, LAYER, LINE, MIN_FONT, MUTED, PANEL, PAUSE_Y, STATE, TITLE_TAG_SLOT, ZONES, zones_overlap
 
@@ -47,6 +47,7 @@ class Stage:
         self.objs, self.zone_of, self.marks = {}, {}, {}
         self.adjust = {}
         self.pause_bar = None
+        self.move_run = 0.0
 
     def register(self, name, mob, zone=None):
         out = self.drop(name)
@@ -136,7 +137,7 @@ def spine(s, current, zone="full"):
 
 @move("clear", 0.6)
 def clear(s, keep=None):
-    keep = set(keep or []) | {"_heading", "_tag"}
+    keep = set(keep or []) | {"_heading", "_tag", "_context"}
     out = []
     for name in list(s.objs):
         if name not in keep:
@@ -369,7 +370,13 @@ def net_move(s, name, node, to):
     for mark_key, mark_mob in s.marks.items():
         if mark_key[:3] == (name, "node", node):
             anims.append(mark_mob.animate.shift(delta))
-    return anims
+    # Leave a trace of where it was, so the change can still be read after the move is over.
+    ghost = dev.body.copy().set_opacity(0.3)
+    for part in ghost.get_family():
+        if hasattr(part, "kfont"):
+            del part.kfont
+    arrow = Arrow(dev.anchor(), dev.anchor() + delta, buff=0.55, stroke_width=3, tip_length=0.18, color=STATE["now"], max_tip_length_to_length_ratio=0.2)
+    return s.set_mark((name, "ghost", node), VGroup(ghost, arrow)) + anims
 
 
 @move("net.relink", 0.5)
@@ -495,10 +502,16 @@ def packet_hop(s, name, to):
     n = s.get(token.net_name)
     stops = to if isinstance(to, list) else [to]
     token.at = stops[-1]
+    # The path stays behind the packet, so the route it took can still be read after it has moved on.
+    points = [token.get_center()] + [dock(n.devices[a]) for a in stops]
+    trail = VMobject().set_points_as_corners(points).set_stroke(STATE["now"], 2, 0.45).set_fill(opacity=0)
+    trail.set_z_index(4)
+    key = (name, "trail", sum(1 for k in s.marks if k[:2] == (name, "trail")))
+    s.marks[key] = trail
     if len(stops) == 1:
-        return [token.animate.move_to(dock(n.devices[stops[0]]))]
-    path = VMobject().set_points_as_corners([token.get_center()] + [dock(n.devices[a]) for a in stops])
-    return [MoveAlongPath(token, path, rate_func=rate_functions.smooth)]
+        return [token.animate.move_to(dock(n.devices[stops[0]])), Create(trail)]
+    path = VMobject().set_points_as_corners(points)
+    return [MoveAlongPath(token, path, rate_func=rate_functions.smooth), Create(trail)]
 
 
 @move("packet.both", 1.1)
@@ -660,7 +673,34 @@ def table_show(s, name, zone, data=None, cols=None, rows=None, show=None, size=3
     else:
         grid.knext = len(grid.rows)
     seat_grid(grid, zone, pin_top=show is not None)
+    if show is None and len(grid.rows) >= 3 and s.move_run >= 0.6 * len(grid.rows):
+        return s.register(name, grid, zone) + [build_table(grid)]
     return s.register(name, grid, zone) + [FadeIn(grid)]
+
+
+EARLIER_ROW = 0.6
+
+
+def build_table(grid):
+    """The header, then one row at a time. The newest row is bright, earlier rows step back, and all return to full at the end."""
+    rows = [opacity_state(row) for row in grid.rows]
+    head = opacity_state(VGroup(grid.head, grid.rule))
+    steps = len(rows) + 1
+
+    def update(_, alpha):
+        at = alpha * steps
+        scale_opacity(head, min(1.0, at * 4))
+        for i, state in enumerate(rows):
+            start = i + 1
+            if at < start:
+                scale_opacity(state, 0.0)
+            elif alpha >= 1:
+                scale_opacity(state, 1.0)
+            elif at < start + 1:
+                scale_opacity(state, min(1.0, (at - start) * 4))
+            else:
+                scale_opacity(state, EARLIER_ROW)
+    return UpdateFromAlphaFunc(grid, update)
 
 
 @move("table.reveal", 0.6)
@@ -716,7 +756,40 @@ def table_set(s, name, r, c, v, state=None):
     grid.cells[r][c] = new
     grid.rows[r].remove(old)
     grid.rows[r].add(new)
-    return [FadeOut(old), FadeIn(new)]
+    out = [FadeOut(old), FadeIn(new)]
+    strikes = grid.__dict__.setdefault("kstrikes", {})
+    if (r, c) in strikes:
+        stale = strikes.pop((r, c))
+        grid.rows[r].remove(stale)
+        out.append(FadeOut(stale))
+    marker = change_marker(old, new, grid.content_w[c] * grid.kscale, grid.size * grid.kscale)
+    if marker is not None:
+        strikes[(r, c)] = marker
+        grid.rows[r].add(marker)
+        out.append(FadeIn(marker))
+    return out
+
+
+UNSTRUCK = {"", "?", "-", "\u2014", "..."}
+
+
+def change_marker(old, new, width, size):
+    """The old value struck through beside the new one, shifting the new one to make room. None when it won't fit or there's nothing to strike."""
+    was = getattr(old, "ktext", None)
+    if was is None or str(was).strip() in UNSTRUCK or str(was) == getattr(new, "ktext", None):
+        return None
+    gone = T(was, grid_font(size), MUTED)
+    if gone.width + 0.14 + new.width > width:
+        return None
+    center = new.get_center()
+    new.shift(RIGHT * (gone.width + 0.14) / 2)
+    gone.next_to(new, LEFT, buff=0.14).set_y(center[1])
+    line = Line(gone.get_left(), gone.get_right(), stroke_color=MUTED, stroke_width=2)
+    return VGroup(gone, line)
+
+
+def grid_font(size):
+    return max(MIN_FONT, size)
 
 
 def emphasize_rows(grid, bright):

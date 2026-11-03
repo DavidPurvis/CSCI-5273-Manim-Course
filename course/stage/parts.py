@@ -30,6 +30,20 @@ def paragraph(text, width, size=30, color=INK, center=False):
     return group
 
 
+def opacity_state(mob, skip=()):
+    """Every drawn piece of mob and its current opacities, so they can be scaled and then restored exactly."""
+    skipped = {id(part) for part in skip}
+    return [(part, part.fill_rgbas[:, 3].copy(), part.stroke_rgbas[:, 3].copy(), part.background_stroke_rgbas[:, 3].copy())
+            for part in mob.family_members_with_points() if id(part) not in skipped and hasattr(part, "fill_rgbas")]
+
+
+def scale_opacity(state, factor):
+    for part, fill, stroke, background in state:
+        part.fill_rgbas[:, 3] = fill * factor
+        part.stroke_rgbas[:, 3] = stroke * factor
+        part.background_stroke_rgbas[:, 3] = background * factor
+
+
 def zone_box(zone):
     x0, y0, x1, y1 = ZONES[zone]
     return np.array([(x0 + x1) / 2, (y0 + y1) / 2, 0]), x1 - x0, y1 - y0

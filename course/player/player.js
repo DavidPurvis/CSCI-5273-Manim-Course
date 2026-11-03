@@ -537,7 +537,22 @@ function snippet(text, q) {
 
 // Practice midterm -----------------------------------------------------------
 function midtermItems() {
-  return D.bank.filter(i => i.kind === "midterm").sort((a, b) => a.n - b.n);
+  return D.bank.filter(i => i.kind === "midterm").sort((a, b) => (b.n > 100) - (a.n > 100) || a.n - b.n);
+}
+function pointsFor(item) { return item.points || 5; }
+function midtermLabel(item) { return `${item.label || `Question ${item.n}`} · ${item.lecture}`; }
+function midtermFigure(item) { return item.figure ? h("img", { class: "ps2-figure", src: item.figure, alt: item.alt || "Figure from PS2" }) : null; }
+// PS2 first, then the generated questions for topics it doesn't cover, each under its own heading.
+function midtermSections(card) {
+  const items = midtermItems();
+  const generated = items.filter(i => i.source === "generated");
+  return [
+    h("h2", {}, "PS2, from your instructor"),
+    h("p", { class: "text-muted" }, "These are your Problem Set 2 questions as written. You've seen them, so use the From PS2 drills to work them with new numbers."),
+    ...items.filter(i => i.source !== "generated").map(card),
+    h("h2", {}, "Other topics"),
+    h("section", { class: "notice" }, h("p", {}, h("b", {}, "Generated, not from your instructor."), " PS2 doesn't cover these topics.")),
+    ...generated.map(card)];
 }
 function fmtClock(seconds) {
   const s = Math.max(0, Math.floor(seconds));
@@ -550,7 +565,7 @@ function viewMidterm() {
     show(h("div", { class: "measure" },
       h("h1", {}, "Practice midterm"),
       h("section", { class: "notice" },
-        h("p", {}, h("b", {}, "This is generated practice, not the instructor's exam or format."), " It covers Lectures 6–15 in 20 questions of 5 points each.")),
+        h("p", {}, h("b", {}, "PS2 shows your instructor's style, but it isn't the exam."), ` This page has PS2's questions first, then generated questions for topics PS2 doesn't cover: ${midtermItems().length} questions, ${midtermItems().reduce((sum, i) => sum + pointsFor(i), 0)} points.`)),
       h("section", { class: "card stack" },
         h("p", { class: "text-muted" }, "Suggested: 75 minutes, closed notes. Show arithmetic and state assumptions. The timer keeps running if you leave this page. The walkthrough videos stay locked until you finish."),
         h("button", { type: "button", class: "btn btn--primary", onclick: () => { S.midterm = { startedAt: Date.now(), answers: {}, marks: {} }; save(); viewMidterm(); } }, "Start the 75-minute timer"))));
@@ -575,21 +590,22 @@ function viewMidterm() {
         tone: "primary",
         onConfirm: () => { S.midterm.finishedAt = Date.now(); save(); viewMidterm(); },
       }) }, "Finish and mark")),
-    midtermItems().map(item => h("section", { class: "card stack" },
-      h("div", { class: "eyebrow" }, `Question ${item.n} · ${item.lecture}`),
+    midtermSections(item => h("section", { class: "card stack" },
+      h("div", { class: "eyebrow" }, midtermLabel(item)),
       h("h3", {}, item.title),
-      h("p", {}, item.q),
+      midtermFigure(item),
+      h("p", { class: "keep-lines" }, item.q),
       h("textarea", { "aria-label": `Answer to question ${item.n}`, oninput: e => { S.midterm.answers[item.n] = e.target.value; save(); } }, S.midterm.answers[item.n] || "")))));
 }
 function viewMidtermMarks() {
   const m = S.midterm;
   const total = () => midtermItems().reduce((sum, i) => sum + (m.marks[i.n] ? m.marks[i.n].points || 0 : 0), 0);
   const sum = h("div", { class: "timer" });
-  const refresh = () => { sum.textContent = `${total()} / 100`; };
+  const refresh = () => { sum.textContent = `${total()} / ${midtermItems().reduce((all, i) => all + pointsFor(i), 0)}`; };
   refresh();
   show(h("div", { class: "measure" },
     h("h1", {}, "Mark your practice midterm"),
-    h("p", { class: "text-muted" }, "Generated practice, not the instructor's exam. Equivalent correct reasoning earns credit. A right answer you can't defend is still a gap."),
+    h("p", { class: "text-muted" }, "PS2 answers come from your problem set. The Other topics questions are generated. Neither is the exam. Equivalent correct reasoning earns credit. A right answer you can't defend is still a gap."),
     h("div", { class: "toolbar card" }, sum,
       h("button", { type: "button", class: "btn btn--danger", onclick: () => confirmFirst({
         title: "Clear this attempt and start over?",
@@ -598,11 +614,11 @@ function viewMidtermMarks() {
         tone: "danger",
         onConfirm: () => { S.midterm = {}; save(); viewMidterm(); },
       }) }, "Start over")),
-    midtermItems().map(item => {
+    midtermSections(item => {
       const mk = m.marks[item.n] || (m.marks[item.n] = {});
       const links = h("div", { class: "cluster text-sm" });
       const redo = () => {
-        const missed = mk.points != null && mk.points < 5;
+        const missed = mk.points != null && mk.points < pointsFor(item);
         links.replaceChildren(...[
           ...item.dishes.slice(0, 2).map(d => h("a", { href: `#dish/${d}/watch` }, `Watch ${d}`)),
           item.walkthrough && D.dishes[item.walkthrough] ? h("a", { href: `#dish/${item.walkthrough}/watch` }, "Walkthrough") : null,
@@ -613,11 +629,11 @@ function viewMidtermMarks() {
       const cause = h("select", { "aria-label": `Why question ${item.n} went wrong`, onchange: e => { mk.cause = e.target.value; save(); } },
         h("option", { value: "" }, "What went wrong?"), CAUSES.map(c => h("option", { value: c, selected: mk.cause === c }, c)));
       const pts = h("select", { class: "select--compact", "aria-label": `Points for question ${item.n}`, onchange: e => { mk.points = Number(e.target.value); save(); refresh(); redo(); } },
-        h("option", { value: "" }, "Points"), [5, 4, 3, 2, 1, 0].map(p => h("option", { value: p, selected: mk.points === p }, `${p} / 5`)));
+        h("option", { value: "" }, "Points"), Array.from({ length: pointsFor(item) + 1 }, (_, i) => pointsFor(item) - i).map(p => h("option", { value: p, selected: mk.points === p }, `${p} / ${pointsFor(item)}`)));
       const card = h("section", { class: "card stack" },
-        h("div", { class: "eyebrow" }, `Question ${item.n} · ${item.lecture}`), h("h3", {}, item.title), h("p", {}, item.q),
+        h("div", { class: "eyebrow" }, midtermLabel(item)), h("h3", {}, item.title), midtermFigure(item), h("p", { class: "keep-lines" }, item.q),
         h("p", { class: "text-muted text-sm" }, h("b", {}, "You wrote: "), m.answers[item.n] || "(blank)"),
-        h("div", { class: "answer" }, item.a),
+        h("div", { class: "answer keep-lines" }, item.a),
         pts, cause, links);
       redo();
       return card;
@@ -629,11 +645,11 @@ function viewMidtermMarks() {
 function viewDrills() {
   show(h("div", { class: "measure" },
     h("h1", {}, "Drills"),
-    h("p", { class: "text-muted" }, "Fresh numbers, instant checks. Every answer was computed by the course's tested models."),
+    h("p", { class: "text-muted" }, "Fresh numbers, instant checks. Every answer was computed by the course's tested models. The From PS2 drills ask your problem set's questions with new numbers; the rest are generated."),
     D.drillTypes.map(t => {
       const items = D.drills.filter(p => p.type === t.key);
       const done = items.filter(p => S.drills[p.id] && S.drills[p.id].right).length;
-      return h("a", { class: "card card--link", href: `#drills/${t.key}` },
+      return h("a", { class: "card card--link", href: `#drills/${t.key}` }, h("div", { class: "eyebrow" }, t.source === "ps2" ? "From PS2" : "Generated"),
         h("div", {}, h("h3", {}, t.title), h("span", { class: "text-muted text-sm" }, `Taught in dish ${t.dish}`)),
         h("span", { class: done ? "tag tag--success" : "tag" }, `${done} of ${items.length}`));
     })));
@@ -701,7 +717,7 @@ function viewDrill(type, wantedId) {
   const solved = items.filter(p => S.drills[p.id] && S.drills[p.id].right).length;
   show(h("div", { class: "measure" },
     h("div", { class: "page-head" }, h("h1", {}, info.title), h("span", { class: "text-muted" }, `${solved} of ${items.length} solved`)),
-    h("section", { class: "card stack" }, h("div", { class: "question" }, problem.prompt), form, feedback, after, stepsBox),
+    h("section", { class: "card stack" }, problem.figure ? h("img", { class: "ps2-figure", src: `ps2/${problem.figure}`, alt: "Figure from PS2" }) : null, h("div", { class: "question" }, problem.prompt), form, feedback, after, stepsBox),
     h("a", { href: "#drills" }, "All drills")));
   if (inputs[0]) inputs[0].el.focus();
 }
